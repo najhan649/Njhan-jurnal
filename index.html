@@ -402,12 +402,44 @@
                     </div>
                 </div>
 
-                <!-- Action Button + Form Container -->
-                <div class="flex justify-between items-center">
+                <!-- Action Button + Filter Bar + Form Container -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <h3 class="text-lg font-black text-white">Trade Journal</h3>
-                    <button id="toggleNewTradeBtn" onclick="toggleTradeForm()" class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl shadow-lg shadow-emerald-900/30 transition flex items-center gap-2">
-                        <i class="fa-solid fa-plus text-xs"></i> New Trade
-                    </button>
+                    
+                    <!-- FILTER BULAN & TAHUN BARU -->
+                    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                        <select id="filterMonth" onchange="applyTradeLogFilter()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                            <option value="ALL">Semua Bulan</option>
+                            <option value="01">Januari</option>
+                            <option value="02">Februari</option>
+                            <option value="03">Maret</option>
+                            <option value="04">April</option>
+                            <option value="05">Mei</option>
+                            <option value="06">Juni</option>
+                            <option value="07">Juli</option>
+                            <option value="08">Agustus</option>
+                            <option value="09">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+
+                        <select id="filterYear" onchange="applyTradeLogFilter()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                            <option value="ALL">Semua Tahun</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                        </select>
+
+                        <button onclick="resetTradeLogFilter()" class="px-3 py-1.5 bg-[#121c15] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
+                            Reset
+                        </button>
+
+                        <button id="toggleNewTradeBtn" onclick="toggleTradeForm()" class="px-4 py-1.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl shadow-lg shadow-emerald-900/30 transition flex items-center gap-2 ml-auto sm:ml-0">
+                            <i class="fa-solid fa-plus text-xs"></i> New Trade
+                        </button>
+                    </div>
                 </div>
 
                 <!-- NEW / EDIT TRADE FORM -->
@@ -564,8 +596,8 @@
                     </div>
                     <div id="noTradesPlaceholder" class="p-10 text-center hidden">
                         <div class="text-4xl mb-3">👻</div>
-                        <h4 class="text-sm font-bold text-white">No trades yet</h4>
-                        <p class="text-xs text-gray-400 mt-1">Add your first trade using the button above.</p>
+                        <h4 class="text-sm font-bold text-white">No trades found</h4>
+                        <p class="text-xs text-gray-400 mt-1">Tidak ada trade yang cocok dengan filter bulan/tahun tersebut.</p>
                     </div>
                 </div>
             </div>
@@ -1054,7 +1086,7 @@
             document.getElementById('tlBalance').innerText = formatMoney(currentBal, curr);
 
             renderDashboard(trades, curr);
-            renderTradeLogTable(trades, curr);
+            applyTradeLogFilter(); // Render table dengan filter bulan/tahun aktif
         }
 
         function renderDashboard(trades, curr) {
@@ -1253,6 +1285,40 @@
                 `;
                 container.appendChild(card);
             });
+        }
+
+        // FUNGSI FILTER BULAN & TAHUN PADA TRADE LOG
+        function applyTradeLogFilter() {
+            const activeAcc = getActiveAccount();
+            if (!activeAcc) return;
+            const curr = activeAcc.currency || 'USD';
+
+            let trades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
+
+            const selectedMonth = document.getElementById('filterMonth').value;
+            const selectedYear = document.getElementById('filterYear').value;
+
+            if (selectedMonth !== 'ALL' || selectedYear !== 'ALL') {
+                trades = trades.filter(t => {
+                    if (!t.date) return false;
+                    const parts = t.date.split('-'); // Format: YYYY-MM-DD
+                    const yearPart = parts[0];
+                    const monthPart = parts[1];
+
+                    const matchYear = (selectedYear === 'ALL' || yearPart === selectedYear);
+                    const matchMonth = (selectedMonth === 'ALL' || monthPart === selectedMonth);
+
+                    return matchYear && matchMonth;
+                });
+            }
+
+            renderTradeLogTable(trades, curr);
+        }
+
+        function resetTradeLogFilter() {
+            document.getElementById('filterMonth').value = 'ALL';
+            document.getElementById('filterYear').value = 'ALL';
+            applyTradeLogFilter();
         }
 
         function renderTradeLogTable(trades, curr) {
