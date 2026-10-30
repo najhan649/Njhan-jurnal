@@ -1,1391 +1,645 @@
-```html
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Njhan Jurnal - Smart Trading Journal</title>
-
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              green: '#00e676',
-              greenDark: '#00b050',
-              accent: '#22c55e',
-              bgDark: '#000000',
-              cardBg: '#0a0a0a',
-              cardBorder: '#1f1f1f',
-              muted: '#9e9e9e'
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Najh.an Journal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0f19',
+                        cardBg: '#131c2e',
+                        cardBorder: '#1e293b',
+                        accentGreen: '#10b981',
+                        accentRed: '#ef4444',
+                        accentBlue: '#3b82f6'
+                    }
+                }
             }
-          }
         }
-      }
-    }
-  </script>
-
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Chart.js for Analytics -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- Inter Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #000000;
-      color: #f1f5f9;
-      -webkit-tap-highlight-color: transparent;
-    }
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 4px;
-      height: 4px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #000000;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #222222;
-      border-radius: 4px;
-    }
-    /* Glow animations */
-    .glow-green {
-      box-shadow: 0 0 15px rgba(0, 230, 118, 0.2);
-    }
-    .custom-select {
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239e9e9e' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-      background-position: right 0.5rem center;
-      background-repeat: no-repeat;
-      background-size: 1.5em 1.5em;
-      padding-right: 2.5rem;
-    }
-  </style>
+    </script>
+    <style>
+        body { background-color: #0b0f19; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0b0f19; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between bg-black text-slate-100">
+<body class="min-h-screen flex flex-col antialiased">
 
-  <!-- TOP HEADER -->
-  <header class="sticky top-0 z-40 bg-black/95 backdrop-blur-md border-b border-brand-cardBorder px-4 py-3">
-    <div class="max-w-md mx-auto flex items-center justify-between">
-      <!-- Logo Branding -->
-      <div class="flex items-center space-x-2">
-        <div class="w-8 h-8 rounded-lg bg-brand-green/10 border border-brand-green flex items-center justify-center text-brand-green font-black text-lg">
-          N
+    <!-- Top Navigation Bar -->
+    <header class="border-b border-cardBorder bg-darkBg/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-accentGreen to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-900/20">
+                    <i class="fa-solid fa-chart-line text-white text-sm"></i>
+                </div>
+                <div>
+                    <span class="text-lg font-bold tracking-tight text-white">Najh.an</span>
+                    <span class="text-xs text-accentGreen block font-medium">Trading Journal</span>
+                </div>
+            </div>
+
+            <div id="account-header-info" class="hidden md:flex items-center space-x-4 bg-cardBg border border-cardBorder px-4 py-1.5 rounded-full text-sm">
+                <span id="nav-acc-name" class="font-semibold text-white">Account</span>
+                <span class="text-slate-500">|</span>
+                <span id="nav-acc-balance" class="text-accentGreen font-bold">$0.00</span>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="openAddAccountModal()" class="bg-accentGreen hover:bg-emerald-600 text-slate-950 font-semibold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center shadow-lg shadow-emerald-900/10">
+                    <i class="fa-solid fa-plus mr-1.5"></i> Add Account
+                </button>
+            </div>
         </div>
-        <div>
-          <h1 class="text-lg font-bold text-white tracking-tight flex items-center gap-1.5">
-            Njhan <span class="text-brand-green font-normal text-xs px-1.5 py-0.5 rounded bg-brand-green/10 border border-brand-green/30">Jurnal</span>
-          </h1>
-          <p class="text-[10px] text-brand-muted leading-none">njhan-jurnal.vercel.app</p>
-        </div>
-      </div>
+    </header>
 
-      <!-- Account Switcher Quick Action -->
-      <button id="btnSwitchAccount" onclick="openAccountModal()" class="flex items-center gap-1.5 bg-black hover:bg-brand-cardBg border border-brand-cardBorder px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-200 transition">
-        <i class="fa-solid fa-wallet text-brand-green text-xs"></i>
-        <span id="headerAccountName" class="truncate max-w-[80px]">Najhan</span>
-        <i class="fa-solid fa-chevron-down text-[10px] text-brand-muted ml-0.5"></i>
-      </button>
-    </div>
-  </header>
-
-  <!-- MAIN CONTAINER (Mobile Centered) -->
-  <main class="max-w-md mx-auto w-full flex-1 px-3 py-4 space-y-4">
-
-    <!-- ACTIVE ACCOUNT HEADER / ACCOUNT SELECTOR BANNER -->
-    <section class="bg-brand-cardBg border border-brand-cardBorder rounded-xl p-3 flex items-center justify-between shadow-xl">
-      <div>
-        <div class="flex items-center gap-2">
-          <span id="activeAccountBadge" class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-brand-green/20 text-brand-green border border-brand-green/30">
-            PERSONAL
-          </span>
-          <span id="activeAccountTitle" class="font-bold text-base text-white">Najh.</span>
-        </div>
-        <div class="text-xs text-brand-muted mt-1">
-          Balance: <span id="activeAccountBalance" class="text-white font-semibold">$300.00</span>
-        </div>
-      </div>
-      <button onclick="openAccountModal()" class="bg-black hover:bg-brand-cardBg text-xs text-slate-200 px-3 py-1.5 rounded-lg font-medium border border-brand-cardBorder transition flex items-center gap-1">
-        <i class="fa-solid fa-arrows-rotate text-[10px]"></i> Switch Account
-      </button>
-    </section>
-
-    <!-- NAVIGATION TABS (DASHBOARD, TRADE LOG, ANALYTICS) -->
-    <nav class="grid grid-cols-3 gap-1 bg-black p-1 rounded-xl border border-brand-cardBorder text-xs font-semibold">
-      <button id="tab-dashboard" onclick="switchTab('dashboard')" class="py-2 rounded-lg text-center transition bg-brand-green text-black font-bold">
-        Dashboard
-      </button>
-      <button id="tab-tradelog" onclick="switchTab('tradelog')" class="py-2 rounded-lg text-center text-slate-400 hover:text-white transition">
-        Trade Log
-      </button>
-      <button id="tab-analytics" onclick="switchTab('analytics')" class="py-2 rounded-lg text-center text-slate-400 hover:text-white transition">
-        Analytics
-      </button>
-    </nav>
-
-    <!-- TAB CONTENT: DASHBOARD -->
-    <div id="content-dashboard" class="space-y-4">
-      
-      <!-- Calendar View PnL -->
-      <section class="bg-brand-cardBg border border-brand-cardBorder rounded-xl p-3">
-        <div class="flex items-center justify-between mb-3">
-          <div>
-            <h2 class="text-sm font-bold text-white">Monthly Performance</h2>
-            <p id="dashboardTradesCount" class="text-[11px] text-brand-muted">4 trades • Oct 2026</p>
-          </div>
-          <div class="flex items-center gap-1">
-            <button onclick="changeMonth(-1)" class="w-7 h-7 rounded bg-black border border-brand-cardBorder text-slate-300 text-xs flex items-center justify-center hover:bg-brand-cardBg">
-              <i class="fa-solid fa-chevron-left"></i>
-            </button>
-            <span id="calendarMonthLabel" class="text-xs font-bold px-1 text-slate-200">October 2026</span>
-            <button onclick="changeMonth(1)" class="w-7 h-7 rounded bg-black border border-brand-cardBorder text-slate-300 text-xs flex items-center justify-center hover:bg-brand-cardBg">
-              <i class="fa-solid fa-chevron-right"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Calendar Grid -->
-        <div class="grid grid-cols-7 gap-1 text-center text-[10px] text-brand-muted font-medium mb-1">
-          <div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div><div>Su</div>
-        </div>
-        <div id="calendarDaysGrid" class="grid grid-cols-7 gap-1">
-          <!-- Rendered dynamically -->
-        </div>
-      </section>
-
-      <!-- Key Metrics Row 1 -->
-      <div class="grid grid-cols-3 gap-2">
-        <div class="bg-brand-cardBg border border-brand-cardBorder rounded-xl p-2.5 text-center">
-          <p class="text-[10px] text-brand-muted uppercase tracking-wider font-semibold">Win Rate</p>
-          <p id="dashWinRate" class="text-base font-extrabold text-white mt-0.5">75%</p>
-          <div class="flex justify-center items-center gap-1 mt-1 text-[9px]">
-            <span class="text-brand-green font-bold" id="dashWinCount">3 W</span>
-            <span class="text-rose-400 font-bold" id="dashLossCount">1 L</span>
-            <span class="text-slate-400 font-bold" id="dashBECount">0 BE</span>
-          </div>
-        </div>
-
-        <div class="bg-brand-cardBg border border-brand-cardBorder rounded-xl p-2.5 text-center">
-          <p class="text-[10px] text-brand-muted uppercase tracking-wider font-semibold">Monthly PnL</p>
-          <p id="dashMonthlyPnL" class="text-base font-extrabold text-brand-green mt-0.5">+$90.00</p>
-          <div class="text-[9px] text-brand-muted mt-1">
-            Prof: <span class="text-brand-green" id="dashMonthlyProfit">$102.00</span><br>
-            Loss: <span class="text-rose-400" id="dashMonthlyLoss">$12.00</span>
-          </div>
-        </div>
-
-        <div class="bg-brand-cardBg border border-brand-cardBorder rounded-xl p-2.5 text-center flex flex-col justify-between">
-          <div>
-            <p class="text-[10px] text-brand-muted uppercase tracking-wider font-semibold">Avg R:R</p>
-            <p id="dashAvgRR" class="text-base font-extrabold text-white mt-0.5">3.25</p>
-          </div>
-          <div id="dashStatusBadge" class="mt-1 bg-brand-green/20 text-brand-green border border-brand-green/30 text-[9px] font-bold py-0.5 px-1 rounded truncate">
-            Profitable
-          </div>
-        </div>
-      </div>
-
-      <!-- Recent Trades Feed -->
-      <section class="bg-brand-cardBg border border-brand-cardBorder rounded-xl p-3">
-        <h2 class="text-xs font-bold text-white mb-0.5">Recent Trades</h2>
-        <p class="text-[10px] text-brand-muted mb-2">Latest across all time</p>
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6">
         
-        <div id="recentTradesList" class="space-y-2">
-          <!-- Rendered dynamically -->
-        </div>
-      </section>
-
-    </div>
-
-    <!-- TAB CONTENT: TRADE LOG -->
-    <div id="content-tradelog" class="hidden space-y-3">
-      
-      <!-- Top Action Bar -->
-      <div class="flex items-center justify-between">
-        <div>
-          <h2 class="text-base font-bold text-white">Trade Journal</h2>
-          <p class="text-[11px] text-brand-muted">Record & analyze your trading executions</p>
-        </div>
-        <button id="btnToggleTradeForm" onclick="toggleTradeForm()" class="bg-brand-green hover:bg-brand-greenDark text-black font-bold text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 shadow transition">
-          <i class="fa-solid fa-plus text-xs"></i> <span>New Trade</span>
-        </button>
-      </div>
-
-      <!-- Quick Metrics Ribbon -->
-      <div class="grid grid-cols-4 gap-2 text-center bg-brand-cardBg border border-brand-cardBorder p-2 rounded-xl">
-        <div>
-          <p class="text-[9px] text-brand-muted uppercase font-semibold">Total P&L</p>
-          <p id="logTotalPnL" class="text-xs font-extrabold text-brand-green">+$90.00</p>
-        </div>
-        <div>
-          <p class="text-[9px] text-brand-muted uppercase font-semibold">Win Rate</p>
-          <p id="logWinRate" class="text-xs font-extrabold text-white">75%</p>
-        </div>
-        <div>
-          <p class="text-[9px] text-brand-muted uppercase font-semibold">Trades</p>
-          <p id="logTotalTrades" class="text-xs font-extrabold text-white">4</p>
-        </div>
-        <div>
-          <p class="text-[9px] text-brand-muted uppercase font-semibold">Balance</p>
-          <p id="logBalance" class="text-xs font-extrabold text-white">$390</p>
-        </div>
-      </div>
-
-      <!-- NEW / EDIT TRADE ENTRY FORM (Collapsible) -->
-      <div id="tradeFormContainer" class="hidden bg-brand-cardBg border border-brand-green/50 rounded-xl p-3 space-y-3 glow-green">
-        <div class="flex items-center justify-between border-b border-brand-cardBorder pb-2">
-          <h3 id="formTitle" class="text-xs font-bold text-brand-green flex items-center gap-1.5">
-            <i class="fa-solid fa-pen-to-square"></i> New Trade Entry
-          </h3>
-          <button onclick="toggleTradeForm(false)" class="text-slate-400 hover:text-white text-xs">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-
-        <form id="tradeForm" onsubmit="saveTrade(event)" class="space-y-3 text-xs">
-          <input type="hidden" id="tradeId">
-
-          <!-- Date, Pair, Position -->
-          <div class="grid grid-cols-3 gap-2">
-            <div>
-              <label class="block text-[10px] text-brand-muted mb-1 font-medium">DATE *</label>
-              <input type="date" id="tradeDate" required class="w-full bg-black border border-brand-cardBorder rounded-lg p-2 text-white focus:outline-none focus:border-brand-green text-xs">
+        <!-- VIEW 1: ACCOUNT SELECTOR -->
+        <div id="view-accounts" class="space-y-6">
+            <div class="flex justify-between items-end">
+                <div>
+                    <h2 class="text-2xl font-bold tracking-tight text-white">Your Accounts</h2>
+                    <p class="text-slate-400 text-sm mt-1">Select an account to start journaling your trades.</p>
+                </div>
             </div>
-            <div>
-              <label class="block text-[10px] text-brand-muted mb-1 font-medium">PAIR *</label>
-              <select id="tradePair" required class="w-full bg-black border border-brand-cardBorder rounded-lg p-2 text-white focus:outline-none focus:border-brand-green text-xs custom-select">
-                <option value="XAUUSD">XAUUSD</option>
-                <option value="EURUSD">EURUSD</option>
-                <option value="GBPUSD">GBPUSD</option>
-                <option value="US100">US100</option>
-                <option value="US30">US30</option>
-                <option value="SPX500">SPX500</option>
-                <option value="USDJPY">USDJPY</option>
-                <option value="AUDUSD">AUDUSD</option>
-                <option value="NZDUSD">NZDUSD</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-[10px] text-brand-muted mb-1 font-medium">POSITION</label>
-              <div class="grid grid-cols-2 gap-1 bg-black p-0.5 rounded-lg border border-brand-cardBorder">
-                <button type="button" id="posBuy" onclick="setPosition('BUY')" class="py-1 rounded text-center text-[10px] font-bold bg-brand-green text-black">BUY</button>
-                <button type="button" id="posSell" onclick="setPosition('SELL')" class="py-1 rounded text-center text-[10px] font-bold text-slate-400 hover:text-white">SELL</button>
-              </div>
-              <input type="hidden" id="tradePosition" value="BUY">
-            </div>
-          </div>
 
-          <!-- Net P/L, Risk, RR -->
-          <div class="grid grid-cols-3 gap-2">
-            <div>
-              <label class="block text-[10px] text-brand-muted mb-1 font-medium">NET P/L ($) *</label>
-              <input type="number" step="any" id="tradeNetPnL" placeholder="250.00" oninput="calculateRR()" required class="w-full bg-black border border-brand-cardBorder rounded-lg p-2 text-white focus:outline-none focus:border-brand-green text-xs">
+            <div id="accounts-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Dynamically populated account cards -->
             </div>
-            <div>
-              <label class="block text-[10px] text-brand-muted mb-1 font-medium">RISK ($) *</label>
-              <input type="number" step="any" id="tradeRisk" placeholder="100.00" oninput="calculateRR()" required class="w-full bg-black border border-brand-cardBorder rounded-lg p-2 text-white focus:outline-none focus:border-brand-green text-xs">
-            </div>
-            <div>
-              <label class="block text-[10px] text-brand-muted mb-1 font-medium">RR (AUTO)</label>
-              <input type="text" id="tradeRR" readonly placeholder="2.5" class="w-full bg-black/60 border border-brand-cardBorder rounded-lg p-2 text-brand-green font-bold text-xs cursor-not-allowed">
-            </div>
-          </div>
 
-          <!-- HTF Opportunity Chips -->
-          <div>
-            <label class="block text-[10px] text-brand-muted mb-1 font-medium">HTF OPPORTUNITY</label>
-            <div class="flex flex-wrap gap-1" id="htfChips">
-              <button type="button" onclick="toggleChip(this, 'htf')" class="chip-btn px-2 py-1 rounded bg-black border border-brand-cardBorder text-[10px] text-slate-300">Open to High</button>
-              <button type="button" onclick="toggleChip(this, 'htf')" class="chip-btn px-2 py-1 rounded bg-black border border-brand-cardBorder text-[10px] text-slate-300">Open to Low</button>
-              <button type="button" onclick="toggleChip(this, 'htf')" class="chip-btn px-2 py-1 rounded bg-black border border-brand-cardBorder text-[10px] text-slate-300">Low to Close</button>
-              <button type="button" onclick="toggleChip(this, 'htf')" class="chip-btn px-2 py-1 rounded bg-black border border-brand-cardBorder text-[10px] text-slate-300">High to Close</button>
-            </div>
-          </div>
-
-          <!-- Confluence Chips -->
-          <div>
-            <label class="block text-[10px] text-brand-muted mb-1 font-medium">CONFLUENCE</label>
-            <div class="flex flex-wrap gap-1" id="confluenceChips">
-              <button type="button" onclick="toggleChip(this, 'conf')" class="chip-btn px-2 py-1 rounded bg-black border border-brand-cardBorder text-[10px] text-slate-300">No Confluence</button>
-              <button type="button" onclick="toggleChip(this, 'conf')" class="chip-btn px-2 py-1 rounded bg-black border border-brand-cardBorder text-[10px] text-slate-300">SMT</button>
-              <button type="button" onclick="toggleChip(this, 'conf')" class="chip-btn px-2 py-1 rounded bg-black border border-brand-cardBorder text-[10px] text-slate-300">PSP</button>
-              <button type="button" onclick="toggleChip(this, 'conf')" class="chip-btn px-2 py-1 rounded bg-black border border-brand-cardBorder text-[10px] text-slate-300">Hidden SMT</button>
-            </div>
-          </div>
-
-          <!-- Result Tags -->
-          <div>
-            <label class="block text-[10px] text-brand-muted mb-1 font-medium">RESULT</label>
-            <div class="flex flex-wrap gap-1" id="resultChips">
-              <button type="button" onclick="toggleChip(this, 'res')" class="chip-btn px-2 py-1 rounded bg-black border border-brand-cardBorder text-[10px] text-slate-300">Break Even</button>
-              <button type="button" onclick="toggleChip(this, 'res')" class="chip-btn px-2 py-1 rounded bg-black border border-brand-cardBorder text-[10px] text-slate-300">Full TP</button>
-              <button type="button" onclick="toggleChip(this, 'res')" class="chip-btn px-2 py-1 rounded bg-black border border-brand-cardBorder text-[10px] text-slate-300">SL</button>
-              <button type="button" onclick="toggleChip(this, 'res')" class="chip-btn px-2 py-1 rounded bg-black border border-brand-cardBorder text-[10px] text-slate-300">Partial</button>
-            </div>
-          </div>
-
-          <!-- External Links / Screenshot Upload Simulation -->
-          <div class="grid grid-cols-2 gap-2 pt-1">
-            <input type="url" id="tradeTvLink" placeholder="TradingView link" class="w-full bg-black border border-brand-cardBorder rounded-lg p-2 text-white text-[11px] focus:outline-none focus:border-brand-green">
-            <button type="button" onclick="triggerScreenshotUpload()" class="w-full bg-black hover:bg-brand-cardBg border border-brand-cardBorder rounded-lg p-2 text-slate-300 text-[11px] flex items-center justify-center gap-1">
-              <i class="fa-solid fa-upload text-brand-green"></i> <span id="uploadLabel">Upload Chart</span>
+            <!-- Add Account Card Button -->
+            <button onclick="openAddAccountModal()" class="w-full border-2 border-dashed border-cardBorder hover:border-accentGreen/50 rounded-2xl p-6 text-slate-400 hover:text-accentGreen transition flex flex-col items-center justify-center space-y-2 bg-cardBg/30 hover:bg-cardBg/60">
+                <div class="w-10 h-10 rounded-full bg-cardBorder flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <span class="font-medium text-sm">Add New Account</span>
             </button>
-          </div>
-
-          <!-- Submit Buttons -->
-          <div class="flex items-center justify-end gap-2 pt-2 border-t border-brand-cardBorder">
-            <button type="button" onclick="toggleTradeForm(false)" class="px-3 py-1.5 rounded-lg bg-black border border-brand-cardBorder text-slate-300 text-xs hover:bg-brand-cardBg">Cancel</button>
-            <button type="submit" class="px-4 py-1.5 rounded-lg bg-brand-green text-black font-bold text-xs hover:bg-brand-greenDark">Save Trade</button>
-          </div>
-        </form>
-      </div>
-
-      <!-- Trade Table / Responsive List -->
-      <section class="bg-brand-cardBg border border-brand-cardBorder rounded-xl overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr class="bg-black border-b border-brand-cardBorder text-[10px] text-brand-muted uppercase">
-                <th class="p-2.5 font-semibold">Date / Pair</th>
-                <th class="p-2.5 font-semibold">P&L ($)</th>
-                <th class="p-2.5 font-semibold">RR</th>
-                <th class="p-2.5 font-semibold text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="tradeTableBody" class="divide-y divide-brand-cardBorder/60">
-              <!-- Rendered dynamically -->
-            </tbody>
-          </table>
         </div>
 
-        <!-- Empty State -->
-        <div id="emptyTradesMsg" class="hidden text-center py-10 p-4">
-          <div class="text-3xl mb-2">👻</div>
-          <p class="font-bold text-white text-sm">No trades yet</p>
-          <p class="text-xs text-brand-muted mt-1">Add your first trade using the button above.</p>
-        </div>
-      </section>
+        <!-- VIEW 2: DASHBOARD / TRADE LOG / ANALYTICS -->
+        <div id="view-journal" class="hidden space-y-6">
+            
+            <!-- Account Switch Bar -->
+            <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-accentGreen text-xl font-bold">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h3 id="current-acc-title" class="text-lg font-bold text-white">Najhan</h3>
+                            <span id="current-acc-type-badge" class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-accentGreen">Personal</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-0.5">Balance: <span id="current-acc-balance-display" class="text-white font-semibold">$500</span></p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2 w-full sm:w-auto">
+                    <button onclick="switchAccount()" class="flex-1 sm:flex-none px-4 py-2 bg-cardBorder hover:bg-slate-800 text-slate-200 text-xs font-semibold rounded-xl transition">
+                        <i class="fa-solid fa-arrow-right-arrow-left mr-1.5"></i> Switch Account
+                    </button>
+                </div>
+            </div>
 
+            <!-- Tabs Navigation -->
+            <div class="flex border-b border-cardBorder space-x-6">
+                <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="pb-3 text-sm font-semibold border-b-2 border-accentGreen text-accentGreen transition">Dashboard</button>
+                <button onclick="switchTab('tradelog')" id="tab-btn-tradelog" class="pb-3 text-sm font-medium text-slate-400 hover:text-white transition">Trade Log</button>
+                <button onclick="switchTab('analytics')" id="tab-btn-analytics" class="pb-3 text-sm font-medium text-slate-400 hover:text-white transition">Analytics</button>
+            </div>
+
+            <!-- TAB CONTENT: DASHBOARD -->
+            <div id="tab-dashboard" class="space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Monthly Performance Calendar Widget -->
+                    <div class="bg-cardBg border border-cardBorder rounded-2xl p-5 lg:col-span-2 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-bold text-white text-base">Monthly Performance</h4>
+                                <p id="calendar-month-label" class="text-xs text-slate-400">October 2026</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="changeMonth(-1)" class="w-8 h-8 rounded-lg bg-cardBorder hover:bg-slate-800 flex items-center justify-center text-slate-300 text-xs"><i class="fa-solid fa-chevron-left"></i></button>
+                                <button onclick="changeMonth(1)" class="w-8 h-8 rounded-lg bg-cardBorder hover:bg-slate-800 flex items-center justify-center text-slate-300 text-xs"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Calendar Grid -->
+                        <div class="grid grid-cols-7 gap-1.5 text-center text-xs">
+                            <span class="text-slate-500 font-medium py-1">Mo</span>
+                            <span class="text-slate-500 font-medium py-1">Tu</span>
+                            <span class="text-slate-500 font-medium py-1">We</span>
+                            <span class="text-slate-500 font-medium py-1">Th</span>
+                            <span class="text-slate-500 font-medium py-1">Fr</span>
+                            <span class="text-slate-500 font-medium py-1">Sa</span>
+                            <span class="text-slate-500 font-medium py-1">Su</span>
+                        </div>
+                        <div id="calendar-days-grid" class="grid grid-cols-7 gap-1.5">
+                            <!-- Populated via JS -->
+                        </div>
+
+                        <!-- Calendar Legend Summary -->
+                        <div class="grid grid-cols-3 gap-3 pt-4 border-t border-cardBorder text-center">
+                            <div class="bg-darkBg/50 p-2.5 rounded-xl border border-cardBorder">
+                                <span class="text-[10px] uppercase font-semibold text-slate-400 block">Win Rate</span>
+                                <span id="dash-win-rate" class="text-base font-bold text-white mt-0.5 block">0%</span>
+                            </div>
+                            <div class="bg-darkBg/50 p-2.5 rounded-xl border border-cardBorder">
+                                <span class="text-[10px] uppercase font-semibold text-slate-400 block">Monthly PnL</span>
+                                <span id="dash-monthly-pnl" class="text-base font-bold text-accentGreen mt-0.5 block">+$0.00</span>
+                            </div>
+                            <div class="bg-darkBg/50 p-2.5 rounded-xl border border-cardBorder">
+                                <span class="text-[10px] uppercase font-semibold text-slate-400 block">Avg R:R</span>
+                                <span id="dash-avg-rr" class="text-base font-bold text-white mt-0.5 block">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Trades Widget -->
+                    <div class="bg-cardBg border border-cardBorder rounded-2xl p-5 shadow-sm space-y-4 flex flex-col">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-white text-base">Recent Trades</h4>
+                            <button id="clear-date-filter-btn" onclick="clearDateFilter()" class="hidden text-[10px] text-accentGreen bg-emerald-500/10 px-2 py-1 rounded-md font-medium hover:bg-emerald-500/20 transition">Show All</button>
+                        </div>
+                        <div id="recent-trades-list" class="space-y-3 flex-1 overflow-y-auto max-h-[380px]">
+                            <div class="text-center py-12 text-slate-500 text-xs">No recent trades</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: TRADE LOG -->
+            <div id="tab-tradelog" class="hidden space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-cardBg border border-cardBorder p-4 rounded-2xl">
+                    <div class="grid grid-cols-2 sm:flex items-center gap-4 w-full sm:w-auto">
+                        <div>
+                            <span class="text-[10px] uppercase font-semibold text-slate-400 block">Total P&L</span>
+                            <span id="log-total-pnl" class="text-lg font-bold text-accentGreen">+$0.00</span>
+                        </div>
+                        <div class="border-l border-cardBorder pl-4">
+                            <span class="text-[10px] uppercase font-semibold text-slate-400 block">Win Rate</span>
+                            <span id="log-win-rate" class="text-lg font-bold text-white">0%</span>
+                        </div>
+                        <div class="border-l border-cardBorder pl-4">
+                            <span class="text-[10px] uppercase font-semibold text-slate-400 block">Trades</span>
+                            <span id="log-total-trades" class="text-lg font-bold text-white">0</span>
+                        </div>
+                    </div>
+                    <button onclick="openAddTradeModal()" class="bg-accentGreen hover:bg-emerald-600 text-slate-950 font-semibold px-4 py-2.5 rounded-xl text-sm transition flex items-center shadow-lg shadow-emerald-900/10 w-full sm:w-auto justify-center">
+                        <i class="fa-solid fa-plus mr-2"></i> New Trade
+                    </button>
+                </div>
+
+                <!-- Trade Table List -->
+                <div class="bg-cardBg border border-cardBorder rounded-2xl overflow-x-auto shadow-sm">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-cardBorder text-slate-400 font-semibold uppercase tracking-wider bg-darkBg/30">
+                                <th class="p-3.5">Date</th>
+                                <th class="p-3.5">Pair</th>
+                                <th class="p-3.5">Pos</th>
+                                <th class="p-3.5">Net P/L</th>
+                                <th class="p-3.5">Risk</th>
+                                <th class="p-3.5">R:R</th>
+                                <th class="p-3.5">HTF</th>
+                                <th class="p-3.5">Result</th>
+                                <th class="p-3.5 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trade-table-body" class="divide-y divide-cardBorder">
+                            <tr>
+                                <td colspan="9" class="p-8 text-center text-slate-500">No trades recorded yet. Click '+ New Trade' to add one.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: ANALYTICS -->
+            <div id="tab-analytics" class="hidden space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Equity Curve Chart -->
+                    <div class="bg-cardBg border border-cardBorder rounded-2xl p-5 shadow-sm space-y-4">
+                        <h4 class="font-bold text-white text-base">Trade Growth View (Equity Curve)</h4>
+                        <div class="h-64 relative">
+                            <canvas id="equityChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- Win/Loss Ratio Chart -->
+                    <div class="bg-cardBg border border-cardBorder rounded-2xl p-5 shadow-sm space-y-4">
+                        <h4 class="font-bold text-white text-base">Win / Loss Ratio</h4>
+                        <div class="h-64 relative flex items-center justify-center">
+                            <canvas id="winLossChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- MODAL: ADD / EDIT ACCOUNT -->
+    <div id="account-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-cardBg border border-cardBorder rounded-2xl w-full max-w-md p-6 space-y-5 shadow-2xl">
+            <h3 id="account-modal-title" class="text-lg font-bold text-white">Add New Account</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Account Name</label>
+                    <input type="text" id="acc-input-name" placeholder="e.g. Najh.an" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-accentGreen">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Account Type</label>
+                    <select id="acc-input-type" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-accentGreen">
+                        <option value="Personal">Personal</option>
+                        <option value="Demo">Demo</option>
+                        <option value="Funded">Funded</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Starting Balance ($)</label>
+                    <input type="number" id="acc-input-balance" placeholder="500" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-accentGreen">
+                </div>
+            </div>
+            <div class="flex justify-end space-x-3 pt-2">
+                <button onclick="closeAddAccountModal()" class="px-4 py-2 bg-cardBorder hover:bg-slate-800 text-slate-300 text-xs font-semibold rounded-xl transition">Cancel</button>
+                <button onclick="saveAccount()" class="px-4 py-2 bg-accentGreen hover:bg-emerald-600 text-slate-950 text-xs font-semibold rounded-xl transition">Save Account</button>
+            </div>
+        </div>
     </div>
 
-    <!-- TAB CONTENT: ANALYTICS -->
-    <div id="content-analytics" class="hidden space-y-4">
-      
-      <!-- Date Filter -->
-      <div class="bg-brand-cardBg border border-brand-cardBorder rounded-xl p-2.5 flex items-center justify-between text-xs">
-        <span class="text-brand-muted font-medium">Filter Period</span>
-        <div class="flex items-center gap-1.5">
-          <input type="date" id="analyticsFrom" onchange="renderAnalytics()" class="bg-black border border-brand-cardBorder text-white rounded px-2 py-1 text-[11px]">
-          <span class="text-brand-muted">to</span>
-          <input type="date" id="analyticsTo" onchange="renderAnalytics()" class="bg-black border border-brand-cardBorder text-white rounded px-2 py-1 text-[11px]">
-        </div>
-      </div>
+    <!-- MODAL: ADD / EDIT TRADE -->
+    <div id="trade-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-cardBg border border-cardBorder rounded-2xl w-full max-w-xl p-6 space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <h3 id="trade-modal-title" class="text-lg font-bold text-white">New Trade Entry</h3>
+            
+            <input type="hidden" id="edit-trade-id">
 
-      <!-- Overview Stats Ribbon -->
-      <div class="grid grid-cols-4 gap-2 text-center">
-        <div class="bg-brand-cardBg border border-brand-cardBorder p-2 rounded-xl">
-          <p class="text-[9px] text-brand-muted uppercase font-semibold">Total P&L</p>
-          <p id="anaTotalPnL" class="text-xs font-extrabold text-brand-green">+$0.00</p>
-        </div>
-        <div class="bg-brand-cardBg border border-brand-cardBorder p-2 rounded-xl">
-          <p class="text-[9px] text-brand-muted uppercase font-semibold">Win Rate</p>
-          <p id="anaWinRate" class="text-xs font-extrabold text-white">0%</p>
-        </div>
-        <div class="bg-brand-cardBg border border-brand-cardBorder p-2 rounded-xl">
-          <p class="text-[9px] text-brand-muted uppercase font-semibold">Trades</p>
-          <p id="anaTotalTrades" class="text-xs font-extrabold text-white">0</p>
-        </div>
-        <div class="bg-brand-cardBg border border-brand-cardBorder p-2 rounded-xl">
-          <p class="text-[9px] text-brand-muted uppercase font-semibold">Avg RR</p>
-          <p id="anaAvgRR" class="text-xs font-extrabold text-white">0</p>
-        </div>
-      </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Date</label>
+                    <input type="date" id="trade-date" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-accentGreen">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Pair</label>
+                    <select id="trade-pair" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-accentGreen">
+                        <option value="XAUUSD">XAUUSD</option>
+                        <option value="US100">US100</option>
+                        <option value="US30">US30</option>
+                        <option value="SPX500">SPX500</option>
+                        <option value="GBPUSD">GBPUSD</option>
+                        <option value="EURUSD">EURUSD</option>
+                        <option value="AUDUSD">AUDUSD</option>
+                        <option value="NZDUSD">NZDUSD</option>
+                        <option value="USDJPY">USDJPY</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Position</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button type="button" id="pos-buy-btn" onclick="setTradePos('BUY')" class="py-2.5 rounded-xl text-xs font-bold bg-accentGreen text-slate-950 transition">BUY</button>
+                        <button type="button" id="pos-sell-btn" onclick="setTradePos('SELL')" class="py-2.5 rounded-xl text-xs font-bold bg-cardBorder text-slate-400 transition">SELL</button>
+                    </div>
+                </div>
+            </div>
 
-      <!-- Trade Growth / Equity Curve -->
-      <section class="bg-brand-cardBg border border-brand-cardBorder rounded-xl p-3 space-y-2">
-        <div class="flex items-center justify-between">
-          <div>
-            <h3 class="text-xs font-bold text-white">Trade Growth View</h3>
-            <p class="text-[10px] text-brand-muted">Equity curve over time</p>
-          </div>
-          <span id="anaEquityGain" class="text-xs font-bold text-brand-green">+$90.00 (30.00%)</span>
-        </div>
-        <div class="h-44 w-full relative">
-          <canvas id="chartEquity"></canvas>
-        </div>
-      </section>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Net P/L ($)</label>
+                    <input type="number" id="trade-pnl" placeholder="100 or -12" oninput="autoCalculateRR()" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-accentGreen">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Risk ($)</label>
+                    <input type="number" id="trade-risk" placeholder="10" oninput="autoCalculateRR()" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-accentGreen">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5">RR (Auto)</label>
+                    <input type="number" step="0.1" id="trade-rr" placeholder="0.0" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-slate-400 focus:outline-none" readonly>
+                </div>
+            </div>
 
-      <!-- Charts Row: Symbol & Win/Loss Ratio -->
-      <div class="grid grid-cols-2 gap-3">
-        <section class="bg-brand-cardBg border border-brand-cardBorder rounded-xl p-3">
-          <h3 class="text-xs font-bold text-white mb-2">Symbol Performance</h3>
-          <div class="h-32 w-full relative">
-            <canvas id="chartSymbol"></canvas>
-          </div>
-        </section>
-
-        <section class="bg-brand-cardBg border border-brand-cardBorder rounded-xl p-3">
-          <h3 class="text-xs font-bold text-white mb-2">Win / Loss Ratio</h3>
-          <div class="h-32 w-full relative">
-            <canvas id="chartWinLoss"></canvas>
-          </div>
-        </section>
-      </div>
-
-      <!-- Charts Row: Day of Week & Order Type -->
-      <div class="grid grid-cols-2 gap-3">
-        <section class="bg-brand-cardBg border border-brand-cardBorder rounded-xl p-3">
-          <h3 class="text-xs font-bold text-white mb-2">PnL by Weekday</h3>
-          <div class="h-32 w-full relative">
-            <canvas id="chartWeekday"></canvas>
-          </div>
-        </section>
-
-        <section class="bg-brand-cardBg border border-brand-cardBorder rounded-xl p-3">
-          <h3 class="text-xs font-bold text-white mb-2">PnL by Order Type</h3>
-          <div class="h-32 w-full relative">
-            <canvas id="chartOrderType"></canvas>
-          </div>
-        </section>
-      </div>
-
-    </div>
-
-  </main>
-
-  <!-- ACCOUNT MANAGER MODAL -->
-  <div id="accountModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-end sm:items-center justify-center p-3 hidden">
-    <div class="bg-brand-cardBg border border-brand-cardBorder w-full max-w-md rounded-2xl p-4 space-y-4 shadow-2xl animate-in fade-in slide-in-from-bottom-5">
-      
-      <div class="flex items-center justify-between border-b border-brand-cardBorder pb-2">
-        <div>
-          <span class="text-[10px] text-brand-green uppercase font-bold tracking-widest">NJHAN JOURNAL</span>
-          <h2 class="text-base font-extrabold text-white">Your Accounts</h2>
-          <p class="text-[11px] text-brand-muted">Select an account to start journaling your trades.</p>
-        </div>
-        <button onclick="closeAccountModal()" class="text-slate-400 hover:text-white text-base">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <!-- List of Accounts -->
-      <div id="accountsListModal" class="space-y-2 max-h-60 overflow-y-auto pr-1">
-        <!-- Rendered dynamically -->
-      </div>
-
-      <!-- Add Account Section -->
-      <div id="addAccountForm" class="border-t border-brand-cardBorder pt-3 space-y-2">
-        <button id="btnShowAddAccount" onclick="toggleAddAccountInputs(true)" class="w-full py-2 border border-dashed border-brand-cardBorder hover:border-brand-green rounded-xl text-xs text-brand-muted hover:text-brand-green flex items-center justify-center gap-2 transition bg-black">
-          <i class="fa-solid fa-plus text-xs"></i> Add Account
-        </button>
-
-        <div id="addAccountInputs" class="hidden space-y-2 bg-black p-3 rounded-xl border border-brand-cardBorder">
-          <p class="text-xs font-bold text-white">New Account</p>
-          <div class="grid grid-cols-3 gap-2">
-            <input type="text" id="newAccName" placeholder="Name (e.g. Najhan)" class="bg-brand-cardBg border border-brand-cardBorder text-white rounded-lg p-1.5 text-xs focus:outline-none focus:border-brand-green">
-            <select id="newAccType" class="bg-brand-cardBg border border-brand-cardBorder text-white rounded-lg p-1.5 text-xs focus:outline-none focus:border-brand-green custom-select">
-              <option value="PERSONAL">Personal</option>
-              <option value="FUNDED">Funded</option>
-              <option value="DEMO">Demo</option>
-            </select>
-            <input type="number" id="newAccBalance" placeholder="Balance ($)" value="1000" class="bg-brand-cardBg border border-brand-cardBorder text-white rounded-lg p-1.5 text-xs focus:outline-none focus:border-brand-green">
-          </div>
-          <div class="flex items-center justify-end gap-2 pt-1">
-            <button onclick="toggleAddAccountInputs(false)" class="px-2.5 py-1 text-xs text-slate-400 hover:text-white">Cancel</button>
-            <button onclick="createNewAccount()" class="px-3 py-1 bg-brand-green text-black font-bold text-xs rounded-lg hover:bg-brand-greenDark">Save</button>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer class="border-t border-brand-cardBorder/60 py-3 text-center text-[10px] text-brand-muted bg-black">
-    <p>Njhan Jurnal &copy; 2026. All trading data stored securely on your device.</p>
-  </footer>
-
-  <!-- JAVASCRIPT LOGIC -->
-  <script>
-    // --- APP STATE & INITIAL DATA ---
-    const STORAGE_KEY_ACCOUNTS = 'njhan_journal_accounts_v1';
-    const STORAGE_KEY_ACTIVE_ACC = 'njhan_journal_active_acc_id_v1';
-    const STORAGE_KEY_TRADES = 'njhan_journal_trades_v1';
-
-    // Mock initial accounts if empty
-    const DEFAULT_ACCOUNTS = [
-      { id: 'acc_1', name: 'Najhan', type: 'PERSONAL', startingBalance: 500 },
-      { id: 'acc_2', name: 'Funded Account', type: 'FUNDED', startingBalance: 10000 },
-      { id: 'acc_3', name: 'Najh.', type: 'PERSONAL', startingBalance: 300 }
-    ];
-
-    // Mock initial trades for Najh. matching video demonstration (Oct 2026)
-    const DEFAULT_TRADES = [
-      {
-        id: 'tr_1',
-        accountId: 'acc_3',
-        date: '2026-10-26',
-        pair: 'XAUUSD',
-        position: 'BUY',
-        netPnL: 12.00,
-        risk: 3.50,
-        rr: 3.4,
-        htf: ['High to Close'],
-        confluence: [],
-        result: ['Full TP'],
-        tvLink: ''
-      },
-      {
-        id: 'tr_2',
-        accountId: 'acc_3',
-        date: '2026-10-27',
-        pair: 'XAUUSD',
-        position: 'BUY',
-        netPnL: 40.00,
-        risk: 5.50,
-        rr: 7.3,
-        htf: ['Open to High'],
-        confluence: [],
-        result: ['Full TP'],
-        tvLink: ''
-      },
-      {
-        id: 'tr_3',
-        accountId: 'acc_3',
-        date: '2026-10-27',
-        pair: 'XAUUSD',
-        position: 'BUY',
-        netPnL: -12.00,
-        risk: 12.00,
-        rr: -1.0,
-        htf: ['Low to Close'],
-        confluence: [],
-        result: ['SL'],
-        tvLink: ''
-      },
-      {
-        id: 'tr_4',
-        accountId: 'acc_3',
-        date: '2026-10-28',
-        pair: 'XAUUSD',
-        position: 'BUY',
-        netPnL: 50.00,
-        risk: 15.00,
-        rr: 3.3,
-        htf: ['Low to Close'],
-        confluence: [],
-        result: ['Full TP'],
-        tvLink: ''
-      }
-    ];
-
-    let accounts = [];
-    let activeAccountId = '';
-    let trades = [];
-
-    // Calendar state
-    let calendarYear = 2026;
-    let calendarMonth = 9; // 0-indexed (9 = October)
-
-    // Chart instances
-    let chartEquityInst = null;
-    let chartSymbolInst = null;
-    let chartWinLossInst = null;
-    let chartWeekdayInst = null;
-    let chartOrderTypeInst = null;
-
-    // Selected chips state for trade form
-    let selectedHTF = [];
-    let selectedConf = [];
-    let selectedRes = [];
-
-    // --- INITIALIZATION ---
-    window.onload = function() {
-      loadDataFromStorage();
-      setupDefaultFormDate();
-      renderAll();
-    };
-
-    function loadDataFromStorage() {
-      // Load accounts
-      const storedAccs = localStorage.getItem(STORAGE_KEY_ACCOUNTS);
-      if (storedAccs) {
-        accounts = JSON.parse(storedAccs);
-      } else {
-        accounts = DEFAULT_ACCOUNTS;
-        localStorage.setItem(STORAGE_KEY_ACCOUNTS, JSON.stringify(accounts));
-      }
-
-      // Load active account ID
-      const storedActiveId = localStorage.getItem(STORAGE_KEY_ACTIVE_ACC);
-      if (storedActiveId && accounts.some(a => a.id === storedActiveId)) {
-        activeAccountId = storedActiveId;
-      } else {
-        activeAccountId = accounts[2] ? accounts[2].id : accounts[0].id; // default to 'Najh.'
-        localStorage.setItem(STORAGE_KEY_ACTIVE_ACC, activeAccountId);
-      }
-
-      // Load trades
-      const storedTrades = localStorage.getItem(STORAGE_KEY_TRADES);
-      if (storedTrades) {
-        trades = JSON.parse(storedTrades);
-      } else {
-        trades = DEFAULT_TRADES;
-        localStorage.setItem(STORAGE_KEY_TRADES, JSON.stringify(trades));
-      }
-    }
-
-    function saveDataToStorage() {
-      localStorage.setItem(STORAGE_KEY_ACCOUNTS, JSON.stringify(accounts));
-      localStorage.setItem(STORAGE_KEY_ACTIVE_ACC, activeAccountId);
-      localStorage.setItem(STORAGE_KEY_TRADES, JSON.stringify(trades));
-    }
-
-    function setupDefaultFormDate() {
-      const today = new Date().toISOString().split('T')[0];
-      document.getElementById('tradeDate').value = today;
-    }
-
-    // --- TAB NAVIGATION ---
-    function switchTab(tabName) {
-      // Hide all content tabs
-      document.getElementById('content-dashboard').classList.add('hidden');
-      document.getElementById('content-tradelog').classList.add('hidden');
-      document.getElementById('content-analytics').classList.add('hidden');
-
-      // Reset button styles
-      ['dashboard', 'tradelog', 'analytics'].forEach(t => {
-        const btn = document.getElementById(`tab-${t}`);
-        btn.className = "py-2 rounded-lg text-center text-slate-400 hover:text-white transition";
-      });
-
-      // Show target tab & highlight button
-      document.getElementById(`content-${tabName}`).classList.remove('hidden');
-      const activeBtn = document.getElementById(`tab-${tabName}`);
-      activeBtn.className = "py-2 rounded-lg text-center transition bg-brand-green text-black font-bold";
-
-      if (tabName === 'analytics') {
-        setTimeout(renderAnalytics, 50);
-      }
-    }
-
-    // --- RENDER ALL ENGINE ---
-    function renderAll() {
-      const activeAcc = accounts.find(a => a.id === activeAccountId) || accounts[0];
-      
-      // Update header & banner info
-      document.getElementById('headerAccountName').innerText = activeAcc.name;
-      document.getElementById('activeAccountTitle').innerText = activeAcc.name;
-      document.getElementById('activeAccountBadge').innerText = activeAcc.type;
-
-      // Filter trades for active account
-      const accTrades = trades.filter(t => t.accountId === activeAccountId);
-
-      // Compute statistics
-      let totalNetPnL = 0;
-      let wins = 0, losses = 0, be = 0;
-      let totalRisk = 0;
-      let totalRR = 0;
-
-      accTrades.forEach(t => {
-        const pnl = parseFloat(t.netPnL) || 0;
-        totalNetPnL += pnl;
-        totalRisk += (parseFloat(t.risk) || 0);
-        totalRR += (parseFloat(t.rr) || 0);
-
-        if (pnl > 0) wins++;
-        else if (pnl < 0) losses++;
-        else be++;
-      });
-
-      const currentBalance = activeAcc.startingBalance + totalNetPnL;
-      const winRate = accTrades.length > 0 ? Math.round((wins / accTrades.length) * 100) : 0;
-      const avgRR = accTrades.length > 0 ? (totalRR / accTrades.length).toFixed(2) : '0';
-
-      // Update Active Banner Balance
-      document.getElementById('activeAccountBalance').innerText = `$${currentBalance.toFixed(2)}`;
-
-      // Render Dashboard
-      renderDashboard(accTrades, totalNetPnL, wins, losses, be, winRate, avgRR);
-
-      // Render Trade Log
-      renderTradeLog(accTrades, totalNetPnL, winRate, currentBalance);
-
-      // Render Accounts Modal List
-      renderAccountsModal();
-    }
-
-    // --- DASHBOARD RENDERER ---
-    function renderDashboard(accTrades, totalNetPnL, wins, losses, be, winRate, avgRR) {
-      document.getElementById('dashWinRate').innerText = `${winRate}%`;
-      document.getElementById('dashWinCount').innerText = `${wins} W`;
-      document.getElementById('dashLossCount').innerText = `${losses} L`;
-      document.getElementById('dashBECount').innerText = `${be} BE`;
-
-      document.getElementById('dashMonthlyPnL').innerText = `${totalNetPnL >= 0 ? '+' : ''}$${totalNetPnL.toFixed(2)}`;
-      document.getElementById('dashMonthlyPnL').className = `text-base font-extrabold ${totalNetPnL >= 0 ? 'text-brand-green' : 'text-rose-400'} mt-0.5`;
-
-      // Monthly Profit / Loss Breakdown
-      let monthlyProfit = 0;
-      let monthlyLoss = 0;
-      accTrades.forEach(t => {
-        const pnl = parseFloat(t.netPnL) || 0;
-        if (pnl > 0) monthlyProfit += pnl;
-        else if (pnl < 0) monthlyLoss += Math.abs(pnl);
-      });
-
-      document.getElementById('dashMonthlyProfit').innerText = `$${monthlyProfit.toFixed(2)}`;
-      document.getElementById('dashMonthlyLoss').innerText = `$${monthlyLoss.toFixed(2)}`;
-      document.getElementById('dashAvgRR').innerText = avgRR;
-
-      const badge = document.getElementById('dashStatusBadge');
-      if (totalNetPnL >= 0) {
-        badge.innerText = "Profitable";
-        badge.className = "mt-1 bg-brand-green/20 text-brand-green border border-brand-green/30 text-[9px] font-bold py-0.5 px-1 rounded truncate";
-      } else {
-        badge.innerText = "Drawdown";
-        badge.className = "mt-1 bg-rose-500/20 text-rose-400 border border-rose-500/30 text-[9px] font-bold py-0.5 px-1 rounded truncate";
-      }
-
-      // Render Calendar
-      renderCalendar(accTrades);
-
-      // Render Recent Trades Feed
-      const feedContainer = document.getElementById('recentTradesList');
-      feedContainer.innerHTML = '';
-
-      if (accTrades.length === 0) {
-        feedContainer.innerHTML = `<div class="text-xs text-brand-muted text-center py-4">No recent trades recorded</div>`;
-        return;
-      }
-
-      // Sort recent trades by date desc
-      const sorted = [...accTrades].sort((a, b) => new Date(b.date) - new Date(a.date));
-      sorted.slice(0, 5).forEach(t => {
-        const pnl = parseFloat(t.netPnL) || 0;
-        const isWin = pnl >= 0;
-
-        const item = document.createElement('div');
-        item.className = "flex items-center justify-between bg-black border border-brand-cardBorder p-2 rounded-lg text-xs";
-        item.innerHTML = `
-          <div class="flex items-center gap-2">
-            <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold ${t.position === 'BUY' ? 'bg-brand-green/20 text-brand-green border border-brand-green/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}">
-              ${t.position}
-            </span>
             <div>
-              <p class="font-bold text-white text-xs tracking-tight">${t.pair} <span class="${isWin ? 'text-brand-green' : 'text-rose-400'} ml-1">${isWin ? '+' : ''}$${pnl.toFixed(2)}</span></p>
-              <p class="text-[10px] text-brand-muted">${t.date}</p>
+                <label class="block text-xs font-medium text-slate-400 mb-1.5">HTF Opportunity</label>
+                <div class="flex flex-wrap gap-2" id="htf-buttons">
+                    <button type="button" onclick="toggleSelection(this, 'htf')" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition">Open to High</button>
+                    <button type="button" onclick="toggleSelection(this, 'htf')" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition">Open to Low</button>
+                    <button type="button" onclick="toggleSelection(this, 'htf')" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition">Low to Close</button>
+                    <button type="button" onclick="toggleSelection(this, 'htf')" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition">High to Close</button>
+                </div>
             </div>
-          </div>
-          <div class="text-right">
-            <span class="text-[11px] font-bold text-slate-300">RR ${t.rr || '0'}</span>
-          </div>
-        `;
-        feedContainer.appendChild(item);
-      });
-    }
 
-    // --- CALENDAR GRID RENDERER ---
-    function renderCalendar(accTrades) {
-      const grid = document.getElementById('calendarDaysGrid');
-      grid.innerHTML = '';
-
-      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      document.getElementById('calendarMonthLabel').innerText = `${months[calendarMonth]} ${calendarYear}`;
-
-      const firstDayIndex = new Date(calendarYear, calendarMonth, 1).getDay(); // 0 is Sun
-      // Convert Sunday=0 to Monday=0 indexing
-      const startOffset = (firstDayIndex === 0 ? 6 : firstDayIndex - 1);
-      const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
-
-      // Filter trades in this month
-      const monthTrades = accTrades.filter(t => {
-        const d = new Date(t.date);
-        return d.getFullYear() === calendarYear && d.getMonth() === calendarMonth;
-      });
-
-      document.getElementById('dashboardTradesCount').innerText = `${monthTrades.length} trades • ${months[calendarMonth].substring(0, 3)} ${calendarYear}`;
-
-      // Map day -> PnL
-      const dayPnLMap = {};
-      monthTrades.forEach(t => {
-        const dayNum = parseInt(t.date.split('-')[2], 10);
-        if (!dayPnLMap[dayNum]) dayPnLMap[dayNum] = 0;
-        dayPnLMap[dayNum] += parseFloat(t.netPnL) || 0;
-      });
-
-      // Blank offset days
-      for (let i = 0; i < startOffset; i++) {
-        const blank = document.createElement('div');
-        blank.className = "h-10 rounded bg-black/40 border border-transparent";
-        grid.appendChild(blank);
-      }
-
-      // Calendar day cells
-      for (let day = 1; day <= daysInMonth; day++) {
-        const cell = document.createElement('div');
-        const hasTrade = dayPnLMap.hasOwnProperty(day);
-        const pnl = dayPnLMap[day] || 0;
-
-        let bgStyle = "bg-black border border-brand-cardBorder text-slate-400";
-        if (hasTrade) {
-          if (pnl > 0) bgStyle = "bg-brand-green/20 border border-brand-green/60 text-brand-green font-bold";
-          else if (pnl < 0) bgStyle = "bg-rose-500/20 border border-rose-500/60 text-rose-400 font-bold";
-          else bgStyle = "bg-slate-800/40 border border-slate-700 text-slate-200";
-        }
-
-        cell.className = `h-10 rounded flex flex-col justify-between p-1 text-[10px] ${bgStyle} transition hover:border-slate-500`;
-        cell.innerHTML = `
-          <span class="text-[9px] opacity-70">${day}</span>
-          ${hasTrade ? `<span class="text-[8px] leading-none font-extrabold truncate">${pnl >= 0 ? '+' : ''}$${Math.round(pnl)}</span>` : ''}
-        `;
-        grid.appendChild(cell);
-      }
-    }
-
-    function changeMonth(delta) {
-      calendarMonth += delta;
-      if (calendarMonth < 0) {
-        calendarMonth = 11;
-        calendarYear--;
-      } else if (calendarMonth > 11) {
-        calendarMonth = 0;
-        calendarYear++;
-      }
-      const accTrades = trades.filter(t => t.accountId === activeAccountId);
-      renderCalendar(accTrades);
-    }
-
-    // --- TRADE LOG RENDERER ---
-    function renderTradeLog(accTrades, totalNetPnL, winRate, currentBalance) {
-      document.getElementById('logTotalPnL').innerText = `${totalNetPnL >= 0 ? '+' : ''}$${totalNetPnL.toFixed(2)}`;
-      document.getElementById('logWinRate').innerText = `${winRate}%`;
-      document.getElementById('logTotalTrades').innerText = accTrades.length;
-      document.getElementById('logBalance').innerText = `$${Math.round(currentBalance)}`;
-
-      const tbody = document.getElementById('tradeTableBody');
-      const emptyMsg = document.getElementById('emptyTradesMsg');
-      tbody.innerHTML = '';
-
-      if (accTrades.length === 0) {
-        emptyMsg.classList.remove('hidden');
-        return;
-      }
-      emptyMsg.classList.add('hidden');
-
-      const sorted = [...accTrades].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-      sorted.forEach(t => {
-        const pnl = parseFloat(t.netPnL) || 0;
-        const isWin = pnl >= 0;
-
-        const row = document.createElement('tr');
-        row.className = "hover:bg-slate-900/50 transition border-b border-brand-cardBorder/30";
-        row.innerHTML = `
-          <td class="p-2.5">
-            <div class="font-bold text-white text-xs">${t.pair}</div>
-            <div class="text-[10px] text-brand-muted">${t.date}</div>
-          </td>
-          <td class="p-2.5 font-extrabold ${isWin ? 'text-brand-green' : 'text-rose-400'}">
-            ${isWin ? '+' : ''}$${pnl.toFixed(2)}
-          </td>
-          <td class="p-2.5 text-slate-300 font-bold">
-            ${t.rr || '-'}
-          </td>
-          <td class="p-2.5 text-right">
-            <div class="flex items-center justify-end gap-2">
-              <button onclick="editTrade('${t.id}')" class="text-brand-green hover:underline text-[11px] font-semibold">
-                Edit
-              </button>
-              <button onclick="deleteTrade('${t.id}')" class="text-rose-400 hover:text-rose-300 text-xs">
-                <i class="fa-solid fa-trash"></i>
-              </button>
+            <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1.5">Result</label>
+                <div class="flex flex-wrap gap-2" id="result-buttons">
+                    <button type="button" onclick="selectResult(this)" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition" data-val="Break Even">Break Even</button>
+                    <button type="button" onclick="selectResult(this)" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition" data-val="Full TP">Full TP</button>
+                    <button type="button" onclick="selectResult(this)" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition" data-val="SL">SL</button>
+                    <button type="button" onclick="selectResult(this)" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition" data-val="Partial">Partial</button>
+                </div>
             </div>
-          </td>
-        `;
-        tbody.appendChild(row);
-      });
-    }
 
-    // --- FORM ACTIONS (ADD / EDIT TRADE) ---
-    function toggleTradeForm(show) {
-      const container = document.getElementById('tradeFormContainer');
-      const isHidden = container.classList.contains('hidden');
-      const shouldShow = show !== undefined ? show : isHidden;
+            <div class="flex justify-end space-x-3 pt-2">
+                <button onclick="closeAddTradeModal()" class="px-4 py-2 bg-cardBorder hover:bg-slate-800 text-slate-300 text-xs font-semibold rounded-xl transition">Cancel</button>
+                <button onclick="saveTrade()" class="px-4 py-2 bg-accentGreen hover:bg-emerald-600 text-slate-950 text-xs font-semibold rounded-xl transition">Save Trade</button>
+            </div>
+        </div>
+    </div>
 
-      if (shouldShow) {
-        container.classList.remove('hidden');
-        if (!document.getElementById('tradeId').value) {
-          resetTradeForm();
+    <!-- Application Script -->
+    <script>
+        // App State
+        let db = JSON.parse(localStorage.getItem('najhan_journal_db')) || {
+            accounts: [
+                { id: 'acc_1', name: 'Najhan', type: 'Personal', balance: 500, trades: [] },
+                { id: 'acc_2', name: 'Najh.', type: 'Funded', balance: 1000, trades: [] }
+            ],
+            currentAccountId: null
+        };
+
+        let currentTab = 'dashboard';
+        let currentPos = 'BUY';
+        let currentSelectedResult = '';
+        let currentCalendarYear = 2026;
+        let currentCalendarMonth = 9; // October (0-indexed)
+        let activeDateFilter = null; // Filter recent trades by clicking calendar day
+        let equityChartInstance = null;
+        let winLossChartInstance = null;
+
+        function saveData() {
+            localStorage.setItem('najhan_journal_db', JSON.stringify(db));
         }
-      } else {
-        container.classList.add('hidden');
-        resetTradeForm();
-      }
-    }
 
-    function resetTradeForm() {
-      document.getElementById('tradeForm').reset();
-      document.getElementById('tradeId').value = '';
-      document.getElementById('formTitle').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> New Trade Entry`;
-      setPosition('BUY');
-      setupDefaultFormDate();
-      selectedHTF = [];
-      selectedConf = [];
-      selectedRes = [];
-      updateChipStyles();
-      document.getElementById('uploadLabel').innerText = "Upload Chart";
-    }
-
-    function setPosition(pos) {
-      document.getElementById('tradePosition').value = pos;
-      const btnBuy = document.getElementById('posBuy');
-      const btnSell = document.getElementById('posSell');
-
-      if (pos === 'BUY') {
-        btnBuy.className = "py-1 rounded text-center text-[10px] font-bold bg-brand-green text-black";
-        btnSell.className = "py-1 rounded text-center text-[10px] font-bold text-slate-400 hover:text-white";
-      } else {
-        btnSell.className = "py-1 rounded text-center text-[10px] font-bold bg-rose-500 text-white";
-        btnBuy.className = "py-1 rounded text-center text-[10px] font-bold text-slate-400 hover:text-white";
-      }
-    }
-
-    function calculateRR() {
-      const netPnL = parseFloat(document.getElementById('tradeNetPnL').value);
-      const risk = parseFloat(document.getElementById('tradeRisk').value);
-      const rrInput = document.getElementById('tradeRR');
-
-      if (!isNaN(netPnL) && !isNaN(risk) && risk !== 0) {
-        const calculated = (netPnL / risk).toFixed(1);
-        rrInput.value = calculated;
-      } else {
-        rrInput.value = '';
-      }
-    }
-
-    function toggleChip(btn, category) {
-      const text = btn.innerText;
-      let targetArr;
-
-      if (category === 'htf') targetArr = selectedHTF;
-      else if (category === 'conf') targetArr = selectedConf;
-      else targetArr = selectedRes;
-
-      const idx = targetArr.indexOf(text);
-      if (idx > -1) {
-        targetArr.splice(idx, 1);
-      } else {
-        targetArr.push(text);
-      }
-
-      updateChipStyles();
-    }
-
-    function updateChipStyles() {
-      document.querySelectorAll('.chip-btn').forEach(btn => {
-        const text = btn.innerText;
-        if (selectedHTF.includes(text) || selectedConf.includes(text) || selectedRes.includes(text)) {
-          btn.className = "chip-btn px-2 py-1 rounded bg-brand-green text-black font-bold text-[10px]";
-        } else {
-          btn.className = "chip-btn px-2 py-1 rounded bg-black border border-brand-cardBorder text-[10px] text-slate-300";
+        // Initialize UI
+        function initApp() {
+            if (!db.currentAccountId && db.accounts.length > 0) {
+                db.currentAccountId = db.accounts[0].id;
+            }
+            if (db.currentAccountId) {
+                showJournalView();
+            } else {
+                showAccountSelector();
+            }
         }
-      });
-    }
 
-    function triggerScreenshotUpload() {
-      document.getElementById('uploadLabel').innerText = "Screenshot Linked ✓";
-    }
+        function showAccountSelector() {
+            document.getElementById('view-accounts').classList.remove('hidden');
+            document.getElementById('view-journal').classList.add('hidden');
+            document.getElementById('account-header-info').classList.add('hidden');
+            
+            const grid = document.getElementById('accounts-grid');
+            grid.innerHTML = '';
 
-    function saveTrade(e) {
-      e.preventDefault();
+            db.accounts.forEach(acc => {
+                const badgeColor = acc.type === 'Funded' ? 'bg-blue-500/20 text-blue-400' : acc.type === 'Demo' ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-accentGreen';
+                
+                // Calculate current live balance
+                let liveBal = acc.balance + acc.trades.reduce((sum, t) => sum + Number(t.pnl), 0);
 
-      const id = document.getElementById('tradeId').value || `tr_${Date.now()}`;
-      const date = document.getElementById('tradeDate').value;
-      const pair = document.getElementById('tradePair').value;
-      const position = document.getElementById('tradePosition').value;
-      const netPnL = parseFloat(document.getElementById('tradeNetPnL').value);
-      const risk = parseFloat(document.getElementById('tradeRisk').value);
-      const rr = parseFloat(document.getElementById('tradeRR').value) || 0;
-      const tvLink = document.getElementById('tradeTvLink').value;
+                const card = document.createElement('div');
+                card.className = 'bg-cardBg border border-cardBorder hover:border-slate-700 rounded-2xl p-5 relative group transition cursor-pointer flex flex-col justify-between space-y-4';
+                card.onclick = (e) => {
+                    if (e.target.closest('.delete-acc')) return;
+                    selectAccount(acc.id);
+                };
 
-      if (!date || isNaN(netPnL) || isNaN(risk)) {
-        alert("Lengkapi field wajib! (Date, Pair, Net P/L, Risk)");
-        return;
-      }
-
-      const tradeData = {
-        id,
-        accountId: activeAccountId,
-        date,
-        pair,
-        position,
-        netPnL,
-        risk,
-        rr,
-        htf: [...selectedHTF],
-        confluence: [...selectedConf],
-        result: [...selectedRes],
-        tvLink
-      };
-
-      const existingIndex = trades.findIndex(t => t.id === id);
-      if (existingIndex > -1) {
-        trades[existingIndex] = tradeData;
-      } else {
-        trades.push(tradeData);
-      }
-
-      saveDataToStorage();
-      toggleTradeForm(false);
-      renderAll();
-    }
-
-    function editTrade(id) {
-      const t = trades.find(item => item.id === id);
-      if (!t) return;
-
-      document.getElementById('tradeId').value = t.id;
-      document.getElementById('tradeDate').value = t.date;
-      document.getElementById('tradePair').value = t.pair;
-      setPosition(t.position);
-      document.getElementById('tradeNetPnL').value = t.netPnL;
-      document.getElementById('tradeRisk').value = t.risk;
-      document.getElementById('tradeRR').value = t.rr;
-      document.getElementById('tradeTvLink').value = t.tvLink || '';
-
-      selectedHTF = t.htf || [];
-      selectedConf = t.confluence || [];
-      selectedRes = t.result || [];
-      updateChipStyles();
-
-      document.getElementById('formTitle').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Edit Trade Entry`;
-      toggleTradeForm(true);
-    }
-
-    function deleteTrade(id) {
-      if (confirm("Hapus catatan trade ini?")) {
-        trades = trades.filter(t => t.id !== id);
-        saveDataToStorage();
-        renderAll();
-      }
-    }
-
-    // --- ACCOUNTS MANAGEMENT ---
-    function openAccountModal() {
-      document.getElementById('accountModal').classList.remove('hidden');
-    }
-
-    function closeAccountModal() {
-      document.getElementById('accountModal').classList.add('hidden');
-      toggleAddAccountInputs(false);
-    }
-
-    function renderAccountsModal() {
-      const container = document.getElementById('accountsListModal');
-      container.innerHTML = '';
-
-      accounts.forEach(acc => {
-        const isActive = acc.id === activeAccountId;
-
-        // Compute account balance
-        const accTrades = trades.filter(t => t.accountId === acc.id);
-        const pnlSum = accTrades.reduce((sum, t) => sum + (parseFloat(t.netPnL) || 0), 0);
-        const balance = acc.startingBalance + pnlSum;
-
-        const card = document.createElement('div');
-        card.className = `p-3 rounded-xl border transition cursor-pointer flex items-center justify-between ${isActive ? 'bg-brand-cardBg border-brand-green glow-green' : 'bg-black border-brand-cardBorder hover:border-slate-700'}`;
-        card.onclick = () => selectAccount(acc.id);
-
-        card.innerHTML = `
-          <div>
-            <span class="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${acc.type === 'FUNDED' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'bg-brand-green/20 text-brand-green border border-brand-green/30'}">
-              ${acc.type}
-            </span>
-            <h4 class="font-bold text-white text-sm mt-1">${acc.name}</h4>
-            <p class="text-xs font-bold text-brand-green mt-0.5">$${balance.toFixed(2)} <span class="text-[10px] text-brand-muted font-normal">Starting Balance</span></p>
-          </div>
-          <div class="flex items-center gap-2">
-            ${isActive ? '<i class="fa-solid fa-circle-check text-brand-green text-base"></i>' : ''}
-            ${accounts.length > 1 ? `<button onclick="deleteAccount(event, '${acc.id}')" class="text-slate-500 hover:text-rose-400 p-1"><i class="fa-solid fa-xmark"></i></button>` : ''}
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function selectAccount(id) {
-      activeAccountId = id;
-      saveDataToStorage();
-      renderAll();
-      closeAccountModal();
-    }
-
-    function toggleAddAccountInputs(show) {
-      const inputs = document.getElementById('addAccountInputs');
-      const btn = document.getElementById('btnShowAddAccount');
-      if (show) {
-        inputs.classList.remove('hidden');
-        btn.classList.add('hidden');
-      } else {
-        inputs.classList.add('hidden');
-        btn.classList.remove('hidden');
-      }
-    }
-
-    function createNewAccount() {
-      const name = document.getElementById('newAccName').value.trim();
-      const type = document.getElementById('newAccType').value;
-      const balance = parseFloat(document.getElementById('newAccBalance').value) || 1000;
-
-      if (!name) {
-        alert("Masukkan nama akun!");
-        return;
-      }
-
-      const newAcc = {
-        id: `acc_${Date.now()}`,
-        name,
-        type,
-        startingBalance: balance
-      };
-
-      accounts.push(newAcc);
-      activeAccountId = newAcc.id;
-      saveDataToStorage();
-      renderAll();
-      closeAccountModal();
-
-      document.getElementById('newAccName').value = '';
-    }
-
-    function deleteAccount(e, id) {
-      e.stopPropagation();
-      if (accounts.length <= 1) {
-        alert("Minimal harus ada 1 akun aktif!");
-        return;
-      }
-      if (confirm("Hapus akun ini beserta catatannya?")) {
-        accounts = accounts.filter(a => a.id !== id);
-        trades = trades.filter(t => t.accountId !== id);
-        if (activeAccountId === id) {
-          activeAccountId = accounts[0].id;
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${badgeColor}">${acc.type}</span>
+                            <h3 class="text-lg font-bold text-white mt-2">${acc.name}</h3>
+                        </div>
+                        <button onclick="deleteAccount('${acc.id}')" class="delete-acc w-8 h-8 rounded-lg bg-darkBg hover:bg-red-500/20 hover:text-red-400 text-slate-500 flex items-center justify-center transition"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-400">Balance</span>
+                        <div class="text-xl font-bold text-white mt-0.5">$${liveBal.toLocaleString()}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
         }
-        saveDataToStorage();
-        renderAll();
-      }
-    }
 
-    // --- ANALYTICS RENDERER (CHART.JS) ---
-    function renderAnalytics() {
-      const accTrades = trades.filter(t => t.accountId === activeAccountId);
-      
-      let totalPnL = 0;
-      let wins = 0;
-      let totalRR = 0;
-
-      accTrades.forEach(t => {
-        const pnl = parseFloat(t.netPnL) || 0;
-        totalPnL += pnl;
-        if (pnl > 0) wins++;
-        totalRR += (parseFloat(t.rr) || 0);
-      });
-
-      const winRate = accTrades.length > 0 ? Math.round((wins / accTrades.length) * 100) : 0;
-      const avgRR = accTrades.length > 0 ? (totalRR / accTrades.length).toFixed(1) : '0';
-
-      document.getElementById('anaTotalPnL').innerText = `${totalPnL >= 0 ? '+' : ''}$${totalPnL.toFixed(2)}`;
-      document.getElementById('anaWinRate').innerText = `${winRate}%`;
-      document.getElementById('anaTotalTrades').innerText = accTrades.length;
-      document.getElementById('anaAvgRR').innerText = avgRR;
-
-      const activeAcc = accounts.find(a => a.id === activeAccountId) || accounts[0];
-      const startBal = activeAcc.startingBalance;
-      const pctGain = startBal > 0 ? ((totalPnL / startBal) * 100).toFixed(2) : 0;
-      document.getElementById('anaEquityGain').innerText = `+$${totalPnL.toFixed(2)} (${pctGain}%)`;
-
-      // Build Charts
-      renderEquityChart(accTrades, startBal);
-      renderSymbolChart(accTrades);
-      renderWinLossChart(accTrades);
-      renderWeekdayChart(accTrades);
-      renderOrderTypeChart(accTrades);
-    }
-
-    function renderEquityChart(accTrades, startBal) {
-      const ctx = document.getElementById('chartEquity').getContext('2d');
-      if (chartEquityInst) chartEquityInst.destroy();
-
-      const sorted = [...accTrades].sort((a, b) => new Date(a.date) - new Date(b.date));
-      const labels = ['Start', ...sorted.map(t => t.date)];
-      
-      let running = startBal;
-      const dataPoints = [startBal];
-      sorted.forEach(t => {
-        running += (parseFloat(t.netPnL) || 0);
-        dataPoints.push(running);
-      });
-
-      chartEquityInst = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Equity ($)',
-            data: dataPoints,
-            borderColor: '#00e676',
-            backgroundColor: 'rgba(0, 230, 118, 0.08)',
-            fill: true,
-            tension: 0.3,
-            borderWidth: 2,
-            pointRadius: 3,
-            pointBackgroundColor: '#00e676'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { ticks: { color: '#9e9e9e', font: { size: 9 } }, grid: { display: false } },
-            y: { ticks: { color: '#9e9e9e', font: { size: 9 } }, grid: { color: '#1f1f1f' } }
-          }
+        function selectAccount(accId) {
+            db.currentAccountId = accId;
+            saveData();
+            showJournalView();
         }
-      });
-    }
 
-    function renderSymbolChart(accTrades) {
-      const ctx = document.getElementById('chartSymbol').getContext('2d');
-      if (chartSymbolInst) chartSymbolInst.destroy();
-
-      const pairMap = {};
-      accTrades.forEach(t => {
-        pairMap[t.pair] = (pairMap[t.pair] || 0) + (parseFloat(t.netPnL) || 0);
-      });
-
-      chartSymbolInst = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: Object.keys(pairMap),
-          datasets: [{
-            data: Object.values(pairMap),
-            backgroundColor: ['#00e676', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6'],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom', labels: { color: '#8e9d94', font: { size: 9 } } } }
+        function switchAccount() {
+            db.currentAccountId = null;
+            saveData();
+            showAccountSelector();
         }
-      });
-    }
 
-    function renderWinLossChart(accTrades) {
-      const ctx = document.getElementById('chartWinLoss').getContext('2d');
-      if (chartWinLossInst) chartWinLossInst.destroy();
+        function showJournalView() {
+            document.getElementById('view-accounts').classList.add('hidden');
+            document.getElementById('view-journal').classList.remove('hidden');
+            document.getElementById('account-header-info').classList.remove('hidden');
 
-      let wins = 0, losses = 0;
-      accTrades.forEach(t => {
-        if ((parseFloat(t.netPnL) || 0) >= 0) wins++;
-        else losses++;
-      });
+            const acc = db.accounts.find(a => a.id === db.currentAccountId);
+            if (!acc) return showAccountSelector();
 
-      chartWinLossInst = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Win', 'Loss'],
-          datasets: [{
-            data: [wins, losses],
-            backgroundColor: ['#00e676', '#f43f5e'],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom', labels: { color: '#8e9d94', font: { size: 9 } } } }
+            let liveBal = acc.balance + acc.trades.reduce((sum, t) => sum + Number(t.pnl), 0);
+
+            document.getElementById('nav-acc-name').innerText = acc.name;
+            document.getElementById('nav-acc-balance').innerText = `$${liveBal.toLocaleString()}`;
+            document.getElementById('current-acc-title').innerText = acc.name;
+            document.getElementById('current-acc-balance-display').innerText = `$${liveBal.toLocaleString()}`;
+            
+            const typeBadge = document.getElementById('current-acc-type-badge');
+            typeBadge.innerText = acc.type;
+            typeBadge.className = `px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${acc.type === 'Funded' ? 'bg-blue-500/20 text-blue-400' : acc.type === 'Demo' ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-accentGreen'}`;
+
+            renderDashboard();
+            renderTradeLog();
+            renderAnalytics();
         }
-      });
-    }
 
-    function renderWeekdayChart(accTrades) {
-      const ctx = document.getElementById('chartWeekday').getContext('2d');
-      if (chartWeekdayInst) chartWeekdayInst.destroy();
-
-      const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-      const pnlByDay = [0, 0, 0, 0, 0];
-
-      accTrades.forEach(t => {
-        const d = new Date(t.date).getDay(); // 1=Mon, 5=Fri
-        if (d >= 1 && d <= 5) {
-          pnlByDay[d - 1] += (parseFloat(t.netPnL) || 0);
+        function switchTab(tab) {
+            currentTab = tab;
+            ['dashboard', 'tradelog', 'analytics'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).className = 'pb-3 text-sm font-medium text-slate-400 hover:text-white transition';
+            });
+            document.getElementById(`tab-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tab}`).className = 'pb-3 text-sm font-semibold border-b-2 border-accentGreen text-accentGreen transition';
+            
+            if (tab === 'analytics') {
+                renderCharts();
+            }
         }
-      });
 
-      chartWeekdayInst = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: days,
-          datasets: [{
-            data: pnlByDay,
-            backgroundColor: pnlByDay.map(v => v >= 0 ? '#00e676' : '#f43f5e'),
-            borderRadius: 4
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { ticks: { color: '#9e9e9e', font: { size: 9 } }, grid: { display: false } },
-            y: { ticks: { color: '#9e9e9e', font: { size: 9 } }, grid: { color: '#1f1f1f' } }
-          }
+        // Account Modal Management
+        function openAddAccountModal() {
+            document.getElementById('account-modal').classList.remove('hidden');
+            document.getElementById('acc-input-name').value = '';
+            document.getElementById('acc-input-balance').value = '500';
         }
-      });
-    }
-
-    function renderOrderTypeChart(accTrades) {
-      const ctx = document.getElementById('chartOrderType').getContext('2d');
-      if (chartOrderTypeInst) chartOrderTypeInst.destroy();
-
-      let buyPnL = 0, sellPnL = 0;
-      accTrades.forEach(t => {
-        const pnl = parseFloat(t.netPnL) || 0;
-        if (t.position === 'BUY') buyPnL += pnl;
-        else sellPnL += pnl;
-      });
-
-      chartOrderTypeInst = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['BUY', 'SELL'],
-          datasets: [{
-            data: [buyPnL, sellPnL],
-            backgroundColor: [buyPnL >= 0 ? '#00e676' : '#f43f5e', sellPnL >= 0 ? '#00e676' : '#f43f5e'],
-            borderRadius: 4
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { ticks: { color: '#9e9e9e', font: { size: 9 } }, grid: { display: false } },
-            y: { ticks: { color: '#9e9e9e', font: { size: 9 } }, grid: { color: '#1f1f1f' } }
-          }
+        function closeAddAccountModal() {
+            document.getElementById('account-modal').classList.add('hidden');
         }
-      });
-    }
-  </script>
-</body>
-</html>
-```
+        function saveAccount() {
+            const name = document.getElementById('acc-input-name').value.trim();
+            const type = document.getElementById('acc-input-type').value;
+            const balance = parseFloat(document.getElementById('acc-input-balance').value) || 0;
+
+            if (!name) return alert('Masukkan nama akun!');
+
+            const newAcc = { id: 'acc_' + Date.now(), name, type, balance, trades: [] };
+            db.accounts.push(newAcc);
+            db.currentAccountId = newAcc.id;
+            saveData();
+            closeAddAccountModal();
+            showJournalView();
+        }
+        function deleteAccount(id) {
+            if (confirm('Hapus akun ini beserta seluruh jurnalnya?')) {
+                db.accounts = db.accounts.filter(a => a.id !== id);
+                if (db.currentAccountId === id) db.currentAccountId = null;
+                saveData();
+                initApp();
+            }
+        }
+
+        // Trade Modal Management
+        function openAddTradeModal(tradeId = null) {
+            document.getElementById('trade-modal').classList.remove('hidden');
+            document.getElementById('edit-trade-id').value = tradeId || '';
+            
+            if (tradeId) {
+                const acc = db.accounts.find(a => a.id === db.currentAccountId);
+                const t = acc.trades.find(item => item.id === tradeId);
+                if (t) {
+                    document.getElementById('trade-modal-title').innerText = 'Edit Trade Entry';
+                    document.getElementById('trade-date').value = t.date;
+                    document.getElementById('trade-pair').value = t.pair;
+                    setTradePos(t.position);
+                    document.getElementById('trade-pnl').value = t.pnl;
+                    document.getElementById('trade-risk').value = t.risk;
+                    document.getElementById('trade-rr').value = t.rr;
+                    currentSelectedResult = t.result;
+                    highlightSelectedResult(t.result);
+                }
+            } else {
+                document.getElementById('trade-modal-title').innerText = 'New Trade Entry';
+                document.getElementById('trade-date').value = new Date().toISOString().split('T')[0];
+                document.getElementById('trade-pair').value = 'XAUUSD';
+                setTradePos('BUY');
+                document.getElementById('trade-pnl').value = '';
+                document.getElementById('trade-risk').value = '';
+                document.getElementById('trade-rr').value = '';
+                currentSelectedResult = '';
+                highlightSelectedResult('');
+            }
+        }
+        function closeAddTradeModal() {
+            document.getElementById('trade-modal').classList.add('hidden');
+        }
+
+        function setTradePos(pos) {
+            currentPos = pos;
+            if (pos === 'BUY') {
+                document.getElementById('pos-buy-btn').className = 'py-2.5 rounded-xl text-xs font-bold bg-accentGreen text-slate-950 transition';
+                document.getElementById('pos-sell-btn').className = 'py-2.5 rounded-xl text-xs font-bold bg-cardBorder text-slate-400 transition';
+            } else {
+                document.getElementById('pos-buy-btn').className = 'py-2.5 rounded-xl text-xs font-bold bg-cardBorder text-slate-400 transition';
+                document.getElementById('pos-sell-btn').className = 'py-2.5 rounded-xl text-xs font-bold bg-accentRed text-white transition';
+            }
+        }
+
+        function autoCalculateRR() {
+            const pnl = parseFloat(document.getElementById('trade-pnl').value) || 0;
+            const risk = parseFloat(document.getElementById('trade-risk').value) || 0;
+            if (risk > 0) {
+                const rr = (pnl / risk).toFixed(1);
+                document.getElementById('trade-rr').value = rr;
+            } else {
+                document.getElementById('trade-rr').value = '0';
+            }
+        }
+
+        function selectResult(btn) {
+            document.querySelectorAll('#result-buttons button').forEach(b => b.className = 'px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition');
+            btn.className = 'px-3 py-1.5 rounded-lg text-xs bg-accentGreen text-slate-950 font-bold transition';
+            currentSelectedResult = btn.getAttribute('data-val');
+        }
+
+        function highlightSelectedResult(val) {
+            document.querySelectorAll('#result-buttons button').forEach(b => {
+                if (b.getAttribute('data-val') === val) {
+                    b.className = 'px-3 py-1.5 rounded-lg text-xs bg-accentGreen text-slate-950 font-bold transition';
+                } else {
+                    b.className = 'px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition';
+                }
+            });
+        }
+
+        function toggleSelection(btn, group) {
+            btn.classList.toggle('bg-accentGreen');
+            btn.classList.toggle('text-slate-950');
+            btn.classList.toggle('font-bold');
+            btn.classList.toggle('bg-cardBorder');
+            btn.classList.toggle('text-slate-300');
+        }
+
+        function saveTrade() {
+            const date = document.getElementById('trade-date').value;
+            const pair = document.getElementById('trade-pair').value;
+            const pnl = parseFloat(document.getElementById('trade-pnl').value);
+            const risk = parseFloat(document.getElementById('trade-risk').value);
+            const rr = parseFloat(document.getElementById('trade-rr').value) || 0;
+            const editId = document.getElementById('edit-trade-id').value;
+
+            if (!date || isNaN(pnl) || isNaN(risk)) {
+                return alert('Lengkapi field wajib (Date, Net P/L, Risk)!');
+            }
+
+            const acc = db.accounts.find(a => a.id === db.currentAccountId);
+            
+            if (editId) {
+                const t = acc.trades.find(item => item.id === editId);
+                if (t) {
+                    t.date = date;
+                    t.pair = pair;
+                    t.position = currentPos;
+                    t.pnl = pnl;
+                    t.risk = risk;
+                    t.rr = rr;
+                    t.result = currentSelectedResult;
+                }
+            } else {
+                const newTrade = {
+                    id: 'trade_' + Date.now(),
+                    date,
+                    pair,
+                    position: currentPos,
+                    pnl,
+                    risk,
+                    rr,
+                    result: currentSelectedResult || (pnl >= 0 ? 'Full TP' : 'SL')
+                };
+                acc.trades.push(newTrade);
+            }
+
+            saveData();
+            closeAddTradeModal();
+            showJournalView();
+        }
+
+        function deleteTrade(id) {
+            if (confirm('Hapus trade ini?')) {
+                const acc = db.accounts.find(a => a.id === db.currentAccountId);
+                acc.trades = acc.trades.filter(t => t.id !== id);
+                saveData();
+                showJournalView();
