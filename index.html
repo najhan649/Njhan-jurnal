@@ -1,168 +1,545 @@
-```html
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NJHAN JURNAL | Professional Trading Journal</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            purple: '#6366F1',
-                            purpleHover: '#4F46E5',
-                            green: '#10B981',
-                            greenBg: 'rgba(16, 185, 129, 0.12)',
-                            red: '#EF4444',
-                            redBg: 'rgba(239, 68, 68, 0.12)',
-                            blue: '#3B82F6'
-                        },
-                        dark: {
-                            bg: '#0F172A',
-                            card: '#1E293B',
-                            border: '#334155',
-                            textMuted: '#94A3B8',
-                            textBright: '#F8FAFC'
-                        },
-                        light: {
-                            bg: '#F8FAFC',
-                            card: '#FFFFFF',
-                            border: '#E2E8F0',
-                            textMuted: '#64748B',
-                            textBright: '#0F172A'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        * {
-            -webkit-tap-highlight-color: transparent;
-            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-        }
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(148, 163, 184, 0.3);
-            border-radius: 9999px;
-        }
-        .glow-indigo {
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25);
-        }
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Njhan Journal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #0d0f0e;
+      color: #e5e7eb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+    .card-dark {
+      background-color: #131614;
+      border: 1px solid #1f2421;
+    }
+    .accent-green {
+      color: #22c55e;
+    }
+    .bg-accent-green {
+      background-color: #22c55e;
+    }
+    .border-accent-green {
+      border-color: #22c55e;
+    }
+    .badge-tag {
+      background-color: #17241b;
+      color: #22c55e;
+      border: 1px solid #1f3a25;
+    }
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0d0f0e;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f2421;
+      border-radius: 4px;
+    }
+  </style>
 </head>
-<body class="bg-light-bg dark:bg-dark-bg text-light-textBright dark:text-dark-textBright min-h-screen flex flex-col max-w-6xl mx-auto border-x border-light-border dark:border-dark-border shadow-2xl relative">
+<body class="min-h-screen pb-10">
 
-    <!-- AUTH OVERLAY / LOGIN MODAL -->
-    <div id="authOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-        <div class="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-3xl w-full max-w-sm p-6 shadow-2xl relative overflow-hidden">
-            <div class="text-center mb-6">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-blue-500 flex items-center justify-center font-black text-white text-lg mx-auto shadow-lg glow-indigo mb-3">
-                    NJ
-                </div>
-                <h2 class="font-black text-xl">NJHAN <span class="text-brand-purple">JURNAL</span></h2>
-                <p class="text-xs text-light-textMuted dark:text-dark-textMuted mt-1">Jurnal Trading Sleek & Presisi Arkein Style</p>
-            </div>
+  <!-- Header / Navbar -->
+  <header class="border-b border-gray-800 bg-[#0d0f0e] sticky top-0 z-50 px-4 py-3 flex justify-between items-center">
+    <div class="flex items-center space-x-2">
+      <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center font-bold text-emerald-500">
+        N
+      </div>
+      <span class="font-bold text-lg text-white tracking-wide">Njhan Journal</span>
+    </div>
+    <button class="p-2 rounded-lg bg-[#131614] border border-gray-800 text-gray-300">
+      <i class="fa-solid fa-bars text-lg"></i>
+    </button>
+  </header>
 
-            <!-- TAB FORM TOGGLE -->
-            <div class="flex bg-light-bg dark:bg-dark-bg p-1 rounded-xl border border-light-border dark:border-dark-border mb-5 text-xs font-bold">
-                <button id="btnTabLogin" onclick="switchAuthTab('login')" class="flex-1 py-2 rounded-lg bg-brand-purple text-white transition-all">Masuk</button>
-                <button id="btnTabRegister" onclick="switchAuthTab('register')" class="flex-1 py-2 rounded-lg text-light-textMuted dark:text-dark-textMuted transition-all">Daftar</button>
-            </div>
-
-            <!-- LOGIN FORM -->
-            <form id="formLogin" onsubmit="handleAuthSubmit(event, 'login')" class="space-y-3 text-xs">
-                <div>
-                    <label class="block text-[10px] text-light-textMuted dark:text-dark-textMuted font-bold uppercase mb-1">Email</label>
-                    <input type="email" id="loginEmail" required placeholder="trader@njhan.com" class="w-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border rounded-xl px-3.5 py-3 text-light-textBright dark:text-dark-textBright outline-none focus:border-brand-purple">
-                </div>
-                <div>
-                    <label class="block text-[10px] text-light-textMuted dark:text-dark-textMuted font-bold uppercase mb-1">Kata Sandi</label>
-                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border rounded-xl px-3.5 py-3 text-light-textBright dark:text-dark-textBright outline-none focus:border-brand-purple">
-                </div>
-                <button type="submit" class="w-full py-3 bg-brand-purple hover:bg-brand-purpleHover text-white font-bold rounded-xl shadow-lg glow-indigo active:scale-95 transition-all text-xs">
-                    <i class="fa-solid fa-right-to-bracket mr-1"></i> Masuk Akun
-                </button>
-            </form>
-
-            <!-- REGISTER FORM -->
-            <form id="formRegister" onsubmit="handleAuthSubmit(event, 'register')" class="space-y-3 text-xs hidden">
-                <div>
-                    <label class="block text-[10px] text-light-textMuted dark:text-dark-textMuted font-bold uppercase mb-1">Nama Lengkap</label>
-                    <input type="text" id="regName" required placeholder="Trader Pro" class="w-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border rounded-xl px-3.5 py-3 text-light-textBright dark:text-dark-textBright outline-none focus:border-brand-purple">
-                </div>
-                <div>
-                    <label class="block text-[10px] text-light-textMuted dark:text-dark-textMuted font-bold uppercase mb-1">Email</label>
-                    <input type="email" id="regEmail" required placeholder="trader@njhan.com" class="w-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border rounded-xl px-3.5 py-3 text-light-textBright dark:text-dark-textBright outline-none focus:border-brand-purple">
-                </div>
-                <div>
-                    <label class="block text-[10px] text-light-textMuted dark:text-dark-textMuted font-bold uppercase mb-1">Kata Sandi</label>
-                    <input type="password" id="regPassword" required placeholder="Min 6 karakter" class="w-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border rounded-xl px-3.5 py-3 text-light-textBright dark:text-dark-textBright outline-none focus:border-brand-purple">
-                </div>
-                <button type="submit" class="w-full py-3 bg-brand-purple hover:bg-brand-purpleHover text-white font-bold rounded-xl shadow-lg glow-indigo active:scale-95 transition-all text-xs">
-                    <i class="fa-solid fa-user-plus mr-1"></i> Buat Akun Baru
-                </button>
-            </form>
-
-            <div class="mt-4 pt-3 border-t border-light-border dark:border-dark-border text-center">
-                <button onclick="loginAsGuest()" class="text-[11px] text-light-textMuted dark:text-dark-textMuted hover:text-brand-purple font-semibold">
-                    ⚡ Mode Tamu / Anonymous Demo
-                </button>
-            </div>
-        </div>
+  <!-- Banner Top Section -->
+  <div class="p-4 max-w-md mx-auto">
+    <div class="bg-[#131614] border border-gray-800/80 rounded-xl p-3 flex items-center justify-between text-xs text-gray-300 mb-4">
+      <div class="flex items-center space-x-2">
+        <span class="bg-emerald-500/20 text-emerald-400 p-1 rounded">✨</span>
+        <span>Exclusive for Njhan Members</span>
+      </div>
+      <i class="fa-solid fa-chevron-right text-gray-500 text-xs"></i>
     </div>
 
-    <!-- TOP NAVBAR -->
-    <header class="h-16 bg-light-card/90 dark:bg-dark-card/90 backdrop-blur-md border-b border-light-border dark:border-dark-border flex items-center justify-between px-4 sm:px-6 sticky top-0 z-30 shrink-0">
-        <div class="flex items-center gap-3">
-            <div id="headerAvatar" class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-500 flex items-center justify-center font-black text-white text-xs shadow-md glow-indigo">
-                NJ
-            </div>
-            <div>
-                <h1 class="font-extrabold text-sm tracking-wide leading-none flex items-center gap-1.5">
-                    NJHAN <span class="text-brand-purple">JURNAL</span>
-                </h1>
-                <p id="headerUserEmail" class="text-[10px] text-light-textMuted dark:text-dark-textMuted font-medium mt-0.5">guest@njhan.app</p>
-            </div>
+    <!-- Title Section -->
+    <div class="flex items-center space-x-2 text-emerald-500 text-sm font-medium mb-1">
+      <i class="fa-solid fa-chart-line text-xs"></i>
+      <span>Njhan Journal</span>
+    </div>
+
+    <!-- Account Selection / Active Account -->
+    <div id="accountSelectionSection">
+      <p class="text-xs text-gray-400 tracking-wider font-semibold">WELCOME BACK, SCOFIELD</p>
+      <h1 class="text-2xl font-bold text-white mb-4">Your Accounts</h1>
+      <p class="text-xs text-gray-400 mb-4">Select an account to start journaling your trades.</p>
+
+      <!-- Account List Cards -->
+      <div class="space-y-3">
+        <!-- Account Card 1 -->
+        <div onclick="selectAccount('FUNDED', '$1.000')" class="card-dark rounded-xl p-4 relative cursor-pointer hover:border-emerald-500/50 transition">
+          <button class="absolute top-3 right-3 text-gray-500 hover:text-gray-300"><i class="fa-solid fa-xmark"></i></button>
+          <span class="text-[10px] font-bold text-sky-400 bg-sky-950/60 border border-sky-800/50 px-2 py-0.5 rounded tracking-wider">FUNDED</span>
+          <div class="text-xl font-bold text-white mt-2">$1.000</div>
+          <div class="text-xs text-gray-400">Starting Balance</div>
         </div>
 
-        <div class="flex items-center gap-2">
-            <!-- Theme Mode Switcher -->
-            <button onclick="toggleTheme()" class="w-9 h-9 rounded-xl bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border flex items-center justify-center text-brand-purple active:scale-90 transition-all" title="Toggle Tema Hitam/Putih">
-                <i id="themeIcon" class="fa-solid fa-moon text-sm"></i>
-            </button>
+        <!-- Account Card 2 -->
+        <div onclick="selectAccount('Najh.', '$300')" class="card-dark rounded-xl p-4 relative cursor-pointer hover:border-emerald-500/50 transition border-emerald-500/30">
+          <button class="absolute top-3 right-3 text-gray-500 hover:text-gray-300"><i class="fa-solid fa-xmark"></i></button>
+          <span class="text-[10px] font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-2 py-0.5 rounded tracking-wider">PERSONAL</span>
+          <div class="text-xl font-bold text-white mt-2">Najh.</div>
+          <div class="text-xs text-gray-400">Balance: <span class="text-gray-200">$300</span></div>
+        </div>
 
-            <!-- Settings Button -->
-            <button onclick="openSettingsModal()" class="w-9 h-9 rounded-xl bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border flex items-center justify-center text-light-textMuted dark:text-dark-textMuted hover:text-brand-purple active:scale-90 transition-all">
-                <i class="fa-solid fa-sliders text-sm"></i>
-```
+        <!-- Add Account Button -->
+        <button class="w-full border border-dashed border-gray-800 rounded-xl p-4 text-center text-gray-400 text-xs font-medium hover:bg-[#131614] transition flex flex-col items-center justify-center space-y-1">
+          <i class="fa-solid fa-plus text-sm"></i>
+          <span>Add Account</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Account View (Dashboard Layout) -->
+    <div id="journalDashboard" class="hidden">
+      <!-- Active Account Header -->
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <div class="flex items-center space-x-2">
+            <h2 id="activeAccountName" class="text-2xl font-bold text-white">Najh.</h2>
+            <span class="text-[10px] font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-2 py-0.5 rounded">PERSONAL</span>
+          </div>
+          <p class="text-xs text-gray-400">Balance: <span id="activeAccountBalance" class="text-white font-medium">$300</span></p>
+        </div>
+        <button onclick="switchAccount()" class="bg-[#1f2421] text-xs text-gray-300 hover:text-white px-3 py-1.5 rounded-lg border border-gray-700 transition">
+          Switch Account
+        </button>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="flex border-b border-gray-800 mb-5 text-sm font-medium">
+        <button onclick="switchTab('dashboard')" id="tab-dashboard" class="py-2 px-4 text-emerald-400 border-b-2 border-emerald-500 font-bold">Dashboard</button>
+        <button onclick="switchTab('tradelog')" id="tab-tradelog" class="py-2 px-4 text-gray-400 hover:text-gray-200">Trade Log</button>
+        <button onclick="switchTab('analytics')" id="tab-analytics" class="py-2 px-4 text-gray-400 hover:text-gray-200">Analytics</button>
+      </div>
+
+      <!-- TAB 1: DASHBOARD -->
+      <div id="content-dashboard" class="space-y-4">
+        <!-- Monthly Performance Calendar -->
+        <div class="card-dark rounded-xl p-4">
+          <div class="flex justify-between items-center mb-3">
+            <div>
+              <h3 class="text-sm font-bold text-white">Monthly Performance</h3>
+              <p class="text-[11px] text-gray-400">4 trades • October 2026</p>
+            </div>
+            <div class="flex items-center space-x-2 text-xs text-gray-400">
+              <span>Oct 2026</span>
+              <div class="flex space-x-1">
+                <button class="p-1 hover:text-white"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
+                <button class="p-1 hover:text-white"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Calendar Grid -->
+          <div class="grid grid-cols-7 gap-1 text-center text-[10px] text-gray-400 mb-1">
+            <div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div><div>Su</div>
+          </div>
+          <div class="grid grid-cols-7 gap-1.5 text-xs">
+            <!-- Blank slots for alignment -->
+            <div class="h-10"></div><div class="h-10"></div>
+            <div class="h-10 p-1 bg-[#181c19] rounded flex flex-col justify-between items-start text-gray-500">1</div>
+            <div class="h-10 p-1 bg-[#181c19] rounded flex flex-col justify-between items-start text-gray-500">2</div>
+            <div class="h-10 p-1 bg-[#181c19] rounded flex flex-col justify-between items-start text-gray-500">3</div>
+            <div class="h-10 p-1 bg-[#181c19] rounded flex flex-col justify-between items-start text-gray-500">4</div>
+            <div class="h-10 p-1 bg-[#181c19] rounded flex flex-col justify-between items-start text-gray-500">5</div>
+            
+            <!-- Dynamic days omitted for brevity, showing active trading week -->
+            <div class="h-10 p-1 bg-[#181c19] rounded flex flex-col justify-between items-start text-gray-500">26</div>
+            <div class="h-10 p-1 bg-[#12281a] border border-emerald-800/40 rounded flex flex-col justify-between items-start">
+              <span class="text-[10px] text-gray-300">27</span>
+              <span class="text-[9px] font-bold text-emerald-400">+$12</span>
+            </div>
+            <div class="h-10 p-1 bg-[#12281a] border border-emerald-800/40 rounded flex flex-col justify-between items-start">
+              <span class="text-[10px] text-gray-300">28</span>
+              <span class="text-[9px] font-bold text-emerald-400">+$28</span>
+            </div>
+            <div class="h-10 p-1 bg-[#12281a] border border-emerald-800/40 rounded flex flex-col justify-between items-start">
+              <span class="text-[10px] text-gray-300">29</span>
+              <span class="text-[9px] font-bold text-emerald-400">+$50</span>
+            </div>
+            <div class="h-10 p-1 bg-[#181c19] rounded flex flex-col justify-between items-start text-gray-500">30</div>
+            <div class="h-10 p-1 bg-[#181c19] rounded flex flex-col justify-between items-start text-gray-500">31</div>
+          </div>
+        </div>
+
+        <!-- Recent Trades List -->
+        <div class="card-dark rounded-xl p-4">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="text-sm font-bold text-white">Recent Trades</h3>
+            <span class="text-[11px] text-gray-400">Latest across all time</span>
+          </div>
+
+          <div class="space-y-2.5">
+            <!-- Trade 1 -->
+            <div class="bg-[#181c19] p-3 rounded-lg flex justify-between items-center border border-gray-800/60">
+              <div class="flex items-center space-x-2">
+                <span class="text-[10px] font-bold bg-emerald-950/80 text-emerald-400 px-2 py-0.5 rounded border border-emerald-800/50">BUY</span>
+                <span class="font-bold text-sm text-white">XAUUSD</span>
+              </div>
+              <div class="text-right">
+                <div class="font-bold text-sm text-emerald-400">+$50.00</div>
+                <div class="text-[10px] text-gray-400">2026-10-28 <span class="ml-2 text-emerald-500 font-medium">RR 3.3</span></div>
+              </div>
+            </div>
+
+            <!-- Trade 2 -->
+            <div class="bg-[#181c19] p-3 rounded-lg flex justify-between items-center border border-gray-800/60">
+              <div class="flex items-center space-x-2">
+                <span class="text-[10px] font-bold bg-red-950/80 text-red-400 px-2 py-0.5 rounded border border-red-800/50">BUY</span>
+                <span class="font-bold text-sm text-white">XAUUSD</span>
+              </div>
+              <div class="text-right">
+                <div class="font-bold text-sm text-red-400">-$12.00</div>
+                <div class="text-[10px] text-gray-400">2026-10-27 <span class="ml-2 text-red-400 font-medium">RR -1</span></div>
+              </div>
+            </div>
+
+            <!-- Trade 3 -->
+            <div class="bg-[#181c19] p-3 rounded-lg flex justify-between items-center border border-gray-800/60">
+              <div class="flex items-center space-x-2">
+                <span class="text-[10px] font-bold bg-emerald-950/80 text-emerald-400 px-2 py-0.5 rounded border border-emerald-800/50">BUY</span>
+                <span class="font-bold text-sm text-white">XAUUSD</span>
+              </div>
+              <div class="text-right">
+                <div class="font-bold text-sm text-emerald-400">+$40.00</div>
+                <div class="text-[10px] text-gray-400">2026-10-27 <span class="ml-2 text-emerald-500 font-medium">RR 7.3</span></div>
+              </div>
+            </div>
+
+            <!-- Trade 4 -->
+            <div class="bg-[#181c19] p-3 rounded-lg flex justify-between items-center border border-gray-800/60">
+              <div class="flex items-center space-x-2">
+                <span class="text-[10px] font-bold bg-emerald-950/80 text-emerald-400 px-2 py-0.5 rounded border border-emerald-800/50">BUY</span>
+                <span class="font-bold text-sm text-white">XAUUSD</span>
+              </div>
+              <div class="text-right">
+                <div class="font-bold text-sm text-emerald-400">+$12.00</div>
+                <div class="text-[10px] text-gray-400">2026-10-26 <span class="ml-2 text-emerald-500 font-medium">RR 3.4</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metrics Bottom Grid -->
+        <div class="grid grid-cols-3 gap-2">
+          <!-- Win Rate -->
+          <div class="card-dark rounded-xl p-3">
+            <div class="text-[10px] text-gray-400">Win Rate</div>
+            <div class="text-[10px] text-gray-500">Oct 2026</div>
+            <div class="text-xl font-bold text-white mt-1">75%</div>
+            <div class="flex space-x-1.5 mt-2 text-[10px]">
+              <span class="text-emerald-400 font-medium">3 <span class="text-gray-500">W</span></span>
+              <span class="text-red-400 font-medium">1 <span class="text-gray-500">L</span></span>
+              <span class="text-gray-400 font-medium">0 <span class="text-gray-500">BE</span></span>
+            </div>
+          </div>
+
+          <!-- Monthly PnL -->
+          <div class="card-dark rounded-xl p-3">
+            <div class="text-[10px] text-gray-400">Monthly PnL</div>
+            <div class="text-[10px] text-gray-500">Oct 2026</div>
+            <div class="text-lg font-bold text-emerald-400 mt-1">+$90.00</div>
+            <div class="text-[9px] mt-1 space-y-0.5">
+              <div class="text-emerald-500">Profit: $102.00</div>
+              <div class="text-red-400">Loss: $12.00</div>
+            </div>
+          </div>
+
+          <!-- Avg R:R -->
+          <div class="card-dark rounded-xl p-3">
+            <div class="text-[10px] text-gray-400">Avg R:R</div>
+            <div class="text-[10px] text-gray-500">Oct 2026</div>
+            <div class="text-xl font-bold text-white mt-1">3.25</div>
+            <div class="text-[9px] text-gray-400 mt-2">4 trades this month</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: TRADE LOG -->
+      <div id="content-tradelog" class="hidden space-y-4">
+        <!-- Summary Cards Row -->
+        <div class="flex justify-between items-center">
+          <h3 class="text-lg font-bold text-white">Trade Journal</h3>
+          <button class="bg-emerald-500 hover:bg-emerald-600 text-black text-xs font-bold px-3 py-2 rounded-lg flex items-center space-x-1">
+            <i class="fa-solid fa-plus text-xs"></i>
+            <span>New Trade</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-4 gap-2 text-center">
+          <div class="card-dark p-2.5 rounded-lg">
+            <div class="text-[9px] text-gray-400">TOTAL P&L</div>
+            <div class="text-xs font-bold text-emerald-400 mt-0.5">+$90.00</div>
+          </div>
+          <div class="card-dark p-2.5 rounded-lg">
+            <div class="text-[9px] text-gray-400">WIN RATE</div>
+            <div class="text-xs font-bold text-emerald-400 mt-0.5">75%</div>
+          </div>
+          <div class="card-dark p-2.5 rounded-lg">
+            <div class="text-[9px] text-gray-400">TRADES</div>
+            <div class="text-xs font-bold text-white mt-0.5">4</div>
+          </div>
+          <div class="card-dark p-2.5 rounded-lg">
+            <div class="text-[9px] text-gray-400">BALANCE</div>
+            <div class="text-xs font-bold text-amber-400 mt-0.5">$390</div>
+          </div>
+        </div>
+
+        <!-- Filter Selects -->
+        <div class="grid grid-cols-4 gap-1.5 text-xs">
+          <select class="bg-[#131614] border border-gray-800 rounded p-1.5 text-gray-300"><option>DATE</option></select>
+          <select class="bg-[#131614] border border-gray-800 rounded p-1.5 text-gray-300"><option>PAIR</option></select>
+          <select class="bg-[#131614] border border-gray-800 rounded p-1.5 text-gray-300"><option>POS</option></select>
+          <select class="bg-[#131614] border border-gray-800 rounded p-1.5 text-gray-300"><option>HTF</option></select>
+        </div>
+
+        <!-- Table Container -->
+        <div class="card-dark rounded-xl overflow-hidden overflow-x-auto">
+          <table class="w-full text-left text-xs text-gray-300 min-w-[500px]">
+            <thead class="bg-[#181c19] text-gray-400 text-[10px] uppercase border-b border-gray-800">
+              <tr>
+                <th class="p-2.5">Date</th>
+                <th class="p-2.5">Pair</th>
+                <th class="p-2.5">Pos</th>
+                <th class="p-2.5">HTF</th>
+                <th class="p-2.5">Confluences</th>
+                <th class="p-2.5">Risk $</th>
+                <th class="p-2.5">RR</th>
+                <th class="p-2.5">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-800/60">
+              <tr>
+                <td class="p-2.5 text-gray-400">2026-10-28</td>
+                <td class="p-2.5 font-bold text-white">XAUUSD</td>
+                <td class="p-2.5"><span class="bg-emerald-950 text-emerald-400 border border-emerald-800 px-1.5 py-0.5 rounded text-[10px]">BUY</span></td>
+                <td class="p-2.5 text-gray-400">Low to Close</td>
+                <td class="p-2.5 text-gray-400">--</td>
+                <td class="p-2.5 text-emerald-400">$15.00</td>
+                <td class="p-2.5 text-amber-400 font-bold">3.3</td>
+                <td class="p-2.5"><button class="text-gray-400 hover:text-emerald-400"><i class="fa-solid fa-pen-to-square"></i></button></td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-gray-400">2026-10-27</td>
+                <td class="p-2.5 font-bold text-white">XAUUSD</td>
+                <td class="p-2.5"><span class="bg-emerald-950 text-emerald-400 border border-emerald-800 px-1.5 py-0.5 rounded text-[10px]">BUY</span></td>
+                <td class="p-2.5 text-gray-400">Open to High</td>
+                <td class="p-2.5 text-gray-400">--</td>
+                <td class="p-2.5 text-red-400">$12.00</td>
+                <td class="p-2.5 text-red-400 font-bold">-1</td>
+                <td class="p-2.5"><button class="text-gray-400 hover:text-emerald-400"><i class="fa-solid fa-pen-to-square"></i></button></td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-gray-400">2026-10-27</td>
+                <td class="p-2.5 font-bold text-white">XAUUSD</td>
+                <td class="p-2.5"><span class="bg-emerald-950 text-emerald-400 border border-emerald-800 px-1.5 py-0.5 rounded text-[10px]">BUY</span></td>
+                <td class="p-2.5 text-gray-400">Open to High</td>
+                <td class="p-2.5 text-gray-400">--</td>
+                <td class="p-2.5 text-emerald-400">$5.50</td>
+                <td class="p-2.5 text-amber-400 font-bold">7.3</td>
+                <td class="p-2.5"><button class="text-gray-400 hover:text-emerald-400"><i class="fa-solid fa-pen-to-square"></i></button></td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-gray-400">2026-10-26</td>
+                <td class="p-2.5 font-bold text-white">XAUUSD</td>
+                <td class="p-2.5"><span class="bg-emerald-950 text-emerald-400 border border-emerald-800 px-1.5 py-0.5 rounded text-[10px]">BUY</span></td>
+                <td class="p-2.5 text-gray-400">High to Close</td>
+                <td class="p-2.5 text-gray-400">--</td>
+                <td class="p-2.5 text-emerald-400">$3.50</td>
+                <td class="p-2.5 text-amber-400 font-bold">3.4</td>
+                <td class="p-2.5"><button class="text-gray-400 hover:text-emerald-400"><i class="fa-solid fa-pen-to-square"></i></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 3: ANALYTICS -->
+      <div id="content-analytics" class="hidden space-y-4">
+        <!-- Date Filter Inputs -->
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div>
+            <label class="text-[10px] text-gray-400">From</label>
+            <input type="date" class="w-full bg-[#131614] border border-gray-800 rounded p-2 text-gray-300">
+          </div>
+          <div>
+            <label class="text-[10px] text-gray-400">To</label>
+            <input type="date" class="w-full bg-[#131614] border border-gray-800 rounded p-2 text-gray-300">
+          </div>
+        </div>
+
+        <!-- Top Overview Banner Metrics -->
+        <div class="grid grid-cols-4 gap-2 text-center">
+          <div class="card-dark p-2 rounded-lg">
+            <div class="text-[8px] text-gray-400">TOTAL P&L</div>
+            <div class="text-xs font-bold text-emerald-400 mt-0.5">+$90.00</div>
+          </div>
+          <div class="card-dark p-2 rounded-lg">
+            <div class="text-[8px] text-gray-400">WIN RATE</div>
+            <div class="text-xs font-bold text-emerald-400 mt-0.5">75%</div>
+          </div>
+          <div class="card-dark p-2 rounded-lg">
+            <div class="text-[8px] text-gray-400">TOTAL TRADES</div>
+            <div class="text-xs font-bold text-white mt-0.5">4</div>
+          </div>
+          <div class="card-dark p-2 rounded-lg">
+            <div class="text-[8px] text-gray-400">AVG RR</div>
+            <div class="text-xs font-bold text-amber-400 mt-0.5">3.3</div>
+          </div>
+        </div>
+
+        <!-- Trade Growth View Chart -->
+        <div class="card-dark p-4 rounded-xl">
+          <div class="flex justify-between items-center mb-2">
+            <div>
+              <h4 class="text-xs font-bold text-white">Trade Growth View</h4>
+              <p class="text-[10px] text-gray-400">Equity curve over time</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs font-bold text-emerald-400">+$90.00</span>
+              <span class="text-[10px] text-emerald-500 bg-emerald-950/60 px-1 rounded ml-1">(30.00%)</span>
+            </div>
+          </div>
+          <div class="h-32 w-full">
+            <canvas id="growthChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Symbol Performance & Win/Loss Ratio Charts -->
+        <div class="grid grid-cols-2 gap-3">
+          <!-- Symbol Performance -->
+          <div class="card-dark p-3 rounded-xl">
+            <h4 class="text-[11px] font-bold text-white mb-2">Symbol Performance</h4>
+            <div class="h-28 flex items-center justify-center">
+              <canvas id="symbolChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Win / Loss Ratio -->
+          <div class="card-dark p-3 rounded-xl">
+            <h4 class="text-[11px] font-bold text-white mb-2">Win / Loss Ratio</h4>
+            <div class="h-28 flex items-center justify-center">
+              <canvas id="winLossChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JavaScript Controls & Charts -->
+  <script>
+    function selectAccount(name, balance) {
+      document.getElementById('accountSelectionSection').classList.add('hidden');
+      document.getElementById('journalDashboard').classList.remove('hidden');
+      document.getElementById('activeAccountName').innerText = name;
+      document.getElementById('activeAccountBalance').innerText = balance;
+      initCharts();
+    }
+
+    function switchAccount() {
+      document.getElementById('journalDashboard').classList.add('hidden');
+      document.getElementById('accountSelectionSection').classList.remove('hidden');
+    }
+
+    function switchTab(tabName) {
+      // Hide all tabs
+      document.getElementById('content-dashboard').classList.add('hidden');
+      document.getElementById('content-tradelog').classList.add('hidden');
+      document.getElementById('content-analytics').classList.add('hidden');
+
+      // Reset tab button states
+      document.getElementById('tab-dashboard').className = 'py-2 px-4 text-gray-400 hover:text-gray-200';
+      document.getElementById('tab-tradelog').className = 'py-2 px-4 text-gray-400 hover:text-gray-200';
+      document.getElementById('tab-analytics').className = 'py-2 px-4 text-gray-400 hover:text-gray-200';
+
+      // Activate active tab
+      document.getElementById('content-' + tabName).classList.remove('hidden');
+      document.getElementById('tab-' + tabName).className = 'py-2 px-4 text-emerald-400 border-b-2 border-emerald-500 font-bold';
+    }
+
+    let chartsInitialized = false;
+    function initCharts() {
+      if(chartsInitialized) return;
+      chartsInitialized = true;
+
+      // Growth Chart
+      const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+      new Chart(ctxGrowth, {
+        type: 'line',
+        data: {
+          labels: ['Start', '2026-10-26', '2026-10-27', '2026-10-28'],
+          datasets: [{
+            data: [300, 312, 340, 390],
+            borderColor: '#22c55e',
+            borderWidth: 2,
+            tension: 0.3,
+            pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { color: '#1a1f1c' }, ticks: { color: '#6b7280', font: { size: 9 } } },
+            y: { grid: { color: '#1a1f1c' }, ticks: { color: '#6b7280', font: { size: 9 } } }
+          }
+        }
+      });
+
+      // Symbol Doughnut Chart
+      const ctxSymbol = document.getElementById('symbolChart').getContext('2d');
+      new Chart(ctxSymbol, {
+        type: 'doughnut',
+        data: {
+          labels: ['XAUUSD'],
+          datasets: [{ data: [90], backgroundColor: ['#22c55e'], borderWidth: 0 }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          cutout: '70%'
+        }
+      });
+
+      // Win/Loss Ratio Doughnut Chart
+      const ctxWinLoss = document.getElementById('winLossChart').getContext('2d');
+      new Chart(ctxWinLoss, {
+        type: 'doughnut',
+        data: {
+          labels: ['Win', 'Loss'],
+          datasets: [{ data: [3, 1], backgroundColor: ['#22c55e', '#ef4444'], borderWidth: 0 }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          cutout: '70%'
+        }
+      });
+    }
+  </script>
+</body>
+</html>
