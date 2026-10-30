@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Najh.an Journal - Real-Time Multi-Device Trading Terminal</title>
+    <title>Najh.an Journal - Multi-Currency Trading Terminal</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -128,7 +128,7 @@
                     </button>
 
                     <button id="authBtnHeader" onclick="openAuthModal()" class="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500 to-green-600 text-black text-xs font-bold rounded-xl shadow-md transition hover:scale-105">
-                        Login / Sign Up
+                        Login
                     </button>
                     <button id="logoutBtnHeader" onclick="handleLogout()" class="hidden px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 text-xs font-bold rounded-xl transition">
                         Logout
@@ -206,21 +206,28 @@
 
                     <div>
                         <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">ACCOUNT NAME</label>
-                        <input type="text" id="newAccountName" placeholder="e.g. Najhan 50k" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
+                        <input type="text" id="newAccountName" placeholder="e.g. Najhan IDR" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid grid-cols-3 gap-3">
                         <div>
                             <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">TYPE</label>
-                            <select id="newAccountType" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
+                            <select id="newAccountType" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
                                 <option value="PERSONAL">PERSONAL</option>
                                 <option value="FUNDED">FUNDED</option>
                                 <option value="DEMO">DEMO</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">STARTING BALANCE ($)</label>
-                            <input type="number" id="newAccountBalance" placeholder="500" value="500" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-mono">
+                            <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">CURRENCY</label>
+                            <select id="newAccountCurrency" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-bold">
+                                <option value="USD">USD ($)</option>
+                                <option value="IDR">IDR (Rp)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">STARTING BALANCE</label>
+                            <input type="number" id="newAccountBalance" placeholder="500" value="500" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-mono">
                         </div>
                     </div>
 
@@ -249,6 +256,7 @@
                 <div>
                     <div class="flex items-center gap-2.5 mb-1">
                         <span id="activeTypeTag" class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PERSONAL</span>
+                        <span id="activeCurrencyTag" class="px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">USD</span>
                         <h2 id="activeAccountName" class="text-xl sm:text-2xl font-black text-white tracking-tight">Najhan</h2>
                     </div>
                     <div class="text-xs text-gray-400 font-medium">
@@ -450,11 +458,11 @@
                     <!-- PnL & Risk Row -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">NET P/L ($) *</label>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">NET P/L *</label>
                             <input type="number" step="any" id="tradeNetPnL" placeholder="100.00" oninput="calculateRR()" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">RISK ($) *</label>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">RISK *</label>
                             <input type="number" step="any" id="tradeRisk" placeholder="10.00" oninput="calculateRR()" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
                         </div>
                         <div>
@@ -769,8 +777,8 @@
             const acc1Ref = doc(db, 'artifacts', appId, 'users', userId, 'accounts', 'acc_1');
             const acc2Ref = doc(db, 'artifacts', appId, 'users', userId, 'accounts', 'acc_2');
 
-            await setDoc(acc1Ref, { name: 'Najhan', type: 'PERSONAL', startingBalance: 500, created: Date.now() });
-            await setDoc(acc2Ref, { name: 'Najh.', type: 'FUNDED', startingBalance: 1000, created: Date.now() - 1000 });
+            await setDoc(acc1Ref, { name: 'Najhan USD', type: 'PERSONAL', currency: 'USD', startingBalance: 500, created: Date.now() });
+            await setDoc(acc2Ref, { name: 'Najhan IDR', type: 'FUNDED', currency: 'IDR', startingBalance: 5000000, created: Date.now() - 1000 });
         }
 
         window.handleEmailLogin = async () => {
@@ -864,6 +872,24 @@
             return window.appData.accounts.find(a => a.id === window.appData.selectedAccountId) || window.appData.accounts[0];
         }
 
+        function formatMoney(amount, currency = 'USD') {
+            const num = Number(amount) || 0;
+            if (currency === 'IDR') {
+                return 'Rp ' + num.toLocaleString('id-ID', {maximumFractionDigits: 0});
+            } else {
+                return '$' + num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            }
+        }
+
+        function formatMoneyShort(amount, currency = 'USD') {
+            const num = Number(amount) || 0;
+            if (currency === 'IDR') {
+                return 'Rp ' + num.toLocaleString('id-ID', {maximumFractionDigits: 0});
+            } else {
+                return '$' + num.toFixed(0);
+            }
+        }
+
         function switchView(view) {
             const accountsView = document.getElementById('accountsView');
             const workspaceView = document.getElementById('workspaceView');
@@ -880,6 +906,7 @@
                     return;
                 }
                 window.appData.selectedAccountId = active.id;
+                const curr = active.currency || 'USD';
 
                 accountsView.classList.add('hidden');
                 workspaceView.classList.remove('hidden');
@@ -888,7 +915,8 @@
                 document.getElementById('activeAccountHeaderName').innerText = active.name;
                 document.getElementById('activeAccountName').innerText = active.name;
                 document.getElementById('activeTypeTag').innerText = active.type;
-                document.getElementById('activeStartingBalance').innerText = '$' + Number(active.startingBalance).toLocaleString();
+                document.getElementById('activeCurrencyTag').innerText = curr;
+                document.getElementById('activeStartingBalance').innerText = formatMoney(active.startingBalance, curr);
 
                 refreshActiveAccountData();
             }
@@ -929,6 +957,7 @@
                 const accTrades = window.appData.trades.filter(t => t.accountId === acc.id);
                 const netProfit = accTrades.reduce((sum, t) => sum + (Number(t.netPnL) || 0), 0);
                 const currentBalance = Number(acc.startingBalance) + netProfit;
+                const curr = acc.currency || 'USD';
 
                 const card = document.createElement('div');
                 card.className = "glass-card hover:border-emerald-500/50 rounded-2xl p-4 sm:p-5 shadow-lg flex items-center justify-between transition duration-300 cursor-pointer group";
@@ -941,13 +970,16 @@
 
                 card.innerHTML = `
                     <div class="space-y-1">
-                        <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider ${
-                            acc.type === 'FUNDED' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' :
-                            acc.type === 'DEMO' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                            'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                        }">${acc.type}</span>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider ${
+                                acc.type === 'FUNDED' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' :
+                                acc.type === 'DEMO' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                                'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                            }">${acc.type}</span>
+                            <span class="px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-gray-800 text-gray-300 border border-gray-700">${curr}</span>
+                        </div>
                         <h3 class="text-lg sm:text-xl font-black text-white group-hover:text-emerald-400 transition">${acc.name}</h3>
-                        <p class="text-xs sm:text-sm font-bold font-mono text-emerald-400">$${currentBalance.toLocaleString('en-US', {minimumFractionDigits:2})} <span class="text-[10px] font-normal text-gray-400 font-sans">Starting: $${Number(acc.startingBalance).toLocaleString()}</span></p>
+                        <p class="text-xs sm:text-sm font-bold font-mono text-emerald-400">${formatMoney(currentBalance, curr)} <span class="text-[10px] font-normal text-gray-400 font-sans">Starting: ${formatMoney(acc.startingBalance, curr)}</span></p>
                     </div>
 
                     <div class="flex items-center gap-3">
@@ -968,6 +1000,7 @@
         async function createAccount() {
             const name = document.getElementById('newAccountName').value.trim();
             const type = document.getElementById('newAccountType').value;
+            const currency = document.getElementById('newAccountCurrency').value;
             const balance = parseFloat(document.getElementById('newAccountBalance').value);
 
             if (!name || isNaN(balance)) {
@@ -979,6 +1012,7 @@
                 id: 'acc_' + Date.now(),
                 name: name,
                 type: type,
+                currency: currency,
                 startingBalance: balance,
                 created: Date.now()
             };
@@ -1009,21 +1043,23 @@
             const activeAcc = getActiveAccount();
             if (!activeAcc) return;
 
+            const curr = activeAcc.currency || 'USD';
             const trades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
             
             const totalPnL = trades.reduce((sum, t) => sum + (Number(t.netPnL) || 0), 0);
             const currentBal = Number(activeAcc.startingBalance) + totalPnL;
 
-            document.getElementById('activeCurrentBalance').innerText = '$' + currentBal.toLocaleString('en-US', {minimumFractionDigits: 2});
-            document.getElementById('tlBalance').innerText = '$' + currentBal.toLocaleString('en-US', {minimumFractionDigits: 2});
+            document.getElementById('activeStartingBalance').innerText = formatMoney(activeAcc.startingBalance, curr);
+            document.getElementById('activeCurrentBalance').innerText = formatMoney(currentBal, curr);
+            document.getElementById('tlBalance').innerText = formatMoney(currentBal, curr);
 
-            renderDashboard(trades);
-            renderTradeLogTable(trades);
+            renderDashboard(trades, curr);
+            renderTradeLogTable(trades, curr);
         }
 
-        function renderDashboard(trades) {
-            renderCalendar(trades);
-            renderRecentTrades(trades);
+        function renderDashboard(trades, curr) {
+            renderCalendar(trades, curr);
+            renderRecentTrades(trades, curr);
 
             const year = currentCalendarDate.getFullYear();
             const month = currentCalendarDate.getMonth();
@@ -1051,10 +1087,10 @@
             document.getElementById('dashLossCount').innerText = lossCount;
             document.getElementById('dashBECount').innerText = beCount;
 
-            document.getElementById('dashMonthlyPnL').innerText = (monthPnL >= 0 ? '+$' : '-$') + Math.abs(monthPnL).toFixed(2);
+            document.getElementById('dashMonthlyPnL').innerText = (monthPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(monthPnL), curr);
             document.getElementById('dashMonthlyPnL').className = `text-2xl font-black mt-1 font-mono ${monthPnL >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
-            document.getElementById('dashProfitVal').innerText = '$' + profitVal.toFixed(2);
-            document.getElementById('dashLossVal').innerText = '$' + lossVal.toFixed(2);
+            document.getElementById('dashProfitVal').innerText = formatMoney(profitVal, curr);
+            document.getElementById('dashLossVal').innerText = formatMoney(lossVal, curr);
 
             document.getElementById('dashAvgRR').innerText = avgRR;
             document.getElementById('dashTotalTradesMonth').innerText = total;
@@ -1067,10 +1103,10 @@
                 statusLabel.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> In Loss`;
                 statusLabel.className = "text-base sm:text-lg font-black text-red-400 mt-1 flex items-center gap-1.5";
             }
-            document.getElementById('dashStatusSub').innerText = `${monthPnL >= 0 ? '+' : '-'}$${Math.abs(monthPnL).toFixed(2)} in Net PnL`;
+            document.getElementById('dashStatusSub').innerText = `${monthPnL >= 0 ? '+' : '-'}${formatMoney(Math.abs(monthPnL), curr)} Net PnL`;
         }
 
-        function renderCalendar(trades) {
+        function renderCalendar(trades, curr) {
             const year = currentCalendarDate.getFullYear();
             const month = currentCalendarDate.getMonth();
 
@@ -1116,7 +1152,7 @@
                 let badgeHTML = '';
                 if (dayTrades.length > 0) {
                     const colorClass = dayNetPnL >= 0 ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
-                    const formattedAmount = (dayNetPnL >= 0 ? '+$' : '-$') + Math.abs(dayNetPnL).toFixed(0);
+                    const formattedAmount = (dayNetPnL >= 0 ? '+' : '-') + formatMoneyShort(Math.abs(dayNetPnL), curr);
                     badgeHTML = `
                         <div class="text-[9px] font-mono ${colorClass} truncate leading-tight mt-0.5">
                             ${formattedAmount}
@@ -1157,7 +1193,7 @@
             refreshActiveAccountData();
         }
 
-        function renderRecentTrades(trades) {
+        function renderRecentTrades(trades, curr) {
             const container = document.getElementById('recentTradesContainer');
             const titleEl = document.getElementById('recentTradesTitle');
             const subtitleEl = document.getElementById('recentTradesFilterSubtitle');
@@ -1190,7 +1226,7 @@
             filteredTrades.forEach(t => {
                 const pnlNum = Number(t.netPnL) || 0;
                 const isWin = pnlNum >= 0;
-                const formattedPnL = (isWin ? '+$' : '-$') + Math.abs(pnlNum).toFixed(2);
+                const formattedPnL = (isWin ? '+' : '-') + formatMoney(Math.abs(pnlNum), curr);
                 const card = document.createElement('div');
                 card.className = "bg-[#0c120e] border border-emerald-500/10 rounded-xl p-3 flex items-center justify-between gap-3 hover:border-emerald-500/30 transition";
                 card.innerHTML = `
@@ -1212,14 +1248,14 @@
                         <div class="text-xs font-black ${isWin ? 'text-emerald-400' : 'text-red-400'}">
                             ${formattedPnL}
                         </div>
-                        <div class="text-[10px] text-gray-400">Risk: $${Number(t.risk || 0).toFixed(2)}</div>
+                        <div class="text-[10px] text-gray-400">Risk: ${formatMoney(t.risk || 0, curr)}</div>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        function renderTradeLogTable(trades) {
+        function renderTradeLogTable(trades, curr) {
             const tbody = document.getElementById('tradeLogTableBody');
             const placeholder = document.getElementById('noTradesPlaceholder');
             tbody.innerHTML = '';
@@ -1228,7 +1264,7 @@
             const wins = trades.filter(t => Number(t.netPnL) > 0).length;
             const winRate = trades.length > 0 ? Math.round((wins / trades.length) * 100) : 0;
 
-            document.getElementById('tlTotalPnL').innerText = (totalPnL >= 0 ? '+$' : '-$') + Math.abs(totalPnL).toFixed(2);
+            document.getElementById('tlTotalPnL').innerText = (totalPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(totalPnL), curr);
             document.getElementById('tlTotalPnL').className = `text-xl font-black ${totalPnL >= 0 ? 'text-emerald-400' : 'text-red-400'} mt-1 font-mono`;
             document.getElementById('tlWinRate').innerText = winRate + '%';
             document.getElementById('tlTotalTrades').innerText = trades.length;
@@ -1245,7 +1281,7 @@
             sorted.forEach(t => {
                 const pnlNum = Number(t.netPnL) || 0;
                 const isWin = pnlNum >= 0;
-                const formattedPnL = (isWin ? '+$' : '-$') + Math.abs(pnlNum).toFixed(2);
+                const formattedPnL = (isWin ? '+' : '-') + formatMoney(Math.abs(pnlNum), curr);
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-emerald-500/5 transition";
                 tr.innerHTML = `
@@ -1257,7 +1293,7 @@
                     <td class="py-3.5 px-4 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'} whitespace-nowrap">
                         ${formattedPnL}
                     </td>
-                    <td class="py-3.5 px-4 font-mono text-gray-400 whitespace-nowrap">$${Number(t.risk || 0).toFixed(2)}</td>
+                    <td class="py-3.5 px-4 font-mono text-gray-400 whitespace-nowrap">${formatMoney(t.risk || 0, curr)}</td>
                     <td class="py-3.5 px-4 font-mono font-bold text-amber-400 whitespace-nowrap">${t.rr || '0'}</td>
                     <td class="py-3.5 px-4 text-gray-400 text-[11px] whitespace-nowrap">${t.htf || '—'}</td>
                     <td class="py-3.5 px-4 text-gray-400 text-[11px] whitespace-nowrap">${t.confluence || '—'}</td>
@@ -1453,6 +1489,7 @@
         function updateAnalyticsCharts() {
             const activeAcc = getActiveAccount();
             if (!activeAcc) return;
+            const curr = activeAcc.currency || 'USD';
 
             let trades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
             trades.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -1468,7 +1505,7 @@
             const winRate = trades.length > 0 ? Math.round((wins / trades.length) * 100) : 0;
             const avgRR = trades.length > 0 ? (trades.reduce((s, t) => s + (Number(t.rr) || 0), 0) / trades.length).toFixed(1) : "0.0";
 
-            document.getElementById('analyticsPnL').innerText = (totalPnL >= 0 ? '+$' : '-$') + Math.abs(totalPnL).toFixed(2);
+            document.getElementById('analyticsPnL').innerText = (totalPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(totalPnL), curr);
             document.getElementById('analyticsPnL').className = `text-xl font-black ${totalPnL >= 0 ? 'text-emerald-400' : 'text-red-400'} mt-1 font-mono`;
             document.getElementById('analyticsWinRate').innerText = winRate + '%';
             document.getElementById('analyticsTotalTrades').innerText = trades.length;
@@ -1487,7 +1524,7 @@
                 dataPoints.push(cumulativeBalance);
             });
 
-            renderLineChart('equityChart', labels, dataPoints, 'Equity ($)');
+            renderLineChart('equityChart', labels, dataPoints, 'Equity', curr);
 
             const symbolMap = {};
             const symbolCount = {};
@@ -1495,7 +1532,7 @@
                 symbolMap[t.pair] = (symbolMap[t.pair] || 0) + Number(t.netPnL);
                 symbolCount[t.pair] = (symbolCount[t.pair] || 0) + 1;
             });
-            renderSymbolPerformanceChart('symbolChart', symbolMap, symbolCount);
+            renderSymbolPerformanceChart('symbolChart', symbolMap, symbolCount, curr);
 
             const losses = trades.filter(t => Number(t.netPnL) < 0).length;
             const bes = trades.filter(t => Number(t.netPnL) === 0).length;
@@ -1507,14 +1544,14 @@
                 const dayIdx = new Date(t.date).getDay();
                 weekdayPnL[dayIdx] += Number(t.netPnL);
             });
-            renderBarChart('weekdayChart', weekdays, weekdayPnL, 'PnL by Day');
+            renderBarChart('weekdayChart', weekdays, weekdayPnL, 'PnL by Day', curr);
 
             const buyPnL = trades.filter(t => t.position === 'BUY').reduce((s, t) => s + Number(t.netPnL), 0);
             const sellPnL = trades.filter(t => t.position === 'SELL').reduce((s, t) => s + Number(t.netPnL), 0);
-            renderBarChart('orderTypeChart', ['BUY', 'SELL'], [buyPnL, sellPnL], 'PnL by Position');
+            renderBarChart('orderTypeChart', ['BUY', 'SELL'], [buyPnL, sellPnL], 'PnL by Position', curr);
         }
 
-        function renderLineChart(canvasId, labels, data, label) {
+        function renderLineChart(canvasId, labels, data, label, curr) {
             if (charts[canvasId]) charts[canvasId].destroy();
             const ctx = document.getElementById(canvasId).getContext('2d');
             
@@ -1547,7 +1584,7 @@
                             callbacks: {
                                 label: function(context) {
                                     const val = Number(context.raw) || 0;
-                                    return `Equity: $${val.toFixed(2)}`;
+                                    return `Equity: ${formatMoney(val, curr)}`;
                                 }
                             }
                         }
@@ -1558,7 +1595,10 @@
                             grid: { color: 'rgba(34, 197, 94, 0.08)' }, 
                             ticks: { 
                                 color: '#9CA3AF',
-                                callback: function(val) { return '$' + Number(val).toLocaleString(); }
+                                callback: function(val) { 
+                                    const n = Number(val);
+                                    return formatMoneyShort(n, curr); 
+                                }
                             } 
                         }
                     }
@@ -1566,7 +1606,7 @@
             });
         }
 
-        function renderSymbolPerformanceChart(canvasId, symbolMap, symbolCount) {
+        function renderSymbolPerformanceChart(canvasId, symbolMap, symbolCount, curr) {
             if (charts[canvasId]) charts[canvasId].destroy();
             const ctx = document.getElementById(canvasId).getContext('2d');
 
@@ -1575,7 +1615,7 @@
             
             const formattedLabels = pairs.map(p => {
                 const val = symbolMap[p];
-                const formattedPnL = (val >= 0 ? '+$' : '-$') + Math.abs(val).toFixed(2);
+                const formattedPnL = (val >= 0 ? '+' : '-') + formatMoney(Math.abs(val), curr);
                 const count = symbolCount[p] || 0;
                 return `${p}: ${formattedPnL} (${count} trades)`;
             });
@@ -1601,7 +1641,7 @@
                                 label: function(context) {
                                     const pair = pairs[context.dataIndex];
                                     const val = symbolMap[pair];
-                                    const formattedPnL = (val >= 0 ? '+$' : '-$') + Math.abs(val).toFixed(2);
+                                    const formattedPnL = (val >= 0 ? '+' : '-') + formatMoney(Math.abs(val), curr);
                                     return `${pair}: ${formattedPnL} (${symbolCount[pair]} trades)`;
                                 }
                             }
@@ -1653,7 +1693,7 @@
             });
         }
 
-        function renderBarChart(canvasId, labels, data, label) {
+        function renderBarChart(canvasId, labels, data, label, curr) {
             if (charts[canvasId]) charts[canvasId].destroy();
             const ctx = document.getElementById(canvasId).getContext('2d');
             charts[canvasId] = new Chart(ctx, {
@@ -1676,7 +1716,7 @@
                             callbacks: {
                                 label: function(context) {
                                     const val = Number(context.raw) || 0;
-                                    const formattedPnL = (val >= 0 ? '+$' : '-$') + Math.abs(val).toFixed(2);
+                                    const formattedPnL = (val >= 0 ? '+' : '-') + formatMoney(Math.abs(val), curr);
                                     return `PnL: ${formattedPnL}`;
                                 }
                             }
@@ -1690,7 +1730,7 @@
                                 color: '#9CA3AF',
                                 callback: function(val) { 
                                     const n = Number(val);
-                                    return (n >= 0 ? '+$' : '-$') + Math.abs(n).toFixed(0);
+                                    return formatMoneyShort(n, curr);
                                 }
                             } 
                         }
