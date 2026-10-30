@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NJH.AN JURNAL</title>
+<style>
+:root{--bg:#0b0d10;--panel:#13171c;--line:#252b33;--text:#edf0f4;--muted:#89929e;--green:#65c99a;--red:#e77b83;--gold:#c6aa78}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px Arial,sans-serif}
+header{padding:22px 5%;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.brand{font-family:Georgia,serif;font-size:23px;letter-spacing:3px}
+.brand span{color:var(--gold)}
+nav{display:flex;gap:18px;color:var(--muted);font-size:12px}
+main{max-width:1200px;margin:auto;padding:28px 5%}
+h1{font-size:25px;margin:0 0 8px}
+.sub,.muted{color:var(--muted)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}
+button{background:var(--gold);color:#101114;border:0;padding:12px 17px;border-radius:7px;font-weight:bold;cursor:pointer}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+.card,.section{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px}
+.card small,.section small{color:var(--muted)}
+.value{font-size:25px;margin-top:13px;font-weight:bold}
+.green{color:var(--green)}.red{color:var(--red)}
+.grid{display:grid;grid-template-columns:1.5fr 1fr;gap:15px;margin-top:17px}
+.section{margin-top:17px}
+.section h3{margin:0 0 18px;font-size:15px}
+canvas{width:100%;height:220px;display:block}
+table{width:100%;border-collapse:collapse;white-space:nowrap}
+th,td{text-align:left;padding:13px 10px;border-bottom:1px solid var(--line);font-size:12px}
+th{color:var(--muted);font-weight:normal}
+.table-wrap{overflow-x:auto}
+input,select,textarea{width:100%;background:#0b0f13;border:1px solid var(--line);padding:12px;color:var(--text);border-radius:6px;margin:7px 0 14px}
+label{color:var(--muted);font-size:12px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#formArea{display:none}
+.months{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.month{background:#0d1115;border:1px solid var(--line);padding:12px;border-radius:7px}
+.month b{display:block;margin:8px 0}
+.delete{background:transparent;color:var(--red);padding:5px}
+footer{text-align:center;color:var(--muted);padding:30px;font-size:11px}
+@media(max-width:750px){.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.months{grid-template-columns:repeat(3,1fr)}nav{display:none}.value{font-size:21px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand">NJH<span>.</span>AN <span>JURNAL</span></div>
+ <nav><span>DASHBOARD</span><span>TRADES</span><span>ANALYTICS</span></nav>
+ <small class="muted">TRADING JOURNAL</small>
+</header>
+<main>
+ <div class="top">
+  <div><h1>Trading Dashboard</h1><div class="sub">Your performance at a glance · USD</div></div>
+  <button onclick="toggleForm()">+ Add Trade</button>
+ </div>
+
+ <div class="cards">
+  <div class="card"><small>TOTAL NET P/L</small><div class="value" id="pnl">$0.00</div></div>
+  <div class="card"><small>WIN RATE</small><div class="value" id="winrate">0%</div></div>
+  <div class="card"><small>PROFIT FACTOR</small><div class="value" id="pf">0.00</div></div>
+  <div class="card"><small>CURRENT BALANCE</small><div class="value" id="balance">$25.00</div></div>
+ </div>
+
+ <div class="grid">
+  <div class="section">
+   <h3>Equity Curve <small> · Account Growth</small></h3>
+   <canvas id="chart"></canvas>
+  </div>
+  <div class="section">
+   <h3>Trading Statistics</h3>
+   <p class="muted">Total Trades <b id="total" style="float:right;color:white">0</b></p>
+   <p class="muted">Wins <b id="wins" class="green" style="float:right">0</b></p>
+   <p class="muted">Losses <b id="losses" class="red" style="float:right">0</b></p>
+   <p class="muted">Average P/L <b id="avg" style="float:right;color:white">$0.00</b></p>
+   <p class="muted">Starting Balance <b style="float:right;color:white">$25.00</b></p>
+  </div>
+ </div>
+
+ <div class="section" id="formArea">
+  <h3>Add New Trade</h3>
+  <form id="tradeForm">
+   <div class="form-grid">
+    <div><label>Trade Date</label><input type="date" id="date" required></div>
+    <div><label>Pair / Symbol</label><input id="symbol" placeholder="XAUUSD" required></div>
+    <div><label>Direction</label><select id="direction"><option>Buy</option><option>Sell</option></select></div>
+    <div><label>Result</label><select id="result"><option value="win">Win</option><option value="loss">Loss</option><option value="breakeven">Breakeven</option></select></div>
+    <div><label>Profit / Loss (USD)</label><input type="number" id="amount" step="0.01" placeholder="3.50" required></div>
+    <div><label>Strategy</label><input id="strategy" placeholder="Breakout / SMC"></div>
+   </div>
+   <label>Notes</label><textarea id="notes" placeholder="Catatan transaksi..." rows="2"></textarea>
+   <button type="submit">Save Trade</button>
+   <button type="button" onclick="toggleForm()" style="background:#292f37;color:white">Cancel</button>
+  </form>
+ </div>
+
+ <div class="section">
+  <h3>Monthly Performance</h3>
+  <div class="months" id="months"></div>
+ </div>
+
+ <div class="section">
+  <h3>Trade History</h3>
+  <div class="table-wrap">
+   <table>
+    <thead><tr><th>DATE</th><th>SYMBOL</th><th>DIRECTION</th><th>RESULT</th><th>P/L</th><th>STRATEGY</th><th></th></tr></thead>
+    <tbody id="history"></tbody>
+   </table>
+  </div>
+  <p class="muted" id="empty">Belum ada transaksi. Tekan Add Trade untuk memulai.</p>
+ </div>
+</main>
+<footer>NJH.AN JURNAL · PERSONAL TRADING PERFORMANCE TRACKER</footer>
+
+<script>
+const START=25;
+let trades=JSON.parse(localStorage.getItem("njhan_trades")||"[]");
+const money=n=>(n<0?"-$":"$")+Math.abs(n).toFixed(2);
+function toggleForm(){
+ const f=document.getElementById("formArea");
+ f.style.display=f.style.display==="block"?"none":"block";
+}
+document.getElementById("date").value=new Date().toISOString().slice(0,10);
+
+document.getElementById("tradeForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ let amount=Number(document.getElementById("amount").value);
+ let result=document.getElementById("result").value;
+ if(result==="win"&&amount<=0){alert("Masukkan profit positif untuk Win.");return}
+ if(result==="loss"&&amount>=0){alert("Masukkan nilai negatif untuk Loss.");return}
+ if(result==="breakeven")amount=0;
+ trades.push({
+  id:Date.now(),date:document.getElementById("date").value,
+  symbol:document.getElementById("symbol").value.toUpperCase(),
+  direction:document.getElementById("direction").value,
+  result,amount,strategy:document.getElementById("strategy").value,
+  notes:document.getElementById("notes").value
+ });
+ save();e.target.reset();
+ document.getElementById("date").value=new Date().toISOString().slice(0,10);
+ toggleForm();
+});
+
+function save(){
+ localStorage.setItem("njhan_trades",JSON.stringify(trades));
+ render();
+}
+function removeTrade(id){
+ if(confirm("Hapus transaksi ini?")){
+  trades=trades.filter(t=>t.id!==id);save();
+ }
+}
+function render(){
+ let sorted=[...trades].sort((a,b)=>a.date.localeCompare(b.date));
+ let total=trades.reduce((s,t)=>s+t.amount,0);
+ let wins=trades.filter(t=>t.amount>0).length;
+ let losses=trades.filter(t=>t.amount<0).length;
+ let grossWin=trades.filter(t=>t.amount>0).reduce((s,t)=>s+t.amount,0);
+ let grossLoss=Math.abs(trades.filter(t=>t.amount<0).reduce((s,t)=>s+t.amount,0));
+ let count=trades.length;
+ document.getElementById("pnl").textContent=money(total);
+ document.getElementById("pnl").className="value "+(total>=0?"green":"red");
+ document.getElementById("winrate").textContent=(count?wins/count*100:0).toFixed(1)+"%";
+ document.getElementById("pf").textContent=grossLoss?(grossWin/grossLoss).toFixed(2):grossWin?"∞":"0.00";
+ document.getElementById("balance").textContent=money(START+total);
+ document.getElementById("total").textContent=count;
+ document.getElementById("wins").textContent=wins;
+ document.getElementById("losses").textContent=losses;
+ document.getElementById("avg").textContent=money(count?total/count:0);
+ document.getElementById("history").innerHTML=[...trades].sort((a,b)=>b.date.localeCompare(a.date)).map(t=>
+ `<tr><td>${t.date}</td><td>${escapeHTML(t.symbol)}</td><td>${t.direction}</td><td>${t.result.toUpperCase()}</td><td class="${t.amount>=0?'green':'red'}">${money(t.amount)}</td><td>${escapeHTML(t.strategy||"-")}</td><td><button class="delete" onclick="removeTrade(${t.id})">Delete</button></td></tr>`
+ ).join("");
+ document.getElementById("empty").style.display=count?"none":"block";
+ const names=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+ document.getElementById("months").innerHTML=names.map((m,i)=>{
+ let p=trades.filter(t=>Number(t.date.slice(5,7))===i+1&&Number(t.date.slice(0,4))===new Date().getFullYear()).reduce((s,t)=>s+t.amount,0);
+ return `<div class="month"><small>${m}</small><b class="${p>=0?'green':'red'}">${money(p)}</b><small>${new Date().getFullYear()}</small></div>`;
+ }).join("");
+ drawChart(sorted);
+}
+function escapeHTML(s){
+ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function drawChart(data){
+ const c=document.getElementById("chart"),ctx=c.getContext("2d");
+ const w=c.clientWidth,h=220,dpr=window.devicePixelRatio||1;
+ c.width=w*dpr;c.height=h*dpr;ctx.scale(dpr,dpr);ctx.clearRect(0,0,w,h);
+ let vals=[START],balance=START;
+ data.forEach(t=>{balance+=t.amount;vals.push(balance)});
+ let min=Math.min(...vals),max=Math.max(...vals);
+ if(min===max){min-=1;max+=1}
+ const x=i=>20+i*(w-40)/Math.max(vals.length-1,1);
+ const y=v=>h-20-(v-min)/(max-min)*(h-40);
+ ctx.strokeStyle="#303740";ctx.lineWidth=1;
+ for(let i=0;i<4;i++){let yy=15+i*(h-30)/3;ctx.beginPath();ctx.moveTo(15,yy);ctx.lineTo(w-10,yy);ctx.stroke()}
+ ctx.beginPath();vals.forEach((v,i)=>i?ctx.lineTo(x(i),y(v)):ctx.moveTo(x(i),y(v)));
+ ctx.strokeStyle="#c6aa78";ctx.lineWidth=2;ctx.stroke();
+ vals.forEach((v,i)=>{ctx.beginPath();ctx.arc(x(i),y(v),3,0,Math.PI*2);ctx.fillStyle="#c6aa78";ctx.fill()});
+}
+window.addEventListener("resize",()=>drawChart([...trades].sort((a,b)=>a.date.localeCompare(b.date))));
+render();
+</script>
+</body>
+</html>
