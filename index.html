@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Njhan Journal - Professional Trading Terminal</title>
+    <title>Najh.an Journal - Professional Trading Terminal</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -119,7 +119,7 @@
                         N
                     </div>
                     <div>
-                        <span class="font-extrabold text-lg text-white tracking-tight group-hover:text-emerald-400 transition">Njhan<span class="text-emerald-400">Journal</span></span>
+                        <span class="font-extrabold text-lg text-white tracking-tight group-hover:text-emerald-400 transition">Najh.an<span class="text-emerald-400">Journal</span></span>
                         <span class="block text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">njhan-jurnal.vercel.app</span>
                     </div>
                 </div>
@@ -325,7 +325,7 @@
                         <div id="dashStatusLabel" class="text-base sm:text-lg font-black text-emerald-400 mt-1 flex items-center gap-1.5">
                             <i class="fa-solid fa-circle-check"></i> Profitable
                         </div>
-                        <div id="dashStatusSub" class="text-[10px] text-gray-400 mt-1.5 font-mono">+$0.00 in Net PnL</div>
+                        <div id="dashStatusSub" class="text-[10px] text-gray-400 mt-1.5 font-mono">+$0.00 Net PnL</div>
                     </div>
                 </div>
             </div>
@@ -979,10 +979,10 @@
                 let badgeHTML = '';
                 if (dayTrades.length > 0) {
                     const colorClass = dayNetPnL >= 0 ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
-                    const sign = dayNetPnL >= 0 ? '+' : '-';
+                    const formattedAmount = (dayNetPnL >= 0 ? '+$' : '-$') + Math.abs(dayNetPnL).toFixed(0);
                     badgeHTML = `
                         <div class="text-[9px] font-mono ${colorClass} truncate leading-tight mt-0.5">
-                            ${sign}$${Math.abs(dayNetPnL)}
+                            ${formattedAmount}
                         </div>
                     `;
                 }
@@ -1052,7 +1052,9 @@
             }
 
             filteredTrades.forEach(t => {
-                const isWin = Number(t.netPnL) >= 0;
+                const pnlNum = Number(t.netPnL) || 0;
+                const isWin = pnlNum >= 0;
+                const formattedPnL = (isWin ? '+$' : '-$') + Math.abs(pnlNum).toFixed(2);
                 const card = document.createElement('div');
                 card.className = "bg-[#0c120e] border border-emerald-500/10 rounded-xl p-3 flex items-center justify-between gap-3 hover:border-emerald-500/30 transition";
                 card.innerHTML = `
@@ -1072,7 +1074,7 @@
                     </div>
                     <div class="text-right font-mono">
                         <div class="text-xs font-black ${isWin ? 'text-emerald-400' : 'text-red-400'}">
-                            ${isWin ? '+' : ''}$${Number(t.netPnL).toFixed(2)}
+                            ${formattedPnL}
                         </div>
                         <div class="text-[10px] text-gray-400">Risk: $${Number(t.risk || 0).toFixed(2)}</div>
                     </div>
@@ -1105,7 +1107,9 @@
             const sorted = [...trades].sort((a, b) => new Date(b.date) - new Date(a.date));
 
             sorted.forEach(t => {
-                const isWin = Number(t.netPnL) >= 0;
+                const pnlNum = Number(t.netPnL) || 0;
+                const isWin = pnlNum >= 0;
+                const formattedPnL = (isWin ? '+$' : '-$') + Math.abs(pnlNum).toFixed(2);
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-emerald-500/5 transition";
                 tr.innerHTML = `
@@ -1115,7 +1119,7 @@
                         <span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${t.position}</span>
                     </td>
                     <td class="py-3.5 px-4 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'} whitespace-nowrap">
-                        ${isWin ? '+' : ''}$${Number(t.netPnL).toFixed(2)}
+                        ${formattedPnL}
                     </td>
                     <td class="py-3.5 px-4 font-mono text-gray-400 whitespace-nowrap">$${Number(t.risk || 0).toFixed(2)}</td>
                     <td class="py-3.5 px-4 font-mono font-bold text-amber-400 whitespace-nowrap">${t.rr || '0'}</td>
@@ -1327,14 +1331,16 @@
             renderLineChart('equityChart', labels, dataPoints, 'Equity ($)');
 
             const symbolMap = {};
+            const symbolCount = {};
             trades.forEach(t => {
                 symbolMap[t.pair] = (symbolMap[t.pair] || 0) + Number(t.netPnL);
+                symbolCount[t.pair] = (symbolCount[t.pair] || 0) + 1;
             });
-            renderDoughnutChart('symbolChart', Object.keys(symbolMap), Object.values(symbolMap));
+            renderSymbolPerformanceChart('symbolChart', symbolMap, symbolCount);
 
             const losses = trades.filter(t => Number(t.netPnL) < 0).length;
             const bes = trades.filter(t => Number(t.netPnL) === 0).length;
-            renderDoughnutChart('winLossChart', ['Wins', 'Losses', 'BreakEven'], [wins, losses, bes], ['#10B981', '#EF4444', '#6B7280']);
+            renderWinLossChart('winLossChart', wins, losses, bes, trades.length);
 
             const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             const weekdayPnL = [0, 0, 0, 0, 0, 0, 0];
@@ -1376,25 +1382,53 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const val = Number(context.raw) || 0;
+                                    return `Equity: $${val.toFixed(2)}`;
+                                }
+                            }
+                        }
+                    },
                     scales: {
                         x: { grid: { color: 'rgba(34, 197, 94, 0.08)' }, ticks: { color: '#9CA3AF' } },
-                        y: { grid: { color: 'rgba(34, 197, 94, 0.08)' }, ticks: { color: '#9CA3AF' } }
+                        y: { 
+                            grid: { color: 'rgba(34, 197, 94, 0.08)' }, 
+                            ticks: { 
+                                color: '#9CA3AF',
+                                callback: function(val) { return '$' + Number(val).toLocaleString(); }
+                            } 
+                        }
                     }
                 }
             });
         }
 
-        function renderDoughnutChart(canvasId, labels, data, colors) {
+        function renderSymbolPerformanceChart(canvasId, symbolMap, symbolCount) {
             if (charts[canvasId]) charts[canvasId].destroy();
             const ctx = document.getElementById(canvasId).getContext('2d');
+
+            const pairs = Object.keys(symbolMap);
+            const pnls = pairs.map(p => symbolMap[p]);
+            
+            // Format legend labels with symbol + PnL + trade count (e.g. XAUUSD +$100.00 (4 trades))
+            const formattedLabels = pairs.map(p => {
+                const val = symbolMap[p];
+                const formattedPnL = (val >= 0 ? '+$' : '-$') + Math.abs(val).toFixed(2);
+                const count = symbolCount[p] || 0;
+                return `${p}: ${formattedPnL} (${count} trades)`;
+            });
+
             charts[canvasId] = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: labels,
+                    labels: formattedLabels,
                     datasets: [{
-                        data: data,
-                        backgroundColor: colors || ['#10B981', '#3B82F6', '#F59E0B', '#EC4899', '#8B5CF6'],
+                        data: pnls.map(v => Math.abs(v) || 1), // scale sizes proportionally
+                        backgroundColor: ['#10B981', '#3B82F6', '#F59E0B', '#EC4899', '#8B5CF6', '#14B8A6'],
                         borderWidth: 2,
                         borderColor: '#0b1016'
                     }]
@@ -1402,7 +1436,61 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { color: '#E5E7EB', font: { size: 10 } } } }
+                    plugins: { 
+                        legend: { position: 'bottom', labels: { color: '#E5E7EB', font: { size: 11, weight: 'bold' } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const pair = pairs[context.dataIndex];
+                                    const val = symbolMap[pair];
+                                    const formattedPnL = (val >= 0 ? '+$' : '-$') + Math.abs(val).toFixed(2);
+                                    return `${pair}: ${formattedPnL} (${symbolCount[pair]} trades)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderWinLossChart(canvasId, wins, losses, bes, total) {
+            if (charts[canvasId]) charts[canvasId].destroy();
+            const ctx = document.getElementById(canvasId).getContext('2d');
+
+            const winPct = total > 0 ? Math.round((wins / total) * 100) : 0;
+            const lossPct = total > 0 ? Math.round((losses / total) * 100) : 0;
+            const bePct = total > 0 ? (100 - winPct - lossPct) : 0;
+
+            const labels = [
+                `Win ${winPct}% (${wins})`,
+                `Loss ${lossPct}% (${losses})`,
+                `BreakEven ${bePct}% (${bes})`
+            ];
+
+            charts[canvasId] = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: [wins, losses, bes],
+                        backgroundColor: ['#10B981', '#EF4444', '#6B7280'],
+                        borderWidth: 2,
+                        borderColor: '#0b1016'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position: 'bottom', labels: { color: '#E5E7EB', font: { size: 11, weight: 'bold' } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label;
+                                }
+                            }
+                        }
+                    }
                 }
             });
         }
@@ -1424,10 +1512,30 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const val = Number(context.raw) || 0;
+                                    const formattedPnL = (val >= 0 ? '+$' : '-$') + Math.abs(val).toFixed(2);
+                                    return `PnL: ${formattedPnL}`;
+                                }
+                            }
+                        }
+                    },
                     scales: {
                         x: { grid: { display: false }, ticks: { color: '#9CA3AF' } },
-                        y: { grid: { color: 'rgba(34, 197, 94, 0.08)' }, ticks: { color: '#9CA3AF' } }
+                        y: { 
+                            grid: { color: 'rgba(34, 197, 94, 0.08)' }, 
+                            ticks: { 
+                                color: '#9CA3AF',
+                                callback: function(val) { 
+                                    const n = Number(val);
+                                    return (n >= 0 ? '+$' : '-$') + Math.abs(n).toFixed(0);
+                                }
+                            } 
+                        }
                     }
                 }
             });
@@ -1443,7 +1551,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Njhan_Journal_Backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `Najhan_Journal_Backup_${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             showNotice("Backup file JSON berhasil didownload!");
         }
