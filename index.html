@@ -286,6 +286,39 @@
 
             <!-- TAB 1: DASHBOARD -->
             <div id="tabContentDashboard" class="space-y-6">
+
+                <!-- DASHBOARD FILTER BULAN & TAHUN -->
+                <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div>
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-filter text-emerald-400"></i> Monthly Performance Filter
+                        </h3>
+                        <p class="text-[11px] text-gray-400">Pilih bulan & tahun untuk melihat kalender dan metrik performa bulanan</p>
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <select id="dashFilterMonth" onchange="onDashFilterChange()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                            <option value="01">Januari</option>
+                            <option value="02">Februari</option>
+                            <option value="03">Maret</option>
+                            <option value="04">April</option>
+                            <option value="05">Mei</option>
+                            <option value="06">Juni</option>
+                            <option value="07">Juli</option>
+                            <option value="08">Agustus</option>
+                            <option value="09">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                        <select id="dashFilterYear" onchange="onDashFilterChange()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                            <!-- Otomatis diisi JS -->
+                        </select>
+                        <button onclick="resetDashFilterToCurrent()" class="px-3 py-1.5 bg-[#121c15] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
+                            Bulan Ini
+                        </button>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
                     <!-- Left Column: Calendar View -->
@@ -293,7 +326,7 @@
                         <div class="flex items-center justify-between pb-3 border-b border-emerald-500/10">
                             <div>
                                 <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                                    <i class="fa-regular fa-calendar text-emerald-400"></i> Monthly Performance
+                                    <i class="fa-regular fa-calendar text-emerald-400"></i> Monthly Calendar View
                                 </h3>
                                 <p id="calendarSubtext" class="text-[11px] text-gray-400">0 trades in current view</p>
                             </div>
@@ -377,6 +410,35 @@
                         <div id="dashStatusSub" class="text-[10px] text-gray-400 mt-1.5 font-mono">+$0.00 Net PnL</div>
                     </div>
                 </div>
+
+                <!-- YEARLY PERFORMANCE SECTION (PALING BAWAH DASHBOARD) -->
+                <div class="glass-card rounded-2xl p-5 space-y-4 shadow-xl">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-emerald-500/10 gap-3">
+                        <div>
+                            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-chart-bar text-emerald-400"></i> Yearly Performance & Monthly Breakdown
+                            </h3>
+                            <p class="text-[11px] text-gray-400">Klik salah satu bulan di bawah untuk melihat rincian Monthly Performance-nya.</p>
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto">
+                            <label class="text-[11px] text-gray-400 font-bold">Filter Tahun:</label>
+                            <select id="yearlyFilterYear" onchange="renderYearlyPerformance()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                                <!-- Otomatis diisi JS -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Container Grid Card Yearly -->
+                    <div id="yearlyCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <!-- KONTAINER SPESIFIK DETAIL BULAN YANG DIKLIK DI BAWAH YEARLY -->
+                    <div id="selectedMonthDetailContainer" class="hidden pt-4 border-t border-emerald-500/10 space-y-3">
+                        <!-- Dirender dinamis ketika bulan diklik -->
+                    </div>
+                </div>
+
             </div>
 
             <!-- TAB 2: TRADE LOG -->
@@ -406,7 +468,7 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <h3 class="text-lg font-black text-white">Trade Journal</h3>
                     
-                    <!-- FILTER BULAN & TAHUN BARU -->
+                    <!-- FILTER BULAN & TAHUN TRADE LOG -->
                     <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                         <select id="filterMonth" onchange="applyTradeLogFilter()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                             <option value="ALL">Semua Bulan</option>
@@ -426,10 +488,7 @@
 
                         <select id="filterYear" onchange="applyTradeLogFilter()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                             <option value="ALL">Semua Tahun</option>
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                            <option value="2026">2026</option>
-                            <option value="2027">2027</option>
+                            <!-- Diisi otomatis oleh JavaScript -->
                         </select>
 
                         <button onclick="resetTradeLogFilter()" class="px-3 py-1.5 bg-[#121c15] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
@@ -894,11 +953,62 @@
 
     <!-- MAIN APP LOGIC JS -->
     <script>
-        let currentCalendarDate = new Date();
+        let currentCalendarDate = new Date(); // Untuk navigasi kalender dashboard
         let selectedCalendarDateStr = null;
         let selectedPosition = 'BUY';
         let selectedTags = { htf: [], confluence: [], result: [] };
         let charts = {};
+
+        // Inisialisasi Opsi Tahun Otomatis pada Select Filter
+        function populateAllYearFilters() {
+            const currentYear = new Date().getFullYear();
+            const years = [];
+            for (let y = currentYear + 5; y >= 2020; y--) {
+                years.push(y);
+            }
+
+            // 1. Trade Log Filter Tahun
+            const trYear = document.getElementById('filterYear');
+            if (trYear) {
+                const val = trYear.value;
+                trYear.innerHTML = '<option value="ALL">Semua Tahun</option>';
+                years.forEach(y => {
+                    trYear.innerHTML += `<option value="${y}">${y}</option>`;
+                });
+                trYear.value = val || 'ALL';
+            }
+
+            // 2. Dashboard Filter Tahun (Monthly Performance)
+            const dashYear = document.getElementById('dashFilterYear');
+            if (dashYear) {
+                const val = dashYear.value;
+                dashYear.innerHTML = '';
+                years.forEach(y => {
+                    dashYear.innerHTML += `<option value="${y}">${y}</option>`;
+                });
+                dashYear.value = val || currentYear;
+            }
+
+            // 3. Yearly Performance Filter Tahun
+            const yearlySel = document.getElementById('yearlyFilterYear');
+            if (yearlySel) {
+                const val = yearlySel.value;
+                yearlySel.innerHTML = '';
+                years.forEach(y => {
+                    yearlySel.innerHTML += `<option value="${y}">${y}</option>`;
+                });
+                yearlySel.value = val || currentYear;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            populateAllYearFilters();
+            // Set default dash month & year to current
+            const now = new Date();
+            const mStr = String(now.getMonth() + 1).padStart(2, '0');
+            const dashMonthEl = document.getElementById('dashFilterMonth');
+            if (dashMonthEl) dashMonthEl.value = mStr;
+        });
 
         function getActiveAccount() {
             return window.appData.accounts.find(a => a.id === window.appData.selectedAccountId) || window.appData.accounts[0];
@@ -1086,10 +1196,33 @@
             document.getElementById('tlBalance').innerText = formatMoney(currentBal, curr);
 
             renderDashboard(trades, curr);
-            applyTradeLogFilter(); // Render table dengan filter bulan/tahun aktif
+            renderYearlyPerformance();
+            applyTradeLogFilter();
+        }
+
+        // Handler saat filter bulan/tahun dashboard diubah
+        function onDashFilterChange() {
+            const m = document.getElementById('dashFilterMonth').value;
+            const y = document.getElementById('dashFilterYear').value;
+            currentCalendarDate = new Date(parseInt(y), parseInt(m) - 1, 1);
+            refreshActiveAccountData();
+        }
+
+        function resetDashFilterToCurrent() {
+            const now = new Date();
+            const mStr = String(now.getMonth() + 1).padStart(2, '0');
+            const yStr = String(now.getFullYear());
+            document.getElementById('dashFilterMonth').value = mStr;
+            document.getElementById('dashFilterYear').value = yStr;
+            currentCalendarDate = new Date();
+            refreshActiveAccountData();
         }
 
         function renderDashboard(trades, curr) {
+            const mSel = document.getElementById('dashFilterMonth').value;
+            const ySel = document.getElementById('dashFilterYear').value;
+            currentCalendarDate = new Date(parseInt(ySel), parseInt(mSel) - 1, 1);
+
             renderCalendar(trades, curr);
             renderRecentTrades(trades, curr);
 
@@ -1208,12 +1341,16 @@
 
         function navigateMonth(dir) {
             currentCalendarDate.setMonth(currentCalendarDate.getMonth() + dir);
+            // sinkronkan select dash month/year
+            document.getElementById('dashFilterMonth').value = String(currentCalendarDate.getMonth() + 1).padStart(2, '0');
+            document.getElementById('dashFilterYear').value = String(currentCalendarDate.getFullYear());
             refreshActiveAccountData();
         }
 
+        // FITUR KLIK TANGGAL: Tampilkan trade pada tanggal tersebut di Recent Trades
         function selectCalendarDate(dateStr) {
             if (selectedCalendarDateStr === dateStr) {
-                selectedCalendarDateStr = null;
+                selectedCalendarDateStr = null; // Toggle off
             } else {
                 selectedCalendarDateStr = dateStr;
             }
@@ -1237,7 +1374,7 @@
             if (selectedCalendarDateStr) {
                 filteredTrades = filteredTrades.filter(t => t.date === selectedCalendarDateStr);
                 titleEl.innerText = `Trades for ${selectedCalendarDateStr}`;
-                subtitleEl.innerText = "Filtered by calendar selection";
+                subtitleEl.innerText = "Filtered by calendar date selection";
             } else {
                 titleEl.innerText = "Recent Trades";
                 subtitleEl.innerText = "Latest across all time";
@@ -1249,7 +1386,7 @@
             if (filteredTrades.length === 0) {
                 container.innerHTML = `
                     <div class="py-12 text-center text-gray-500 text-xs">
-                        No recent trades
+                        No trades found for this selection
                     </div>
                 `;
                 return;
@@ -1287,7 +1424,148 @@
             });
         }
 
-        // FUNGSI FILTER BULAN & TAHUN PADA TRADE LOG
+        // YEARLY PERFORMANCE & MONTHLY BREAKDOWN DI BAWAH DASHBOARD
+        function renderYearlyPerformance() {
+            const activeAcc = getActiveAccount();
+            if (!activeAcc) return;
+            const curr = activeAcc.currency || 'USD';
+            const trades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
+
+            const yearSelect = document.getElementById('yearlyFilterYear');
+            const selectedYear = yearSelect ? parseInt(yearSelect.value) : new Date().getFullYear();
+
+            const container = document.getElementById('yearlyCardsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+            // Buat rekap 12 bulan untuk tahun yang dipilih
+            for (let m = 0; m < 12; m++) {
+                const mNumStr = String(m + 1).padStart(2, '0');
+                const monthTrades = trades.filter(t => {
+                    if (!t.date) return false;
+                    const parts = t.date.split('-');
+                    return parseInt(parts[0]) === selectedYear && parseInt(parts[1]) === (m + 1);
+                });
+
+                const mPnL = monthTrades.reduce((sum, t) => sum + Number(t.netPnL || 0), 0);
+                const mWins = monthTrades.filter(t => Number(t.netPnL) > 0).length;
+                const mWinRate = monthTrades.length > 0 ? Math.round((mWins / monthTrades.length) * 100) : 0;
+
+                const card = document.createElement('div');
+                card.className = "bg-[#0c120e] border border-emerald-500/15 hover:border-emerald-500/50 rounded-xl p-4 cursor-pointer transition flex flex-col justify-between group shadow-sm";
+                card.onclick = () => showMonthDetailFromYearly(selectedYear, mNumStr, monthNames[m]);
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-white group-hover:text-emerald-400 transition">${monthNames[m]} ${selectedYear}</span>
+                        <span class="text-[10px] font-mono text-gray-400">${monthTrades.length} trades</span>
+                    </div>
+                    <div>
+                        <div class="text-sm font-black font-mono ${mPnL >= 0 ? 'text-emerald-400' : 'text-red-400'}">
+                            ${(mPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(mPnL), curr)}
+                        </div>
+                        <div class="text-[10px] text-gray-400 mt-1 flex justify-between">
+                            <span>Win Rate: <b class="text-white">${mWinRate}%</b></span>
+                            <span class="text-emerald-400 text-[10px] underline">Detail →</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            }
+        }
+
+        // FUNGSI KETIKA BULAN DI YEARLY PERFORMANCE DIKLIK -> MUNCUL MONTHLY PERFORMANCE DI BAWAHNYA
+        function showMonthDetailFromYearly(year, monthStr, monthName) {
+            const activeAcc = getActiveAccount();
+            if (!activeAcc) return;
+            const curr = activeAcc.currency || 'USD';
+            const trades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
+
+            const monthTrades = trades.filter(t => {
+                if (!t.date) return false;
+                const parts = t.date.split('-');
+                return parseInt(parts[0]) === year && parts[1] === monthStr;
+            });
+
+            const detailContainer = document.getElementById('selectedMonthDetailContainer');
+            detailContainer.classList.remove('hidden');
+
+            const mPnL = monthTrades.reduce((sum, t) => sum + Number(t.netPnL || 0), 0);
+            const mWins = monthTrades.filter(t => Number(t.netPnL) > 0).length;
+            const mWinRate = monthTrades.length > 0 ? Math.round((mWins / monthTrades.length) * 100) : 0;
+            const avgRR = monthTrades.length > 0 ? (monthTrades.reduce((s, t) => s + (Number(t.rr) || 0), 0) / monthTrades.length).toFixed(2) : 0;
+
+            let tradesHtml = '';
+            if (monthTrades.length === 0) {
+                tradesHtml = `<div class="text-xs text-gray-500 py-4 text-center">Tidak ada catatan trade pada bulan ${monthName} ${year}.</div>`;
+            } else {
+                monthTrades.sort((a, b) => new Date(b.date) - new Date(a.date));
+                tradesHtml = `
+                    <div class="overflow-x-auto pt-2">
+                        <table class="w-full text-left text-xs text-gray-300">
+                            <thead class="bg-[#090f0b] text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-emerald-500/10">
+                                <tr>
+                                    <th class="py-2 px-3">Date</th>
+                                    <th class="py-2 px-3">Pair</th>
+                                    <th class="py-2 px-3">Pos</th>
+                                    <th class="py-2 px-3">Net P/L</th>
+                                    <th class="py-2 px-3">RR</th>
+                                    <th class="py-2 px-3">Result</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-emerald-500/5">
+                `;
+                monthTrades.forEach(t => {
+                    const pnl = Number(t.netPnL) || 0;
+                    const isWin = pnl >= 0;
+                    tradesHtml += `
+                        <tr class="hover:bg-emerald-500/5">
+                            <td class="py-2 px-3 font-mono text-[11px] text-gray-300">${t.date}</td>
+                            <td class="py-2 px-3 font-bold text-white">${t.pair}</td>
+                            <td class="py-2 px-3"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}">${t.position}</span></td>
+                            <td class="py-2 px-3 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'}">${(isWin ? '+' : '-') + formatMoney(Math.abs(pnl), curr)}</td>
+                            <td class="py-2 px-3 font-mono text-amber-400">${t.rr || '0'}</td>
+                            <td class="py-2 px-3 text-gray-300 text-[10px]">${t.result || 'N/A'}</td>
+                        </tr>
+                    `;
+                });
+                tradesHtml += `</tbody></table></div>`;
+            }
+
+            detailContainer.innerHTML = `
+                <div class="flex items-center justify-between pb-2 border-b border-emerald-500/10">
+                    <h4 class="text-sm font-black text-emerald-400 flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-days"></i> Monthly Performance Detail: ${monthName} ${year}
+                    </h4>
+                    <button onclick="document.getElementById('selectedMonthDetailContainer').classList.add('hidden')" class="text-xs text-gray-400 hover:text-white px-2 py-1 bg-[#121c15] rounded-lg">Tutup</button>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                    <div class="bg-[#0c120e] p-3 rounded-xl border border-emerald-500/10">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold">Total PnL</span>
+                        <div class="text-base font-black font-mono ${mPnL >= 0 ? 'text-emerald-400' : 'text-red-400'} mt-0.5">${(mPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(mPnL), curr)}</div>
+                    </div>
+                    <div class="bg-[#0c120e] p-3 rounded-xl border border-emerald-500/10">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold">Win Rate</span>
+                        <div class="text-base font-black text-white mt-0.5">${mWinRate}% (${mWins}/${monthTrades.length})</div>
+                    </div>
+                    <div class="bg-[#0c120e] p-3 rounded-xl border border-emerald-500/10">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold">Avg R:R</span>
+                        <div class="text-base font-black text-amber-400 font-mono mt-0.5">${avgRR}</div>
+                    </div>
+                    <div class="bg-[#0c120e] p-3 rounded-xl border border-emerald-500/10">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold">Total Trades</span>
+                        <div class="text-base font-black text-white mt-0.5">${monthTrades.length}</div>
+                    </div>
+                </div>
+                ${tradesHtml}
+            `;
+
+            detailContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // TRADE LOG FILTER BULAN & TAHUN
         function applyTradeLogFilter() {
             const activeAcc = getActiveAccount();
             if (!activeAcc) return;
