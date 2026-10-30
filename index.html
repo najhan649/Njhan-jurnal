@@ -279,22 +279,15 @@
             <div id="tabContentDashboard" class="space-y-6">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-                    <!-- Left Column: Calendar View & Weekly PnL inside -->
+                    <!-- Left Column: Calendar View & Weekly Breakdown -->
                     <div class="lg:col-span-7 glass-card rounded-2xl p-4 sm:p-5 space-y-4">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-emerald-500/10 gap-3">
+                        <div class="flex items-center justify-between pb-3 border-b border-emerald-500/10">
                             <div>
                                 <h3 class="text-sm font-bold text-white flex items-center gap-2">
                                     <i class="fa-regular fa-calendar text-emerald-400"></i> Monthly Performance
                                 </h3>
                                 <p id="calendarSubtext" class="text-[11px] text-gray-400">0 trades in current view</p>
                             </div>
-
-                            <!-- Weekly PnL Badge in Calendar Header -->
-                            <div class="bg-[#111b13] border border-emerald-500/20 px-3 py-1.5 rounded-xl flex items-center justify-between gap-3">
-                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Weekly PnL:</span>
-                                <span id="calendarWeeklyPnL" class="text-xs font-black text-emerald-400 font-mono">+$0.00</span>
-                            </div>
-
                             <div class="flex items-center gap-2">
                                 <button onclick="navigateMonth(-1)" class="p-2 bg-[#121c15] hover:bg-[#1a291e] rounded-xl text-gray-300 text-xs border border-emerald-500/10 transition">
                                     <i class="fa-solid fa-chevron-left"></i>
@@ -314,6 +307,14 @@
                         <!-- Days Grid -->
                         <div id="calendarDays" class="calendar-grid gap-1.5">
                             <!-- Populated dynamically -->
+                        </div>
+
+                        <!-- Rekap PnL Per Minggu (Weekly Breakdown) -->
+                        <div class="pt-3 border-t border-emerald-500/10 space-y-2">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Weekly PnL Breakdown</span>
+                            <div id="weeklyBreakdownContainer" class="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+                                <!-- Populated dynamically -->
+                            </div>
                         </div>
 
                         <div class="flex items-center justify-between pt-3 text-[11px] text-gray-400 border-t border-emerald-500/10">
@@ -341,7 +342,7 @@
                     </div>
                 </div>
 
-                <!-- Monthly Metrics Summary Cards (Tanpa Weekly PnL karena sudah dipindah ke kalender) -->
+                <!-- Monthly Metrics Summary Cards -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                     <div class="glass-card rounded-2xl p-4">
                         <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Win Rate</span>
@@ -357,7 +358,7 @@
                         <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Monthly PnL</span>
                         <div id="dashMonthlyPnL" class="text-2xl font-black text-emerald-400 mt-1 font-mono">+$0.00</div>
                         <div class="text-[10px] text-gray-400 mt-1.5">
-                            Profit: <span id="dashProfitVal" class="text-emerald-400 font-mono">$0.00</span>
+                            Profit: <span id="dashProfitVal" class="text-emerald-400 font-mono">$0.00</span> &nbsp;|&nbsp; Loss: <span id="dashLossVal" class="text-red-400 font-mono">$0.00</span>
                         </div>
                     </div>
 
@@ -1050,29 +1051,6 @@
             const lossVal = monthTrades.filter(t => Number(t.netPnL) < 0).reduce((s, t) => s + Math.abs(Number(t.netPnL)), 0);
             const monthPnL = profitVal - lossVal;
 
-            // Hitung Profit/PnL Minggu Ini
-            const now = new Date();
-            const currentDayOfWeek = now.getDay() === 0 ? 6 : now.getDay() - 1;
-            const startOfWeek = new Date(now);
-            startOfWeek.setDate(now.getDate() - currentDayOfWeek);
-            startOfWeek.setHours(0, 0, 0, 0);
-
-            const endOfWeek = new Date(startOfWeek);
-            endOfWeek.setDate(startOfWeek.getDate() + 6);
-            endOfWeek.setHours(23, 59, 59, 999);
-
-            const weekTrades = trades.filter(t => {
-                const d = new Date(t.date);
-                return d >= startOfWeek && d <= endOfWeek;
-            });
-
-            const weeklyPnL = weekTrades.reduce((s, t) => s + Number(t.netPnL), 0);
-
-            // Update Weekly PnL di Header Kalender (Monthly Performance)
-            const calWeeklyEl = document.getElementById('calendarWeeklyPnL');
-            calWeeklyEl.innerText = (weeklyPnL >= 0 ? '+$' : '-$') + Math.abs(weeklyPnL).toFixed(2);
-            calWeeklyEl.className = `text-xs font-black font-mono ${weeklyPnL >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
-
             const avgRR = total > 0 ? (monthTrades.reduce((s, t) => s + (Number(t.rr) || 0), 0) / total).toFixed(2) : 0;
 
             document.getElementById('dashWinRate').innerText = winRate + '%';
@@ -1083,6 +1061,7 @@
             document.getElementById('dashMonthlyPnL').innerText = (monthPnL >= 0 ? '+$' : '-$') + Math.abs(monthPnL).toFixed(2);
             document.getElementById('dashMonthlyPnL').className = `text-2xl font-black mt-1 font-mono ${monthPnL >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
             document.getElementById('dashProfitVal').innerText = '$' + profitVal.toFixed(2);
+            document.getElementById('dashLossVal').innerText = '$' + lossVal.toFixed(2);
 
             document.getElementById('dashAvgRR').innerText = avgRR;
             document.getElementById('dashTotalTradesMonth').innerText = total;
@@ -1126,12 +1105,26 @@
 
             let monthTradeCount = 0;
 
+            // Logika untuk mengelompokkan per minggu di bulan ini
+            const weeklyMap = {};
+
             for (let day = 1; day <= daysInMonth; day++) {
+                const currentDateObj = new Date(year, month, day);
                 const dayDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const dayTrades = tradesByDate[dayDateStr] || [];
                 monthTradeCount += dayTrades.length;
 
                 const dayNetPnL = dayTrades.reduce((s, t) => s + Number(t.netPnL), 0);
+
+                // Tentukan minggu ke berapa di bulan ini berdasarkan hari Senin
+                const startOfCalendar = new Date(year, month, 1);
+                const weekNum = Math.floor((day + adjustedFirstDay - 1) / 7) + 1;
+                
+                if (!weeklyMap[weekNum]) {
+                    weeklyMap[weekNum] = { pnl: 0, startDate: dayDateStr, endDate: dayDateStr };
+                }
+                weeklyMap[weekNum].pnl += dayNetPnL;
+                weeklyMap[weekNum].endDate = dayDateStr;
 
                 const cell = document.createElement('div');
                 const isSelected = selectedCalendarDateStr === dayDateStr;
@@ -1163,6 +1156,24 @@
 
                 calendarDaysContainer.appendChild(cell);
             }
+
+            // Render Weekly Breakdown ke UI
+            const weeklyContainer = document.getElementById('weeklyBreakdownContainer');
+            weeklyContainer.innerHTML = '';
+
+            Object.keys(weeklyMap).forEach((wKey, idx) => {
+                const wData = weeklyMap[wKey];
+                const isWin = wData.pnl >= 0;
+                const formattedWeeklyPnL = (isWin ? '+$' : '-$') + Math.abs(wData.pnl).toFixed(2);
+
+                const row = document.createElement('div');
+                row.className = "flex items-center justify-between bg-[#0a0f0c] border border-emerald-500/10 px-3 py-2 rounded-xl text-xs font-mono";
+                row.innerHTML = `
+                    <span class="text-gray-400 text-[11px]">Minggu ${idx + 1} (${wData.startDate.substring(5)} s/d ${wData.endDate.substring(5)})</span>
+                    <span class="font-black ${isWin ? 'text-emerald-400' : 'text-red-400'}">= ${formattedWeeklyPnL}</span>
+                `;
+                weeklyContainer.appendChild(row);
+            });
 
             document.getElementById('calendarSubtext').innerText = `${monthTradeCount} trades in ${monthNames[month]}`;
         }
@@ -1767,7 +1778,7 @@
         window.refreshActiveAccountData = refreshActiveAccountData;
         window.showNotice = showNotice;
         window.closeAuthModal = closeAuthModal;
-        window.openAuthModal = openAuthModal;
+        window.openAuthManager = openAuthModal;
     </script>
 </body>
 </html>
