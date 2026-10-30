@@ -75,31 +75,27 @@
             background: #10B981;
         }
 
-        /* Kalender Grid 8 Kolom: 7 Kolom Hari + 1 Kolom Weekly PnL di Kanan */
+        /* PC / Desktop Grid: 8 Kolom (7 Hari + 1 Weekly Sidebar) */
         .calendar-layout-grid {
             display: grid;
-            grid-template-columns: repeat(7, minmax(0, 1fr)) 130px;
+            grid-template-columns: repeat(7, minmax(0, 1fr)) 120px;
             gap: 6px;
         }
 
         .calendar-day {
-            min-height: 72px;
+            min-height: 68px;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .week-summary-card {
-            min-height: 72px;
+            min-height: 68px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 8px 10px;
+            padding: 6px 8px;
             background: rgba(12, 18, 14, 0.8);
             border: 1px solid rgba(34, 197, 94, 0.15);
             border-radius: 0.75rem;
-            transition: all 0.2s;
-        }
-        .week-summary-card:hover {
-            border-color: rgba(34, 197, 94, 0.35);
         }
 
         .btn-tag {
@@ -113,12 +109,23 @@
             border-color: transparent;
         }
 
-        @media (max-width: 1024px) {
+        /* KHUSUS HP (Layar di bawah 768px): Ubah ke 7 kolom murni agar hari & tanggal tidak bergeser, lalu kartu weekly diletakkan di bawah atau disederhanakan */
+        @media (max-width: 768px) {
             .calendar-layout-grid {
-                grid-template-columns: repeat(7, minmax(45px, 1fr));
+                grid-template-columns: repeat(7, minmax(38px, 1fr));
+                gap: 4px;
             }
-            .week-summary-sidebar {
-                display: none;
+            .week-summary-card {
+                grid-column: span 7; /* Kartu Weekly membentang penuh 1 baris di bawah tiap minggu di HP */
+                min-height: 40px;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 6px 12px;
+                margin-bottom: 4px;
+            }
+            .desktop-col-header {
+                display: none; /* Sembunyikan header kolom weekly khusus pc di hp kecil */
             }
         }
     </style>
@@ -305,9 +312,9 @@
             <div id="tabContentDashboard" class="space-y-6">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-                    <!-- Left Column: Calendar View & Weekly Sidebar on the Right -->
-                    <div class="lg:col-span-8 glass-card rounded-2xl p-4 sm:p-5 space-y-4">
-                        <div class="flex items-center justify-between pb-3 border-b border-emerald-500/10">
+                    <!-- Left Column: Calendar View -->
+                    <div class="lg:col-span-8 glass-card rounded-2xl p-3 sm:p-5 space-y-4 overflow-x-auto">
+                        <div class="flex items-center justify-between pb-3 border-b border-emerald-500/10 min-w-[320px]">
                             <div>
                                 <h3 class="text-sm font-bold text-white flex items-center gap-2">
                                     <i class="fa-regular fa-calendar text-emerald-400"></i> Monthly Performance
@@ -318,25 +325,25 @@
                                 <button onclick="navigateMonth(-1)" class="p-2 bg-[#121c15] hover:bg-[#1a291e] rounded-xl text-gray-300 text-xs border border-emerald-500/10 transition">
                                     <i class="fa-solid fa-chevron-left"></i>
                                 </button>
-                                <span id="calendarMonthLabel" class="text-xs font-bold text-emerald-400 min-w-[110px] text-center font-mono">October 2026</span>
+                                <span id="calendarMonthLabel" class="text-xs font-bold text-emerald-400 min-w-[100px] text-center font-mono">October 2026</span>
                                 <button onclick="navigateMonth(1)" class="p-2 bg-[#121c15] hover:bg-[#1a291e] rounded-xl text-gray-300 text-xs border border-emerald-500/10 transition">
                                     <i class="fa-solid fa-chevron-right"></i>
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Calendar Layout Grid (8 Columns: 7 Days + 1 Weekly Summary Header/Column) -->
-                        <div class="calendar-layout-grid text-center text-[10px] font-black text-gray-400 uppercase tracking-widest py-1 border-b border-emerald-500/5">
+                        <!-- Calendar Layout Grid Header -->
+                        <div class="calendar-layout-grid text-center text-[10px] font-black text-gray-400 uppercase tracking-widest py-1 border-b border-emerald-500/5 min-w-[320px]">
                             <div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div><div>Su</div>
-                            <div class="text-emerald-400 font-bold">Weekly PnL</div>
+                            <div class="desktop-col-header text-emerald-400 font-bold">Weekly PnL</div>
                         </div>
 
                         <!-- Days & Weekly Cards Grid Container -->
-                        <div id="calendarDaysAndWeeks" class="calendar-layout-grid gap-1.5 items-start">
+                        <div id="calendarDaysAndWeeks" class="calendar-layout-grid gap-1.5 items-start min-w-[320px]">
                             <!-- Populated dynamically -->
                         </div>
 
-                        <div class="flex items-center justify-between pt-3 text-[11px] text-gray-400 border-t border-emerald-500/10">
+                        <div class="flex items-center justify-between pt-3 text-[11px] text-gray-400 border-t border-emerald-500/10 min-w-[320px]">
                             <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400"></span> Profit Day</span>
                             <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-500 shadow-sm shadow-red-500"></span> Loss Day</span>
                             <button onclick="clearCalendarDateFilter()" class="text-emerald-400 hover:text-emerald-300 font-bold transition">Show All Trades</button>
@@ -1117,25 +1124,20 @@
             });
 
             let monthTradeCount = 0;
-            
-            // Hitung total baris minggu yang diperlukan (biasanya 4 atau 5 minggu)
             const totalCells = adjustedFirstDay + daysInMonth;
             const totalWeeks = Math.ceil(totalCells / 7);
 
             let dayCounter = 1;
-            const weeklyDataAccumulator = {};
 
             for (let w = 1; w <= totalWeeks; w++) {
                 const weekDaysCells = [];
                 let weekNetPnL = 0;
                 let weekTradeCount = 0;
 
-                // Render 7 hari untuk minggu ke-w
                 for (let d = 0; d < 7; d++) {
                     const cellIndex = (w - 1) * 7 + d;
                     
                     if (cellIndex < adjustedFirstDay || dayCounter > daysInMonth) {
-                        // Kotak kosong (sebelum tanggal 1 atau setelah akhir bulan)
                         weekDaysCells.push(`<div class="calendar-day bg-[#080d0a]/20 rounded-xl opacity-20 border border-transparent"></div>`);
                     } else {
                         const day = dayCounter;
@@ -1169,10 +1171,8 @@
                     }
                 }
 
-                // Masukkan 7 hari ke container utama
                 weekDaysCells.forEach(html => container.insertAdjacentHTML('beforeend', html));
 
-                // Render Kartu Kolom Weekly PnL di sebelah kanan baris tersebut
                 const isWeekWin = weekNetPnL >= 0;
                 const formattedWeekPnL = weekTradeCount > 0 ? ((isWeekWin ? '+$' : '-$') + Math.abs(weekNetPnL).toFixed(0)) : '$0';
                 
@@ -1302,7 +1302,7 @@
                     <td class="py-3.5 px-4 font-mono text-[11px] text-gray-300 whitespace-nowrap">${t.date}</td>
                     <td class="py-3.5 px-4 font-bold text-white whitespace-nowrap">${t.pair}</td>
                     <td class="py-3.5 px-4 whitespace-nowrap">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-emerald-500/20'}">${t.position}</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${t.position}</span>
                     </td>
                     <td class="py-3.5 px-4 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'} whitespace-nowrap">
                         ${formattedPnL}
