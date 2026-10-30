@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Najh.an Journal - Professional Trading Terminal</title>
+    <title>Najh.an Journal - Real-Time Multi-Device Trading Terminal</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -37,6 +37,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         body {
             background: #07090e;
@@ -48,7 +49,6 @@
             min-height: 100vh;
         }
 
-        /* Glassmorphism card container */
         .glass-card {
             background: rgba(15, 22, 17, 0.65);
             backdrop-filter: blur(16px);
@@ -61,7 +61,6 @@
             border-color: rgba(34, 197, 94, 0.3);
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 5px;
             height: 5px;
@@ -97,14 +96,6 @@
             box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
             border-color: transparent;
         }
-
-        .neon-glow {
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
-        }
-
-        .neon-glow-red {
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.25);
-        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black">
@@ -120,23 +111,74 @@
                     </div>
                     <div>
                         <span class="font-extrabold text-lg text-white tracking-tight group-hover:text-emerald-400 transition">Najh.an<span class="text-emerald-400">Journal</span></span>
-                        <span class="block text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">njhan-jurnal.vercel.app</span>
+                        <span class="block text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">https://njhan-jurnal.vercel.app</span>
                     </div>
                 </div>
 
                 <!-- Right Actions Header -->
                 <div class="flex items-center gap-3">
+                    <!-- User Profile & Cloud Sync Indicator -->
+                    <div id="cloudStatusBadge" class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span id="userEmailDisplay">Live Cloud Sync</span>
+                    </div>
+
                     <button id="headerAccountBadge" onclick="switchView('accounts')" class="hidden sm:flex items-center gap-2 bg-[#121c15] hover:bg-[#18261d] border border-emerald-500/20 text-xs font-semibold px-3.5 py-1.5 rounded-xl text-emerald-400 transition shadow-sm">
                         <i class="fa-solid fa-wallet text-emerald-400 text-xs"></i>
                         <span id="activeAccountHeaderName">Personal</span>
                     </button>
-                    <button onclick="toggleExportImportModal(true)" class="p-2 text-gray-400 hover:text-emerald-400 rounded-xl hover:bg-[#121c15] border border-transparent hover:border-emerald-500/20 transition" title="Data Backup / Restore">
-                        <i class="fa-solid fa-database text-sm"></i>
+
+                    <button id="authBtnHeader" onclick="openAuthModal()" class="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500 to-green-600 text-black text-xs font-bold rounded-xl shadow-md transition hover:scale-105">
+                        Login / Sign Up
+                    </button>
+                    <button id="logoutBtnHeader" onclick="handleLogout()" class="hidden px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 text-xs font-bold rounded-xl transition">
+                        Logout
                     </button>
                 </div>
             </div>
         </div>
     </header>
+
+    <!-- AUTHENTICATION MODAL -->
+    <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl p-6 max-w-sm w-full space-y-5 shadow-2xl relative border-emerald-500/30">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="text-center space-y-1">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center text-black font-black text-2xl mx-auto shadow-lg shadow-emerald-900/40">
+                    N
+                </div>
+                <h3 class="text-xl font-black text-white tracking-tight">Najh.an Cloud Sync</h3>
+                <p class="text-xs text-gray-400">Sync your trading journal across infinite devices.</p>
+            </div>
+
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">EMAIL ADDRESS</label>
+                    <input type="email" id="authEmail" placeholder="yourname@gmail.com" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">PASSWORD</label>
+                    <input type="password" id="authPassword" placeholder="••••••••" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div id="authErrorMsg" class="text-xs text-red-400 hidden text-center"></div>
+
+                <button onclick="handleEmailLogin()" class="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl transition shadow-lg shadow-emerald-900/30">
+                    Login / Sign In
+                </button>
+                <button onclick="handleEmailSignUp()" class="w-full py-2.5 bg-[#121c15] hover:bg-[#18261d] text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
+                    Create New Account
+                </button>
+                <button onclick="handleAnonymousSignIn()" class="w-full py-2 text-gray-400 hover:text-emerald-400 text-[11px] underline transition">
+                    Continue as Guest (Anonymous)
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- MAIN CONTAINER -->
     <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-6 flex-grow w-full">
@@ -200,7 +242,7 @@
             </div>
         </section>
 
-        <!-- MAIN JOURNAL WORKSPACE (Hidden by default until account selected) -->
+        <!-- MAIN JOURNAL WORKSPACE -->
         <section id="workspaceView" class="hidden space-y-6">
 
             <!-- Active Account Bar -->
@@ -211,7 +253,7 @@
                         <h2 id="activeAccountName" class="text-xl sm:text-2xl font-black text-white tracking-tight">Najhan</h2>
                     </div>
                     <div class="text-xs text-gray-400 font-medium">
-                        Starting: <span id="activeStartingBalance" class="text-gray-200 font-mono">$500</span> &nbsp;|&nbsp; Current Balance: <span id="activeCurrentBalance" class="text-emerald-400 font-mono font-bold">$500</span>
+                        Starting: <span id="activeStartingBalance" class="text-gray-200 font-mono">$500.00</span> &nbsp;|&nbsp; Current Balance: <span id="activeCurrentBalance" class="text-emerald-400 font-mono font-bold">$500.00</span>
                     </div>
                 </div>
 
@@ -276,7 +318,7 @@
                         </div>
                     </div>
 
-                    <!-- Right Column: Selected / Recent Trades -->
+                    <!-- Right Column: Recent Trades -->
                     <div class="lg:col-span-5 glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between pb-3 border-b border-emerald-500/10 mb-3">
@@ -349,7 +391,7 @@
                     </div>
                     <div class="glass-card p-4 rounded-2xl text-center">
                         <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">BALANCE</span>
-                        <div id="tlBalance" class="text-xl font-black text-amber-400 mt-1 font-mono">$500</div>
+                        <div id="tlBalance" class="text-xl font-black text-amber-400 mt-1 font-mono">$500.00</div>
                     </div>
                 </div>
 
@@ -361,7 +403,7 @@
                     </button>
                 </div>
 
-                <!-- NEW / EDIT TRADE FORM MODAL / SECTION -->
+                <!-- NEW / EDIT TRADE FORM -->
                 <div id="tradeFormContainer" class="hidden glass-card rounded-2xl p-4 sm:p-6 shadow-2xl space-y-5">
                     <div class="flex justify-between items-center border-b border-emerald-500/10 pb-3">
                         <h3 id="tradeFormTitle" class="text-sm font-bold text-white flex items-center gap-2">
@@ -406,7 +448,7 @@
                         </div>
                     </div>
 
-                    <!-- PnL & Risk Calculation Row -->
+                    <!-- PnL & Risk Row -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">NET P/L ($) *</label>
@@ -422,7 +464,7 @@
                         </div>
                     </div>
 
-                    <!-- HTF Opportunity Selector -->
+                    <!-- HTF Opportunity -->
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">HTF OPPORTUNITY</label>
                         <div class="flex flex-wrap gap-2" id="htfOptionsGroup">
@@ -433,7 +475,7 @@
                         </div>
                     </div>
 
-                    <!-- Confluence Selector -->
+                    <!-- Confluence -->
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">CONFLUENCE</label>
                         <div class="flex flex-wrap gap-2" id="confluenceOptionsGroup">
@@ -445,7 +487,7 @@
                         </div>
                     </div>
 
-                    <!-- Result Tag Selector -->
+                    <!-- Result -->
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">RESULT</label>
                         <div class="flex flex-wrap gap-2" id="resultOptionsGroup">
@@ -456,14 +498,14 @@
                         </div>
                     </div>
 
-                    <!-- Links & Image Screenshot Upload -->
+                    <!-- Links & Screenshot Upload -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">TRADINGVIEW / CHART LINK</label>
                             <input type="url" id="tradeLink" placeholder="https://www.tradingview.com/x/..." class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">SCREENSHOT URL / ATTACHMENT</label>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">SCREENSHOT URL / LINK</label>
                             <input type="text" id="tradeScreenshot" placeholder="Image URL or screenshot link" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                         </div>
                     </div>
@@ -475,7 +517,7 @@
                     </div>
                 </div>
 
-                <!-- Trades Table Container -->
+                <!-- Trades Table -->
                 <div class="glass-card rounded-2xl overflow-hidden shadow-2xl">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs text-gray-300">
@@ -542,7 +584,7 @@
                     </div>
                 </div>
 
-                <!-- Equity Curve / Growth Chart -->
+                <!-- Equity Curve Chart -->
                 <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
                     <div class="flex justify-between items-center">
                         <div>
@@ -556,7 +598,7 @@
                     </div>
                 </div>
 
-                <!-- Breakdown Charts Grid -->
+                <!-- Breakdown Charts -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
                         <h4 class="text-sm font-bold text-white">Symbol Performance</h4>
@@ -592,36 +634,7 @@
         </section>
     </main>
 
-    <!-- BACKUP / EXPORT / IMPORT MODAL -->
-    <div id="exportImportModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-card rounded-2xl p-6 max-w-lg w-full space-y-4 shadow-2xl">
-            <div class="flex justify-between items-center border-b border-emerald-500/10 pb-3">
-                <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-database text-emerald-400"></i> Backup & Restore Data
-                </h3>
-                <button onclick="toggleExportImportModal(false)" class="text-gray-400 hover:text-white">
-                    <i class="fa-solid fa-xmark text-sm"></i>
-                </button>
-            </div>
-            <p class="text-xs text-gray-400 leading-relaxed">All data is saved indefinitely in your device's browser memory (localStorage). You can export JSON backups or restore data across devices.</p>
-
-            <div class="space-y-3">
-                <button onclick="exportDataJSON()" class="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black font-bold text-xs rounded-xl transition shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-download"></i> Export Journal Backup (JSON)
-                </button>
-
-                <div class="border-t border-emerald-500/10 pt-3">
-                    <label class="block text-xs font-bold text-gray-300 mb-1">Import Data from JSON:</label>
-                    <textarea id="importJSONArea" placeholder="Paste JSON backup text here..." class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl p-3 text-xs font-mono text-gray-300 h-24 focus:outline-none focus:border-emerald-500"></textarea>
-                    <button onclick="importDataJSON()" class="w-full mt-2 py-2 bg-[#121c15] hover:bg-[#18281d] text-emerald-400 border border-emerald-500/30 font-bold text-xs rounded-xl transition">
-                        Restore / Import Data
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CUSTOM MESSAGE / CONFIRMATION MODAL -->
+    <!-- CUSTOM NOTICE MODAL -->
     <div id="customModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-card rounded-2xl p-5 max-w-sm w-full space-y-4 shadow-2xl text-center border-emerald-500/20">
             <div id="customModalIcon" class="text-3xl text-emerald-400"><i class="fa-solid fa-circle-info"></i></div>
@@ -633,88 +646,227 @@
         </div>
     </div>
 
-    <!-- APPLICATION LOGIC JS -->
-    <script>
-        // State Management stored in localStorage
-        const STORAGE_KEY = 'njhan_journal_data_v1';
+    <!-- FIREBASE MODULE & REAL-TIME LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getAuth, 
+            signInWithCustomToken, 
+            signInAnonymously, 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword, 
+            signOut, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc, 
+            deleteDoc, 
+            collection, 
+            onSnapshot 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        let appData = {
-            accounts: [
-                { id: 'acc_1', name: 'Najhan', type: 'PERSONAL', startingBalance: 500, created: Date.now() },
-                { id: 'acc_2', name: 'Najh.', type: 'FUNDED', startingBalance: 1000, created: Date.now() - 1000 }
-            ],
-            trades: [
-                {
-                    id: 'tr_1',
-                    accountId: 'acc_1',
-                    date: '2026-10-26',
-                    pair: 'XAUUSD',
-                    position: 'BUY',
-                    netPnL: 100,
-                    risk: 10,
-                    rr: 10,
-                    htf: 'Open to High',
-                    confluence: 'SMT',
-                    result: 'Full TP',
-                    link: '',
-                    screenshot: ''
-                }
-            ],
-            selectedAccountId: 'acc_1'
+        // Global variables provided by environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'njhan-jurnal-default';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyDemoDummyApiKeyForPreviewEnvOnly",
+            authDomain: "njhan-jurnal.firebaseapp.com",
+            projectId: "njhan-jurnal",
+            storageBucket: "njhan-jurnal.appspot.com",
+            messagingSenderId: "1234567890",
+            appId: "1:1234567890:web:abc123def456"
         };
 
-        // Active Calendar View Month / Filter
-        let currentCalendarDate = new Date(2026, 9, 1); // Oct 2026 default
-        let selectedCalendarDateStr = null;
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        // Selected Position Tag in Form
+        let currentUser = null;
+        let accountsUnsub = null;
+        let tradesUnsub = null;
+
+        // In-memory data state synced with Firestore
+        window.appData = {
+            accounts: [],
+            trades: [],
+            selectedAccountId: null
+        };
+
+        // Initialize Firebase Authentication
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                }
+            } catch (e) {
+                console.warn("Custom token sign in skipped or failed:", e);
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                document.getElementById('authBtnHeader').classList.add('hidden');
+                document.getElementById('logoutBtnHeader').classList.remove('hidden');
+                document.getElementById('cloudStatusBadge').classList.remove('hidden');
+                document.getElementById('userEmailDisplay').innerText = user.email || 'Cloud Active (' + user.uid.substring(0, 6) + ')';
+                closeAuthModal();
+                setupFirestoreListeners(user.uid);
+            } else {
+                document.getElementById('authBtnHeader').classList.remove('hidden');
+                document.getElementById('logoutBtnHeader').classList.add('hidden');
+                document.getElementById('cloudStatusBadge').classList.add('hidden');
+                
+                // Fallback to anonymous sign in if not logged in so Firestore works immediately
+                signInAnonymously(auth).catch(err => console.error("Anonymous auth failed:", err));
+            }
+        });
+
+        function setupFirestoreListeners(userId) {
+            if (accountsUnsub) accountsUnsub();
+            if (tradesUnsub) tradesUnsub();
+
+            // Rule 1 strictly followed: artifacts/{appId}/users/{userId}/{collectionName}
+            const accountsCol = collection(db, 'artifacts', appId, 'users', userId, 'accounts');
+            const tradesCol = collection(db, 'artifacts', appId, 'users', userId, 'trades');
+
+            accountsUnsub = onSnapshot(accountsCol, (snapshot) => {
+                const accounts = [];
+                snapshot.forEach(docSnap => {
+                    accounts.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                
+                if (accounts.length === 0) {
+                    // Seed initial default accounts if user has none
+                    seedDefaultAccounts(userId);
+                    return;
+                }
+
+                window.appData.accounts = accounts;
+                if (!window.appData.selectedAccountId || !accounts.find(a => a.id === window.appData.selectedAccountId)) {
+                    window.appData.selectedAccountId = accounts[0].id;
+                }
+                
+                window.renderAccountsList();
+                window.refreshActiveAccountData();
+            }, (error) => {
+                console.error("Accounts listener error:", error);
+            });
+
+            tradesUnsub = onSnapshot(tradesCol, (snapshot) => {
+                const trades = [];
+                snapshot.forEach(docSnap => {
+                    trades.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                window.appData.trades = trades;
+                window.refreshActiveAccountData();
+            }, (error) => {
+                console.error("Trades listener error:", error);
+            });
+        }
+
+        async function seedDefaultAccounts(userId) {
+            const acc1Ref = doc(db, 'artifacts', appId, 'users', userId, 'accounts', 'acc_1');
+            const acc2Ref = doc(db, 'artifacts', appId, 'users', userId, 'accounts', 'acc_2');
+
+            await setDoc(acc1Ref, { name: 'Najhan', type: 'PERSONAL', startingBalance: 500, created: Date.now() });
+            await setDoc(acc2Ref, { name: 'Najh.', type: 'FUNDED', startingBalance: 1000, created: Date.now() - 1000 });
+        }
+
+        // Firebase Auth Methods
+        window.handleEmailLogin = async () => {
+            const email = document.getElementById('authEmail').value.trim();
+            const pass = document.getElementById('authPassword').value;
+            const errEl = document.getElementById('authErrorMsg');
+            errEl.classList.add('hidden');
+
+            if (!email || !pass) {
+                errEl.innerText = "Please fill in email and password.";
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch (err) {
+                errEl.innerText = err.message || "Failed to sign in.";
+                errEl.classList.remove('hidden');
+            }
+        };
+
+        window.handleEmailSignUp = async () => {
+            const email = document.getElementById('authEmail').value.trim();
+            const pass = document.getElementById('authPassword').value;
+            const errEl = document.getElementById('authErrorMsg');
+            errEl.classList.add('hidden');
+
+            if (!email || !pass) {
+                errEl.innerText = "Please fill in email and password.";
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+            } catch (err) {
+                errEl.innerText = err.message || "Failed to create account.";
+                errEl.classList.remove('hidden');
+            }
+        };
+
+        window.handleAnonymousSignIn = async () => {
+            try {
+                await signInAnonymously(auth);
+                closeAuthModal();
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        window.handleLogout = async () => {
+            await signOut(auth);
+            window.showNotice("Logged out successfully.");
+        };
+
+        // Save / Delete Firestore operations
+        window.saveAccountToCloud = async (accountObj) => {
+            if (!currentUser) return;
+            const accRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'accounts', accountObj.id);
+            await setDoc(accRef, accountObj);
+        };
+
+        window.deleteAccountFromCloud = async (accId) => {
+            if (!currentUser) return;
+            const accRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'accounts', accId);
+            await deleteDoc(accRef);
+        };
+
+        window.saveTradeToCloud = async (tradeObj) => {
+            if (!currentUser) return;
+            const tradeRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'trades', tradeObj.id);
+            await setDoc(tradeRef, tradeObj);
+        };
+
+        window.deleteTradeFromCloud = async (tradeId) => {
+            if (!currentUser) return;
+            const tradeRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'trades', tradeId);
+            await deleteDoc(tradeRef);
+        };
+
+        initAuth();
+    </script>
+
+    <!-- MAIN APP LOGIC JS -->
+    <script>
+        let currentCalendarDate = new Date(2026, 9, 1);
+        let selectedCalendarDateStr = null;
         let selectedPosition = 'BUY';
         let selectedTags = { htf: [], confluence: [], result: [] };
-
-        // Chart Instances
         let charts = {};
 
-        // Initialization
-        window.onload = function() {
-            loadFromStorage();
-            renderAccountsList();
-            
-            // Check if active account exists
-            if (appData.selectedAccountId && getActiveAccount()) {
-                switchView('workspace');
-            } else {
-                switchView('accounts');
-            }
-
-            // Set default date in trade form to today
-            const todayStr = new Date().toISOString().split('T')[0];
-            document.getElementById('tradeDate').value = todayStr;
-        };
-
-        function saveToStorage() {
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-            } catch (e) {
-                console.error("Storage error:", e);
-            }
-        }
-
-        function loadFromStorage() {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (raw) {
-                try {
-                    const parsed = JSON.parse(raw);
-                    if (parsed && parsed.accounts) {
-                        appData = parsed;
-                    }
-                } catch (e) {
-                    console.error("Failed to parse local data", e);
-                }
-            }
-        }
-
         function getActiveAccount() {
-            return appData.accounts.find(a => a.id === appData.selectedAccountId) || appData.accounts[0];
+            return window.appData.accounts.find(a => a.id === window.appData.selectedAccountId) || window.appData.accounts[0];
         }
 
         function switchView(view) {
@@ -732,14 +884,12 @@
                     showNotice("Please select or create an account first.");
                     return;
                 }
-                appData.selectedAccountId = active.id;
-                saveToStorage();
+                window.appData.selectedAccountId = active.id;
 
                 accountsView.classList.add('hidden');
                 workspaceView.classList.remove('hidden');
                 headerBadge.classList.remove('hidden');
 
-                // Update Header info
                 document.getElementById('activeAccountHeaderName').innerText = active.name;
                 document.getElementById('activeAccountName').innerText = active.name;
                 document.getElementById('activeTypeTag').innerText = active.type;
@@ -777,10 +927,11 @@
 
         function renderAccountsList() {
             const container = document.getElementById('accountsList');
+            if (!container) return;
             container.innerHTML = '';
 
-            appData.accounts.forEach(acc => {
-                const accTrades = appData.trades.filter(t => t.accountId === acc.id);
+            window.appData.accounts.forEach(acc => {
+                const accTrades = window.appData.trades.filter(t => t.accountId === acc.id);
                 const netProfit = accTrades.reduce((sum, t) => sum + (Number(t.netPnL) || 0), 0);
                 const currentBalance = Number(acc.startingBalance) + netProfit;
 
@@ -789,8 +940,7 @@
                 
                 card.onclick = (e) => {
                     if (e.target.closest('.delete-acc-btn')) return;
-                    appData.selectedAccountId = acc.id;
-                    saveToStorage();
+                    window.appData.selectedAccountId = acc.id;
                     switchView('workspace');
                 };
 
@@ -802,7 +952,7 @@
                             'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                         }">${acc.type}</span>
                         <h3 class="text-lg sm:text-xl font-black text-white group-hover:text-emerald-400 transition">${acc.name}</h3>
-                        <p class="text-xs sm:text-sm font-bold font-mono text-emerald-400">$${currentBalance.toLocaleString()} <span class="text-[10px] font-normal text-gray-400 font-sans">Starting: $${Number(acc.startingBalance).toLocaleString()}</span></p>
+                        <p class="text-xs sm:text-sm font-bold font-mono text-emerald-400">$${currentBalance.toLocaleString('en-US', {minimumFractionDigits:2})} <span class="text-[10px] font-normal text-gray-400 font-sans">Starting: $${Number(acc.startingBalance).toLocaleString()}</span></p>
                     </div>
 
                     <div class="flex items-center gap-3">
@@ -820,7 +970,7 @@
             document.getElementById('showAddAccountBtn').classList.toggle('hidden', show);
         }
 
-        function createAccount() {
+        async function createAccount() {
             const name = document.getElementById('newAccountName').value.trim();
             const type = document.getElementById('newAccountType').value;
             const balance = parseFloat(document.getElementById('newAccountBalance').value);
@@ -838,31 +988,25 @@
                 created: Date.now()
             };
 
-            appData.accounts.push(newAcc);
-            appData.selectedAccountId = newAcc.id;
-            saveToStorage();
+            await window.saveAccountToCloud(newAcc);
+            window.appData.selectedAccountId = newAcc.id;
 
             document.getElementById('newAccountName').value = '';
             toggleAddAccountForm(false);
-            renderAccountsList();
             switchView('workspace');
         }
 
         function confirmDeleteAccount(accId, name) {
-            if (appData.accounts.length <= 1) {
+            if (window.appData.accounts.length <= 1) {
                 showNotice("You must keep at least one account.");
                 return;
             }
 
-            showConfirm(`Hapus akun '${name}'? Data trade pada akun ini juga akan terhapus.`, () => {
-                appData.accounts = appData.accounts.filter(a => a.id !== accId);
-                appData.trades = appData.trades.filter(t => t.accountId !== accId);
-                
-                if (appData.selectedAccountId === accId) {
-                    appData.selectedAccountId = appData.accounts[0].id;
+            showConfirm(`Hapus akun '${name}'? Data trade pada akun ini juga akan terhapus.`, async () => {
+                await window.deleteAccountFromCloud(accId);
+                if (window.appData.selectedAccountId === accId) {
+                    window.appData.selectedAccountId = window.appData.accounts[0].id;
                 }
-                saveToStorage();
-                renderAccountsList();
             });
         }
 
@@ -870,13 +1014,13 @@
             const activeAcc = getActiveAccount();
             if (!activeAcc) return;
 
-            const trades = appData.trades.filter(t => t.accountId === activeAcc.id);
+            const trades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
             
             const totalPnL = trades.reduce((sum, t) => sum + (Number(t.netPnL) || 0), 0);
             const currentBal = Number(activeAcc.startingBalance) + totalPnL;
 
-            document.getElementById('activeCurrentBalance').innerText = '$' + currentBal.toLocaleString();
-            document.getElementById('tlBalance').innerText = '$' + currentBal.toLocaleString();
+            document.getElementById('activeCurrentBalance').innerText = '$' + currentBal.toLocaleString('en-US', {minimumFractionDigits: 2});
+            document.getElementById('tlBalance').innerText = '$' + currentBal.toLocaleString('en-US', {minimumFractionDigits: 2});
 
             renderDashboard(trades);
             renderTradeLogTable(trades);
@@ -943,7 +1087,6 @@
 
             const firstDay = new Date(year, month, 1).getDay();
             const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1;
-
             const daysInMonth = new Date(year, month + 1, 0).getDate();
 
             for (let i = 0; i < adjustedFirstDay; i++) {
@@ -1039,7 +1182,6 @@
             }
 
             filteredTrades.sort((a, b) => new Date(b.date) - new Date(a.date));
-
             badgeEl.innerText = `${filteredTrades.length} trades`;
 
             if (filteredTrades.length === 0) {
@@ -1204,7 +1346,7 @@
             document.querySelectorAll('.btn-tag').forEach(b => b.classList.remove('active'));
         }
 
-        function saveTrade() {
+        async function saveTrade() {
             const activeAcc = getActiveAccount();
             if (!activeAcc) return;
 
@@ -1238,20 +1380,12 @@
                 screenshot: screenshot
             };
 
-            if (editId) {
-                const idx = appData.trades.findIndex(t => t.id === editId);
-                if (idx !== -1) appData.trades[idx] = tradeObj;
-            } else {
-                appData.trades.push(tradeObj);
-            }
-
-            saveToStorage();
+            await window.saveTradeToCloud(tradeObj);
             toggleTradeForm(false);
-            refreshActiveAccountData();
         }
 
         function editTrade(tradeId) {
-            const trade = appData.trades.find(t => t.id === tradeId);
+            const trade = window.appData.trades.find(t => t.id === tradeId);
             if (!trade) return;
 
             document.getElementById('editingTradeId').value = trade.id;
@@ -1284,10 +1418,8 @@
         }
 
         function deleteTrade(tradeId) {
-            showConfirm("Hapus trade ini dari journal?", () => {
-                appData.trades = appData.trades.filter(t => t.id !== tradeId);
-                saveToStorage();
-                refreshActiveAccountData();
+            showConfirm("Hapus trade ini dari journal?", async () => {
+                await window.deleteTradeFromCloud(tradeId);
             });
         }
 
@@ -1295,7 +1427,7 @@
             const activeAcc = getActiveAccount();
             if (!activeAcc) return;
 
-            let trades = appData.trades.filter(t => t.accountId === activeAcc.id);
+            let trades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
             trades.sort((a, b) => new Date(a.date) - new Date(b.date));
 
             const fromDateStr = document.getElementById('analyticsFromDate').value;
@@ -1414,7 +1546,6 @@
             const pairs = Object.keys(symbolMap);
             const pnls = pairs.map(p => symbolMap[p]);
             
-            // Format legend labels with symbol + PnL + trade count (e.g. XAUUSD +$100.00 (4 trades))
             const formattedLabels = pairs.map(p => {
                 const val = symbolMap[p];
                 const formattedPnL = (val >= 0 ? '+$' : '-$') + Math.abs(val).toFixed(2);
@@ -1427,7 +1558,7 @@
                 data: {
                     labels: formattedLabels,
                     datasets: [{
-                        data: pnls.map(v => Math.abs(v) || 1), // scale sizes proportionally
+                        data: pnls.map(v => Math.abs(v) || 1),
                         backgroundColor: ['#10B981', '#3B82F6', '#F59E0B', '#EC4899', '#8B5CF6', '#14B8A6'],
                         borderWidth: 2,
                         borderColor: '#0b1016'
@@ -1541,40 +1672,12 @@
             });
         }
 
-        function toggleExportImportModal(show) {
-            document.getElementById('exportImportModal').classList.toggle('hidden', !show);
+        function openAuthModal() {
+            document.getElementById('authModal').classList.remove('hidden');
         }
 
-        function exportDataJSON() {
-            const str = JSON.stringify(appData, null, 2);
-            const blob = new Blob([str], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Najhan_Journal_Backup_${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            showNotice("Backup file JSON berhasil didownload!");
-        }
-
-        function importDataJSON() {
-            const raw = document.getElementById('importJSONArea').value.trim();
-            if (!raw) return;
-
-            try {
-                const parsed = JSON.parse(raw);
-                if (parsed.accounts && parsed.trades) {
-                    appData = parsed;
-                    saveToStorage();
-                    toggleExportImportModal(false);
-                    renderAccountsList();
-                    switchView('workspace');
-                    showNotice("Data berhasil di-restore!");
-                } else {
-                    showNotice("Format JSON backup tidak valid.");
-                }
-            } catch (e) {
-                showNotice("Error membaca JSON. Pastikan format sudah benar.");
-            }
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
         }
 
         function showNotice(msg) {
@@ -1603,6 +1706,13 @@
         function closeCustomModal() {
             document.getElementById('customModal').classList.add('hidden');
         }
+
+        // Attach global helpers
+        window.renderAccountsList = renderAccountsList;
+        window.refreshActiveAccountData = refreshActiveAccountData;
+        window.showNotice = showNotice;
+        window.closeAuthModal = closeAuthModal;
+        window.openAuthModal = openAuthModal;
     </script>
 </body>
 </html>
