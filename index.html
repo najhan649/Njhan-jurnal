@@ -125,7 +125,7 @@
                 <div class="flex items-center gap-3">
                     <div id="cloudStatusBadge" class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span id="userEmailDisplay">Live Cloud Sync</span>
+                        <span id="userEmailDisplay">Cloud Active</span>
                     </div>
 
                     <button id="headerAccountBadge" onclick="switchView('accounts')" class="hidden sm:flex items-center gap-2 bg-[#121c15] hover:bg-[#18261d] border border-emerald-500/20 text-xs font-semibold px-3.5 py-1.5 rounded-xl text-emerald-400 transition shadow-sm">
@@ -156,7 +156,7 @@
                     N
                 </div>
                 <h3 class="text-xl font-black text-white tracking-tight">Najh.an Cloud Sync</h3>
-                <p class="text-xs text-gray-400">Sync your trading journal across infinite devices.</p>
+                <p class="text-xs text-gray-400">Silakan login dengan email Anda untuk menyinkronkan data.</p>
             </div>
 
             <div class="space-y-3">
@@ -177,9 +177,6 @@
                 </button>
                 <button onclick="handleEmailSignUp()" class="w-full py-2.5 bg-[#121c15] hover:bg-[#18261d] text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
                     Create New Account
-                </button>
-                <button onclick="handleAnonymousSignIn()" class="w-full py-2 text-gray-400 hover:text-emerald-400 text-[11px] underline transition">
-                    Continue as Guest (Anonymous)
                 </button>
             </div>
         </div>
@@ -775,7 +772,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
             getAuth, 
-            signInAnonymously, 
             signInWithEmailAndPassword, 
             createUserWithEmailAndPassword, 
             signOut, 
@@ -822,7 +818,7 @@
                 document.getElementById('authBtnHeader').classList.add('hidden');
                 document.getElementById('logoutBtnHeader').classList.remove('hidden');
                 document.getElementById('cloudStatusBadge').classList.remove('hidden');
-                document.getElementById('userEmailDisplay').innerText = user.email || 'Cloud Active (' + user.uid.substring(0, 6) + ')';
+                document.getElementById('userEmailDisplay').innerText = user.email || 'Cloud Active';
                 closeAuthModal();
                 setupFirestoreListeners(user.uid);
             } else {
@@ -830,7 +826,8 @@
                 document.getElementById('logoutBtnHeader').classList.add('hidden');
                 document.getElementById('cloudStatusBadge').classList.add('hidden');
                 
-                signInAnonymously(auth).catch(err => console.error("Anonymous auth failed:", err));
+                // Jika belum login, otomatis buka modal login
+                openAuthModal();
             }
         });
 
@@ -921,15 +918,6 @@
             } catch (err) {
                 errEl.innerText = err.message || "Failed to create account.";
                 errEl.classList.remove('hidden');
-            }
-        };
-
-        window.handleAnonymousSignIn = async () => {
-            try {
-                await signInAnonymously(auth);
-                closeAuthModal();
-            } catch (err) {
-                console.error(err);
             }
         };
 
@@ -2204,7 +2192,7 @@
         }
 
         function openAuthModal() {
-            document.getElementById('authModal').classList.add('hidden');
+            document.getElementById('authModal').classList.remove('hidden');
         }
 
         function closeAuthModal() {
