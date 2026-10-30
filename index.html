@@ -1,848 +1,1376 @@
+```html
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Najh.an Journal</title>
+    <title>Njhan Journal - Professional Trading Terminal</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js for Analytics -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        darkBg: '#0b0f19',
-                        cardBg: '#131c2e',
-                        cardBorder: '#1e293b',
-                        accentGreen: '#10b981',
-                        accentRed: '#ef4444',
-                        accentBlue: '#3b82f6'
+                        darkBg: '#07090e',
+                        cardBg: 'rgba(15, 22, 17, 0.75)',
+                        cardBorder: 'rgba(34, 197, 94, 0.15)',
+                        brandGreen: '#10B981',
+                        brandGreenGlow: '#22C55E',
+                        brandRed: '#EF4444',
+                        accentDark: '#111b13'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'Monaco', 'monospace']
                     }
                 }
             }
         }
     </script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Font: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #0b0f19; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+        body {
+            background: #07090e;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(34, 197, 94, 0.03) 0px, transparent 50%);
+            color: #f1f5f9;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism card container */
+        .glass-card {
+            background: rgba(15, 22, 17, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(34, 197, 94, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #0b0f19; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #07090e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(34, 197, 94, 0.25);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10B981;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .calendar-day {
+            min-height: 56px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-tag {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-tag.active {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: #000000;
+            font-weight: 700;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+            border-color: transparent;
+        }
+
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+        }
+
+        .neon-glow-red {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.25);
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased">
+<body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black">
 
-    <!-- Top Navigation Bar -->
-    <header class="border-b border-cardBorder bg-darkBg/80 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-accentGreen to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-900/20">
-                    <i class="fa-solid fa-chart-line text-white text-sm"></i>
+    <!-- TOP HEADER / NAVBAR -->
+    <header class="bg-[#0b1016]/80 backdrop-blur-md border-b border-emerald-500/10 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo / Brand -->
+                <div class="flex items-center gap-3 cursor-pointer group" onclick="switchView('accounts')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-xl shadow-lg shadow-emerald-900/40 group-hover:scale-105 transition-transform duration-300">
+                        N
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-lg text-white tracking-tight group-hover:text-emerald-400 transition">Njhan<span class="text-emerald-400">Journal</span></span>
+                        <span class="block text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">njhan-jurnal.vercel.app</span>
+                    </div>
                 </div>
-                <div>
-                    <span class="text-lg font-bold tracking-tight text-white">Najh.an</span>
-                    <span class="text-xs text-accentGreen block font-medium">Trading Journal</span>
+
+                <!-- Right Actions Header -->
+                <div class="flex items-center gap-3">
+                    <button id="headerAccountBadge" onclick="switchView('accounts')" class="hidden sm:flex items-center gap-2 bg-[#121c15] hover:bg-[#18261d] border border-emerald-500/20 text-xs font-semibold px-3.5 py-1.5 rounded-xl text-emerald-400 transition shadow-sm">
+                        <i class="fa-solid fa-wallet text-emerald-400 text-xs"></i>
+                        <span id="activeAccountHeaderName">Personal</span>
+                    </button>
+                    <button onclick="toggleExportImportModal(true)" class="p-2 text-gray-400 hover:text-emerald-400 rounded-xl hover:bg-[#121c15] border border-transparent hover:border-emerald-500/20 transition" title="Data Backup / Restore">
+                        <i class="fa-solid fa-database text-sm"></i>
+                    </button>
                 </div>
-            </div>
-
-            <div id="account-header-info" class="hidden md:flex items-center space-x-4 bg-cardBg border border-cardBorder px-4 py-1.5 rounded-full text-sm">
-                <span id="nav-acc-name" class="font-semibold text-white">Account</span>
-                <span class="text-slate-500">|</span>
-                <span id="nav-acc-balance" class="text-accentGreen font-bold">$0.00</span>
-            </div>
-
-            <div class="flex items-center space-x-3">
-                <button onclick="openAddAccountModal()" class="bg-accentGreen hover:bg-emerald-600 text-slate-950 font-semibold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center shadow-lg shadow-emerald-900/10">
-                    <i class="fa-solid fa-plus mr-1.5"></i> Add Account
-                </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Container -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6">
-        
-        <!-- VIEW 1: ACCOUNT SELECTOR -->
-        <div id="view-accounts" class="space-y-6">
-            <div class="flex justify-between items-end">
-                <div>
-                    <h2 class="text-2xl font-bold tracking-tight text-white">Your Accounts</h2>
-                    <p class="text-slate-400 text-sm mt-1">Select an account to start journaling your trades.</p>
-                </div>
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-6 flex-grow w-full">
+
+        <!-- ACCOUNT SELECTION VIEW -->
+        <section id="accountsView" class="max-w-2xl mx-auto space-y-6 pt-4">
+            <div class="text-center space-y-2">
+                <span class="px-3 py-1 rounded-full text-[11px] font-bold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 uppercase">
+                    Welcome Back, Trader
+                </span>
+                <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Your Accounts</h1>
+                <p class="text-xs sm:text-sm text-gray-400">Select an account to start journaling your trades.</p>
             </div>
 
-            <div id="accounts-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Dynamically populated account cards -->
-            </div>
-
-            <!-- Add Account Card Button -->
-            <button onclick="openAddAccountModal()" class="w-full border-2 border-dashed border-cardBorder hover:border-accentGreen/50 rounded-2xl p-6 text-slate-400 hover:text-accentGreen transition flex flex-col items-center justify-center space-y-2 bg-cardBg/30 hover:bg-cardBg/60">
-                <div class="w-10 h-10 rounded-full bg-cardBorder flex items-center justify-center text-lg">
-                    <i class="fa-solid fa-plus"></i>
-                </div>
-                <span class="font-medium text-sm">Add New Account</span>
-            </button>
-        </div>
-
-        <!-- VIEW 2: DASHBOARD / TRADE LOG / ANALYTICS -->
-        <div id="view-journal" class="hidden space-y-6">
-            
-            <!-- Account Switch Bar -->
-            <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
-                <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-accentGreen text-xl font-bold">
-                        <i class="fa-solid fa-wallet"></i>
+            <!-- New Account Form Toggle / Button -->
+            <div class="glass-card rounded-2xl p-5 shadow-2xl">
+                <div id="addAccountForm" class="hidden space-y-4">
+                    <div class="flex justify-between items-center pb-3 border-b border-emerald-500/10">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-plus text-emerald-400"></i> Create New Account
+                        </h3>
+                        <button onclick="toggleAddAccountForm(false)" class="text-gray-400 hover:text-white text-xs p-1">
+                            <i class="fa-solid fa-xmark text-sm"></i>
+                        </button>
                     </div>
+
                     <div>
-                        <div class="flex items-center space-x-2">
-                            <h3 id="current-acc-title" class="text-lg font-bold text-white">Najhan</h3>
-                            <span id="current-acc-type-badge" class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-accentGreen">Personal</span>
-                        </div>
-                        <p class="text-xs text-slate-400 mt-0.5">Balance: <span id="current-acc-balance-display" class="text-white font-semibold">$500</span></p>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-2 w-full sm:w-auto">
-                    <button onclick="switchAccount()" class="flex-1 sm:flex-none px-4 py-2 bg-cardBorder hover:bg-slate-800 text-slate-200 text-xs font-semibold rounded-xl transition">
-                        <i class="fa-solid fa-arrow-right-arrow-left mr-1.5"></i> Switch Account
-                    </button>
-                </div>
-            </div>
-
-            <!-- Tabs Navigation -->
-            <div class="flex border-b border-cardBorder space-x-6">
-                <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="pb-3 text-sm font-semibold border-b-2 border-accentGreen text-accentGreen transition">Dashboard</button>
-                <button onclick="switchTab('tradelog')" id="tab-btn-tradelog" class="pb-3 text-sm font-medium text-slate-400 hover:text-white transition">Trade Log</button>
-                <button onclick="switchTab('analytics')" id="tab-btn-analytics" class="pb-3 text-sm font-medium text-slate-400 hover:text-white transition">Analytics</button>
-            </div>
-
-            <!-- TAB CONTENT: DASHBOARD -->
-            <div id="tab-dashboard" class="space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Monthly Performance Calendar Widget -->
-                    <div class="bg-cardBg border border-cardBorder rounded-2xl p-5 lg:col-span-2 shadow-sm space-y-4">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h4 class="font-bold text-white text-base">Monthly Performance</h4>
-                                <p id="calendar-month-label" class="text-xs text-slate-400">October 2026</p>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <button onclick="changeMonth(-1)" class="w-8 h-8 rounded-lg bg-cardBorder hover:bg-slate-800 flex items-center justify-center text-slate-300 text-xs"><i class="fa-solid fa-chevron-left"></i></button>
-                                <button onclick="changeMonth(1)" class="w-8 h-8 rounded-lg bg-cardBorder hover:bg-slate-800 flex items-center justify-center text-slate-300 text-xs"><i class="fa-solid fa-chevron-right"></i></button>
-                            </div>
-                        </div>
-
-                        <!-- Calendar Grid -->
-                        <div class="grid grid-cols-7 gap-1.5 text-center text-xs">
-                            <span class="text-slate-500 font-medium py-1">Mo</span>
-                            <span class="text-slate-500 font-medium py-1">Tu</span>
-                            <span class="text-slate-500 font-medium py-1">We</span>
-                            <span class="text-slate-500 font-medium py-1">Th</span>
-                            <span class="text-slate-500 font-medium py-1">Fr</span>
-                            <span class="text-slate-500 font-medium py-1">Sa</span>
-                            <span class="text-slate-500 font-medium py-1">Su</span>
-                        </div>
-                        <div id="calendar-days-grid" class="grid grid-cols-7 gap-1.5">
-                            <!-- Populated via JS -->
-                        </div>
-
-                        <!-- Calendar Legend Summary -->
-                        <div class="grid grid-cols-3 gap-3 pt-4 border-t border-cardBorder text-center">
-                            <div class="bg-darkBg/50 p-2.5 rounded-xl border border-cardBorder">
-                                <span class="text-[10px] uppercase font-semibold text-slate-400 block">Win Rate</span>
-                                <span id="dash-win-rate" class="text-base font-bold text-white mt-0.5 block">0%</span>
-                            </div>
-                            <div class="bg-darkBg/50 p-2.5 rounded-xl border border-cardBorder">
-                                <span class="text-[10px] uppercase font-semibold text-slate-400 block">Monthly PnL</span>
-                                <span id="dash-monthly-pnl" class="text-base font-bold text-accentGreen mt-0.5 block">+$0.00</span>
-                            </div>
-                            <div class="bg-darkBg/50 p-2.5 rounded-xl border border-cardBorder">
-                                <span class="text-[10px] uppercase font-semibold text-slate-400 block">Avg R:R</span>
-                                <span id="dash-avg-rr" class="text-base font-bold text-white mt-0.5 block">0</span>
-                            </div>
-                        </div>
+                        <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">ACCOUNT NAME</label>
+                        <input type="text" id="newAccountName" placeholder="e.g. Najhan 50k" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
                     </div>
 
-                    <!-- Recent Trades Widget -->
-                    <div class="bg-cardBg border border-cardBorder rounded-2xl p-5 shadow-sm space-y-4 flex flex-col">
-                        <div class="flex items-center justify-between">
-                            <h4 class="font-bold text-white text-base">Recent Trades</h4>
-                            <button id="clear-date-filter-btn" onclick="clearDateFilter()" class="hidden text-[10px] text-accentGreen bg-emerald-500/10 px-2 py-1 rounded-md font-medium hover:bg-emerald-500/20 transition">Show All</button>
-                        </div>
-                        <div id="recent-trades-list" class="space-y-3 flex-1 overflow-y-auto max-h-[380px]">
-                            <div class="text-center py-12 text-slate-500 text-xs">No recent trades</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB CONTENT: TRADE LOG -->
-            <div id="tab-tradelog" class="hidden space-y-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-cardBg border border-cardBorder p-4 rounded-2xl">
-                    <div class="grid grid-cols-2 sm:flex items-center gap-4 w-full sm:w-auto">
+                    <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <span class="text-[10px] uppercase font-semibold text-slate-400 block">Total P&L</span>
-                            <span id="log-total-pnl" class="text-lg font-bold text-accentGreen">+$0.00</span>
+                            <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">TYPE</label>
+                            <select id="newAccountType" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
+                                <option value="PERSONAL">PERSONAL</option>
+                                <option value="FUNDED">FUNDED</option>
+                                <option value="DEMO">DEMO</option>
+                            </select>
                         </div>
-                        <div class="border-l border-cardBorder pl-4">
-                            <span class="text-[10px] uppercase font-semibold text-slate-400 block">Win Rate</span>
-                            <span id="log-win-rate" class="text-lg font-bold text-white">0%</span>
-                        </div>
-                        <div class="border-l border-cardBorder pl-4">
-                            <span class="text-[10px] uppercase font-semibold text-slate-400 block">Trades</span>
-                            <span id="log-total-trades" class="text-lg font-bold text-white">0</span>
+                        <div>
+                            <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">STARTING BALANCE ($)</label>
+                            <input type="number" id="newAccountBalance" placeholder="500" value="500" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-mono">
                         </div>
                     </div>
-                    <button onclick="openAddTradeModal()" class="bg-accentGreen hover:bg-emerald-600 text-slate-950 font-semibold px-4 py-2.5 rounded-xl text-sm transition flex items-center shadow-lg shadow-emerald-900/10 w-full sm:w-auto justify-center">
-                        <i class="fa-solid fa-plus mr-2"></i> New Trade
-                    </button>
+
+                    <div class="flex justify-end gap-2 pt-2">
+                        <button onclick="toggleAddAccountForm(false)" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-white rounded-xl transition">Cancel</button>
+                        <button onclick="createAccount()" class="px-5 py-2 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl transition shadow-lg shadow-emerald-900/30">Save Account</button>
+                    </div>
                 </div>
 
-                <!-- Trade Table List -->
-                <div class="bg-cardBg border border-cardBorder rounded-2xl overflow-x-auto shadow-sm">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="border-b border-cardBorder text-slate-400 font-semibold uppercase tracking-wider bg-darkBg/30">
-                                <th class="p-3.5">Date</th>
-                                <th class="p-3.5">Pair</th>
-                                <th class="p-3.5">Pos</th>
-                                <th class="p-3.5">Net P/L</th>
-                                <th class="p-3.5">Risk</th>
-                                <th class="p-3.5">R:R</th>
-                                <th class="p-3.5">HTF</th>
-                                <th class="p-3.5">Result</th>
-                                <th class="p-3.5 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="trade-table-body" class="divide-y divide-cardBorder">
-                            <tr>
-                                <td colspan="9" class="p-8 text-center text-slate-500">No trades recorded yet. Click '+ New Trade' to add one.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <button id="showAddAccountBtn" onclick="toggleAddAccountForm(true)" class="w-full py-3.5 border-2 border-dashed border-emerald-500/20 hover:border-emerald-500/50 rounded-xl text-gray-400 hover:text-emerald-400 text-xs font-bold tracking-wide flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-plus text-xs"></i> Add Account
+                </button>
+            </div>
+
+            <!-- List of Accounts -->
+            <div id="accountsList" class="space-y-3">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- MAIN JOURNAL WORKSPACE (Hidden by default until account selected) -->
+        <section id="workspaceView" class="hidden space-y-6">
+
+            <!-- Active Account Bar -->
+            <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+                <div>
+                    <div class="flex items-center gap-2.5 mb-1">
+                        <span id="activeTypeTag" class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PERSONAL</span>
+                        <h2 id="activeAccountName" class="text-xl sm:text-2xl font-black text-white tracking-tight">Najhan</h2>
+                    </div>
+                    <div class="text-xs text-gray-400 font-medium">
+                        Starting: <span id="activeStartingBalance" class="text-gray-200 font-mono">$500</span> &nbsp;|&nbsp; Current Balance: <span id="activeCurrentBalance" class="text-emerald-400 font-mono font-bold">$500</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 self-start sm:self-auto">
+                    <button onclick="switchView('accounts')" class="px-4 py-2 bg-[#121d15] hover:bg-[#18281d] text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-right-left text-xs"></i> Switch Account
+                    </button>
                 </div>
             </div>
 
-            <!-- TAB CONTENT: ANALYTICS -->
-            <div id="tab-analytics" class="hidden space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Equity Curve Chart -->
-                    <div class="bg-cardBg border border-cardBorder rounded-2xl p-5 shadow-sm space-y-4">
-                        <h4 class="font-bold text-white text-base">Trade Growth View (Equity Curve)</h4>
-                        <div class="h-64 relative">
-                            <canvas id="equityChart"></canvas>
+            <!-- Tab Navigation Header -->
+            <div class="border-b border-emerald-500/10 flex gap-2 sm:gap-6 text-xs sm:text-sm font-bold overflow-x-auto">
+                <button onclick="setActiveTab('dashboard')" id="tabBtnDashboard" class="py-3 px-3 border-b-2 border-emerald-500 text-emerald-400 flex items-center gap-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-chart-line text-xs"></i> Dashboard
+                </button>
+                <button onclick="setActiveTab('tradelog')" id="tabBtnTradelog" class="py-3 px-3 border-b-2 border-transparent text-gray-400 hover:text-gray-200 flex items-center gap-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-list-check text-xs"></i> Trade Log
+                </button>
+                <button onclick="setActiveTab('analytics')" id="tabBtnAnalytics" class="py-3 px-3 border-b-2 border-transparent text-gray-400 hover:text-gray-200 flex items-center gap-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-chart-pie text-xs"></i> Analytics
+                </button>
+            </div>
+
+            <!-- TAB 1: DASHBOARD -->
+            <div id="tabContentDashboard" class="space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                    <!-- Left Column: Calendar View -->
+                    <div class="lg:col-span-7 glass-card rounded-2xl p-4 sm:p-5 space-y-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-emerald-500/10">
+                            <div>
+                                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                    <i class="fa-regular fa-calendar text-emerald-400"></i> Monthly Performance
+                                </h3>
+                                <p id="calendarSubtext" class="text-[11px] text-gray-400">0 trades in current view</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="navigateMonth(-1)" class="p-2 bg-[#121c15] hover:bg-[#1a291e] rounded-xl text-gray-300 text-xs border border-emerald-500/10 transition">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </button>
+                                <span id="calendarMonthLabel" class="text-xs font-bold text-emerald-400 min-w-[110px] text-center font-mono">October 2026</span>
+                                <button onclick="navigateMonth(1)" class="p-2 bg-[#121c15] hover:bg-[#1a291e] rounded-xl text-gray-300 text-xs border border-emerald-500/10 transition">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Calendar Grid Header -->
+                        <div class="calendar-grid text-center text-[10px] font-black text-gray-400 uppercase tracking-widest py-1 border-b border-emerald-500/5">
+                            <div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div><div>Su</div>
+                        </div>
+
+                        <!-- Days Grid -->
+                        <div id="calendarDays" class="calendar-grid gap-1.5">
+                            <!-- Populated dynamically -->
+                        </div>
+
+                        <div class="flex items-center justify-between pt-3 text-[11px] text-gray-400 border-t border-emerald-500/10">
+                            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400"></span> Profit Day</span>
+                            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-500 shadow-sm shadow-red-500"></span> Loss Day</span>
+                            <button onclick="clearCalendarDateFilter()" class="text-emerald-400 hover:text-emerald-300 font-bold transition">Show All Trades</button>
                         </div>
                     </div>
-                    <!-- Win/Loss Ratio Chart -->
-                    <div class="bg-cardBg border border-cardBorder rounded-2xl p-5 shadow-sm space-y-4">
-                        <h4 class="font-bold text-white text-base">Win / Loss Ratio</h4>
-                        <div class="h-64 relative flex items-center justify-center">
+
+                    <!-- Right Column: Selected / Recent Trades -->
+                    <div class="lg:col-span-5 glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between pb-3 border-b border-emerald-500/10 mb-3">
+                                <div>
+                                    <h3 id="recentTradesTitle" class="text-sm font-bold text-white">Recent Trades</h3>
+                                    <p id="recentTradesFilterSubtitle" class="text-[11px] text-gray-400">Latest across all time</p>
+                                </div>
+                                <span id="recentTradesCountBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">0 trades</span>
+                            </div>
+
+                            <div id="recentTradesContainer" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monthly Metrics Summary Cards -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                    <div class="glass-card rounded-2xl p-4">
+                        <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Win Rate</span>
+                        <div id="dashWinRate" class="text-2xl font-black text-emerald-400 mt-1">0%</div>
+                        <div class="flex gap-2 text-[10px] font-semibold text-gray-400 mt-1.5">
+                            <span><span id="dashWinCount" class="text-emerald-400 font-bold">0</span> W</span>
+                            <span><span id="dashLossCount" class="text-red-400 font-bold">0</span> L</span>
+                            <span><span id="dashBECount" class="text-gray-300 font-bold">0</span> BE</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-4">
+                        <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Monthly PnL</span>
+                        <div id="dashMonthlyPnL" class="text-2xl font-black text-emerald-400 mt-1 font-mono">+$0.00</div>
+                        <div class="text-[10px] text-gray-400 mt-1.5">
+                            Profit: <span id="dashProfitVal" class="text-emerald-400 font-mono">$0.00</span> &nbsp;|&nbsp; Loss: <span id="dashLossVal" class="text-red-400 font-mono">$0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-4">
+                        <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Avg R:R</span>
+                        <div id="dashAvgRR" class="text-2xl font-black text-amber-400 mt-1 font-mono">0</div>
+                        <div class="text-[10px] text-gray-400 mt-1.5"><span id="dashTotalTradesMonth" class="text-gray-200 font-bold">0</span> trades this month</div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-4">
+                        <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Status</span>
+                        <div id="dashStatusLabel" class="text-base sm:text-lg font-black text-emerald-400 mt-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-circle-check"></i> Profitable
+                        </div>
+                        <div id="dashStatusSub" class="text-[10px] text-gray-400 mt-1.5 font-mono">+$0.00 in Net PnL</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: TRADE LOG -->
+            <div id="tabContentTradelog" class="hidden space-y-6">
+
+                <!-- Header Summary Banner -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="glass-card p-4 rounded-2xl text-center">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">TOTAL P&L</span>
+                        <div id="tlTotalPnL" class="text-xl font-black text-emerald-400 mt-1 font-mono">+$0.00</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl text-center">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">WIN RATE</span>
+                        <div id="tlWinRate" class="text-xl font-black text-emerald-400 mt-1">0%</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl text-center">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">TRADES</span>
+                        <div id="tlTotalTrades" class="text-xl font-black text-white mt-1">0</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl text-center">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">BALANCE</span>
+                        <div id="tlBalance" class="text-xl font-black text-amber-400 mt-1 font-mono">$500</div>
+                    </div>
+                </div>
+
+                <!-- Action Button + Form Container -->
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-black text-white">Trade Journal</h3>
+                    <button id="toggleNewTradeBtn" onclick="toggleTradeForm()" class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl shadow-lg shadow-emerald-900/30 transition flex items-center gap-2">
+                        <i class="fa-solid fa-plus text-xs"></i> New Trade
+                    </button>
+                </div>
+
+                <!-- NEW / EDIT TRADE FORM MODAL / SECTION -->
+                <div id="tradeFormContainer" class="hidden glass-card rounded-2xl p-4 sm:p-6 shadow-2xl space-y-5">
+                    <div class="flex justify-between items-center border-b border-emerald-500/10 pb-3">
+                        <h3 id="tradeFormTitle" class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-regular fa-pen-to-square text-emerald-400"></i> New Trade Entry
+                        </h3>
+                        <button onclick="toggleTradeForm(false)" class="text-gray-400 hover:text-white text-xs px-2.5 py-1 bg-[#121c15] rounded-lg border border-emerald-500/10">
+                            <i class="fa-solid fa-xmark"></i> Cancel
+                        </button>
+                    </div>
+
+                    <input type="hidden" id="editingTradeId" value="">
+
+                    <!-- Form Inputs Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">DATE *</label>
+                            <input type="date" id="tradeDate" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">PAIR *</label>
+                            <select id="tradePair" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                                <option value="XAUUSD">XAUUSD</option>
+                                <option value="EURUSD">EURUSD</option>
+                                <option value="GBPUSD">GBPUSD</option>
+                                <option value="US100">US100</option>
+                                <option value="US30">US30</option>
+                                <option value="SPX500">SPX500</option>
+                                <option value="AUDUSD">AUDUSD</option>
+                                <option value="NZDUSD">NZDUSD</option>
+                                <option value="USDJPY">USDJPY</option>
+                                <option value="OTHER">Other Pair...</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">POSITION *</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button type="button" id="posBuyBtn" onclick="selectPos('BUY')" class="py-2.5 border border-emerald-500 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-xl shadow-sm">BUY</button>
+                                <button type="button" id="posSellBtn" onclick="selectPos('SELL')" class="py-2.5 border border-emerald-500/10 bg-[#0a0f0c] text-gray-400 text-xs font-bold rounded-xl">SELL</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PnL & Risk Calculation Row -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">NET P/L ($) *</label>
+                            <input type="number" step="any" id="tradeNetPnL" placeholder="100.00" oninput="calculateRR()" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">RISK ($) *</label>
+                            <input type="number" step="any" id="tradeRisk" placeholder="10.00" oninput="calculateRR()" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">RR (AUTO)</label>
+                            <input type="number" step="any" id="tradeRR" placeholder="10.0" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-emerald-400 font-bold focus:outline-none font-mono">
+                        </div>
+                    </div>
+
+                    <!-- HTF Opportunity Selector -->
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">HTF OPPORTUNITY</label>
+                        <div class="flex flex-wrap gap-2" id="htfOptionsGroup">
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Open to High</button>
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Open to Low</button>
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Low to Close</button>
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">High to Close</button>
+                        </div>
+                    </div>
+
+                    <!-- Confluence Selector -->
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">CONFLUENCE</label>
+                        <div class="flex flex-wrap gap-2" id="confluenceOptionsGroup">
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">No Confluence</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">SMT</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">SSMT</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">PSP</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Hidden SMT</button>
+                        </div>
+                    </div>
+
+                    <!-- Result Tag Selector -->
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">RESULT</label>
+                        <div class="flex flex-wrap gap-2" id="resultOptionsGroup">
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Break Even</button>
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Full TP</button>
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">SL</button>
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Partial</button>
+                        </div>
+                    </div>
+
+                    <!-- Links & Image Screenshot Upload -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">TRADINGVIEW / CHART LINK</label>
+                            <input type="url" id="tradeLink" placeholder="https://www.tradingview.com/x/..." class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">SCREENSHOT URL / ATTACHMENT</label>
+                            <input type="text" id="tradeScreenshot" placeholder="Image URL or screenshot link" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <!-- Form Buttons -->
+                    <div class="flex justify-end gap-3 pt-3 border-t border-emerald-500/10">
+                        <button onclick="toggleTradeForm(false)" class="px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-white rounded-xl transition">Cancel</button>
+                        <button onclick="saveTrade()" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl transition shadow-lg shadow-emerald-900/30">Save Trade</button>
+                    </div>
+                </div>
+
+                <!-- Trades Table Container -->
+                <div class="glass-card rounded-2xl overflow-hidden shadow-2xl">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-300">
+                            <thead class="bg-[#090f0b] border-b border-emerald-500/10 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                <tr>
+                                    <th class="py-3.5 px-4">Date</th>
+                                    <th class="py-3.5 px-4">Pair</th>
+                                    <th class="py-3.5 px-4">Pos</th>
+                                    <th class="py-3.5 px-4">Net P/L</th>
+                                    <th class="py-3.5 px-4">Risk</th>
+                                    <th class="py-3.5 px-4">RR</th>
+                                    <th class="py-3.5 px-4">HTF</th>
+                                    <th class="py-3.5 px-4">Confluence</th>
+                                    <th class="py-3.5 px-4">Result</th>
+                                    <th class="py-3.5 px-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tradeLogTableBody" class="divide-y divide-emerald-500/5">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="noTradesPlaceholder" class="p-10 text-center hidden">
+                        <div class="text-4xl mb-3">👻</div>
+                        <h4 class="text-sm font-bold text-white">No trades yet</h4>
+                        <p class="text-xs text-gray-400 mt-1">Add your first trade using the button above.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: ANALYTICS -->
+            <div id="tabContentAnalytics" class="hidden space-y-6">
+
+                <!-- Analytics Filter Header -->
+                <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-emerald-400"></i> Performance Analytics
+                    </h3>
+                    <div class="flex items-center gap-2 text-xs">
+                        <span class="text-gray-400">From:</span>
+                        <input type="date" id="analyticsFromDate" onchange="updateAnalyticsCharts()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                        <span class="text-gray-400">To:</span>
+                        <input type="date" id="analyticsToDate" onchange="updateAnalyticsCharts()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+
+                <!-- Top Stats Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="glass-card p-4 rounded-2xl">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">TOTAL P&L</span>
+                        <div id="analyticsPnL" class="text-xl font-black text-emerald-400 mt-1 font-mono">+$0.00</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">WIN RATE</span>
+                        <div id="analyticsWinRate" class="text-xl font-black text-emerald-400 mt-1">0%</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">TOTAL TRADES</span>
+                        <div id="analyticsTotalTrades" class="text-xl font-black text-white mt-1">0</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">AVG R:R</span>
+                        <div id="analyticsAvgRR" class="text-xl font-black text-amber-400 mt-1 font-mono">0.0</div>
+                    </div>
+                </div>
+
+                <!-- Equity Curve / Growth Chart -->
+                <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="text-sm font-bold text-white">Trade Growth View</h4>
+                            <p class="text-[11px] text-gray-400">Equity curve over time</p>
+                        </div>
+                        <span id="equityGrowthPercentage" class="text-sm font-black text-emerald-400 font-mono">+0.00%</span>
+                    </div>
+                    <div class="h-64 relative w-full">
+                        <canvas id="equityChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Breakdown Charts Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+                        <h4 class="text-sm font-bold text-white">Symbol Performance</h4>
+                        <div class="h-52 relative">
+                            <canvas id="symbolChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+                        <h4 class="text-sm font-bold text-white">Win / Loss Ratio</h4>
+                        <div class="h-52 relative">
                             <canvas id="winLossChart"></canvas>
                         </div>
                     </div>
-                </div>
-            </div>
 
-        </div>
-    </main>
+                    <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+                        <h4 class="text-sm font-bold text-white">PnL by Weekday</h4>
+                        <div class="h-52 relative">
+                            <canvas id="weekdayChart"></canvas>
+                        </div>
+                    </div>
 
-    <!-- MODAL: ADD / EDIT ACCOUNT -->
-    <div id="account-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-cardBg border border-cardBorder rounded-2xl w-full max-w-md p-6 space-y-5 shadow-2xl">
-            <h3 id="account-modal-title" class="text-lg font-bold text-white">Add New Account</h3>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Account Name</label>
-                    <input type="text" id="acc-input-name" placeholder="e.g. Najh.an" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-accentGreen">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Account Type</label>
-                    <select id="acc-input-type" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-accentGreen">
-                        <option value="Personal">Personal</option>
-                        <option value="Demo">Demo</option>
-                        <option value="Funded">Funded</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Starting Balance ($)</label>
-                    <input type="number" id="acc-input-balance" placeholder="500" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-accentGreen">
-                </div>
-            </div>
-            <div class="flex justify-end space-x-3 pt-2">
-                <button onclick="closeAddAccountModal()" class="px-4 py-2 bg-cardBorder hover:bg-slate-800 text-slate-300 text-xs font-semibold rounded-xl transition">Cancel</button>
-                <button onclick="saveAccount()" class="px-4 py-2 bg-accentGreen hover:bg-emerald-600 text-slate-950 text-xs font-semibold rounded-xl transition">Save Account</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: ADD / EDIT TRADE -->
-    <div id="trade-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-cardBg border border-cardBorder rounded-2xl w-full max-w-xl p-6 space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto">
-            <h3 id="trade-modal-title" class="text-lg font-bold text-white">New Trade Entry</h3>
-            
-            <input type="hidden" id="edit-trade-id">
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Date</label>
-                    <input type="date" id="trade-date" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-accentGreen">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Pair</label>
-                    <select id="trade-pair" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-accentGreen">
-                        <option value="XAUUSD">XAUUSD</option>
-                        <option value="US100">US100</option>
-                        <option value="US30">US30</option>
-                        <option value="SPX500">SPX500</option>
-                        <option value="GBPUSD">GBPUSD</option>
-                        <option value="EURUSD">EURUSD</option>
-                        <option value="AUDUSD">AUDUSD</option>
-                        <option value="NZDUSD">NZDUSD</option>
-                        <option value="USDJPY">USDJPY</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Position</label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button type="button" id="pos-buy-btn" onclick="setTradePos('BUY')" class="py-2.5 rounded-xl text-xs font-bold bg-accentGreen text-slate-950 transition">BUY</button>
-                        <button type="button" id="pos-sell-btn" onclick="setTradePos('SELL')" class="py-2.5 rounded-xl text-xs font-bold bg-cardBorder text-slate-400 transition">SELL</button>
+                    <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+                        <h4 class="text-sm font-bold text-white">PnL by Order Type / Position</h4>
+                        <div class="h-52 relative">
+                            <canvas id="orderTypeChart"></canvas>
+                        </div>
                     </div>
                 </div>
+
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Net P/L ($)</label>
-                    <input type="number" id="trade-pnl" placeholder="100 or -12" oninput="autoCalculateRR()" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-accentGreen">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Risk ($)</label>
-                    <input type="number" id="trade-risk" placeholder="10" oninput="autoCalculateRR()" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-accentGreen">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1.5">RR (Auto)</label>
-                    <input type="number" step="0.1" id="trade-rr" placeholder="0.0" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-slate-400 focus:outline-none" readonly>
-                </div>
-            </div>
+        </section>
+    </main>
 
-            <div>
-                <label class="block text-xs font-medium text-slate-400 mb-1.5">HTF Opportunity</label>
-                <div class="flex flex-wrap gap-2" id="htf-buttons">
-                    <button type="button" onclick="toggleSelection(this, 'htf')" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition">Open to High</button>
-                    <button type="button" onclick="toggleSelection(this, 'htf')" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition">Open to Low</button>
-                    <button type="button" onclick="toggleSelection(this, 'htf')" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition">Low to Close</button>
-                    <button type="button" onclick="toggleSelection(this, 'htf')" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition">High to Close</button>
-                </div>
+    <!-- BACKUP / EXPORT / IMPORT MODAL -->
+    <div id="exportImportModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl p-6 max-w-lg w-full space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-emerald-500/10 pb-3">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-database text-emerald-400"></i> Backup & Restore Data
+                </h3>
+                <button onclick="toggleExportImportModal(false)" class="text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
             </div>
+            <p class="text-xs text-gray-400 leading-relaxed">All data is saved indefinitely in your device's browser memory (localStorage). You can export JSON backups or restore data across devices.</p>
 
-            <div>
-                <label class="block text-xs font-medium text-slate-400 mb-1.5">Result</label>
-                <div class="flex flex-wrap gap-2" id="result-buttons">
-                    <button type="button" onclick="selectResult(this)" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition" data-val="Break Even">Break Even</button>
-                    <button type="button" onclick="selectResult(this)" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition" data-val="Full TP">Full TP</button>
-                    <button type="button" onclick="selectResult(this)" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition" data-val="SL">SL</button>
-                    <button type="button" onclick="selectResult(this)" class="px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition" data-val="Partial">Partial</button>
+            <div class="space-y-3">
+                <button onclick="exportDataJSON()" class="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black font-bold text-xs rounded-xl transition shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-download"></i> Export Journal Backup (JSON)
+                </button>
+
+                <div class="border-t border-emerald-500/10 pt-3">
+                    <label class="block text-xs font-bold text-gray-300 mb-1">Import Data from JSON:</label>
+                    <textarea id="importJSONArea" placeholder="Paste JSON backup text here..." class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl p-3 text-xs font-mono text-gray-300 h-24 focus:outline-none focus:border-emerald-500"></textarea>
+                    <button onclick="importDataJSON()" class="w-full mt-2 py-2 bg-[#121c15] hover:bg-[#18281d] text-emerald-400 border border-emerald-500/30 font-bold text-xs rounded-xl transition">
+                        Restore / Import Data
+                    </button>
                 </div>
-            </div>
-
-            <div class="flex justify-end space-x-3 pt-2">
-                <button onclick="closeAddTradeModal()" class="px-4 py-2 bg-cardBorder hover:bg-slate-800 text-slate-300 text-xs font-semibold rounded-xl transition">Cancel</button>
-                <button onclick="saveTrade()" class="px-4 py-2 bg-accentGreen hover:bg-emerald-600 text-slate-950 text-xs font-semibold rounded-xl transition">Save Trade</button>
             </div>
         </div>
     </div>
 
-    <!-- Application Script -->
+    <!-- CUSTOM MESSAGE / CONFIRMATION MODAL -->
+    <div id="customModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl p-5 max-w-sm w-full space-y-4 shadow-2xl text-center border-emerald-500/20">
+            <div id="customModalIcon" class="text-3xl text-emerald-400"><i class="fa-solid fa-circle-info"></i></div>
+            <h4 id="customModalTitle" class="text-base font-bold text-white">Notice</h4>
+            <p id="customModalMsg" class="text-xs text-gray-300 leading-relaxed"></p>
+            <div id="customModalActions" class="flex justify-center gap-2 pt-2">
+                <button onclick="closeCustomModal()" class="px-5 py-2 bg-emerald-500 text-black text-xs font-bold rounded-xl shadow-lg">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- APPLICATION LOGIC JS -->
     <script>
-        // App State
-        let db = JSON.parse(localStorage.getItem('najhan_journal_db')) || {
+        // State Management stored in localStorage
+        const STORAGE_KEY = 'njhan_journal_data_v1';
+
+        let appData = {
             accounts: [
-                { id: 'acc_1', name: 'Najhan', type: 'Personal', balance: 500, trades: [] },
-                { id: 'acc_2', name: 'Najh.', type: 'Funded', balance: 1000, trades: [] }
+                { id: 'acc_1', name: 'Najhan', type: 'PERSONAL', startingBalance: 500, created: Date.now() },
+                { id: 'acc_2', name: 'Najh.', type: 'FUNDED', startingBalance: 1000, created: Date.now() - 1000 }
             ],
-            currentAccountId: null
+            trades: [
+                {
+                    id: 'tr_1',
+                    accountId: 'acc_1',
+                    date: '2026-10-26',
+                    pair: 'XAUUSD',
+                    position: 'BUY',
+                    netPnL: 100,
+                    risk: 10,
+                    rr: 10,
+                    htf: 'Open to High',
+                    confluence: 'SMT',
+                    result: 'Full TP',
+                    link: '',
+                    screenshot: ''
+                }
+            ],
+            selectedAccountId: 'acc_1'
         };
 
-        let currentTab = 'dashboard';
-        let currentPos = 'BUY';
-        let currentSelectedResult = '';
-        let currentCalendarYear = 2026;
-        let currentCalendarMonth = 9; // October (0-indexed)
-        let activeDateFilter = null; // Filter recent trades by clicking calendar day
-        let equityChartInstance = null;
-        let winLossChartInstance = null;
+        // Active Calendar View Month / Filter
+        let currentCalendarDate = new Date(2026, 9, 1); // Oct 2026 default
+        let selectedCalendarDateStr = null;
 
-        function saveData() {
-            localStorage.setItem('najhan_journal_db', JSON.stringify(db));
-        }
+        // Selected Position Tag in Form
+        let selectedPosition = 'BUY';
+        let selectedTags = { htf: [], confluence: [], result: [] };
 
-        // Initialize UI
-        function initApp() {
-            if (!db.currentAccountId && db.accounts.length > 0) {
-                db.currentAccountId = db.accounts[0].id;
-            }
-            if (db.currentAccountId) {
-                showJournalView();
-            } else {
-                showAccountSelector();
-            }
-        }
+        // Chart Instances
+        let charts = {};
 
-        function showAccountSelector() {
-            document.getElementById('view-accounts').classList.remove('hidden');
-            document.getElementById('view-journal').classList.add('hidden');
-            document.getElementById('account-header-info').classList.add('hidden');
+        // Initialization
+        window.onload = function() {
+            loadFromStorage();
+            renderAccountsList();
             
-            const grid = document.getElementById('accounts-grid');
-            grid.innerHTML = '';
+            // Check if active account exists
+            if (appData.selectedAccountId && getActiveAccount()) {
+                switchView('workspace');
+            } else {
+                switchView('accounts');
+            }
 
-            db.accounts.forEach(acc => {
-                const badgeColor = acc.type === 'Funded' ? 'bg-blue-500/20 text-blue-400' : acc.type === 'Demo' ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-accentGreen';
+            // Set default date in trade form to today
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('tradeDate').value = todayStr;
+        };
+
+        function saveToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            } catch (e) {
+                console.error("Storage error:", e);
+            }
+        }
+
+        function loadFromStorage() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) {
+                try {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && parsed.accounts) {
+                        appData = parsed;
+                    }
+                } catch (e) {
+                    console.error("Failed to parse local data", e);
+                }
+            }
+        }
+
+        function getActiveAccount() {
+            return appData.accounts.find(a => a.id === appData.selectedAccountId) || appData.accounts[0];
+        }
+
+        function switchView(view) {
+            const accountsView = document.getElementById('accountsView');
+            const workspaceView = document.getElementById('workspaceView');
+            const headerBadge = document.getElementById('headerAccountBadge');
+
+            if (view === 'accounts') {
+                accountsView.classList.remove('hidden');
+                workspaceView.classList.add('hidden');
+                headerBadge.classList.add('hidden');
+            } else {
+                const active = getActiveAccount();
+                if (!active) {
+                    showNotice("Please select or create an account first.");
+                    return;
+                }
+                appData.selectedAccountId = active.id;
+                saveToStorage();
+
+                accountsView.classList.add('hidden');
+                workspaceView.classList.remove('hidden');
+                headerBadge.classList.remove('hidden');
+
+                // Update Header info
+                document.getElementById('activeAccountHeaderName').innerText = active.name;
+                document.getElementById('activeAccountName').innerText = active.name;
+                document.getElementById('activeTypeTag').innerText = active.type;
+                document.getElementById('activeStartingBalance').innerText = '$' + Number(active.startingBalance).toLocaleString();
+
+                refreshActiveAccountData();
+            }
+        }
+
+        function setActiveTab(tab) {
+            const tabs = ['dashboard', 'tradelog', 'analytics'];
+            tabs.forEach(t => {
+                const btn = document.getElementById('tabBtn' + capitalize(t));
+                const content = document.getElementById('tabContent' + capitalize(t));
                 
-                // Calculate current live balance
-                let liveBal = acc.balance + acc.trades.reduce((sum, t) => sum + Number(t.pnl), 0);
+                if (t === tab) {
+                    btn.classList.add('border-emerald-500', 'text-emerald-400');
+                    btn.classList.remove('border-transparent', 'text-gray-400');
+                    content.classList.remove('hidden');
+                } else {
+                    btn.classList.remove('border-emerald-500', 'text-emerald-400');
+                    btn.classList.add('border-transparent', 'text-gray-400');
+                    content.classList.add('hidden');
+                }
+            });
+
+            if (tab === 'analytics') {
+                setTimeout(updateAnalyticsCharts, 100);
+            }
+        }
+
+        function capitalize(s) {
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        }
+
+        function renderAccountsList() {
+            const container = document.getElementById('accountsList');
+            container.innerHTML = '';
+
+            appData.accounts.forEach(acc => {
+                const accTrades = appData.trades.filter(t => t.accountId === acc.id);
+                const netProfit = accTrades.reduce((sum, t) => sum + (Number(t.netPnL) || 0), 0);
+                const currentBalance = Number(acc.startingBalance) + netProfit;
 
                 const card = document.createElement('div');
-                card.className = 'bg-cardBg border border-cardBorder hover:border-slate-700 rounded-2xl p-5 relative group transition cursor-pointer flex flex-col justify-between space-y-4';
+                card.className = "glass-card hover:border-emerald-500/50 rounded-2xl p-4 sm:p-5 shadow-lg flex items-center justify-between transition duration-300 cursor-pointer group";
+                
                 card.onclick = (e) => {
-                    if (e.target.closest('.delete-acc')) return;
-                    selectAccount(acc.id);
+                    if (e.target.closest('.delete-acc-btn')) return;
+                    appData.selectedAccountId = acc.id;
+                    saveToStorage();
+                    switchView('workspace');
                 };
 
                 card.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${badgeColor}">${acc.type}</span>
-                            <h3 class="text-lg font-bold text-white mt-2">${acc.name}</h3>
-                        </div>
-                        <button onclick="deleteAccount('${acc.id}')" class="delete-acc w-8 h-8 rounded-lg bg-darkBg hover:bg-red-500/20 hover:text-red-400 text-slate-500 flex items-center justify-center transition"><i class="fa-solid fa-xmark"></i></button>
+                    <div class="space-y-1">
+                        <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider ${
+                            acc.type === 'FUNDED' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' :
+                            acc.type === 'DEMO' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                            'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                        }">${acc.type}</span>
+                        <h3 class="text-lg sm:text-xl font-black text-white group-hover:text-emerald-400 transition">${acc.name}</h3>
+                        <p class="text-xs sm:text-sm font-bold font-mono text-emerald-400">$${currentBalance.toLocaleString()} <span class="text-[10px] font-normal text-gray-400 font-sans">Starting: $${Number(acc.startingBalance).toLocaleString()}</span></p>
                     </div>
-                    <div>
-                        <span class="text-xs text-slate-400">Balance</span>
-                        <div class="text-xl font-bold text-white mt-0.5">$${liveBal.toLocaleString()}</div>
+
+                    <div class="flex items-center gap-3">
+                        <button class="delete-acc-btn text-gray-500 hover:text-red-400 p-2 rounded-xl transition" onclick="confirmDeleteAccount('${acc.id}', '${acc.name}')" title="Delete Account">
+                            <i class="fa-solid fa-xmark text-lg"></i>
+                        </button>
                     </div>
                 `;
-                grid.appendChild(card);
+                container.appendChild(card);
             });
         }
 
-        function selectAccount(accId) {
-            db.currentAccountId = accId;
-            saveData();
-            showJournalView();
+        function toggleAddAccountForm(show) {
+            document.getElementById('addAccountForm').classList.toggle('hidden', !show);
+            document.getElementById('showAddAccountBtn').classList.toggle('hidden', show);
         }
 
-        function switchAccount() {
-            db.currentAccountId = null;
-            saveData();
-            showAccountSelector();
-        }
+        function createAccount() {
+            const name = document.getElementById('newAccountName').value.trim();
+            const type = document.getElementById('newAccountType').value;
+            const balance = parseFloat(document.getElementById('newAccountBalance').value);
 
-        function showJournalView() {
-            document.getElementById('view-accounts').classList.add('hidden');
-            document.getElementById('view-journal').classList.remove('hidden');
-            document.getElementById('account-header-info').classList.remove('hidden');
-
-            const acc = db.accounts.find(a => a.id === db.currentAccountId);
-            if (!acc) return showAccountSelector();
-
-            let liveBal = acc.balance + acc.trades.reduce((sum, t) => sum + Number(t.pnl), 0);
-
-            document.getElementById('nav-acc-name').innerText = acc.name;
-            document.getElementById('nav-acc-balance').innerText = `$${liveBal.toLocaleString()}`;
-            document.getElementById('current-acc-title').innerText = acc.name;
-            document.getElementById('current-acc-balance-display').innerText = `$${liveBal.toLocaleString()}`;
-            
-            const typeBadge = document.getElementById('current-acc-type-badge');
-            typeBadge.innerText = acc.type;
-            typeBadge.className = `px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${acc.type === 'Funded' ? 'bg-blue-500/20 text-blue-400' : acc.type === 'Demo' ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-accentGreen'}`;
-
-            renderDashboard();
-            renderTradeLog();
-            renderAnalytics();
-        }
-
-        function switchTab(tab) {
-            currentTab = tab;
-            ['dashboard', 'tradelog', 'analytics'].forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-                document.getElementById(`tab-btn-${t}`).className = 'pb-3 text-sm font-medium text-slate-400 hover:text-white transition';
-            });
-            document.getElementById(`tab-${tab}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${tab}`).className = 'pb-3 text-sm font-semibold border-b-2 border-accentGreen text-accentGreen transition';
-            
-            if (tab === 'analytics') {
-                renderCharts();
+            if (!name || isNaN(balance)) {
+                showNotice("Please fill in valid account details.");
+                return;
             }
+
+            const newAcc = {
+                id: 'acc_' + Date.now(),
+                name: name,
+                type: type,
+                startingBalance: balance,
+                created: Date.now()
+            };
+
+            appData.accounts.push(newAcc);
+            appData.selectedAccountId = newAcc.id;
+            saveToStorage();
+
+            document.getElementById('newAccountName').value = '';
+            toggleAddAccountForm(false);
+            renderAccountsList();
+            switchView('workspace');
         }
 
-        // Account Modal Management
-        function openAddAccountModal() {
-            document.getElementById('account-modal').classList.remove('hidden');
-            document.getElementById('acc-input-name').value = '';
-            document.getElementById('acc-input-balance').value = '500';
-        }
-        function closeAddAccountModal() {
-            document.getElementById('account-modal').classList.add('hidden');
-        }
-        function saveAccount() {
-            const name = document.getElementById('acc-input-name').value.trim();
-            const type = document.getElementById('acc-input-type').value;
-            const balance = parseFloat(document.getElementById('acc-input-balance').value) || 0;
-
-            if (!name) return alert('Masukkan nama akun!');
-
-            const newAcc = { id: 'acc_' + Date.now(), name, type, balance, trades: [] };
-            db.accounts.push(newAcc);
-            db.currentAccountId = newAcc.id;
-            saveData();
-            closeAddAccountModal();
-            showJournalView();
-        }
-        function deleteAccount(id) {
-            if (confirm('Hapus akun ini beserta seluruh jurnalnya?')) {
-                db.accounts = db.accounts.filter(a => a.id !== id);
-                if (db.currentAccountId === id) db.currentAccountId = null;
-                saveData();
-                initApp();
+        function confirmDeleteAccount(accId, name) {
+            if (appData.accounts.length <= 1) {
+                showNotice("You must keep at least one account.");
+                return;
             }
-        }
 
-        // Trade Modal Management
-        function openAddTradeModal(tradeId = null) {
-            document.getElementById('trade-modal').classList.remove('hidden');
-            document.getElementById('edit-trade-id').value = tradeId || '';
-            
-            if (tradeId) {
-                const acc = db.accounts.find(a => a.id === db.currentAccountId);
-                const t = acc.trades.find(item => item.id === tradeId);
-                if (t) {
-                    document.getElementById('trade-modal-title').innerText = 'Edit Trade Entry';
-                    document.getElementById('trade-date').value = t.date;
-                    document.getElementById('trade-pair').value = t.pair;
-                    setTradePos(t.position);
-                    document.getElementById('trade-pnl').value = t.pnl;
-                    document.getElementById('trade-risk').value = t.risk;
-                    document.getElementById('trade-rr').value = t.rr;
-                    currentSelectedResult = t.result;
-                    highlightSelectedResult(t.result);
+            showConfirm(`Hapus akun '${name}'? Data trade pada akun ini juga akan terhapus.`, () => {
+                appData.accounts = appData.accounts.filter(a => a.id !== accId);
+                appData.trades = appData.trades.filter(t => t.accountId !== accId);
+                
+                if (appData.selectedAccountId === accId) {
+                    appData.selectedAccountId = appData.accounts[0].id;
                 }
-            } else {
-                document.getElementById('trade-modal-title').innerText = 'New Trade Entry';
-                document.getElementById('trade-date').value = new Date().toISOString().split('T')[0];
-                document.getElementById('trade-pair').value = 'XAUUSD';
-                setTradePos('BUY');
-                document.getElementById('trade-pnl').value = '';
-                document.getElementById('trade-risk').value = '';
-                document.getElementById('trade-rr').value = '';
-                currentSelectedResult = '';
-                highlightSelectedResult('');
-            }
-        }
-        function closeAddTradeModal() {
-            document.getElementById('trade-modal').classList.add('hidden');
+                saveToStorage();
+                renderAccountsList();
+            });
         }
 
-        function setTradePos(pos) {
-            currentPos = pos;
+        function refreshActiveAccountData() {
+            const activeAcc = getActiveAccount();
+            if (!activeAcc) return;
+
+            const trades = appData.trades.filter(t => t.accountId === activeAcc.id);
+            
+            const totalPnL = trades.reduce((sum, t) => sum + (Number(t.netPnL) || 0), 0);
+            const currentBal = Number(activeAcc.startingBalance) + totalPnL;
+
+            document.getElementById('activeCurrentBalance').innerText = '$' + currentBal.toLocaleString();
+            document.getElementById('tlBalance').innerText = '$' + currentBal.toLocaleString();
+
+            renderDashboard(trades);
+            renderTradeLogTable(trades);
+        }
+
+        function renderDashboard(trades) {
+            renderCalendar(trades);
+            renderRecentTrades(trades);
+
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            const monthTrades = trades.filter(t => {
+                const d = new Date(t.date);
+                return d.getFullYear() === year && d.getMonth() === month;
+            });
+
+            const winCount = monthTrades.filter(t => Number(t.netPnL) > 0).length;
+            const lossCount = monthTrades.filter(t => Number(t.netPnL) < 0).length;
+            const beCount = monthTrades.filter(t => Number(t.netPnL) === 0).length;
+            const total = monthTrades.length;
+
+            const winRate = total > 0 ? Math.round((winCount / total) * 100) : 0;
+
+            const profitVal = monthTrades.filter(t => Number(t.netPnL) > 0).reduce((s, t) => s + Number(t.netPnL), 0);
+            const lossVal = monthTrades.filter(t => Number(t.netPnL) < 0).reduce((s, t) => s + Math.abs(Number(t.netPnL)), 0);
+            const monthPnL = profitVal - lossVal;
+
+            const avgRR = total > 0 ? (monthTrades.reduce((s, t) => s + (Number(t.rr) || 0), 0) / total).toFixed(2) : 0;
+
+            document.getElementById('dashWinRate').innerText = winRate + '%';
+            document.getElementById('dashWinCount').innerText = winCount;
+            document.getElementById('dashLossCount').innerText = lossCount;
+            document.getElementById('dashBECount').innerText = beCount;
+
+            document.getElementById('dashMonthlyPnL').innerText = (monthPnL >= 0 ? '+$' : '-$') + Math.abs(monthPnL).toFixed(2);
+            document.getElementById('dashMonthlyPnL').className = `text-2xl font-black mt-1 font-mono ${monthPnL >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
+            document.getElementById('dashProfitVal').innerText = '$' + profitVal.toFixed(2);
+            document.getElementById('dashLossVal').innerText = '$' + lossVal.toFixed(2);
+
+            document.getElementById('dashAvgRR').innerText = avgRR;
+            document.getElementById('dashTotalTradesMonth').innerText = total;
+
+            const statusLabel = document.getElementById('dashStatusLabel');
+            if (monthPnL >= 0) {
+                statusLabel.innerHTML = `<i class="fa-solid fa-circle-check"></i> Profitable`;
+                statusLabel.className = "text-base sm:text-lg font-black text-emerald-400 mt-1 flex items-center gap-1.5";
+            } else {
+                statusLabel.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> In Loss`;
+                statusLabel.className = "text-base sm:text-lg font-black text-red-400 mt-1 flex items-center gap-1.5";
+            }
+            document.getElementById('dashStatusSub').innerText = `${monthPnL >= 0 ? '+' : '-'}$${Math.abs(monthPnL).toFixed(2)} in Net PnL`;
+        }
+
+        function renderCalendar(trades) {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('calendarMonthLabel').innerText = `${monthNames[month]} ${year}`;
+
+            const calendarDaysContainer = document.getElementById('calendarDays');
+            calendarDaysContainer.innerHTML = '';
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1;
+
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < adjustedFirstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = "calendar-day bg-[#080d0a]/30 rounded-xl opacity-20 border border-transparent";
+                calendarDaysContainer.appendChild(emptyCell);
+            }
+
+            const tradesByDate = {};
+            trades.forEach(t => {
+                if (!tradesByDate[t.date]) tradesByDate[t.date] = [];
+                tradesByDate[t.date].push(t);
+            });
+
+            let monthTradeCount = 0;
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayTrades = tradesByDate[dayDateStr] || [];
+                monthTradeCount += dayTrades.length;
+
+                const dayNetPnL = dayTrades.reduce((s, t) => s + Number(t.netPnL), 0);
+
+                const cell = document.createElement('div');
+                const isSelected = selectedCalendarDateStr === dayDateStr;
+
+                cell.className = `calendar-day rounded-xl p-1.5 flex flex-col justify-between border cursor-pointer ${
+                    isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/10' : 'border-emerald-500/10 bg-[#0c120e] hover:border-emerald-500/40'
+                }`;
+
+                cell.onclick = () => selectCalendarDate(dayDateStr);
+
+                let badgeHTML = '';
+                if (dayTrades.length > 0) {
+                    const colorClass = dayNetPnL >= 0 ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
+                    const sign = dayNetPnL >= 0 ? '+' : '-';
+                    badgeHTML = `
+                        <div class="text-[9px] font-mono ${colorClass} truncate leading-tight mt-0.5">
+                            ${sign}$${Math.abs(dayNetPnL)}
+                        </div>
+                    `;
+                }
+
+                cell.innerHTML = `
+                    <div class="flex items-center justify-between text-[11px] font-bold ${dayTrades.length > 0 ? 'text-white' : 'text-gray-500'}">
+                        <span>${day}</span>
+                        ${dayTrades.length > 0 ? `<span class="w-1.5 h-1.5 rounded-full ${dayNetPnL >= 0 ? 'bg-emerald-400 shadow-sm shadow-emerald-400' : 'bg-red-400 shadow-sm shadow-red-400'}"></span>` : ''}
+                    </div>
+                    ${badgeHTML}
+                `;
+
+                calendarDaysContainer.appendChild(cell);
+            }
+
+            document.getElementById('calendarSubtext').innerText = `${monthTradeCount} trades in ${monthNames[month]}`;
+        }
+
+        function navigateMonth(dir) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + dir);
+            refreshActiveAccountData();
+        }
+
+        function selectCalendarDate(dateStr) {
+            if (selectedCalendarDateStr === dateStr) {
+                selectedCalendarDateStr = null;
+            } else {
+                selectedCalendarDateStr = dateStr;
+            }
+            refreshActiveAccountData();
+        }
+
+        function clearCalendarDateFilter() {
+            selectedCalendarDateStr = null;
+            refreshActiveAccountData();
+        }
+
+        function renderRecentTrades(trades) {
+            const container = document.getElementById('recentTradesContainer');
+            const titleEl = document.getElementById('recentTradesTitle');
+            const subtitleEl = document.getElementById('recentTradesFilterSubtitle');
+            const badgeEl = document.getElementById('recentTradesCountBadge');
+
+            container.innerHTML = '';
+
+            let filteredTrades = [...trades];
+            if (selectedCalendarDateStr) {
+                filteredTrades = filteredTrades.filter(t => t.date === selectedCalendarDateStr);
+                titleEl.innerText = `Trades for ${selectedCalendarDateStr}`;
+                subtitleEl.innerText = "Filtered by calendar selection";
+            } else {
+                titleEl.innerText = "Recent Trades";
+                subtitleEl.innerText = "Latest across all time";
+            }
+
+            filteredTrades.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            badgeEl.innerText = `${filteredTrades.length} trades`;
+
+            if (filteredTrades.length === 0) {
+                container.innerHTML = `
+                    <div class="py-12 text-center text-gray-500 text-xs">
+                        No recent trades
+                    </div>
+                `;
+                return;
+            }
+
+            filteredTrades.forEach(t => {
+                const isWin = Number(t.netPnL) >= 0;
+                const card = document.createElement('div');
+                card.className = "bg-[#0c120e] border border-emerald-500/10 rounded-xl p-3 flex items-center justify-between gap-3 hover:border-emerald-500/30 transition";
+                card.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${isWin ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">
+                            ${t.position}
+                        </span>
+                        <div>
+                            <div class="text-xs font-bold text-white flex items-center gap-2">
+                                ${t.pair}
+                                <span class="text-[10px] text-gray-400 font-mono font-normal">${t.date}</span>
+                            </div>
+                            <div class="text-[10px] text-gray-400 mt-0.5">
+                                RR: <span class="text-amber-400 font-bold font-mono">${t.rr || '0'}</span> &nbsp;|&nbsp; Result: <span class="text-gray-300">${t.result || 'N/A'}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right font-mono">
+                        <div class="text-xs font-black ${isWin ? 'text-emerald-400' : 'text-red-400'}">
+                            ${isWin ? '+' : ''}$${Number(t.netPnL).toFixed(2)}
+                        </div>
+                        <div class="text-[10px] text-gray-400">Risk: $${Number(t.risk || 0).toFixed(2)}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderTradeLogTable(trades) {
+            const tbody = document.getElementById('tradeLogTableBody');
+            const placeholder = document.getElementById('noTradesPlaceholder');
+            tbody.innerHTML = '';
+
+            const totalPnL = trades.reduce((sum, t) => sum + (Number(t.netPnL) || 0), 0);
+            const wins = trades.filter(t => Number(t.netPnL) > 0).length;
+            const winRate = trades.length > 0 ? Math.round((wins / trades.length) * 100) : 0;
+
+            document.getElementById('tlTotalPnL').innerText = (totalPnL >= 0 ? '+$' : '-$') + Math.abs(totalPnL).toFixed(2);
+            document.getElementById('tlTotalPnL').className = `text-xl font-black ${totalPnL >= 0 ? 'text-emerald-400' : 'text-red-400'} mt-1 font-mono`;
+            document.getElementById('tlWinRate').innerText = winRate + '%';
+            document.getElementById('tlTotalTrades').innerText = trades.length;
+
+            if (trades.length === 0) {
+                placeholder.classList.remove('hidden');
+                return;
+            } else {
+                placeholder.classList.add('hidden');
+            }
+
+            const sorted = [...trades].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            sorted.forEach(t => {
+                const isWin = Number(t.netPnL) >= 0;
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-emerald-500/5 transition";
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 font-mono text-[11px] text-gray-300 whitespace-nowrap">${t.date}</td>
+                    <td class="py-3.5 px-4 font-bold text-white whitespace-nowrap">${t.pair}</td>
+                    <td class="py-3.5 px-4 whitespace-nowrap">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${t.position}</span>
+                    </td>
+                    <td class="py-3.5 px-4 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'} whitespace-nowrap">
+                        ${isWin ? '+' : ''}$${Number(t.netPnL).toFixed(2)}
+                    </td>
+                    <td class="py-3.5 px-4 font-mono text-gray-400 whitespace-nowrap">$${Number(t.risk || 0).toFixed(2)}</td>
+                    <td class="py-3.5 px-4 font-mono font-bold text-amber-400 whitespace-nowrap">${t.rr || '0'}</td>
+                    <td class="py-3.5 px-4 text-gray-400 text-[11px] whitespace-nowrap">${t.htf || '—'}</td>
+                    <td class="py-3.5 px-4 text-gray-400 text-[11px] whitespace-nowrap">${t.confluence || '—'}</td>
+                    <td class="py-3.5 px-4 whitespace-nowrap">
+                        <span class="px-2 py-0.5 rounded text-[10px] bg-[#121a14] text-gray-300 border border-emerald-500/10">${t.result || 'N/A'}</span>
+                    </td>
+                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                        <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#121c15] hover:bg-emerald-500 hover:text-black text-emerald-400 border border-emerald-500/20 text-[11px] rounded-lg transition mr-1">Edit</button>
+                        <button onclick="deleteTrade('${t.id}')" class="px-2 py-1 bg-[#121c15] hover:bg-red-500 hover:text-white text-gray-400 border border-emerald-500/10 text-[11px] rounded-lg transition"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function toggleTradeForm(show) {
+            const container = document.getElementById('tradeFormContainer');
+            if (show === undefined) {
+                container.classList.toggle('hidden');
+            } else {
+                container.classList.toggle('hidden', !show);
+            }
+
+            if (!container.classList.contains('hidden')) {
+                container.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                resetTradeForm();
+            }
+        }
+
+        function selectPos(pos) {
+            selectedPosition = pos;
+            const buyBtn = document.getElementById('posBuyBtn');
+            const sellBtn = document.getElementById('posSellBtn');
+
             if (pos === 'BUY') {
-                document.getElementById('pos-buy-btn').className = 'py-2.5 rounded-xl text-xs font-bold bg-accentGreen text-slate-950 transition';
-                document.getElementById('pos-sell-btn').className = 'py-2.5 rounded-xl text-xs font-bold bg-cardBorder text-slate-400 transition';
+                buyBtn.className = "py-2.5 border border-emerald-500 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-xl shadow-sm";
+                sellBtn.className = "py-2.5 border border-emerald-500/10 bg-[#0a0f0c] text-gray-400 text-xs font-bold rounded-xl";
             } else {
-                document.getElementById('pos-buy-btn').className = 'py-2.5 rounded-xl text-xs font-bold bg-cardBorder text-slate-400 transition';
-                document.getElementById('pos-sell-btn').className = 'py-2.5 rounded-xl text-xs font-bold bg-accentRed text-white transition';
+                sellBtn.className = "py-2.5 border border-red-500 bg-red-500/20 text-red-400 text-xs font-bold rounded-xl shadow-sm";
+                buyBtn.className = "py-2.5 border border-emerald-500/10 bg-[#0a0f0c] text-gray-400 text-xs font-bold rounded-xl";
             }
         }
 
-        function autoCalculateRR() {
-            const pnl = parseFloat(document.getElementById('trade-pnl').value) || 0;
-            const risk = parseFloat(document.getElementById('trade-risk').value) || 0;
-            if (risk > 0) {
+        function toggleTagOption(btn, category) {
+            const txt = btn.innerText;
+            const group = selectedTags[category];
+
+            if (group.includes(txt)) {
+                selectedTags[category] = group.filter(x => x !== txt);
+                btn.classList.remove('active');
+            } else {
+                selectedTags[category].push(txt);
+                btn.classList.add('active');
+            }
+        }
+
+        function calculateRR() {
+            const pnl = parseFloat(document.getElementById('tradeNetPnL').value);
+            const risk = parseFloat(document.getElementById('tradeRisk').value);
+            if (!isNaN(pnl) && !isNaN(risk) && risk !== 0) {
                 const rr = (pnl / risk).toFixed(1);
-                document.getElementById('trade-rr').value = rr;
-            } else {
-                document.getElementById('trade-rr').value = '0';
+                document.getElementById('tradeRR').value = rr;
             }
         }
 
-        function selectResult(btn) {
-            document.querySelectorAll('#result-buttons button').forEach(b => b.className = 'px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition');
-            btn.className = 'px-3 py-1.5 rounded-lg text-xs bg-accentGreen text-slate-950 font-bold transition';
-            currentSelectedResult = btn.getAttribute('data-val');
-        }
+        function resetTradeForm() {
+            document.getElementById('editingTradeId').value = '';
+            document.getElementById('tradeFormTitle').innerHTML = `<i class="fa-regular fa-pen-to-square text-emerald-400"></i> New Trade Entry`;
+            document.getElementById('tradeDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('tradePair').value = 'XAUUSD';
+            selectPos('BUY');
+            document.getElementById('tradeNetPnL').value = '';
+            document.getElementById('tradeRisk').value = '';
+            document.getElementById('tradeRR').value = '';
+            document.getElementById('tradeLink').value = '';
+            document.getElementById('tradeScreenshot').value = '';
 
-        function highlightSelectedResult(val) {
-            document.querySelectorAll('#result-buttons button').forEach(b => {
-                if (b.getAttribute('data-val') === val) {
-                    b.className = 'px-3 py-1.5 rounded-lg text-xs bg-accentGreen text-slate-950 font-bold transition';
-                } else {
-                    b.className = 'px-3 py-1.5 rounded-lg text-xs bg-cardBorder text-slate-300 border border-transparent hover:border-slate-600 transition';
-                }
-            });
-        }
-
-        function toggleSelection(btn, group) {
-            btn.classList.toggle('bg-accentGreen');
-            btn.classList.toggle('text-slate-950');
-            btn.classList.toggle('font-bold');
-            btn.classList.toggle('bg-cardBorder');
-            btn.classList.toggle('text-slate-300');
+            selectedTags = { htf: [], confluence: [], result: [] };
+            document.querySelectorAll('.btn-tag').forEach(b => b.classList.remove('active'));
         }
 
         function saveTrade() {
-            const date = document.getElementById('trade-date').value;
-            const pair = document.getElementById('trade-pair').value;
-            const pnl = parseFloat(document.getElementById('trade-pnl').value);
-            const risk = parseFloat(document.getElementById('trade-risk').value);
-            const rr = parseFloat(document.getElementById('trade-rr').value) || 0;
-            const editId = document.getElementById('edit-trade-id').value;
+            const activeAcc = getActiveAccount();
+            if (!activeAcc) return;
 
-            if (!date || isNaN(pnl) || isNaN(risk)) {
-                return alert('Lengkapi field wajib (Date, Net P/L, Risk)!');
+            const editId = document.getElementById('editingTradeId').value;
+            const date = document.getElementById('tradeDate').value;
+            const pair = document.getElementById('tradePair').value;
+            const pnl = parseFloat(document.getElementById('tradeNetPnL').value);
+            const risk = parseFloat(document.getElementById('tradeRisk').value);
+            const rr = parseFloat(document.getElementById('tradeRR').value);
+            const link = document.getElementById('tradeLink').value.trim();
+            const screenshot = document.getElementById('tradeScreenshot').value.trim();
+
+            if (!date || !pair || isNaN(pnl)) {
+                showNotice("Lengkapi field wajib! (Date, Pair, Net P/L)");
+                return;
             }
 
-            const acc = db.accounts.find(a => a.id === db.currentAccountId);
-            
+            const tradeObj = {
+                id: editId || 'tr_' + Date.now(),
+                accountId: activeAcc.id,
+                date: date,
+                pair: pair,
+                position: selectedPosition,
+                netPnL: pnl,
+                risk: isNaN(risk) ? 0 : risk,
+                rr: isNaN(rr) ? 0 : rr,
+                htf: selectedTags.htf.join(', ') || '',
+                confluence: selectedTags.confluence.join(', ') || '',
+                result: selectedTags.result.join(', ') || '',
+                link: link,
+                screenshot: screenshot
+            };
+
             if (editId) {
-                const t = acc.trades.find(item => item.id === editId);
-                if (t) {
-                    t.date = date;
-                    t.pair = pair;
-                    t.position = currentPos;
-                    t.pnl = pnl;
-                    t.risk = risk;
-                    t.rr = rr;
-                    t.result = currentSelectedResult;
-                }
+                const idx = appData.trades.findIndex(t => t.id === editId);
+                if (idx !== -1) appData.trades[idx] = tradeObj;
             } else {
-                const newTrade = {
-                    id: 'trade_' + Date.now(),
-                    date,
-                    pair,
-                    position: currentPos,
-                    pnl,
-                    risk,
-                    rr,
-                    result: currentSelectedResult || (pnl >= 0 ? 'Full TP' : 'SL')
-                };
-                acc.trades.push(newTrade);
+                appData.trades.push(tradeObj);
             }
 
-            saveData();
-            closeAddTradeModal();
-            showJournalView();
+            saveToStorage();
+            toggleTradeForm(false);
+            refreshActiveAccountData();
         }
 
-        function deleteTrade(id) {
-            if (confirm('Hapus trade ini?')) {
-                const acc = db.accounts.find(a => a.id === db.currentAccountId);
-                acc.trades = acc.trades.filter(t => t.id !== id);
-                saveData();
-                showJournalView();
-            }
-        }
+        function editTrade(tradeId) {
+            const trade = appData.trades.find(t => t.id === tradeId);
+            if (!trade) return;
 
-        // Calendar Controls
-        function changeMonth(dir) {
-            currentCalendarMonth += dir;
-            if (currentCalendarMonth > 11) {
-                currentCalendarMonth = 0;
-                currentCalendarYear++;
-            } else if (currentCalendarMonth < 0) {
-                currentCalendarMonth = 11;
-                currentCalendarYear--;
-            }
-            renderDashboard();
-        }
+            document.getElementById('editingTradeId').value = trade.id;
+            document.getElementById('tradeFormTitle').innerHTML = `<i class="fa-regular fa-pen-to-square text-emerald-400"></i> Edit Trade`;
+            document.getElementById('tradeDate').value = trade.date;
+            document.getElementById('tradePair').value = trade.pair;
+            selectPos(trade.position);
+            document.getElementById('tradeNetPnL').value = trade.netPnL;
+            document.getElementById('tradeRisk').value = trade.risk;
+            document.getElementById('tradeRR').value = trade.rr;
+            document.getElementById('tradeLink').value = trade.link || '';
+            document.getElementById('tradeScreenshot').value = trade.screenshot || '';
 
-        function filterByDate(dateStr) {
-            activeDateFilter = dateStr;
-            document.getElementById('clear-date-filter-btn').classList.remove('hidden');
-            renderDashboardRecentTrades();
-        }
+            selectedTags = {
+                htf: trade.htf ? trade.htf.split(', ') : [],
+                confluence: trade.confluence ? trade.confluence.split(', ') : [],
+                result: trade.result ? trade.result.split(', ') : []
+            };
 
-        function clearDateFilter() {
-            activeDateFilter = null;
-            document.getElementById('clear-date-filter-btn').classList.add('hidden');
-            renderDashboardRecentTrades();
-        }
-
-        // Render Dashboard
-        function renderDashboard() {
-            const acc = db.accounts.find(a => a.id === db.currentAccountId);
-            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            document.getElementById('calendar-month-label').innerText = `${months[currentCalendarMonth]} ${currentCalendarYear}`;
-
-            // Calculate monthly stats
-            let monthTrades = acc.trades.filter(t => {
-                const d = new Date(t.date);
-                return d.getFullYear() === currentCalendarYear && d.getMonth() === currentCalendarMonth;
+            document.querySelectorAll('.btn-tag').forEach(b => {
+                const txt = b.innerText;
+                if (selectedTags.htf.includes(txt) || selectedTags.confluence.includes(txt) || selectedTags.result.includes(txt)) {
+                    b.classList.add('active');
+                } else {
+                    b.classList.remove('active');
+                }
             });
 
-            let totalPnL = monthTrades.reduce((sum, t) => sum + t.pnl, 0);
-            let wins = monthTrades.filter(t => t.pnl > 0).length;
-            let winRate = monthTrades.length > 0 ? Math.round((wins / monthTrades.length) * 100) : 0;
-            let avgRR = monthTrades.length > 0 ? (monthTrades.reduce((sum, t) => sum + t.rr, 0) / monthTrades.length).toFixed(2) : '0';
-
-            document.getElementById('dash-win-rate').innerText = `${winRate}%`;
-            document.getElementById('dash-monthly-pnl').innerText = `${totalPnL >= 0 ? '+' : ''}$${totalPnL.toFixed(2)}`;
-            document.getElementById('dash-monthly-pnl').className = `text-base font-bold mt-0.5 block ${totalPnL >= 0 ? 'text-accentGreen' : 'text-accentRed'}`;
-            document.getElementById('dash-avg-rr').innerText = avgRR;
-
-            // Render Calendar Days
-            const grid = document.getElementById('calendar-days-grid');
-            grid.innerHTML = '';
-
-            const firstDayIndex = new Date(currentCalendarYear, currentCalendarMonth, 1).getDay();
-            const adjustedFirstDay = firstDayIndex === 0 ? 6 : firstDayIndex - 1; // Monday start
-            const totalDays = new Date(currentCalendarYear, currentCalendarMonth + 1, 0).getDate();
-
-            // Empty slots for previous month
-            for (let i = 0; i < adjustedFirstDay; i++) {
-                const emptyCell = document.createElement('div');
-                emptyCell.className = 'h-16 rounded-xl bg-darkBg/20 border border-transparent opacity-30';
-                grid.appendChild(emptyCell);
-            }
-
-            for (let day = 1; day <= totalDays; day++) {
-                const dayStr = `${currentCalendarYear}-${String(currentCalendarMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const dayTrades = monthTrades.filter(t => t.date === dayStr);
-                const dayPnL = dayTrades.reduce((sum, t) => sum + t.pnl, 0);
-
-                const cell = document.createElement('div');
-                const isSelected = activeDateFilter === dayStr;
-                
-                let bgClass = 'bg-cardBg/60 border-cardBorder';
-                if (dayTrades.length > 0) {
-                    bgClass = dayPnL >= 0 ? 'bg-emerald-950/20 border-emerald-500/30' : 'bg-red-950/20 border-red-500/30';
-                }
-                if (isSelected) {
-                    bgClass += ' ring-2 ring-accentGreen';
-                }
-
-                cell.className = `h-16 rounded-xl border p-1.5 flex flex-col justify-between cursor-pointer hover:border-slate-500 transition ${bgClass}`;
-                cell.onclick = () => filterByDate(dayStr);
-
-                let content = `<span class="text-xs font-semibold text-slate-300">${day}</span>`;
-                if (dayTrades.length > 0) {
-                    content += `<span class="text-[10px] font-bold ${dayPnL >= 0 ? 'text-accentGreen' : 'text-accentRed'}">${dayPnL >= 0 ? '+' : ''}$${dayPnL.toFixed(0)}</span>`;
-                }
-                cell.innerHTML = content;
-                grid.appendChild(cell);
-            }
-
-            renderDashboardRecentTrades();
+            toggleTradeForm(true);
         }
 
-        function renderDashboardRecentTrades() {
-            const acc = db.accounts.find(a => a.id === db.currentAccountId);
-            const list = document.getElementById('recent-trades-list');
-            list.innerHTML = '';
-
-            let tradesToDisplay = [...acc.trades].sort((a, b) => new Date(b.date) - new Date(a.date));
-            if (activeDateFilter) {
-                tradesToDisplay = tradesToDisplay.filter(t => t.date === activeDateFilter);
-            }
-
-            if (tradesToDisplay.length === 0) {
-                list.innerHTML = `<div class="text-center py-12 text-slate-500 text-xs">No recent trades found</div>`;
-                return;
-            }
-
-            tradesToDisplay.slice(0, 5).forEach(t => {
-                const isBuy = t.position === 'BUY';
-                const item = document.createElement('div');
-                item.className = 'bg-darkBg/50 border border-cardBorder rounded-xl p-3 flex items-center justify-between';
-                item.innerHTML = `
-                    <div class="flex items-center space-x-3">
-                        <span class="px-2 py-1 rounded-md text-[10px] font-bold ${isBuy ? 'bg-emerald-500/20 text-accentGreen' : 'bg-red-500/20 text-accentRed'}">${t.position}</span>
-                        <div>
-                            <span class="font-bold text-white text-xs">${t.pair}</span>
-                            <span class="text-[10px] text-slate-400 block">${t.date}</span>
-                        </div>
-                    </div>
-                    <span class="text-xs font-bold ${t.pnl >= 0 ? 'text-accentGreen' : 'text-accentRed'}">${t.pnl >= 0 ? '+' : ''}$${t.pnl.toFixed(2)}</span>
-                `;
-                list.appendChild(item);
+        function deleteTrade(tradeId) {
+            showConfirm("Hapus trade ini dari journal?", () => {
+                appData.trades = appData.trades.filter(t => t.id !== tradeId);
+                saveToStorage();
+                refreshActiveAccountData();
             });
         }
 
-        // Render Trade Log Tab
-        function renderTradeLog() {
-            const acc = db.accounts.find(a => a.id === db.currentAccountId);
-            const tbody = document.getElementById('trade-table-body');
-            tbody.innerHTML = '';
+        function updateAnalyticsCharts() {
+            const activeAcc = getActiveAccount();
+            if (!activeAcc) return;
 
-            let totalPnL = acc.trades.reduce((sum, t) => sum + t.pnl, 0);
-            let wins = acc.trades.filter(t => t.pnl > 0).length;
-            let winRate = acc.trades.length > 0 ? Math.round((wins / acc.trades.length) * 100) : 0;
+            let trades = appData.trades.filter(t => t.accountId === activeAcc.id);
+            trades.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-            document.getElementById('log-total-pnl.innerText') // keep selector safe
-            document.getElementById('log-total-pnl').innerText = `${totalPnL >= 0 ? '+' : ''}$${totalPnL.toFixed(2)}`;
-            document.getElementById('log-total-pnl').className = `text-lg font-bold ${totalPnL >= 0 ? 'text-accentGreen' : 'text-accentRed'}`;
-            document.getElementById('log-win-rate').innerText = `${winRate}%`;
-            document.getElementById('log-total-trades').innerText = acc.trades.length;
+            const fromDateStr = document.getElementById('analyticsFromDate').value;
+            const toDateStr = document.getElementById('analyticsToDate').value;
 
-            if (acc.trades.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-slate-500">No trades recorded yet. Click '+ New Trade' to add one.</td></tr>`;
-                return;
-            }
+            if (fromDateStr) trades = trades.filter(t => t.date >= fromDateStr);
+            if (toDateStr) trades = trades.filter(t => t.date <= toDateStr);
 
-            [...acc.trades].reverse().forEach(t => {
-                const isBuy = t.position === 'BUY';
-                const row = document.createElement('tr');
-                row.className = 'hover:bg-darkBg/30 transition';
-                row.innerHTML = `
-                    <td class="p-3.5 text-slate-300">${t.date}</td>
-                    <td class="p-3.5 font-bold text-white">${t.pair}</td>
-                    <td class="p-3.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${isBuy ? 'bg-emerald-500/20 text-accentGreen' : 'bg-red-500/20 text-accentRed'}">${t.position}</span></td>
-                    <td class="p-3.5 font-bold ${t.pnl >= 0 ? 'text-accentGreen' : 'text-accentRed'}">${t.pnl >= 0 ? '+' : ''}$${t.pnl.toFixed(2)}</td>
-                    <td class="p-3.5 text-slate-400">$${t.risk}</td>
-                    <td class="p-3.5 text-slate-300">${t.rr}</td>
-                    <td class="p-3.5 text-slate-400">Standard</td>
-                    <td class="p-3.5"><span class="px-2 py-0.5 rounded text-[10px] font-medium bg-cardBorder text-slate-300">${t.result}</span></td>
-                    <td class="p-3.5 text-right space-x-2">
-                        <button onclick="openAddTradeModal('${t.id}')" class="text-slate-400 hover:text-accentGreen transition"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button onclick="deleteTrade('${t.id}')" class="text-slate-400 hover:text-red-400 transition"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
-                tbody.appendChild(row);
+            const totalPnL = trades.reduce((sum, t) => sum + Number(t.netPnL), 0);
+            const wins = trades.filter(t => Number(t.netPnL) > 0).length;
+            const winRate = trades.length > 0 ? Math.round((wins / trades.length) * 100) : 0;
+            const avgRR = trades.length > 0 ? (trades.reduce((s, t) => s + (Number(t.rr) || 0), 0) / trades.length).toFixed(1) : "0.0";
+
+            document.getElementById('analyticsPnL').innerText = (totalPnL >= 0 ? '+$' : '-$') + Math.abs(totalPnL).toFixed(2);
+            document.getElementById('analyticsPnL').className = `text-xl font-black ${totalPnL >= 0 ? 'text-emerald-400' : 'text-red-400'} mt-1 font-mono`;
+            document.getElementById('analyticsWinRate').innerText = winRate + '%';
+            document.getElementById('analyticsTotalTrades').innerText = trades.length;
+            document.getElementById('analyticsAvgRR').innerText = avgRR;
+
+            const growthPct = ((totalPnL / Number(activeAcc.startingBalance)) * 100).toFixed(2);
+            document.getElementById('equityGrowthPercentage').innerText = (growthPct >= 0 ? '+' : '') + growthPct + '%';
+
+            let cumulativeBalance = Number(activeAcc.startingBalance);
+            const labels = ['Start'];
+            const dataPoints = [cumulativeBalance];
+
+            trades.forEach(t => {
+                cumulativeBalance += Number(t.netPnL);
+                labels.push(t.date);
+                dataPoints.push(cumulativeBalance);
             });
+
+            renderLineChart('equityChart', labels, dataPoints, 'Equity ($)');
+
+            const symbolMap = {};
+            trades.forEach(t => {
+                symbolMap[t.pair] = (symbolMap[t.pair] || 0) + Number(t.netPnL);
+            });
+            renderDoughnutChart('symbolChart', Object.keys(symbolMap), Object.values(symbolMap));
+
+            const losses = trades.filter(t => Number(t.netPnL) < 0).length;
+            const bes = trades.filter(t => Number(t.netPnL) === 0).length;
+            renderDoughnutChart('winLossChart', ['Wins', 'Losses', 'BreakEven'], [wins, losses, bes], ['#10B981', '#EF4444', '#6B7280']);
+
+            const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const weekdayPnL = [0, 0, 0, 0, 0, 0, 0];
+            trades.forEach(t => {
+                const dayIdx = new Date(t.date).getDay();
+                weekdayPnL[dayIdx] += Number(t.netPnL);
+            });
+            renderBarChart('weekdayChart', weekdays, weekdayPnL, 'PnL by Day');
+
+            const buyPnL = trades.filter(t => t.position === 'BUY').reduce((s, t) => s + Number(t.netPnL), 0);
+            const sellPnL = trades.filter(t => t.position === 'SELL').reduce((s, t) => s + Number(t.netPnL), 0);
+            renderBarChart('orderTypeChart', ['BUY', 'SELL'], [buyPnL, sellPnL], 'PnL by Position');
         }
 
-        // Render Analytics Charts
-        function renderCharts() {
-            const acc = db.accounts.find(a => a.id === db.currentAccountId);
+        function renderLineChart(canvasId, labels, data, label) {
+            if (charts[canvasId]) charts[canvasId].destroy();
+            const ctx = document.getElementById(canvasId).getContext('2d');
             
-            // Prepare Equity Data
-            let runningBal = acc.balance;
-            let equityLabels = ['Start'];
-            let equityData = [runningBal];
+            const gradient = ctx.createLinearGradient(0, 0, 0, 250);
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.35)');
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
 
-            [...acc.trades].sort((a, b) => new Date(a.date) - new Date(b.date)).forEach(t => {
-                runningBal += t.pnl;
-                equityLabels.push(t.date);
-                equityData.push(runningBal);
-            });
-
-            // Equity Curve Chart
-            const ctxEquity = document.getElementById('equityChart').getContext('2d');
-            if (equityChartInstance) equityChartInstance.destroy();
-            equityChartInstance = new Chart(ctxEquity, {
+            charts[canvasId] = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: equityLabels,
+                    labels: labels,
                     datasets: [{
-                        label: 'Equity ($)',
-                        data: equityData,
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        label: label,
+                        data: data,
+                        borderColor: '#10B981',
+                        borderWidth: 2.5,
+                        backgroundColor: gradient,
                         fill: true,
-                        tension: 0.2
+                        tension: 0.35,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#10B981'
                     }]
                 },
                 options: {
@@ -850,40 +1378,124 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' } },
-                        y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' } }
-                    }
-                }
-            });
-
-            // Win / Loss Ratio Chart
-            const winsCount = acc.trades.filter(t => t.pnl > 0).length;
-            const lossesCount = acc.trades.filter(t => t.pnl <= 0).length;
-
-            const ctxWinLoss = document.getElementById('winLossChart').getContext('2d');
-            if (winLossChartInstance) winLossChartInstance.destroy();
-            winLossChartInstance = new Chart(ctxWinLoss, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Wins', 'Losses'],
-                    datasets: [{
-                        data: [winsCount, lossesCount > 0 || winsCount === 0 ? lossesCount : 0],
-                        backgroundColor: ['#10b981', '#ef4444'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { color: '#cbd5e1' } }
+                        x: { grid: { color: 'rgba(34, 197, 94, 0.08)' }, ticks: { color: '#9CA3AF' } },
+                        y: { grid: { color: 'rgba(34, 197, 94, 0.08)' }, ticks: { color: '#9CA3AF' } }
                     }
                 }
             });
         }
 
-        // Run application on load
-        window.onload = initApp;
+        function renderDoughnutChart(canvasId, labels, data, colors) {
+            if (charts[canvasId]) charts[canvasId].destroy();
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            charts[canvasId] = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors || ['#10B981', '#3B82F6', '#F59E0B', '#EC4899', '#8B5CF6'],
+                        borderWidth: 2,
+                        borderColor: '#0b1016'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { color: '#E5E7EB', font: { size: 10 } } } }
+                }
+            });
+        }
+
+        function renderBarChart(canvasId, labels, data, label) {
+            if (charts[canvasId]) charts[canvasId].destroy();
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            charts[canvasId] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        backgroundColor: data.map(v => v >= 0 ? '#10B981' : '#EF4444'),
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: '#9CA3AF' } },
+                        y: { grid: { color: 'rgba(34, 197, 94, 0.08)' }, ticks: { color: '#9CA3AF' } }
+                    }
+                }
+            });
+        }
+
+        function toggleExportImportModal(show) {
+            document.getElementById('exportImportModal').classList.toggle('hidden', !show);
+        }
+
+        function exportDataJSON() {
+            const str = JSON.stringify(appData, null, 2);
+            const blob = new Blob([str], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Njhan_Journal_Backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            showNotice("Backup file JSON berhasil didownload!");
+        }
+
+        function importDataJSON() {
+            const raw = document.getElementById('importJSONArea').value.trim();
+            if (!raw) return;
+
+            try {
+                const parsed = JSON.parse(raw);
+                if (parsed.accounts && parsed.trades) {
+                    appData = parsed;
+                    saveToStorage();
+                    toggleExportImportModal(false);
+                    renderAccountsList();
+                    switchView('workspace');
+                    showNotice("Data berhasil di-restore!");
+                } else {
+                    showNotice("Format JSON backup tidak valid.");
+                }
+            } catch (e) {
+                showNotice("Error membaca JSON. Pastikan format sudah benar.");
+            }
+        }
+
+        function showNotice(msg) {
+            document.getElementById('customModalIcon').innerHTML = `<i class="fa-solid fa-circle-info text-emerald-400"></i>`;
+            document.getElementById('customModalTitle').innerText = "Information";
+            document.getElementById('customModalMsg').innerText = msg;
+            document.getElementById('customModalActions').innerHTML = `<button onclick="closeCustomModal()" class="px-5 py-2 bg-emerald-500 text-black text-xs font-bold rounded-xl shadow-lg hover:bg-emerald-400 transition">OK</button>`;
+            document.getElementById('customModal').classList.remove('hidden');
+        }
+
+        function showConfirm(msg, onConfirm) {
+            document.getElementById('customModalIcon').innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-400"></i>`;
+            document.getElementById('customModalTitle').innerText = "Confirmation";
+            document.getElementById('customModalMsg').innerText = msg;
+            document.getElementById('customModalActions').innerHTML = `
+                <button onclick="closeCustomModal()" class="px-4 py-2 bg-gray-800 text-xs text-white rounded-xl hover:bg-gray-700 transition">Batal</button>
+                <button id="modalConfirmOkBtn" class="px-4 py-2 bg-emerald-500 text-black text-xs font-bold rounded-xl hover:bg-emerald-400 transition">OK</button>
+            `;
+            document.getElementById('modalConfirmOkBtn').onclick = () => {
+                closeCustomModal();
+                onConfirm();
+            };
+            document.getElementById('customModal').classList.remove('hidden');
+        }
+
+        function closeCustomModal() {
+            document.getElementById('customModal').classList.add('hidden');
+        }
     </script>
 </body>
 </html>
+```
