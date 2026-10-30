@@ -293,7 +293,7 @@
             <!-- TAB 1: DASHBOARD -->
             <div id="tabContentDashboard" class="space-y-6">
 
-                <!-- DASHBOARD FILTER BULAN & TAHUN (INFINITE DYNAMIC YEARS) -->
+                <!-- DASHBOARD FILTER BULAN & TAHUN -->
                 <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3">
                     <div>
                         <h3 class="text-sm font-bold text-white flex items-center gap-2">
@@ -317,7 +317,7 @@
                             <option value="12">Desember</option>
                         </select>
                         <select id="dashFilterYear" onchange="onDashFilterChange()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
-                            <!-- Diisi dinamis infinity/trade-based -->
+                            <!-- Diisi dinamis infinity -->
                         </select>
                         <button onclick="resetDashFilterToCurrent()" class="px-3 py-1.5 bg-[#121c15] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
                             Bulan Ini
@@ -417,19 +417,19 @@
                     </div>
                 </div>
 
-                <!-- YEARLY PERFORMANCE SECTION (ALA MONTHLY CALENDAR GRID & INFINITE YEARS) -->
+                <!-- YEARLY PERFORMANCE SECTION -->
                 <div class="glass-card rounded-2xl p-5 space-y-4 shadow-xl">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-emerald-500/10 gap-3">
                         <div>
                             <h3 class="text-sm font-bold text-white flex items-center gap-2">
                                 <i class="fa-solid fa-calendar-alt text-emerald-400"></i> Yearly Performance Calendar
                             </h3>
-                            <p class="text-[11px] text-gray-400">Klik salah satu kotak bulan di bawah untuk melihat rincian Monthly Performance-nya.</p>
+                            <p class="text-[11px] text-gray-400">Klik salah satu kotak bulan di bawah untuk membuka rincian Monthly Performance & Calendar View-nya.</p>
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto">
                             <label class="text-[11px] text-gray-400 font-bold">Filter Tahun:</label>
                             <select id="yearlyFilterYear" onchange="renderYearlyPerformance()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
-                                <!-- Diisi dinamis infinity/trade-based -->
+                                <!-- Diisi dinamis infinity -->
                             </select>
                         </div>
                     </div>
@@ -439,8 +439,8 @@
                         <!-- Populated dynamically -->
                     </div>
 
-                    <!-- KONTAINER DETAIL BULAN YANG DIKLIK TEPAT DI BAWAH YEARLY -->
-                    <div id="selectedMonthDetailContainer" class="hidden pt-4 border-t border-emerald-500/10 space-y-3">
+                    <!-- KONTAINER DETAIL BULAN + MONTHLY CALENDAR VIEW DI BAWAH YEARLY -->
+                    <div id="selectedMonthDetailContainer" class="hidden pt-4 border-t border-emerald-500/10 space-y-4">
                         <!-- Dirender dinamis ketika bulan diklik -->
                     </div>
                 </div>
@@ -493,7 +493,6 @@
 
                         <select id="filterYear" onchange="applyTradeLogFilter()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                             <option value="ALL">Semua Tahun</option>
-                            <!-- Diisi dinamis infinity -->
                         </select>
 
                         <button onclick="resetTradeLogFilter()" class="px-3 py-1.5 bg-[#121c15] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
@@ -863,7 +862,6 @@
                     trades.push({ id: docSnap.id, ...docSnap.data() });
                 });
                 window.appData.trades = trades;
-                // Update dropdown tahun infinity berdasarkan data trade aktif
                 if (window.populateAllYearFilters) window.populateAllYearFilters();
                 window.refreshActiveAccountData();
             }, (error) => {
@@ -966,12 +964,10 @@
         let selectedTags = { htf: [], confluence: [], result: [] };
         let charts = {};
 
-        // FUNGSI INFINITE TAHUN OTOMATIS BERDASARKAN TRADE & WAKTU SEKARANG
         function populateAllYearFilters() {
             const currentYear = new Date().getFullYear();
             const yearsSet = new Set([currentYear]);
 
-            // Kumpulkan semua tahun dari data trade aktif
             if (window.appData && window.appData.trades) {
                 window.appData.trades.forEach(t => {
                     if (t.date) {
@@ -981,14 +977,12 @@
                 });
             }
 
-            // Pastikan rentang dari beberapa tahun ke belakang hingga 5 tahun ke depan selalu ada
             for (let y = currentYear - 5; y <= currentYear + 5; y++) {
                 yearsSet.add(y);
             }
 
             const sortedYears = Array.from(yearsSet).sort((a, b) => b - a);
 
-            // 1. Trade Log Filter Tahun
             const trYear = document.getElementById('filterYear');
             if (trYear) {
                 const val = trYear.value;
@@ -999,7 +993,6 @@
                 trYear.value = val || 'ALL';
             }
 
-            // 2. Dashboard Filter Tahun (Monthly Performance)
             const dashYear = document.getElementById('dashFilterYear');
             if (dashYear) {
                 const val = dashYear.value;
@@ -1010,7 +1003,6 @@
                 dashYear.value = val || currentYear;
             }
 
-            // 3. Yearly Performance Filter Tahun
             const yearlySel = document.getElementById('yearlyFilterYear');
             if (yearlySel) {
                 const val = yearlySel.value;
@@ -1444,7 +1436,7 @@
             });
         }
 
-        // YEARLY PERFORMANCE DENGAN TAMPILAN BULAN-BULAN (ALA MONTHLY CALENDAR GRID)
+        // RENDER YEARLY CALENDAR GRID
         function renderYearlyPerformance() {
             const activeAcc = getActiveAccount();
             if (!activeAcc) return;
@@ -1499,13 +1491,14 @@
             }
         }
 
-        // KETIKA BULAN DI YEARLY CALENDAR DIKLIK -> MUNCUL DETAILNYA DI BAWAH
+        // KETIKA BULAN DIKLIK -> MUNCUL RINGKASAN + MONTHLY CALENDAR VIEW LENGKAP DI BAWAH
         function showMonthDetailFromYearly(year, monthStr, monthName) {
             const activeAcc = getActiveAccount();
             if (!activeAcc) return;
             const curr = activeAcc.currency || 'USD';
             const trades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
 
+            const monthIndex = parseInt(monthStr) - 1;
             const monthTrades = trades.filter(t => {
                 if (!t.date) return false;
                 const parts = t.date.split('-');
@@ -1520,12 +1513,52 @@
             const mWinRate = monthTrades.length > 0 ? Math.round((mWins / monthTrades.length) * 100) : 0;
             const avgRR = monthTrades.length > 0 ? (monthTrades.reduce((s, t) => s + (Number(t.rr) || 0), 0) / monthTrades.length).toFixed(2) : 0;
 
-            let tradesHtml = '';
+            // Generate HTML untuk Monthly Calendar View (Grid Hari-Hari dalam Bulan Tersebut)
+            const firstDay = new Date(year, monthIndex, 1).getDay();
+            const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1;
+            const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+
+            const tradesByDate = {};
+            monthTrades.forEach(t => {
+                if (!tradesByDate[t.date]) tradesByDate[t.date] = [];
+                tradesByDate[t.date].push(t);
+            });
+
+            let calendarCellsHtml = '';
+            for (let i = 0; i < adjustedFirstDay; i++) {
+                calendarCellsHtml += `<div class="calendar-day bg-[#080d0a]/30 rounded-xl opacity-20 border border-transparent"></div>`;
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayDateStr = `${year}-${monthStr}-${String(day).padStart(2, '0')}`;
+                const dayTrades = tradesByDate[dayDateStr] || [];
+                const dayNetPnL = dayTrades.reduce((s, t) => s + Number(t.netPnL), 0);
+
+                let badgeHTML = '';
+                if (dayTrades.length > 0) {
+                    const colorClass = dayNetPnL >= 0 ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
+                    const formattedAmount = (dayNetPnL >= 0 ? '+' : '-') + formatMoneyShort(Math.abs(dayNetPnL), curr);
+                    badgeHTML = `<div class="text-[9px] font-mono ${colorClass} truncate leading-tight mt-0.5">${formattedAmount}</div>`;
+                }
+
+                calendarCellsHtml += `
+                    <div class="calendar-day rounded-xl p-1.5 flex flex-col justify-between border border-emerald-500/10 bg-[#0c120e]">
+                        <div class="flex items-center justify-between text-[11px] font-bold ${dayTrades.length > 0 ? 'text-white' : 'text-gray-500'}">
+                            <span>${day}</span>
+                            ${dayTrades.length > 0 ? `<span class="w-1.5 h-1.5 rounded-full ${dayNetPnL >= 0 ? 'bg-emerald-400 shadow-sm shadow-emerald-400' : 'bg-red-400 shadow-sm shadow-red-400'}"></span>` : ''}
+                        </div>
+                        ${badgeHTML}
+                    </div>
+                `;
+            }
+
+            // Generate HTML Tabel Daftar Trade Bulan Tersebut
+            let tradesTableHtml = '';
             if (monthTrades.length === 0) {
-                tradesHtml = `<div class="text-xs text-gray-500 py-4 text-center">Tidak ada catatan trade pada bulan ${monthName} ${year}.</div>`;
+                tradesTableHtml = `<div class="text-xs text-gray-500 py-4 text-center">Tidak ada catatan trade pada bulan ${monthName} ${year}.</div>`;
             } else {
                 monthTrades.sort((a, b) => new Date(b.date) - new Date(a.date));
-                tradesHtml = `
+                tradesTableHtml = `
                     <div class="overflow-x-auto pt-2">
                         <table class="w-full text-left text-xs text-gray-300">
                             <thead class="bg-[#090f0b] text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-emerald-500/10">
@@ -1543,7 +1576,7 @@
                 monthTrades.forEach(t => {
                     const pnl = Number(t.netPnL) || 0;
                     const isWin = pnl >= 0;
-                    tradesHtml += `
+                    tradesTableHtml += `
                         <tr class="hover:bg-emerald-500/5">
                             <td class="py-2 px-3 font-mono text-[11px] text-gray-300">${t.date}</td>
                             <td class="py-2 px-3 font-bold text-white">${t.pair}</td>
@@ -1554,17 +1587,19 @@
                         </tr>
                     `;
                 });
-                tradesHtml += `</tbody></table></div>`;
+                tradesTableHtml += `</tbody></table></div>`;
             }
 
             detailContainer.innerHTML = `
                 <div class="flex items-center justify-between pb-2 border-b border-emerald-500/10">
                     <h4 class="text-sm font-black text-emerald-400 flex items-center gap-2">
-                        <i class="fa-solid fa-calendar-days"></i> Monthly Performance Detail: ${monthName} ${year}
+                        <i class="fa-solid fa-calendar-days"></i> Monthly Performance & Calendar View: ${monthName} ${year}
                     </h4>
-                    <button onclick="document.getElementById('selectedMonthDetailContainer').classList.add('hidden')" class="text-xs text-gray-400 hover:text-white px-2 py-1 bg-[#121c15] rounded-lg">Tutup</button>
+                    <button onclick="document.getElementById('selectedMonthDetailContainer').classList.add('hidden')" class="text-xs text-gray-400 hover:text-white px-2.5 py-1 bg-[#121c15] rounded-lg border border-emerald-500/10">Tutup</button>
                 </div>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+
+                <!-- Ringkasan Kartu Metrik -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     <div class="bg-[#0c120e] p-3 rounded-xl border border-emerald-500/10">
                         <span class="text-[10px] text-gray-400 uppercase font-bold">Total PnL</span>
                         <div class="text-base font-black font-mono ${mPnL >= 0 ? 'text-emerald-400' : 'text-red-400'} mt-0.5">${(mPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(mPnL), curr)}</div>
@@ -1582,7 +1617,23 @@
                         <div class="text-base font-black text-white mt-0.5">${monthTrades.length}</div>
                     </div>
                 </div>
-                ${tradesHtml}
+
+                <!-- Tampilan Monthly Calendar View -->
+                <div class="bg-[#0a0f0c] p-4 rounded-xl border border-emerald-500/10 space-y-3">
+                    <div class="text-xs font-bold text-gray-300">Kalender Harian — ${monthName} ${year}</div>
+                    <div class="calendar-grid text-center text-[10px] font-black text-gray-400 uppercase tracking-widest py-1 border-b border-emerald-500/5">
+                        <div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div><div>Su</div>
+                    </div>
+                    <div class="calendar-grid gap-1.5">
+                        ${calendarCellsHtml}
+                    </div>
+                </div>
+
+                <!-- Tabel Trade Bulan Tersebut -->
+                <div class="space-y-2">
+                    <div class="text-xs font-bold text-gray-300">Daftar Trade Bulan ${monthName} ${year}</div>
+                    ${tradesTableHtml}
+                </div>
             `;
 
             detailContainer.scrollIntoView({ behavior: 'smooth' });
@@ -2134,4 +2185,4 @@
     </script>
 </body>
 </html>
-          
+ 
