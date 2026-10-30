@@ -75,14 +75,31 @@
             background: #10B981;
         }
 
-        .calendar-grid {
+        /* Kalender Grid 8 Kolom: 7 Kolom Hari + 1 Kolom Weekly PnL di Kanan */
+        .calendar-layout-grid {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
+            grid-template-columns: repeat(7, minmax(0, 1fr)) 130px;
+            gap: 6px;
         }
 
         .calendar-day {
-            min-height: 56px;
+            min-height: 72px;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .week-summary-card {
+            min-height: 72px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8px 10px;
+            background: rgba(12, 18, 14, 0.8);
+            border: 1px solid rgba(34, 197, 94, 0.15);
+            border-radius: 0.75rem;
+            transition: all 0.2s;
+        }
+        .week-summary-card:hover {
+            border-color: rgba(34, 197, 94, 0.35);
         }
 
         .btn-tag {
@@ -94,6 +111,15 @@
             font-weight: 700;
             box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
             border-color: transparent;
+        }
+
+        @media (max-width: 1024px) {
+            .calendar-layout-grid {
+                grid-template-columns: repeat(7, minmax(45px, 1fr));
+            }
+            .week-summary-sidebar {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -279,8 +305,8 @@
             <div id="tabContentDashboard" class="space-y-6">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-                    <!-- Left Column: Calendar View & Weekly Breakdown -->
-                    <div class="lg:col-span-7 glass-card rounded-2xl p-4 sm:p-5 space-y-4">
+                    <!-- Left Column: Calendar View & Weekly Sidebar on the Right -->
+                    <div class="lg:col-span-8 glass-card rounded-2xl p-4 sm:p-5 space-y-4">
                         <div class="flex items-center justify-between pb-3 border-b border-emerald-500/10">
                             <div>
                                 <h3 class="text-sm font-bold text-white flex items-center gap-2">
@@ -299,22 +325,15 @@
                             </div>
                         </div>
 
-                        <!-- Calendar Grid Header -->
-                        <div class="calendar-grid text-center text-[10px] font-black text-gray-400 uppercase tracking-widest py-1 border-b border-emerald-500/5">
+                        <!-- Calendar Layout Grid (8 Columns: 7 Days + 1 Weekly Summary Header/Column) -->
+                        <div class="calendar-layout-grid text-center text-[10px] font-black text-gray-400 uppercase tracking-widest py-1 border-b border-emerald-500/5">
                             <div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div><div>Su</div>
+                            <div class="text-emerald-400 font-bold">Weekly PnL</div>
                         </div>
 
-                        <!-- Days Grid -->
-                        <div id="calendarDays" class="calendar-grid gap-1.5">
+                        <!-- Days & Weekly Cards Grid Container -->
+                        <div id="calendarDaysAndWeeks" class="calendar-layout-grid gap-1.5 items-start">
                             <!-- Populated dynamically -->
-                        </div>
-
-                        <!-- Rekap PnL Per Minggu (Weekly Breakdown) -->
-                        <div class="pt-3 border-t border-emerald-500/10 space-y-2">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Weekly PnL Breakdown</span>
-                            <div id="weeklyBreakdownContainer" class="space-y-1.5 max-h-36 overflow-y-auto pr-1">
-                                <!-- Populated dynamically -->
-                            </div>
                         </div>
 
                         <div class="flex items-center justify-between pt-3 text-[11px] text-gray-400 border-t border-emerald-500/10">
@@ -325,7 +344,7 @@
                     </div>
 
                     <!-- Right Column: Recent Trades -->
-                    <div class="lg:col-span-5 glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between">
+                    <div class="lg:col-span-4 glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between pb-3 border-b border-emerald-500/10 mb-3">
                                 <div>
@@ -1084,18 +1103,12 @@
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             document.getElementById('calendarMonthLabel').innerText = `${monthNames[month]} ${year}`;
 
-            const calendarDaysContainer = document.getElementById('calendarDays');
-            calendarDaysContainer.innerHTML = '';
+            const container = document.getElementById('calendarDaysAndWeeks');
+            container.innerHTML = '';
 
             const firstDay = new Date(year, month, 1).getDay();
             const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1;
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-            for (let i = 0; i < adjustedFirstDay; i++) {
-                const emptyCell = document.createElement('div');
-                emptyCell.className = "calendar-day bg-[#080d0a]/30 rounded-xl opacity-20 border border-transparent";
-                calendarDaysContainer.appendChild(emptyCell);
-            }
 
             const tradesByDate = {};
             trades.forEach(t => {
@@ -1104,76 +1117,73 @@
             });
 
             let monthTradeCount = 0;
+            
+            // Hitung total baris minggu yang diperlukan (biasanya 4 atau 5 minggu)
+            const totalCells = adjustedFirstDay + daysInMonth;
+            const totalWeeks = Math.ceil(totalCells / 7);
 
-            // Logika untuk mengelompokkan per minggu di bulan ini
-            const weeklyMap = {};
+            let dayCounter = 1;
+            const weeklyDataAccumulator = {};
 
-            for (let day = 1; day <= daysInMonth; day++) {
-                const currentDateObj = new Date(year, month, day);
-                const dayDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const dayTrades = tradesByDate[dayDateStr] || [];
-                monthTradeCount += dayTrades.length;
+            for (let w = 1; w <= totalWeeks; w++) {
+                const weekDaysCells = [];
+                let weekNetPnL = 0;
+                let weekTradeCount = 0;
 
-                const dayNetPnL = dayTrades.reduce((s, t) => s + Number(t.netPnL), 0);
+                // Render 7 hari untuk minggu ke-w
+                for (let d = 0; d < 7; d++) {
+                    const cellIndex = (w - 1) * 7 + d;
+                    
+                    if (cellIndex < adjustedFirstDay || dayCounter > daysInMonth) {
+                        // Kotak kosong (sebelum tanggal 1 atau setelah akhir bulan)
+                        weekDaysCells.push(`<div class="calendar-day bg-[#080d0a]/20 rounded-xl opacity-20 border border-transparent"></div>`);
+                    } else {
+                        const day = dayCounter;
+                        const dayDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        const dayTrades = tradesByDate[dayDateStr] || [];
+                        monthTradeCount += dayTrades.length;
+                        weekTradeCount += dayTrades.length;
 
-                // Tentukan minggu ke berapa di bulan ini berdasarkan hari Senin
-                const startOfCalendar = new Date(year, month, 1);
-                const weekNum = Math.floor((day + adjustedFirstDay - 1) / 7) + 1;
+                        const dayNetPnL = dayTrades.reduce((s, t) => s + Number(t.netPnL), 0);
+                        weekNetPnL += dayNetPnL;
+
+                        const isSelected = selectedCalendarDateStr === dayDateStr;
+                        
+                        let badgeHTML = '';
+                        if (dayTrades.length > 0) {
+                            const colorClass = dayNetPnL >= 0 ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
+                            const formattedAmount = (dayNetPnL >= 0 ? '+$' : '-$') + Math.abs(dayNetPnL).toFixed(0);
+                            badgeHTML = `<div class="text-[9px] font-mono ${colorClass} truncate leading-tight mt-0.5">${formattedAmount}</div>`;
+                        }
+
+                        weekDaysCells.push(`
+                            <div class="calendar-day rounded-xl p-1.5 flex flex-col justify-between border cursor-pointer ${isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/10' : 'border-emerald-500/10 bg-[#0c120e] hover:border-emerald-500/40'}" onclick="selectCalendarDate('${dayDateStr}')">
+                                <div class="flex items-center justify-between text-[11px] font-bold ${dayTrades.length > 0 ? 'text-white' : 'text-gray-500'}">
+                                    <span>${day}</span>
+                                    ${dayTrades.length > 0 ? `<span class="w-1.5 h-1.5 rounded-full ${dayNetPnL >= 0 ? 'bg-emerald-400 shadow-sm shadow-emerald-400' : 'bg-red-400 shadow-sm shadow-red-400'}"></span>` : ''}
+                                </div>
+                                ${badgeHTML}
+                            </div>
+                        `);
+                        dayCounter++;
+                    }
+                }
+
+                // Masukkan 7 hari ke container utama
+                weekDaysCells.forEach(html => container.insertAdjacentHTML('beforeend', html));
+
+                // Render Kartu Kolom Weekly PnL di sebelah kanan baris tersebut
+                const isWeekWin = weekNetPnL >= 0;
+                const formattedWeekPnL = weekTradeCount > 0 ? ((isWeekWin ? '+$' : '-$') + Math.abs(weekNetPnL).toFixed(0)) : '$0';
                 
-                if (!weeklyMap[weekNum]) {
-                    weeklyMap[weekNum] = { pnl: 0, startDate: dayDateStr, endDate: dayDateStr };
-                }
-                weeklyMap[weekNum].pnl += dayNetPnL;
-                weeklyMap[weekNum].endDate = dayDateStr;
-
-                const cell = document.createElement('div');
-                const isSelected = selectedCalendarDateStr === dayDateStr;
-
-                cell.className = `calendar-day rounded-xl p-1.5 flex flex-col justify-between border cursor-pointer ${
-                    isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/10' : 'border-emerald-500/10 bg-[#0c120e] hover:border-emerald-500/40'
-                }`;
-
-                cell.onclick = () => selectCalendarDate(dayDateStr);
-
-                let badgeHTML = '';
-                if (dayTrades.length > 0) {
-                    const colorClass = dayNetPnL >= 0 ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
-                    const formattedAmount = (dayNetPnL >= 0 ? '+$' : '-$') + Math.abs(dayNetPnL).toFixed(0);
-                    badgeHTML = `
-                        <div class="text-[9px] font-mono ${colorClass} truncate leading-tight mt-0.5">
-                            ${formattedAmount}
-                        </div>
-                    `;
-                }
-
-                cell.innerHTML = `
-                    <div class="flex items-center justify-between text-[11px] font-bold ${dayTrades.length > 0 ? 'text-white' : 'text-gray-500'}">
-                        <span>${day}</span>
-                        ${dayTrades.length > 0 ? `<span class="w-1.5 h-1.5 rounded-full ${dayNetPnL >= 0 ? 'bg-emerald-400 shadow-sm shadow-emerald-400' : 'bg-red-400 shadow-sm shadow-red-400'}"></span>` : ''}
+                container.insertAdjacentHTML('beforeend', `
+                    <div class="week-summary-card">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Week ${w}</span>
+                        <span class="text-xs font-black font-mono ${weekTradeCount > 0 ? (isWeekWin ? 'text-emerald-400' : 'text-red-400') : 'text-gray-500'} mt-0.5">${formattedWeekPnL}</span>
+                        <span class="text-[9px] text-gray-500 font-mono mt-0.5">${weekTradeCount} trades</span>
                     </div>
-                    ${badgeHTML}
-                `;
-
-                calendarDaysContainer.appendChild(cell);
+                `);
             }
-
-            // Render Weekly Breakdown ke UI
-            const weeklyContainer = document.getElementById('weeklyBreakdownContainer');
-            weeklyContainer.innerHTML = '';
-
-            Object.keys(weeklyMap).forEach((wKey, idx) => {
-                const wData = weeklyMap[wKey];
-                const isWin = wData.pnl >= 0;
-                const formattedWeeklyPnL = (isWin ? '+$' : '-$') + Math.abs(wData.pnl).toFixed(2);
-
-                const row = document.createElement('div');
-                row.className = "flex items-center justify-between bg-[#0a0f0c] border border-emerald-500/10 px-3 py-2 rounded-xl text-xs font-mono";
-                row.innerHTML = `
-                    <span class="text-gray-400 text-[11px]">Minggu ${idx + 1} (${wData.startDate.substring(5)} s/d ${wData.endDate.substring(5)})</span>
-                    <span class="font-black ${isWin ? 'text-emerald-400' : 'text-red-400'}">= ${formattedWeeklyPnL}</span>
-                `;
-                weeklyContainer.appendChild(row);
-            });
 
             document.getElementById('calendarSubtext').innerText = `${monthTradeCount} trades in ${monthNames[month]}`;
         }
@@ -1292,7 +1302,7 @@
                     <td class="py-3.5 px-4 font-mono text-[11px] text-gray-300 whitespace-nowrap">${t.date}</td>
                     <td class="py-3.5 px-4 font-bold text-white whitespace-nowrap">${t.pair}</td>
                     <td class="py-3.5 px-4 whitespace-nowrap">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${t.position}</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-emerald-500/20'}">${t.position}</span>
                     </td>
                     <td class="py-3.5 px-4 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'} whitespace-nowrap">
                         ${formattedPnL}
@@ -1767,7 +1777,7 @@
                 closeCustomModal();
                 onConfirm();
             };
-            document.getElementById('customModal').classList.remove('hidden');
+            document.getElementById('customModal').classList.add('hidden');
         }
 
         function closeCustomModal() {
@@ -1778,7 +1788,7 @@
         window.refreshActiveAccountData = refreshActiveAccountData;
         window.showNotice = showNotice;
         window.closeAuthModal = closeAuthModal;
-        window.openAuthManager = openAuthModal;
+        window.openAuthModal = openAuthModal;
     </script>
 </body>
 </html>
