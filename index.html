@@ -498,3 +498,208 @@
 
       // Blank slots
       for(let i = 0; i < 2; i++) {
+        calendarGrid.innerHTML += `<div class="h-9"></div>`;
+      }
+
+      for(let day = 1; day <= 31; day++) {
+        let dayPnlContent = '';
+        let bgClass = 'bg-[#161a17] text-gray-500';
+
+        if(day === 26) {
+          dayPnlContent = `<span class="text-[8px] font-bold text-emerald-400">+$12</span>`;
+          bgClass = 'bg-[#122419] border border-emerald-800/40 text-gray-300';
+        } else if(day === 27) {
+          dayPnlContent = `<span class="text-[8px] font-bold text-emerald-400">+$28</span>`;
+          bgClass = 'bg-[#122419] border border-emerald-800/40 text-gray-300';
+        } else if(day === 28) {
+          dayPnlContent = `<span class="text-[8px] font-bold text-emerald-400">+$50</span>`;
+          bgClass = 'bg-[#122419] border border-emerald-800/40 text-gray-300';
+        }
+
+        calendarGrid.innerHTML += `
+          <div class="h-9 p-1 ${bgClass} rounded flex flex-col justify-between items-start">
+            <span class="text-[9px]">${day}</span>
+            ${dayPnlContent}
+          </div>
+        `;
+      }
+    }
+
+    function changeMonth(delta) {
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      currentMonth = (currentMonth + delta + 12) % 12;
+      document.getElementById('calendarMonthLabel').innerText = `${months[currentMonth]} 2026`;
+      document.getElementById('monthTradeCount').innerText = currentMonth === 9 ? '4 trades • October 2026' : `0 trades • ${months[currentMonth]} 2026`;
+    }
+
+    function renderRecentTrades() {
+      const container = document.getElementById('recentTradesContainer');
+      container.innerHTML = '';
+
+      tradesData.forEach(trade => {
+        const isWin = trade.pnl > 0;
+        const color = isWin ? 'emerald' : 'red';
+        const sign = isWin ? '+' : '';
+
+        container.innerHTML += `
+          <div class="bg-[#161a17] p-2.5 rounded-lg flex justify-between items-center border border-gray-800/60">
+            <div class="flex items-center space-x-2">
+              <span class="text-[9px] font-bold bg-${color}-950/80 text-${color}-400 px-1.5 py-0.5 rounded border border-${color}-800/50">${trade.pos}</span>
+              <span class="font-bold text-xs text-white">${trade.pair}</span>
+            </div>
+            <div class="text-right">
+              <div class="font-bold text-xs text-${color}-400">${sign}$${Math.abs(trade.pnl).toFixed(2)}</div>
+              <div class="text-[9px] text-gray-400">${trade.date} <span class="ml-1 text-${color}-400 font-semibold">RR ${trade.rr}</span></div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Render Trade Log Table
+    function renderTradeLog() {
+      const tbody = document.getElementById('tradeLogTableBody');
+      tbody.innerHTML = '';
+
+      tradesData.forEach(trade => {
+        const isWin = trade.pnl > 0;
+        const color = isWin ? 'text-emerald-400' : 'text-red-400';
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-[#161a17]/50 transition">
+            <td class="p-2 text-gray-400">${trade.date}</td>
+            <td class="p-2 font-bold text-white">${trade.pair}</td>
+            <td class="p-2"><span class="bg-emerald-950 text-emerald-400 border border-emerald-800 px-1.5 py-0.5 rounded text-[9px]">BUY</span></td>
+            <td class="p-2 text-gray-400">${trade.htf}</td>
+            <td class="p-2 text-gray-400">${trade.confluence}</td>
+            <td class="p-2 ${color}">$${trade.risk.toFixed(2)}</td>
+            <td class="p-2 ${color} font-bold">${trade.rr}</td>
+            <td class="p-2"><button class="text-gray-400 hover:text-emerald-400"><i class="fa-solid fa-pen-to-square"></i></button></td>
+          </tr>
+        `;
+      });
+    }
+
+    function addNewTradePrompt() {
+      const pair = prompt("Masukkan Pair (misal: XAUUSD):", "XAUUSD");
+      if(!pair) return;
+      const pnl = parseFloat(prompt("Masukkan PnL ($):", "25"));
+      
+      const newTrade = {
+        id: Date.now(),
+        date: new Date().toISOString().split('T')[0],
+        pair: pair.toUpperCase(),
+        pos: 'BUY',
+        htf: 'Open to High',
+        confluence: '--',
+        risk: 10.00,
+        pnl: pnl,
+        rr: (pnl / 10).toFixed(1),
+        result: pnl > 0 ? 'TP' : 'SL'
+      };
+
+      tradesData.unshift(newTrade);
+      renderDashboard();
+      renderTradeLog();
+    }
+
+    // Analytics Charts Initialization
+    let chartsInit = false;
+    function initAnalyticsCharts() {
+      if(chartsInit) return;
+      chartsInit = true;
+
+      // 1. Equity Curve Chart
+      new Chart(document.getElementById('growthChart').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: ['Start', '10-26', '10-27', '10-28'],
+          datasets: [{
+            data: [300, 312, 340, 390],
+            borderColor: '#22c55e',
+            borderWidth: 2,
+            tension: 0.3,
+            pointRadius: 2,
+            pointBackgroundColor: '#22c55e'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { color: '#1c221e' }, ticks: { color: '#6b7280', font: { size: 8 } } },
+            y: { grid: { color: '#1c221e' }, ticks: { color: '#6b7280', font: { size: 8 } } }
+          }
+        }
+      });
+
+      // 2. Symbol Chart
+      new Chart(document.getElementById('symbolChart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels: ['XAUUSD'],
+          datasets: [{ data: [90], backgroundColor: ['#22c55e'], borderWidth: 0 }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          cutout: '70%'
+        }
+      });
+
+      // 3. Win/Loss Chart
+      new Chart(document.getElementById('winLossChart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Win', 'Loss'],
+          datasets: [{ data: [3, 1], backgroundColor: ['#22c55e', '#ef4444'], borderWidth: 0 }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          cutout: '70%'
+        }
+      });
+
+      // 4. Weekday Chart
+      new Chart(document.getElementById('weekdayChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed'],
+          datasets: [{ data: [12, 28, 50], backgroundColor: '#22c55e', borderRadius: 4 }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: '#6b7280', font: { size: 8 } } },
+            y: { grid: { color: '#1c221e' }, ticks: { color: '#6b7280', font: { size: 8 } } }
+          }
+        }
+      });
+
+      // 5. Order Type Chart
+      new Chart(document.getElementById('orderTypeChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: ['TP', 'SL'],
+          datasets: [{ data: [102, -12], backgroundColor: ['#22c55e', '#ef4444'], borderRadius: 4 }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: '#6b7280', font: { size: 8 } } },
+            y: { grid: { color: '#1c221e' }, ticks: { color: '#6b7280', font: { size: 8 } } }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
