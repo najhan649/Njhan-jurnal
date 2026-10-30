@@ -431,6 +431,9 @@
                             <select id="yearlyFilterYear" onchange="renderYearlyPerformance()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                                 <!-- Diisi dinamis infinity -->
                             </select>
+                            <button onclick="resetYearlyFilterToCurrent()" class="px-3 py-1.5 bg-[#121c15] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
+                                Tahun Ini
+                            </button>
                         </div>
                     </div>
 
@@ -494,6 +497,10 @@
                         <select id="filterYear" onchange="applyTradeLogFilter()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                             <option value="ALL">Semua Tahun</option>
                         </select>
+
+                        <button onclick="resetTradeLogFilterToCurrentMonth()" class="px-3 py-1.5 bg-[#121c15] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
+                            Bulan Ini
+                        </button>
 
                         <button onclick="resetTradeLogFilter()" class="px-3 py-1.5 bg-[#121c15] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
                             Reset
@@ -1232,12 +1239,31 @@
             refreshActiveAccountData();
         }
 
+        function resetYearlyFilterToCurrent() {
+            const now = new Date();
+            const yStr = String(now.getFullYear());
+            const yearlySel = document.getElementById('yearlyFilterYear');
+            if (yearlySel) {
+                yearlySel.value = yStr;
+                renderYearlyPerformance();
+            }
+        }
+
+        function resetTradeLogFilterToCurrentMonth() {
+            const now = new Date();
+            const mStr = String(now.getMonth() + 1).padStart(2, '0');
+            const yStr = String(now.getFullYear());
+            document.getElementById('filterMonth').value = mStr;
+            document.getElementById('filterYear').value = yStr;
+            applyTradeLogFilter();
+        }
+
         function renderDashboard(trades, curr) {
             const mSel = document.getElementById('dashFilterMonth').value;
             const ySel = document.getElementById('dashFilterYear').value;
             currentCalendarDate = new Date(parseInt(ySel), parseInt(mSel) - 1, 1);
 
-            renderCalendar(trades, curr);
+            renderCalendar(trades, curr, 'calendarDays', 'calendarMonthLabel', 'calendarSubtext', true);
             renderRecentTrades(trades, curr);
 
             const year = currentCalendarDate.getFullYear();
@@ -1285,14 +1311,16 @@
             document.getElementById('dashStatusSub').innerText = `${monthPnL >= 0 ? '+' : '-'}${formatMoney(Math.abs(monthPnL), curr)} Net PnL`;
         }
 
-        function renderCalendar(trades, curr) {
+        function renderCalendar(trades, curr, containerId = 'calendarDays', labelId = 'calendarMonthLabel', subtextId = 'calendarSubtext', isMainDashboard = true) {
             const year = currentCalendarDate.getFullYear();
             const month = currentCalendarDate.getMonth();
 
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            document.getElementById('calendarMonthLabel').innerText = `${monthNames[month]} ${year}`;
+            const labelEl = document.getElementById(labelId);
+            if (labelEl) labelEl.innerText = `${monthNames[month]} ${year}`;
 
-            const calendarDaysContainer = document.getElementById('calendarDays');
+            const calendarDaysContainer = document.getElementById(containerId);
+            if (!calendarDaysContainer) return;
             calendarDaysContainer.innerHTML = '';
 
             const firstDay = new Date(year, month, 1).getDay();
@@ -1326,7 +1354,7 @@
                     isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/10' : 'border-emerald-500/10 bg-[#0c120e] hover:border-emerald-500/40'
                 }`;
 
-                cell.onclick = () => selectCalendarDate(dayDateStr);
+                cell.onclick = () => selectCalendarDate(dayDateStr, isMainDashboard);
 
                 let badgeHTML = '';
                 if (dayTrades.length > 0) {
@@ -1334,7 +1362,7 @@
                     const formattedAmount = (dayNetPnL >= 0 ? '+' : '-') + formatMoneyShort(Math.abs(dayNetPnL), curr);
                     badgeHTML = `
                         <div class="text-[9px] font-mono ${colorClass} truncate leading-tight mt-0.5">
-                            ${formattedAmount}
+                            ${formattedAmount} (${dayTrades.length}t)
                         </div>
                     `;
                 }
@@ -1350,7 +1378,8 @@
                 calendarDaysContainer.appendChild(cell);
             }
 
-            document.getElementById('calendarSubtext').innerText = `${monthTradeCount} trades in ${monthNames[month]}`;
+            const subtextEl = document.getElementById(subtextId);
+            if (subtextEl) subtextEl.innerText = `${monthTradeCount} trades in ${monthNames[month]}`;
         }
 
         function navigateMonth(dir) {
@@ -1360,13 +1389,22 @@
             refreshActiveAccountData();
         }
 
-        function selectCalendarDate(dateStr) {
+        function selectCalendarDate(dateStr, isMainDashboard = true) {
             if (selectedCalendarDateStr === dateStr) {
                 selectedCalendarDateStr = null;
             } else {
                 selectedCalendarDateStr = dateStr;
             }
-            refreshActiveAccountData();
+            if (isMainDashboard) {
+                refreshActiveAccountData();
+            } else {
+                const parts = dateStr.split('-');
+                const y = parseInt(parts[0]);
+                const mStr = parts[1];
+                const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+                const mName = monthNames[parseInt(mStr) - 1];
+                showMonthDetailFromYearly(y, mStr, mName);
+            }
         }
 
         function clearCalendarDateFilter() {
@@ -1476,14 +1514,15 @@
                 card.innerHTML = `
                     <div class="flex items-center justify-between text-xs font-bold text-white mb-2">
                         <span>${monthNames[m]}</span>
-                        <span class="text-[9px] font-mono text-gray-400">${monthTrades.length} trades</span>
+                        <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-bold">${monthTrades.length} trades</span>
                     </div>
                     <div>
                         <div class="text-xs sm:text-sm font-black font-mono ${hasTrades ? (mPnL >= 0 ? 'text-emerald-400' : 'text-red-400') : 'text-gray-500'}">
                             ${hasTrades ? ((mPnL >= 0 ? '+' : '-') + formatMoneyShort(Math.abs(mPnL), curr)) : '—'}
                         </div>
-                        <div class="text-[10px] text-gray-400 mt-1">
-                            Win Rate: <b class="${hasTrades ? 'text-white' : 'text-gray-500'}">${mWinRate}%</b>
+                        <div class="text-[10px] text-gray-400 mt-1 flex justify-between items-center">
+                            <span>Win Rate:</span>
+                            <b class="${hasTrades ? 'text-white' : 'text-gray-500'}">${mWinRate}%</b>
                         </div>
                     </div>
                 `;
@@ -1491,7 +1530,7 @@
             }
         }
 
-        // KETIKA BULAN DIKLIK -> MUNCUL RINGKASAN + MONTHLY CALENDAR VIEW LENGKAP DI BAWAH
+        // KETIKA BULAN DIKLIK -> MUNCUL RINGKASAN + MONTHLY CALENDAR VIEW LENGKAP DI BAWAH (BISA KLIK TANGGAL)
         function showMonthDetailFromYearly(year, monthStr, monthName) {
             const activeAcc = getActiveAccount();
             if (!activeAcc) return;
@@ -1513,7 +1552,6 @@
             const mWinRate = monthTrades.length > 0 ? Math.round((mWins / monthTrades.length) * 100) : 0;
             const avgRR = monthTrades.length > 0 ? (monthTrades.reduce((s, t) => s + (Number(t.rr) || 0), 0) / monthTrades.length).toFixed(2) : 0;
 
-            // Generate HTML untuk Monthly Calendar View (Grid Hari-Hari dalam Bulan Tersebut)
             const firstDay = new Date(year, monthIndex, 1).getDay();
             const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1;
             const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
@@ -1533,16 +1571,19 @@
                 const dayDateStr = `${year}-${monthStr}-${String(day).padStart(2, '0')}`;
                 const dayTrades = tradesByDate[dayDateStr] || [];
                 const dayNetPnL = dayTrades.reduce((s, t) => s + Number(t.netPnL), 0);
+                const isSelected = selectedCalendarDateStr === dayDateStr;
 
                 let badgeHTML = '';
                 if (dayTrades.length > 0) {
                     const colorClass = dayNetPnL >= 0 ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
                     const formattedAmount = (dayNetPnL >= 0 ? '+' : '-') + formatMoneyShort(Math.abs(dayNetPnL), curr);
-                    badgeHTML = `<div class="text-[9px] font-mono ${colorClass} truncate leading-tight mt-0.5">${formattedAmount}</div>`;
+                    badgeHTML = `<div class="text-[9px] font-mono ${colorClass} truncate leading-tight mt-0.5">${formattedAmount} (${dayTrades.length}t)</div>`;
                 }
 
                 calendarCellsHtml += `
-                    <div class="calendar-day rounded-xl p-1.5 flex flex-col justify-between border border-emerald-500/10 bg-[#0c120e]">
+                    <div onclick="selectCalendarDate('${dayDateStr}', false)" class="calendar-day rounded-xl p-1.5 flex flex-col justify-between border cursor-pointer ${
+                        isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/10' : 'border-emerald-500/10 bg-[#0c120e] hover:border-emerald-500/40'
+                    }">
                         <div class="flex items-center justify-between text-[11px] font-bold ${dayTrades.length > 0 ? 'text-white' : 'text-gray-500'}">
                             <span>${day}</span>
                             ${dayTrades.length > 0 ? `<span class="w-1.5 h-1.5 rounded-full ${dayNetPnL >= 0 ? 'bg-emerald-400 shadow-sm shadow-emerald-400' : 'bg-red-400 shadow-sm shadow-red-400'}"></span>` : ''}
@@ -1552,12 +1593,16 @@
                 `;
             }
 
-            // Generate HTML Tabel Daftar Trade Bulan Tersebut
+            let displayedTrades = [...monthTrades];
+            if (selectedCalendarDateStr && selectedCalendarDateStr.startsWith(`${year}-${monthStr}`)) {
+                displayedTrades = displayedTrades.filter(t => t.date === selectedCalendarDateStr);
+            }
+
             let tradesTableHtml = '';
-            if (monthTrades.length === 0) {
-                tradesTableHtml = `<div class="text-xs text-gray-500 py-4 text-center">Tidak ada catatan trade pada bulan ${monthName} ${year}.</div>`;
+            if (displayedTrades.length === 0) {
+                tradesTableHtml = `<div class="text-xs text-gray-500 py-4 text-center">Tidak ada catatan trade ${selectedCalendarDateStr ? 'pada tanggal ' + selectedCalendarDateStr : 'pada bulan ' + monthName + ' ' + year}.</div>`;
             } else {
-                monthTrades.sort((a, b) => new Date(b.date) - new Date(a.date));
+                displayedTrades.sort((a, b) => new Date(b.date) - new Date(a.date));
                 tradesTableHtml = `
                     <div class="overflow-x-auto pt-2">
                         <table class="w-full text-left text-xs text-gray-300">
@@ -1573,7 +1618,7 @@
                             </thead>
                             <tbody class="divide-y divide-emerald-500/5">
                 `;
-                monthTrades.forEach(t => {
+                displayedTrades.forEach(t => {
                     const pnl = Number(t.netPnL) || 0;
                     const isWin = pnl >= 0;
                     tradesTableHtml += `
@@ -1614,13 +1659,16 @@
                     </div>
                     <div class="bg-[#0c120e] p-3 rounded-xl border border-emerald-500/10">
                         <span class="text-[10px] text-gray-400 uppercase font-bold">Total Trades</span>
-                        <div class="text-base font-black text-white mt-0.5">${monthTrades.length}</div>
+                        <div class="text-base font-black text-emerald-400 mt-0.5">${monthTrades.length} Trades</div>
                     </div>
                 </div>
 
-                <!-- Tampilan Monthly Calendar View -->
+                <!-- Tampilan Monthly Calendar View (Klik Tanggal) -->
                 <div class="bg-[#0a0f0c] p-4 rounded-xl border border-emerald-500/10 space-y-3">
-                    <div class="text-xs font-bold text-gray-300">Kalender Harian — ${monthName} ${year}</div>
+                    <div class="flex items-center justify-between">
+                        <div class="text-xs font-bold text-gray-300">Kalender Harian — ${monthName} ${year} (Klik tanggal untuk filter)</div>
+                        ${selectedCalendarDateStr ? `<button onclick="selectedCalendarDateStr=null; showMonthDetailFromYearly(${year}, '${monthStr}', '${monthName}')" class="text-[11px] text-emerald-400 hover:underline font-bold">Reset Filter Tanggal</button>` : ''}
+                    </div>
                     <div class="calendar-grid text-center text-[10px] font-black text-gray-400 uppercase tracking-widest py-1 border-b border-emerald-500/5">
                         <div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div><div>Su</div>
                     </div>
@@ -1629,14 +1677,12 @@
                     </div>
                 </div>
 
-                <!-- Tabel Trade Bulan Tersebut -->
+                <!-- Tabel Trade -->
                 <div class="space-y-2">
-                    <div class="text-xs font-bold text-gray-300">Daftar Trade Bulan ${monthName} ${year}</div>
+                    <div class="text-xs font-bold text-gray-300">Daftar Trade ${selectedCalendarDateStr ? 'pada ' + selectedCalendarDateStr : 'Bulan ' + monthName + ' ' + year} (${displayedTrades.length} trades)</div>
                     ${tradesTableHtml}
                 </div>
             `;
-
-            detailContainer.scrollIntoView({ behavior: 'smooth' });
         }
 
         // TRADE LOG FILTER
@@ -2185,4 +2231,3 @@
     </script>
 </body>
 </html>
- 
