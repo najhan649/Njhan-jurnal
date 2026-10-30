@@ -462,37 +462,52 @@
                         </div>
                     </div>
 
-                    <!-- HTF Opportunity -->
+                    <!-- HTF Opportunity (With Custom Input) -->
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">HTF OPPORTUNITY</label>
-                        <div class="flex flex-wrap gap-2" id="htfOptionsGroup">
+                        <div class="flex flex-wrap gap-2 items-center" id="htfOptionsGroup">
                             <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Open to High</button>
                             <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Open to Low</button>
                             <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Low to Close</button>
                             <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">High to Close</button>
+                            <button type="button" onclick="toggleCustomTagInput('htf')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
+                        </div>
+                        <div id="htfCustomInputContainer" class="hidden mt-2 flex gap-2">
+                            <input type="text" id="htfCustomText" placeholder="Ketik opsi HTF sendiri..." class="bg-[#0a0f0c] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
+                            <button type="button" onclick="addCustomTag('htf')" class="px-3 py-1.5 bg-emerald-500 text-black font-bold text-xs rounded-xl">Tambah</button>
                         </div>
                     </div>
 
-                    <!-- Confluence -->
+                    <!-- Confluence (With Custom Input) -->
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">CONFLUENCE</label>
-                        <div class="flex flex-wrap gap-2" id="confluenceOptionsGroup">
+                        <div class="flex flex-wrap gap-2 items-center" id="confluenceOptionsGroup">
                             <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">No Confluence</button>
                             <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">SMT</button>
                             <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">SSMT</button>
                             <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">PSP</button>
                             <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Hidden SMT</button>
+                            <button type="button" onclick="toggleCustomTagInput('confluence')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
+                        </div>
+                        <div id="confluenceCustomInputContainer" class="hidden mt-2 flex gap-2">
+                            <input type="text" id="confluenceCustomText" placeholder="Ketik opsi Confluence sendiri..." class="bg-[#0a0f0c] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
+                            <button type="button" onclick="addCustomTag('confluence')" class="px-3 py-1.5 bg-emerald-500 text-black font-bold text-xs rounded-xl">Tambah</button>
                         </div>
                     </div>
 
-                    <!-- Result -->
+                    <!-- Result (With Custom Input) -->
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">RESULT</label>
-                        <div class="flex flex-wrap gap-2" id="resultOptionsGroup">
+                        <div class="flex flex-wrap gap-2 items-center" id="resultOptionsGroup">
                             <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Break Even</button>
                             <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Full TP</button>
                             <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">SL</button>
                             <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Partial</button>
+                            <button type="button" onclick="toggleCustomTagInput('result')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
+                        </div>
+                        <div id="resultCustomInputContainer" class="hidden mt-2 flex gap-2">
+                            <input type="text" id="resultCustomText" placeholder="Ketik opsi Result sendiri..." class="bg-[#0a0f0c] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
+                            <button type="button" onclick="addCustomTag('result')" class="px-3 py-1.5 bg-emerald-500 text-black font-bold text-xs rounded-xl">Tambah</button>
                         </div>
                     </div>
 
@@ -1300,6 +1315,40 @@
             }
         }
 
+        function toggleCustomTagInput(category) {
+            const container = document.getElementById(category + 'CustomInputContainer');
+            container.classList.toggle('hidden');
+            if (!container.classList.contains('hidden')) {
+                document.getElementById(category + 'CustomText').focus();
+            }
+        }
+
+        function addCustomTag(category) {
+            const input = document.getElementById(category + 'CustomText');
+            const val = input.value.trim();
+            if (!val) return;
+
+            const groupDiv = document.getElementById(category + 'OptionsGroup');
+            const customBtn = groupDiv.querySelector('button:last-child'); // tombol + Custom
+
+            // Buat tombol tag baru
+            const newBtn = document.createElement('button');
+            newBtn.type = 'button';
+            newBtn.className = 'btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300 active';
+            newBtn.innerText = val;
+            newBtn.onclick = function() { toggleTagOption(newBtn, category); };
+
+            // Masukkan sebelum tombol + Custom
+            groupDiv.insertBefore(newBtn, customBtn);
+
+            // Tambahkan ke state terpilih
+            selectedTags[category].push(val);
+
+            // Bersihkan input & sembunyikan
+            input.value = '';
+            document.getElementById(category + 'CustomInputContainer').classList.add('hidden');
+        }
+
         function calculateRR() {
             const pnl = parseFloat(document.getElementById('tradeNetPnL').value);
             const risk = parseFloat(document.getElementById('tradeRisk').value);
@@ -1323,6 +1372,10 @@
 
             selectedTags = { htf: [], confluence: [], result: [] };
             document.querySelectorAll('.btn-tag').forEach(b => b.classList.remove('active'));
+            ['htf', 'confluence', 'result'].forEach(cat => {
+                document.getElementById(cat + 'CustomInputContainer').classList.add('hidden');
+                document.getElementById(cat + 'CustomText').value = '';
+            });
         }
 
         async function saveTrade() {
