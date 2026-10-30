@@ -439,4 +439,1261 @@
                         </div>
 
                         <div>
-                            <label class="block text-[10px] font
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">POSITION *</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button type="button" id="posBuyBtn" onclick="selectPos('BUY')" class="py-2.5 border border-emerald-500 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-xl shadow-sm">BUY</button>
+                                <button type="button" id="posSellBtn" onclick="selectPos('SELL')" class="py-2.5 border border-emerald-500/10 bg-[#0a0f0c] text-gray-400 text-xs font-bold rounded-xl">SELL</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PnL & Risk Row -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">NET P/L ($) *</label>
+                            <input type="number" step="any" id="tradeNetPnL" placeholder="100.00" oninput="calculateRR()" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">RISK ($) *</label>
+                            <input type="number" step="any" id="tradeRisk" placeholder="10.00" oninput="calculateRR()" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">RR (AUTO)</label>
+                            <input type="number" step="any" id="tradeRR" placeholder="10.0" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-emerald-400 font-bold focus:outline-none font-mono">
+                        </div>
+                    </div>
+
+                    <!-- HTF Opportunity -->
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">HTF OPPORTUNITY</label>
+                        <div class="flex flex-wrap gap-2" id="htfOptionsGroup">
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Open to High</button>
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Open to Low</button>
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Low to Close</button>
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">High to Close</button>
+                        </div>
+                    </div>
+
+                    <!-- Confluence -->
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">CONFLUENCE</label>
+                        <div class="flex flex-wrap gap-2" id="confluenceOptionsGroup">
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">No Confluence</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">SMT</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">SSMT</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">PSP</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Hidden SMT</button>
+                        </div>
+                    </div>
+
+                    <!-- Result -->
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">RESULT</label>
+                        <div class="flex flex-wrap gap-2" id="resultOptionsGroup">
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Break Even</button>
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Full TP</button>
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">SL</button>
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#0a0f0c] text-gray-300">Partial</button>
+                        </div>
+                    </div>
+
+                    <!-- Links & Screenshot Upload -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">TRADINGVIEW / CHART LINK</label>
+                            <input type="url" id="tradeLink" placeholder="https://www.tradingview.com/x/..." class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">SCREENSHOT URL / LINK</label>
+                            <input type="text" id="tradeScreenshot" placeholder="Image URL or screenshot link" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <!-- Form Buttons -->
+                    <div class="flex justify-end gap-3 pt-3 border-t border-emerald-500/10">
+                        <button onclick="toggleTradeForm(false)" class="px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-white rounded-xl transition">Cancel</button>
+                        <button onclick="saveTrade()" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl transition shadow-lg shadow-emerald-900/30">Save Trade</button>
+                    </div>
+                </div>
+
+                <!-- Trades Table -->
+                <div class="glass-card rounded-2xl overflow-hidden shadow-2xl">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-300">
+                            <thead class="bg-[#090f0b] border-b border-emerald-500/10 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                <tr>
+                                    <th class="py-3.5 px-4">Date</th>
+                                    <th class="py-3.5 px-4">Pair</th>
+                                    <th class="py-3.5 px-4">Pos</th>
+                                    <th class="py-3.5 px-4">Net P/L</th>
+                                    <th class="py-3.5 px-4">Risk</th>
+                                    <th class="py-3.5 px-4">RR</th>
+                                    <th class="py-3.5 px-4">HTF</th>
+                                    <th class="py-3.5 px-4">Confluence</th>
+                                    <th class="py-3.5 px-4">Result</th>
+                                    <th class="py-3.5 px-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tradeLogTableBody" class="divide-y divide-emerald-500/5">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="noTradesPlaceholder" class="p-10 text-center hidden">
+                        <div class="text-4xl mb-3">👻</div>
+                        <h4 class="text-sm font-bold text-white">No trades yet</h4>
+                        <p class="text-xs text-gray-400 mt-1">Add your first trade using the button above.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: ANALYTICS -->
+            <div id="tabContentAnalytics" class="hidden space-y-6">
+
+                <!-- Analytics Filter Header -->
+                <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-emerald-400"></i> Performance Analytics
+                    </h3>
+                    <div class="flex items-center gap-2 text-xs">
+                        <span class="text-gray-400">From:</span>
+                        <input type="date" id="analyticsFromDate" onchange="updateAnalyticsCharts()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                        <span class="text-gray-400">To:</span>
+                        <input type="date" id="analyticsToDate" onchange="updateAnalyticsCharts()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+
+                <!-- Top Stats Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="glass-card p-4 rounded-2xl">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">TOTAL P&L</span>
+                        <div id="analyticsPnL" class="text-xl font-black text-emerald-400 mt-1 font-mono">+$0.00</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">WIN RATE</span>
+                        <div id="analyticsWinRate" class="text-xl font-black text-emerald-400 mt-1">0%</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">TOTAL TRADES</span>
+                        <div id="analyticsTotalTrades" class="text-xl font-black text-white mt-1">0</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">AVG R:R</span>
+                        <div id="analyticsAvgRR" class="text-xl font-black text-amber-400 mt-1 font-mono">0.0</div>
+                    </div>
+                </div>
+
+                <!-- Equity Curve Chart -->
+                <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="text-sm font-bold text-white">Trade Growth View</h4>
+                            <p class="text-[11px] text-gray-400">Equity curve over time</p>
+                        </div>
+                        <span id="equityGrowthPercentage" class="text-sm font-black text-emerald-400 font-mono">+0.00%</span>
+                    </div>
+                    <div class="h-64 relative w-full">
+                        <canvas id="equityChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Breakdown Charts -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+                        <h4 class="text-sm font-bold text-white">Symbol Performance</h4>
+                        <div class="h-52 relative">
+                            <canvas id="symbolChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+                        <h4 class="text-sm font-bold text-white">Win / Loss Ratio</h4>
+                        <div class="h-52 relative">
+                            <canvas id="winLossChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+                        <h4 class="text-sm font-bold text-white">PnL by Weekday</h4>
+                        <div class="h-52 relative">
+                            <canvas id="weekdayChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+                        <h4 class="text-sm font-bold text-white">PnL by Order Type / Position</h4>
+                        <div class="h-52 relative">
+                            <canvas id="orderTypeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <!-- CUSTOM NOTICE MODAL -->
+    <div id="customModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl p-5 max-w-sm w-full space-y-4 shadow-2xl text-center border-emerald-500/20">
+            <div id="customModalIcon" class="text-3xl text-emerald-400"><i class="fa-solid fa-circle-info"></i></div>
+            <h4 id="customModalTitle" class="text-base font-bold text-white">Notice</h4>
+            <p id="customModalMsg" class="text-xs text-gray-300 leading-relaxed"></p>
+            <div id="customModalActions" class="flex justify-center gap-2 pt-2">
+                <button onclick="closeCustomModal()" class="px-5 py-2 bg-emerald-500 text-black text-xs font-bold rounded-xl shadow-lg">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIREBASE MODULE & REAL-TIME LOGIC (Menggunakan API Key Anda) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getAuth, 
+            signInAnonymously, 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword, 
+            signOut, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc, 
+            deleteDoc, 
+            collection, 
+            onSnapshot 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const appId = 'najhan-journal-app';
+        
+        // Konfigurasi Firebase Anda yang asli
+        const firebaseConfig = {
+          apiKey: "AIzaSyBDM-GgrBkfMmFjBH4NOZczudd2Ubw6NFQ",
+          authDomain: "najhan-journal.firebaseapp.com",
+          projectId: "najhan-journal",
+          storageBucket: "najhan-journal.firebasestorage.app",
+          messagingSenderId: "650825564074",
+          appId: "1:650825564074:web:1c09b74cbfdc3bfca135d3",
+          measurementId: "G-TPM076LFXN"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let accountsUnsub = null;
+        let tradesUnsub = null;
+
+        window.appData = {
+            accounts: [],
+            trades: [],
+            selectedAccountId: null
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                document.getElementById('authBtnHeader').classList.add('hidden');
+                document.getElementById('logoutBtnHeader').classList.remove('hidden');
+                document.getElementById('cloudStatusBadge').classList.remove('hidden');
+                document.getElementById('userEmailDisplay').innerText = user.email || 'Cloud Active (' + user.uid.substring(0, 6) + ')';
+                closeAuthModal();
+                setupFirestoreListeners(user.uid);
+            } else {
+                document.getElementById('authBtnHeader').classList.remove('hidden');
+                document.getElementById('logoutBtnHeader').classList.add('hidden');
+                document.getElementById('cloudStatusBadge').classList.add('hidden');
+                
+                // Fallback otomatis ke anonymous jika belum login
+                signInAnonymously(auth).catch(err => console.error("Anonymous auth failed:", err));
+            }
+        });
+
+        function setupFirestoreListeners(userId) {
+            if (accountsUnsub) accountsUnsub();
+            if (tradesUnsub) tradesUnsub();
+
+            const accountsCol = collection(db, 'artifacts', appId, 'users', userId, 'accounts');
+            const tradesCol = collection(db, 'artifacts', appId, 'users', userId, 'trades');
+
+            accountsUnsub = onSnapshot(accountsCol, (snapshot) => {
+                const accounts = [];
+                snapshot.forEach(docSnap => {
+                    accounts.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                
+                if (accounts.length === 0) {
+                    seedDefaultAccounts(userId);
+                    return;
+                }
+
+                window.appData.accounts = accounts;
+                if (!window.appData.selectedAccountId || !accounts.find(a => a.id === window.appData.selectedAccountId)) {
+                    window.appData.selectedAccountId = accounts[0].id;
+                }
+                
+                window.renderAccountsList();
+                window.refreshActiveAccountData();
+            }, (error) => {
+                console.error("Accounts listener error:", error);
+            });
+
+            tradesUnsub = onSnapshot(tradesCol, (snapshot) => {
+                const trades = [];
+                snapshot.forEach(docSnap => {
+                    trades.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                window.appData.trades = trades;
+                window.refreshActiveAccountData();
+            }, (error) => {
+                console.error("Trades listener error:", error);
+            });
+        }
+
+        async function seedDefaultAccounts(userId) {
+            const acc1Ref = doc(db, 'artifacts', appId, 'users', userId, 'accounts', 'acc_1');
+            const acc2Ref = doc(db, 'artifacts', appId, 'users', userId, 'accounts', 'acc_2');
+
+            await setDoc(acc1Ref, { name: 'Najhan', type: 'PERSONAL', startingBalance: 500, created: Date.now() });
+            await setDoc(acc2Ref, { name: 'Najh.', type: 'FUNDED', startingBalance: 1000, created: Date.now() - 1000 });
+        }
+
+        window.handleEmailLogin = async () => {
+            const email = document.getElementById('authEmail').value.trim();
+            const pass = document.getElementById('authPassword').value;
+            const errEl = document.getElementById('authErrorMsg');
+            errEl.classList.add('hidden');
+
+            if (!email || !pass) {
+                errEl.innerText = "Please fill in email and password.";
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch (err) {
+                errEl.innerText = err.message || "Failed to sign in.";
+                errEl.classList.remove('hidden');
+            }
+        };
+
+        window.handleEmailSignUp = async () => {
+            const email = document.getElementById('authEmail').value.trim();
+            const pass = document.getElementById('authPassword').value;
+            const errEl = document.getElementById('authErrorMsg');
+            errEl.classList.add('hidden');
+
+            if (!email || !pass) {
+                errEl.innerText = "Please fill in email and password.";
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+            } catch (err) {
+                errEl.innerText = err.message || "Failed to create account.";
+                errEl.classList.remove('hidden');
+            }
+        };
+
+        window.handleAnonymousSignIn = async () => {
+            try {
+                await signInAnonymously(auth);
+                closeAuthModal();
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        window.handleLogout = async () => {
+            await signOut(auth);
+            window.showNotice("Logged out successfully.");
+        };
+
+        window.saveAccountToCloud = async (accountObj) => {
+            if (!currentUser) return;
+            const accRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'accounts', accountObj.id);
+            await setDoc(accRef, accountObj);
+        };
+
+        window.deleteAccountFromCloud = async (accId) => {
+            if (!currentUser) return;
+            const accRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'accounts', accId);
+            await deleteDoc(accRef);
+        };
+
+        window.saveTradeToCloud = async (tradeObj) => {
+            if (!currentUser) return;
+            const tradeRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'trades', tradeObj.id);
+            await setDoc(tradeRef, tradeObj);
+        };
+
+        window.deleteTradeFromCloud = async (tradeId) => {
+            if (!currentUser) return;
+            const tradeRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'trades', tradeId);
+            await deleteDoc(tradeRef);
+        };
+    </script>
+
+    <!-- MAIN APP LOGIC JS -->
+    <script>
+        let currentCalendarDate = new Date();
+        let selectedCalendarDateStr = null;
+        let selectedPosition = 'BUY';
+        let selectedTags = { htf: [], confluence: [], result: [] };
+        let charts = {};
+
+        function getActiveAccount() {
+            return window.appData.accounts.find(a => a.id === window.appData.selectedAccountId) || window.appData.accounts[0];
+        }
+
+        function switchView(view) {
+            const accountsView = document.getElementById('accountsView');
+            const workspaceView = document.getElementById('workspaceView');
+            const headerBadge = document.getElementById('headerAccountBadge');
+
+            if (view === 'accounts') {
+                accountsView.classList.remove('hidden');
+                workspaceView.classList.add('hidden');
+                headerBadge.classList.add('hidden');
+            } else {
+                const active = getActiveAccount();
+                if (!active) {
+                    showNotice("Please select or create an account first.");
+                    return;
+                }
+                window.appData.selectedAccountId = active.id;
+
+                accountsView.classList.add('hidden');
+                workspaceView.classList.remove('hidden');
+                headerBadge.classList.remove('hidden');
+
+                document.getElementById('activeAccountHeaderName').innerText = active.name;
+                document.getElementById('activeAccountName').innerText = active.name;
+                document.getElementById('activeTypeTag').innerText = active.type;
+                document.getElementById('activeStartingBalance').innerText = '$' + Number(active.startingBalance).toLocaleString();
+
+                refreshActiveAccountData();
+            }
+        }
+
+        function setActiveTab(tab) {
+            const tabs = ['dashboard', 'tradelog', 'analytics'];
+            tabs.forEach(t => {
+                const btn = document.getElementById('tabBtn' + capitalize(t));
+                const content = document.getElementById('tabContent' + capitalize(t));
+                
+                if (t === tab) {
+                    btn.classList.add('border-emerald-500', 'text-emerald-400');
+                    btn.classList.remove('border-transparent', 'text-gray-400');
+                    content.classList.remove('hidden');
+                } else {
+                    btn.classList.remove('border-emerald-500', 'text-emerald-400');
+                    btn.classList.add('border-transparent', 'text-gray-400');
+                    content.classList.add('hidden');
+                }
+            });
+
+            if (tab === 'analytics') {
+                setTimeout(updateAnalyticsCharts, 100);
+            }
+        }
+
+        function capitalize(s) {
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        }
+
+        function renderAccountsList() {
+            const container = document.getElementById('accountsList');
+            if (!container) return;
+            container.innerHTML = '';
+
+            window.appData.accounts.forEach(acc => {
+                const accTrades = window.appData.trades.filter(t => t.accountId === acc.id);
+                const netProfit = accTrades.reduce((sum, t) => sum + (Number(t.netPnL) || 0), 0);
+                const currentBalance = Number(acc.startingBalance) + netProfit;
+
+                const card = document.createElement('div');
+                card.className = "glass-card hover:border-emerald-500/50 rounded-2xl p-4 sm:p-5 shadow-lg flex items-center justify-between transition duration-300 cursor-pointer group";
+                
+                card.onclick = (e) => {
+                    if (e.target.closest('.delete-acc-btn')) return;
+                    window.appData.selectedAccountId = acc.id;
+                    switchView('workspace');
+                };
+
+                card.innerHTML = `
+                    <div class="space-y-1">
+                        <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider ${
+                            acc.type === 'FUNDED' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' :
+                            acc.type === 'DEMO' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                            'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                        }">${acc.type}</span>
+                        <h3 class="text-lg sm:text-xl font-black text-white group-hover:text-emerald-400 transition">${acc.name}</h3>
+                        <p class="text-xs sm:text-sm font-bold font-mono text-emerald-400">$${currentBalance.toLocaleString('en-US', {minimumFractionDigits:2})} <span class="text-[10px] font-normal text-gray-400 font-sans">Starting: $${Number(acc.startingBalance).toLocaleString()}</span></p>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <button class="delete-acc-btn text-gray-500 hover:text-red-400 p-2 rounded-xl transition" onclick="confirmDeleteAccount('${acc.id}', '${acc.name}')" title="Delete Account">
+                            <i class="fa-solid fa-xmark text-lg"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function toggleAddAccountForm(show) {
+            document.getElementById('addAccountForm').classList.toggle('hidden', !show);
+            document.getElementById('showAddAccountBtn').classList.toggle('hidden', show);
+        }
+
+        async function createAccount() {
+            const name = document.getElementById('newAccountName').value.trim();
+            const type = document.getElementById('newAccountType').value;
+            const balance = parseFloat(document.getElementById('newAccountBalance').value);
+
+            if (!name || isNaN(balance)) {
+                showNotice("Please fill in valid account details.");
+                return;
+            }
+
+            const newAcc = {
+                id: 'acc_' + Date.now(),
+                name: name,
+                type: type,
+                startingBalance: balance,
+                created: Date.now()
+            };
+
+            await window.saveAccountToCloud(newAcc);
+            window.appData.selectedAccountId = newAcc.id;
+
+            document.getElementById('newAccountName').value = '';
+            toggleAddAccountForm(false);
+            switchView('workspace');
+        }
+
+        function confirmDeleteAccount(accId, name) {
+            if (window.appData.accounts.length <= 1) {
+                showNotice("You must keep at least one account.");
+                return;
+            }
+
+            showConfirm(`Hapus akun '${name}'? Data trade pada akun ini juga akan terhapus.`, async () => {
+                await window.deleteAccountFromCloud(accId);
+                if (window.appData.selectedAccountId === accId) {
+                    window.appData.selectedAccountId = window.appData.accounts[0].id;
+                }
+            });
+        }
+
+        function refreshActiveAccountData() {
+            const activeAcc = getActiveAccount();
+            if (!activeAcc) return;
+
+            const trades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
+            
+            const totalPnL = trades.reduce((sum, t) => sum + (Number(t.netPnL) || 0), 0);
+            const currentBal = Number(activeAcc.startingBalance) + totalPnL;
+
+            document.getElementById('activeCurrentBalance').innerText = '$' + currentBal.toLocaleString('en-US', {minimumFractionDigits: 2});
+            document.getElementById('tlBalance').innerText = '$' + currentBal.toLocaleString('en-US', {minimumFractionDigits: 2});
+
+            renderDashboard(trades);
+            renderTradeLogTable(trades);
+        }
+
+        function renderDashboard(trades) {
+            renderCalendar(trades);
+            renderRecentTrades(trades);
+
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            const monthTrades = trades.filter(t => {
+                const d = new Date(t.date);
+                return d.getFullYear() === year && d.getMonth() === month;
+            });
+
+            const winCount = monthTrades.filter(t => Number(t.netPnL) > 0).length;
+            const lossCount = monthTrades.filter(t => Number(t.netPnL) < 0).length;
+            const beCount = monthTrades.filter(t => Number(t.netPnL) === 0).length;
+            const total = monthTrades.length;
+
+            const winRate = total > 0 ? Math.round((winCount / total) * 100) : 0;
+
+            const profitVal = monthTrades.filter(t => Number(t.netPnL) > 0).reduce((s, t) => s + Number(t.netPnL), 0);
+            const lossVal = monthTrades.filter(t => Number(t.netPnL) < 0).reduce((s, t) => s + Math.abs(Number(t.netPnL)), 0);
+            const monthPnL = profitVal - lossVal;
+
+            const avgRR = total > 0 ? (monthTrades.reduce((s, t) => s + (Number(t.rr) || 0), 0) / total).toFixed(2) : 0;
+
+            document.getElementById('dashWinRate').innerText = winRate + '%';
+            document.getElementById('dashWinCount').innerText = winCount;
+            document.getElementById('dashLossCount').innerText = lossCount;
+            document.getElementById('dashBECount').innerText = beCount;
+
+            document.getElementById('dashMonthlyPnL').innerText = (monthPnL >= 0 ? '+$' : '-$') + Math.abs(monthPnL).toFixed(2);
+            document.getElementById('dashMonthlyPnL').className = `text-2xl font-black mt-1 font-mono ${monthPnL >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
+            document.getElementById('dashProfitVal').innerText = '$' + profitVal.toFixed(2);
+            document.getElementById('dashLossVal').innerText = '$' + lossVal.toFixed(2);
+
+            document.getElementById('dashAvgRR').innerText = avgRR;
+            document.getElementById('dashTotalTradesMonth').innerText = total;
+
+            const statusLabel = document.getElementById('dashStatusLabel');
+            if (monthPnL >= 0) {
+                statusLabel.innerHTML = `<i class="fa-solid fa-circle-check"></i> Profitable`;
+                statusLabel.className = "text-base sm:text-lg font-black text-emerald-400 mt-1 flex items-center gap-1.5";
+            } else {
+                statusLabel.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> In Loss`;
+                statusLabel.className = "text-base sm:text-lg font-black text-red-400 mt-1 flex items-center gap-1.5";
+            }
+            document.getElementById('dashStatusSub').innerText = `${monthPnL >= 0 ? '+' : '-'}$${Math.abs(monthPnL).toFixed(2)} in Net PnL`;
+        }
+
+        function renderCalendar(trades) {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('calendarMonthLabel').innerText = `${monthNames[month]} ${year}`;
+
+            const calendarDaysContainer = document.getElementById('calendarDays');
+            calendarDaysContainer.innerHTML = '';
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1;
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < adjustedFirstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = "calendar-day bg-[#080d0a]/30 rounded-xl opacity-20 border border-transparent";
+                calendarDaysContainer.appendChild(emptyCell);
+            }
+
+            const tradesByDate = {};
+            trades.forEach(t => {
+                if (!tradesByDate[t.date]) tradesByDate[t.date] = [];
+                tradesByDate[t.date].push(t);
+            });
+
+            let monthTradeCount = 0;
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayTrades = tradesByDate[dayDateStr] || [];
+                monthTradeCount += dayTrades.length;
+
+                const dayNetPnL = dayTrades.reduce((s, t) => s + Number(t.netPnL), 0);
+
+                const cell = document.createElement('div');
+                const isSelected = selectedCalendarDateStr === dayDateStr;
+
+                cell.className = `calendar-day rounded-xl p-1.5 flex flex-col justify-between border cursor-pointer ${
+                    isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/10' : 'border-emerald-500/10 bg-[#0c120e] hover:border-emerald-500/40'
+                }`;
+
+                cell.onclick = () => selectCalendarDate(dayDateStr);
+
+                let badgeHTML = '';
+                if (dayTrades.length > 0) {
+                    const colorClass = dayNetPnL >= 0 ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
+                    const formattedAmount = (dayNetPnL >= 0 ? '+$' : '-$') + Math.abs(dayNetPnL).toFixed(0);
+                    badgeHTML = `
+                        <div class="text-[9px] font-mono ${colorClass} truncate leading-tight mt-0.5">
+                            ${formattedAmount}
+                        </div>
+                    `;
+                }
+
+                cell.innerHTML = `
+                    <div class="flex items-center justify-between text-[11px] font-bold ${dayTrades.length > 0 ? 'text-white' : 'text-gray-500'}">
+                        <span>${day}</span>
+                        ${dayTrades.length > 0 ? `<span class="w-1.5 h-1.5 rounded-full ${dayNetPnL >= 0 ? 'bg-emerald-400 shadow-sm shadow-emerald-400' : 'bg-red-400 shadow-sm shadow-red-400'}"></span>` : ''}
+                    </div>
+                    ${badgeHTML}
+                `;
+
+                calendarDaysContainer.appendChild(cell);
+            }
+
+            document.getElementById('calendarSubtext').innerText = `${monthTradeCount} trades in ${monthNames[month]}`;
+        }
+
+        function navigateMonth(dir) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + dir);
+            refreshActiveAccountData();
+        }
+
+        function selectCalendarDate(dateStr) {
+            if (selectedCalendarDateStr === dateStr) {
+                selectedCalendarDateStr = null;
+            } else {
+                selectedCalendarDateStr = dateStr;
+            }
+            refreshActiveAccountData();
+        }
+
+        function clearCalendarDateFilter() {
+            selectedCalendarDateStr = null;
+            refreshActiveAccountData();
+        }
+
+        function renderRecentTrades(trades) {
+            const container = document.getElementById('recentTradesContainer');
+            const titleEl = document.getElementById('recentTradesTitle');
+            const subtitleEl = document.getElementById('recentTradesFilterSubtitle');
+            const badgeEl = document.getElementById('recentTradesCountBadge');
+
+            container.innerHTML = '';
+
+            let filteredTrades = [...trades];
+            if (selectedCalendarDateStr) {
+                filteredTrades = filteredTrades.filter(t => t.date === selectedCalendarDateStr);
+                titleEl.innerText = `Trades for ${selectedCalendarDateStr}`;
+                subtitleEl.innerText = "Filtered by calendar selection";
+            } else {
+                titleEl.innerText = "Recent Trades";
+                subtitleEl.innerText = "Latest across all time";
+            }
+
+            filteredTrades.sort((a, b) => new Date(b.date) - new Date(a.date));
+            badgeEl.innerText = `${filteredTrades.length} trades`;
+
+            if (filteredTrades.length === 0) {
+                container.innerHTML = `
+                    <div class="py-12 text-center text-gray-500 text-xs">
+                        No recent trades
+                    </div>
+                `;
+                return;
+            }
+
+            filteredTrades.forEach(t => {
+                const pnlNum = Number(t.netPnL) || 0;
+                const isWin = pnlNum >= 0;
+                const formattedPnL = (isWin ? '+$' : '-$') + Math.abs(pnlNum).toFixed(2);
+                const card = document.createElement('div');
+                card.className = "bg-[#0c120e] border border-emerald-500/10 rounded-xl p-3 flex items-center justify-between gap-3 hover:border-emerald-500/30 transition";
+                card.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${isWin ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">
+                            ${t.position}
+                        </span>
+                        <div>
+                            <div class="text-xs font-bold text-white flex items-center gap-2">
+                                ${t.pair}
+                                <span class="text-[10px] text-gray-400 font-mono font-normal">${t.date}</span>
+                            </div>
+                            <div class="text-[10px] text-gray-400 mt-0.5">
+                                RR: <span class="text-amber-400 font-bold font-mono">${t.rr || '0'}</span> &nbsp;|&nbsp; Result: <span class="text-gray-300">${t.result || 'N/A'}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right font-mono">
+                        <div class="text-xs font-black ${isWin ? 'text-emerald-400' : 'text-red-400'}">
+                            ${formattedPnL}
+                        </div>
+                        <div class="text-[10px] text-gray-400">Risk: $${Number(t.risk || 0).toFixed(2)}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderTradeLogTable(trades) {
+            const tbody = document.getElementById('tradeLogTableBody');
+            const placeholder = document.getElementById('noTradesPlaceholder');
+            tbody.innerHTML = '';
+
+            const totalPnL = trades.reduce((sum, t) => sum + (Number(t.netPnL) || 0), 0);
+            const wins = trades.filter(t => Number(t.netPnL) > 0).length;
+            const winRate = trades.length > 0 ? Math.round((wins / trades.length) * 100) : 0;
+
+            document.getElementById('tlTotalPnL').innerText = (totalPnL >= 0 ? '+$' : '-$') + Math.abs(totalPnL).toFixed(2);
+            document.getElementById('tlTotalPnL').className = `text-xl font-black ${totalPnL >= 0 ? 'text-emerald-400' : 'text-red-400'} mt-1 font-mono`;
+            document.getElementById('tlWinRate').innerText = winRate + '%';
+            document.getElementById('tlTotalTrades').innerText = trades.length;
+
+            if (trades.length === 0) {
+                placeholder.classList.remove('hidden');
+                return;
+            } else {
+                placeholder.classList.add('hidden');
+            }
+
+            const sorted = [...trades].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            sorted.forEach(t => {
+                const pnlNum = Number(t.netPnL) || 0;
+                const isWin = pnlNum >= 0;
+                const formattedPnL = (isWin ? '+$' : '-$') + Math.abs(pnlNum).toFixed(2);
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-emerald-500/5 transition";
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 font-mono text-[11px] text-gray-300 whitespace-nowrap">${t.date}</td>
+                    <td class="py-3.5 px-4 font-bold text-white whitespace-nowrap">${t.pair}</td>
+                    <td class="py-3.5 px-4 whitespace-nowrap">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${t.position}</span>
+                    </td>
+                    <td class="py-3.5 px-4 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'} whitespace-nowrap">
+                        ${formattedPnL}
+                    </td>
+                    <td class="py-3.5 px-4 font-mono text-gray-400 whitespace-nowrap">$${Number(t.risk || 0).toFixed(2)}</td>
+                    <td class="py-3.5 px-4 font-mono font-bold text-amber-400 whitespace-nowrap">${t.rr || '0'}</td>
+                    <td class="py-3.5 px-4 text-gray-400 text-[11px] whitespace-nowrap">${t.htf || '—'}</td>
+                    <td class="py-3.5 px-4 text-gray-400 text-[11px] whitespace-nowrap">${t.confluence || '—'}</td>
+                    <td class="py-3.5 px-4 whitespace-nowrap">
+                        <span class="px-2 py-0.5 rounded text-[10px] bg-[#121a14] text-gray-300 border border-emerald-500/10">${t.result || 'N/A'}</span>
+                    </td>
+                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                        <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#121c15] hover:bg-emerald-500 hover:text-black text-emerald-400 border border-emerald-500/20 text-[11px] rounded-lg transition mr-1">Edit</button>
+                        <button onclick="deleteTrade('${t.id}')" class="px-2 py-1 bg-[#121c15] hover:bg-red-500 hover:text-white text-gray-400 border border-emerald-500/10 text-[11px] rounded-lg transition"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function toggleTradeForm(show) {
+            const container = document.getElementById('tradeFormContainer');
+            if (show === undefined) {
+                container.classList.toggle('hidden');
+            } else {
+                container.classList.toggle('hidden', !show);
+            }
+
+            if (!container.classList.contains('hidden')) {
+                container.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                resetTradeForm();
+            }
+        }
+
+        function selectPos(pos) {
+            selectedPosition = pos;
+            const buyBtn = document.getElementById('posBuyBtn');
+            const sellBtn = document.getElementById('posSellBtn');
+
+            if (pos === 'BUY') {
+                buyBtn.className = "py-2.5 border border-emerald-500 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-xl shadow-sm";
+                sellBtn.className = "py-2.5 border border-emerald-500/10 bg-[#0a0f0c] text-gray-400 text-xs font-bold rounded-xl";
+            } else {
+                sellBtn.className = "py-2.5 border border-red-500 bg-red-500/20 text-red-400 text-xs font-bold rounded-xl shadow-sm";
+                buyBtn.className = "py-2.5 border border-emerald-500/10 bg-[#0a0f0c] text-gray-400 text-xs font-bold rounded-xl";
+            }
+        }
+
+        function toggleTagOption(btn, category) {
+            const txt = btn.innerText;
+            const group = selectedTags[category];
+
+            if (group.includes(txt)) {
+                selectedTags[category] = group.filter(x => x !== txt);
+                btn.classList.remove('active');
+            } else {
+                selectedTags[category].push(txt);
+                btn.classList.add('active');
+            }
+        }
+
+        function calculateRR() {
+            const pnl = parseFloat(document.getElementById('tradeNetPnL').value);
+            const risk = parseFloat(document.getElementById('tradeRisk').value);
+            if (!isNaN(pnl) && !isNaN(risk) && risk !== 0) {
+                const rr = (pnl / risk).toFixed(1);
+                document.getElementById('tradeRR').value = rr;
+            }
+        }
+
+        function resetTradeForm() {
+            document.getElementById('editingTradeId').value = '';
+            document.getElementById('tradeFormTitle').innerHTML = `<i class="fa-regular fa-pen-to-square text-emerald-400"></i> New Trade Entry`;
+            document.getElementById('tradeDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('tradePair').value = 'XAUUSD';
+            selectPos('BUY');
+            document.getElementById('tradeNetPnL').value = '';
+            document.getElementById('tradeRisk').value = '';
+            document.getElementById('tradeRR').value = '';
+            document.getElementById('tradeLink').value = '';
+            document.getElementById('tradeScreenshot').value = '';
+
+            selectedTags = { htf: [], confluence: [], result: [] };
+            document.querySelectorAll('.btn-tag').forEach(b => b.classList.remove('active'));
+        }
+
+        async function saveTrade() {
+            const activeAcc = getActiveAccount();
+            if (!activeAcc) return;
+
+            const editId = document.getElementById('editingTradeId').value;
+            const date = document.getElementById('tradeDate').value;
+            const pair = document.getElementById('tradePair').value;
+            const pnl = parseFloat(document.getElementById('tradeNetPnL').value);
+            const risk = parseFloat(document.getElementById('tradeRisk').value);
+            const rr = parseFloat(document.getElementById('tradeRR').value);
+            const link = document.getElementById('tradeLink').value.trim();
+            const screenshot = document.getElementById('tradeScreenshot').value.trim();
+
+            if (!date || !pair || isNaN(pnl)) {
+                showNotice("Lengkapi field wajib! (Date, Pair, Net P/L)");
+                return;
+            }
+
+            const tradeObj = {
+                id: editId || 'tr_' + Date.now(),
+                accountId: activeAcc.id,
+                date: date,
+                pair: pair,
+                position: selectedPosition,
+                netPnL: pnl,
+                risk: isNaN(risk) ? 0 : risk,
+                rr: isNaN(rr) ? 0 : rr,
+                htf: selectedTags.htf.join(', ') || '',
+                confluence: selectedTags.confluence.join(', ') || '',
+                result: selectedTags.result.join(', ') || '',
+                link: link,
+                screenshot: screenshot
+            };
+
+            await window.saveTradeToCloud(tradeObj);
+            toggleTradeForm(false);
+        }
+
+        function editTrade(tradeId) {
+            const trade = window.appData.trades.find(t => t.id === tradeId);
+            if (!trade) return;
+
+            document.getElementById('editingTradeId').value = trade.id;
+            document.getElementById('tradeFormTitle').innerHTML = `<i class="fa-regular fa-pen-to-square text-emerald-400"></i> Edit Trade`;
+            document.getElementById('tradeDate').value = trade.date;
+            document.getElementById('tradePair').value = trade.pair;
+            selectPos(trade.position);
+            document.getElementById('tradeNetPnL').value = trade.netPnL;
+            document.getElementById('tradeRisk').value = trade.risk;
+            document.getElementById('tradeRR').value = trade.rr;
+            document.getElementById('tradeLink').value = trade.link || '';
+            document.getElementById('tradeScreenshot').value = trade.screenshot || '';
+
+            selectedTags = {
+                htf: trade.htf ? trade.htf.split(', ') : [],
+                confluence: trade.confluence ? trade.confluence.split(', ') : [],
+                result: trade.result ? trade.result.split(', ') : []
+            };
+
+            document.querySelectorAll('.btn-tag').forEach(b => {
+                const txt = b.innerText;
+                if (selectedTags.htf.includes(txt) || selectedTags.confluence.includes(txt) || selectedTags.result.includes(txt)) {
+                    b.classList.add('active');
+                } else {
+                    b.classList.remove('active');
+                }
+            });
+
+            toggleTradeForm(true);
+        }
+
+        function deleteTrade(tradeId) {
+            showConfirm("Hapus trade ini dari journal?", async () => {
+                await window.deleteTradeFromCloud(tradeId);
+            });
+        }
+
+        function updateAnalyticsCharts() {
+            const activeAcc = getActiveAccount();
+            if (!activeAcc) return;
+
+            let trades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
+            trades.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            const fromDateStr = document.getElementById('analyticsFromDate').value;
+            const toDateStr = document.getElementById('analyticsToDate').value;
+
+            if (fromDateStr) trades = trades.filter(t => t.date >= fromDateStr);
+            if (toDateStr) trades = trades.filter(t => t.date <= toDateStr);
+
+            const totalPnL = trades.reduce((sum, t) => sum + Number(t.netPnL), 0);
+            const wins = trades.filter(t => Number(t.netPnL) > 0).length;
+            const winRate = trades.length > 0 ? Math.round((wins / trades.length) * 100) : 0;
+            const avgRR = trades.length > 0 ? (trades.reduce((s, t) => s + (Number(t.rr) || 0), 0) / trades.length).toFixed(1) : "0.0";
+
+            document.getElementById('analyticsPnL').innerText = (totalPnL >= 0 ? '+$' : '-$') + Math.abs(totalPnL).toFixed(2);
+            document.getElementById('analyticsPnL').className = `text-xl font-black ${totalPnL >= 0 ? 'text-emerald-400' : 'text-red-400'} mt-1 font-mono`;
+            document.getElementById('analyticsWinRate').innerText = winRate + '%';
+            document.getElementById('analyticsTotalTrades').innerText = trades.length;
+            document.getElementById('analyticsAvgRR').innerText = avgRR;
+
+            const growthPct = ((totalPnL / Number(activeAcc.startingBalance)) * 100).toFixed(2);
+            document.getElementById('equityGrowthPercentage').innerText = (growthPct >= 0 ? '+' : '') + growthPct + '%';
+
+            let cumulativeBalance = Number(activeAcc.startingBalance);
+            const labels = ['Start'];
+            const dataPoints = [cumulativeBalance];
+
+            trades.forEach(t => {
+                cumulativeBalance += Number(t.netPnL);
+                labels.push(t.date);
+                dataPoints.push(cumulativeBalance);
+            });
+
+            renderLineChart('equityChart', labels, dataPoints, 'Equity ($)');
+
+            const symbolMap = {};
+            const symbolCount = {};
+            trades.forEach(t => {
+                symbolMap[t.pair] = (symbolMap[t.pair] || 0) + Number(t.netPnL);
+                symbolCount[t.pair] = (symbolCount[t.pair] || 0) + 1;
+            });
+            renderSymbolPerformanceChart('symbolChart', symbolMap, symbolCount);
+
+            const losses = trades.filter(t => Number(t.netPnL) < 0).length;
+            const bes = trades.filter(t => Number(t.netPnL) === 0).length;
+            renderWinLossChart('winLossChart', wins, losses, bes, trades.length);
+
+            const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const weekdayPnL = [0, 0, 0, 0, 0, 0, 0];
+            trades.forEach(t => {
+                const dayIdx = new Date(t.date).getDay();
+                weekdayPnL[dayIdx] += Number(t.netPnL);
+            });
+            renderBarChart('weekdayChart', weekdays, weekdayPnL, 'PnL by Day');
+
+            const buyPnL = trades.filter(t => t.position === 'BUY').reduce((s, t) => s + Number(t.netPnL), 0);
+            const sellPnL = trades.filter(t => t.position === 'SELL').reduce((s, t) => s + Number(t.netPnL), 0);
+            renderBarChart('orderTypeChart', ['BUY', 'SELL'], [buyPnL, sellPnL], 'PnL by Position');
+        }
+
+        function renderLineChart(canvasId, labels, data, label) {
+            if (charts[canvasId]) charts[canvasId].destroy();
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            
+            const gradient = ctx.createLinearGradient(0, 0, 0, 250);
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.35)');
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+
+            charts[canvasId] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        borderColor: '#10B981',
+                        borderWidth: 2.5,
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.35,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#10B981'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const val = Number(context.raw) || 0;
+                                    return `Equity: $${val.toFixed(2)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(34, 197, 94, 0.08)' }, ticks: { color: '#9CA3AF' } },
+                        y: { 
+                            grid: { color: 'rgba(34, 197, 94, 0.08)' }, 
+                            ticks: { 
+                                color: '#9CA3AF',
+                                callback: function(val) { return '$' + Number(val).toLocaleString(); }
+                            } 
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderSymbolPerformanceChart(canvasId, symbolMap, symbolCount) {
+            if (charts[canvasId]) charts[canvasId].destroy();
+            const ctx = document.getElementById(canvasId).getContext('2d');
+
+            const pairs = Object.keys(symbolMap);
+            const pnls = pairs.map(p => symbolMap[p]);
+            
+            const formattedLabels = pairs.map(p => {
+                const val = symbolMap[p];
+                const formattedPnL = (val >= 0 ? '+$' : '-$') + Math.abs(val).toFixed(2);
+                const count = symbolCount[p] || 0;
+                return `${p}: ${formattedPnL} (${count} trades)`;
+            });
+
+            charts[canvasId] = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: formattedLabels,
+                    datasets: [{
+                        data: pnls.map(v => Math.abs(v) || 1),
+                        backgroundColor: ['#10B981', '#3B82F6', '#F59E0B', '#EC4899', '#8B5CF6', '#14B8A6'],
+                        borderWidth: 2,
+                        borderColor: '#0b1016'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position: 'bottom', labels: { color: '#E5E7EB', font: { size: 11, weight: 'bold' } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const pair = pairs[context.dataIndex];
+                                    const val = symbolMap[pair];
+                                    const formattedPnL = (val >= 0 ? '+$' : '-$') + Math.abs(val).toFixed(2);
+                                    return `${pair}: ${formattedPnL} (${symbolCount[pair]} trades)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderWinLossChart(canvasId, wins, losses, bes, total) {
+            if (charts[canvasId]) charts[canvasId].destroy();
+            const ctx = document.getElementById(canvasId).getContext('2d');
+
+            const winPct = total > 0 ? Math.round((wins / total) * 100) : 0;
+            const lossPct = total > 0 ? Math.round((losses / total) * 100) : 0;
+            const bePct = total > 0 ? (100 - winPct - lossPct) : 0;
+
+            const labels = [
+                `Win ${winPct}% (${wins})`,
+                `Loss ${lossPct}% (${losses})`,
+                `BreakEven ${bePct}% (${bes})`
+            ];
+
+            charts[canvasId] = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: [wins, losses, bes],
+                        backgroundColor: ['#10B981', '#EF4444', '#6B7280'],
+                        borderWidth: 2,
+                        borderColor: '#0b1016'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position: 'bottom', labels: { color: '#E5E7EB', font: { size: 11, weight: 'bold' } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderBarChart(canvasId, labels, data, label) {
+            if (charts[canvasId]) charts[canvasId].destroy();
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            charts[canvasId] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        backgroundColor: data.map(v => v >= 0 ? '#10B981' : '#EF4444'),
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const val = Number(context.raw) || 0;
+                                    const formattedPnL = (val >= 0 ? '+$' : '-$') + Math.abs(val).toFixed(2);
+                                    return `PnL: ${formattedPnL}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: '#9CA3AF' } },
+                        y: { 
+                            grid: { color: 'rgba(34, 197, 94, 0.08)' }, 
+                            ticks: { 
+                                color: '#9CA3AF',
+                                callback: function(val) { 
+                                    const n = Number(val);
+                                    return (n >= 0 ? '+$' : '-$') + Math.abs(n).toFixed(0);
+                                }
+                            } 
+                        }
+                    }
+                }
+            });
+        }
+
+        function openAuthModal() {
+            document.getElementById('authModal').classList.remove('hidden');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+        }
+
+        function showNotice(msg) {
+            document.getElementById('customModalIcon').innerHTML = `<i class="fa-solid fa-circle-info text-emerald-400"></i>`;
+            document.getElementById('customModalTitle').innerText = "Information";
+            document.getElementById('customModalMsg').innerText = msg;
+            document.getElementById('customModalActions').innerHTML = `<button onclick="closeCustomModal()" class="px-5 py-2 bg-emerald-500 text-black text-xs font-bold rounded-xl shadow-lg hover:bg-emerald-400 transition">OK</button>`;
+            document.getElementById('customModal').classList.remove('hidden');
+        }
+
+        function showConfirm(msg, onConfirm) {
+            document.getElementById('customModalIcon').innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-400"></i>`;
+            document.getElementById('customModalTitle').innerText = "Confirmation";
+            document.getElementById('customModalMsg').innerText = msg;
+            document.getElementById('customModalActions').innerHTML = `
+                <button onclick="closeCustomModal()" class="px-4 py-2 bg-gray-800 text-xs text-white rounded-xl hover:bg-gray-700 transition">Batal</button>
+                <button id="modalConfirmOkBtn" class="px-4 py-2 bg-emerald-500 text-black text-xs font-bold rounded-xl hover:bg-emerald-400 transition">OK</button>
+            `;
+            document.getElementById('modalConfirmOkBtn').onclick = () => {
+                closeCustomModal();
+                onConfirm();
+            };
+            document.getElementById('customModal').classList.remove('hidden');
+        }
+
+        function closeCustomModal() {
+            document.getElementById('customModal').classList.add('hidden');
+        }
+
+        window.renderAccountsList = renderAccountsList;
+        window.refreshActiveAccountData = refreshActiveAccountData;
+        window.showNotice = showNotice;
+        window.closeAuthModal = closeAuthModal;
+        window.openAuthModal = openAuthModal;
+    </script>
+</body>
+</html>
