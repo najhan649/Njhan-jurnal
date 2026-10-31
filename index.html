@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Najh.an Journal - Institutional Trading Terminal v4.0</title>
+    <title>Najh.an Journal - Institutional Trading Terminal v5.0</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -117,7 +117,7 @@
                     </div>
                     <div>
                         <span class="font-extrabold text-lg text-white tracking-tight group-hover:text-emerald-400 transition">Najh.an <span class="text-emerald-400">Journal</span></span>
-                        <span class="block text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v4.0</span>
+                        <span class="block text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v5.0</span>
                     </div>
                 </div>
 
@@ -362,11 +362,11 @@
                         <div class="flex items-center justify-between pt-3 text-[11px] text-gray-400 border-t border-emerald-500/10">
                             <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400"></span> Profit Day</span>
                             <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-500 shadow-sm shadow-red-500"></span> Loss Day</span>
-                            <button onclick="clearCalendarDateFilter()" class="text-emerald-400 hover:text-emerald-300 font-bold transition">Show All Trades</button>
+                            <button onclick="clearCalendarDateFilter()" class="text-emerald-400 hover:text-emerald-300 font-bold transition">Show All Month Trades</button>
                         </div>
                     </div>
 
-                    <!-- Right Column: Recent Trades -->
+                    <!-- Right Column: Recent Trades / Filtered Trades -->
                     <div class="lg:col-span-5 glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between pb-3 border-b border-emerald-500/10 mb-3">
@@ -413,7 +413,7 @@
                     <div class="glass-card rounded-2xl p-4">
                         <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Expectancy</span>
                         <div id="dashExpectancy" class="text-2xl font-black text-amber-400 mt-1 font-mono">$0.00</div>
-                        <div class="text-[10px] text-gray-400 mt-1.5">Average per trade</div>
+                        <div id="dashStatusSub" class="text-[10px] text-gray-400 mt-1.5">Average per trade</div>
                     </div>
                 </div>
 
@@ -1267,6 +1267,7 @@
             const m = document.getElementById('dashFilterMonth').value;
             const y = document.getElementById('dashFilterYear').value;
             currentCalendarDate = new Date(parseInt(y), parseInt(m) - 1, 1);
+            selectedCalendarDateStr = null; // Reset filter tanggal saat bulan/tahun diganti
             refreshActiveAccountData();
         }
 
@@ -1277,6 +1278,7 @@
             document.getElementById('dashFilterMonth').value = mStr;
             document.getElementById('dashFilterYear').value = yStr;
             currentCalendarDate = new Date();
+            selectedCalendarDateStr = null;
             refreshActiveAccountData();
         }
 
@@ -1423,14 +1425,17 @@
 
         function navigateMonth(dir) {
             currentCalendarDate.setMonth(currentCalendarDate.getMonth() + dir);
-            document.getElementById('dashFilterMonth').value = String(currentCalendarDate.getMonth() + 1).padStart(2, '0');
-            document.getElementById('dashFilterYear').value = String(currentCalendarDate.getFullYear());
+            const newMStr = String(currentCalendarDate.getMonth() + 1).padStart(2, '0');
+            const newYStr = String(currentCalendarDate.getFullYear());
+            document.getElementById('dashFilterMonth').value = newMStr;
+            document.getElementById('dashFilterYear').value = newYStr;
+            selectedCalendarDateStr = null; // Reset filter tanggal saat navigasi bulan
             refreshActiveAccountData();
         }
 
         function selectCalendarDate(dateStr, isMainDashboard = true) {
             if (selectedCalendarDateStr === dateStr) {
-                selectedCalendarDateStr = null;
+                selectedCalendarDateStr = null; // Toggle off jika diklik dua kali
             } else {
                 selectedCalendarDateStr = dateStr;
             }
@@ -1459,29 +1464,40 @@
 
             container.innerHTML = '';
 
-            let filteredTrades = [...trades];
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            // Saring trade berdasarkan bulan aktif di Dashboard terlebih dahulu
+            let monthTrades = trades.filter(t => {
+                if (!t.date) return false;
+                const d = new Date(t.date);
+                return d.getFullYear() === year && d.getMonth() === month;
+            });
+
+            // Jika ada tanggal spesifik yang diklik di kalender, saring lagi berdasarkan tanggal tersebut
             if (selectedCalendarDateStr) {
-                filteredTrades = filteredTrades.filter(t => t.date === selectedCalendarDateStr);
+                monthTrades = monthTrades.filter(t => t.date === selectedCalendarDateStr);
                 titleEl.innerText = `Trades for ${selectedCalendarDateStr}`;
-                subtitleEl.innerText = "Filtered by calendar date selection";
+                subtitleEl.innerText = "Filtered by selected calendar date";
             } else {
-                titleEl.innerText = "Recent Trades";
-                subtitleEl.innerText = "Latest across all time";
+                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                titleEl.innerText = `Trades in ${monthNames[month]} ${year}`;
+                subtitleEl.innerText = "Showing trades for active month";
             }
 
-            filteredTrades.sort((a, b) => new Date(b.date) - new Date(a.date));
-            badgeEl.innerText = `${filteredTrades.length} trades`;
+            monthTrades.sort((a, b) => new Date(b.date) - new Date(a.date));
+            badgeEl.innerText = `${monthTrades.length} trades`;
 
-            if (filteredTrades.length === 0) {
+            if (monthTrades.length === 0) {
                 container.innerHTML = `
                     <div class="py-12 text-center text-gray-500 text-xs">
-                        No trades found for this selection
+                        Tidak ada trade pada ${selectedCalendarDateStr ? 'tanggal ' + selectedCalendarDateStr : 'bulan ini'}.
                     </div>
                 `;
                 return;
             }
 
-            filteredTrades.forEach(t => {
+            monthTrades.forEach(t => {
                 const pnlNum = Number(t.netPnL) || 0;
                 const isWin = pnlNum >= 0;
                 const formattedPnL = (isWin ? '+' : '-') + formatMoney(Math.abs(pnlNum), curr);
