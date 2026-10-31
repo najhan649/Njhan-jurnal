@@ -1214,12 +1214,12 @@
 
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(16, 185, 129, 0.45)';
+                    ctx.fillStyle = 'rgba(16, 185, 129, 0.20)'; // Redup agar tidak tembus pandang di Workspace
                     ctx.fill();
 
                     if (p.text) {
                         ctx.font = '9px JetBrains Mono, monospace';
-                        ctx.fillStyle = 'rgba(16, 185, 129, 0.35)';
+                        ctx.fillStyle = 'rgba(16, 185, 129, 0.15)'; // Redup
                         ctx.fillText(p.text, p.x + 7, p.y - 7);
                     }
 
@@ -1233,8 +1233,8 @@
                             ctx.beginPath();
                             ctx.moveTo(p.x, p.y);
                             ctx.lineTo(p2.x, p2.y);
-                            ctx.strokeStyle = `rgba(16, 185, 129, ${0.15 * (1 - dist / 130)})`;
-                            ctx.lineWidth = 0.6;
+                            ctx.strokeStyle = `rgba(16, 185, 129, ${0.06 * (1 - dist / 130)})`; // Garis redup
+                            ctx.lineWidth = 0.5;
                             ctx.stroke();
                         }
                     }
@@ -1248,8 +1248,8 @@
                             ctx.beginPath();
                             ctx.moveTo(p.x, p.y);
                             ctx.lineTo(pointer.x, pointer.y);
-                            ctx.strokeStyle = `rgba(34, 197, 94, ${0.35 * (1 - distMouse / pointer.radius)})`;
-                            ctx.lineWidth = 1;
+                            ctx.strokeStyle = `rgba(34, 197, 94, ${0.20 * (1 - distMouse / pointer.radius)})`;
+                            ctx.lineWidth = 0.8;
                             ctx.stroke();
                         }
                     }
