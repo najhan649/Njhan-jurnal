@@ -38,16 +38,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* Memastikan latar belakang body transparan agar canvas terlihat jelas */
         body {
-            background: #020407;
+            background-color: #020407;
             color: #f1f5f9;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
+            margin: 0;
+        }
+
+        /* Canvas Latar Belakang diletakkan di lapisan paling bawah */
+        #networkCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: auto;
+            z-index: 0;
         }
 
         .glass-card {
-            background: rgba(8, 13, 10, 0.85);
+            background: rgba(8, 13, 10, 0.88);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(16, 185, 129, 0.3);
@@ -68,9 +81,6 @@
         ::-webkit-scrollbar-thumb {
             background: rgba(16, 185, 129, 0.35);
             border-radius: 9999px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #10B981;
         }
 
         .calendar-grid {
@@ -125,16 +135,6 @@
         .animate-fade-in {
             animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-
-        #networkCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: auto;
-            z-index: 1;
-        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black relative">
@@ -143,7 +143,7 @@
     <canvas id="networkCanvas"></canvas>
 
     <!-- TOP HEADER / NAVBAR -->
-    <header class="bg-[#020407]/90 backdrop-blur-md border-b border-emerald-500/15 sticky top-0 z-40">
+    <header class="bg-[#020407]/80 backdrop-blur-md border-b border-emerald-500/15 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo / Brand -->
@@ -181,7 +181,7 @@
     </header>
 
     <!-- LANDING SCREEN / WELCOME MODAL -->
-    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/50 backdrop-blur-[2px] flex items-center justify-center p-4 overflow-y-auto">
+    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/40 backdrop-blur-[2px] flex items-center justify-center p-4 overflow-y-auto">
         <div class="glass-card max-w-xl w-full rounded-3xl p-6 sm:p-10 space-y-8 text-center animate-fade-in relative z-20 border-emerald-500/30 shadow-2xl">
             
             <!-- Logo & Brand Header -->
@@ -999,7 +999,7 @@
                 }
             } catch (err) {
                 errEl.innerText = err.message || "Authentication failed.";
-                errEl.classList.add('hidden');
+                errEl.classList.remove('hidden');
             }
         };
 
@@ -1033,7 +1033,7 @@
         };
     </script>
 
-    <!-- MAIN APP & JARINGAN NODE PASAR INTERAKTIF (TANPA KATA "DATA") -->
+    <!-- MAIN APP & JARINGAN NODE PASAR INTERAKTIF -->
     <script>
         let currentCalendarDate = new Date();
         let selectedCalendarDateStr = null;
@@ -1046,7 +1046,6 @@
 
         const dayNamesID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
-        // ANIMASI JARINGAN NODE BERUBAH MENJADI HARGA PASAR CRYPTO/FOREX/INDICES & REAKSI SENTUHAN
         function initInteractiveNetworkCanvas() {
             const canvas = document.getElementById('networkCanvas');
             if (!canvas) return;
@@ -1078,7 +1077,6 @@
                 }
             }, { passive: true });
 
-            // Daftar instrumen Crypto, Forex, & Indices asli seperti di video
             const marketItems = [
                 { name: 'BTC/USD', price: 92450.20 },
                 { name: 'ETH/USD', price: 3420.50 },
@@ -1115,7 +1113,6 @@
             function animate() {
                 ctx.clearRect(0, 0, width, height);
 
-                // Update fluktuasi harga pasar secara realtime
                 nodes.forEach(n => {
                     n.x += n.vx;
                     n.y += n.vy;
@@ -1129,20 +1126,17 @@
                         n.updateTimer = 0;
                     }
 
-                    // Titik Node
                     ctx.beginPath();
                     ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
                     ctx.fillStyle = '#10B981';
                     ctx.fill();
 
-                    // Label Simbol & Angka Harga Pasar yang Berubah
                     let priceDisplay = n.price > 100 ? n.price.toFixed(2) : n.price.toFixed(4);
                     ctx.font = '9px JetBrains Mono, monospace';
                     ctx.fillStyle = 'rgba(16, 185, 129, 0.75)';
                     ctx.textAlign = 'left';
                     ctx.fillText(`${n.symbol}: ${priceDisplay}`, n.x + 8, n.y - 4);
 
-                    // Hubungkan antar node terdekat dengan garis siku
                     for (let j = i + 1; j < nodes.length; j++) {
                         let n2 = nodes[j];
                         let dx = n.x - n2.x;
@@ -1160,7 +1154,6 @@
                         }
                     }
 
-                    // Reaksi sentuhan / kursor mouse mendekati node
                     let dxMouse = n.x - pointer.x;
                     let dyMouse = n.y - pointer.y;
                     let distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
@@ -2113,7 +2106,6 @@
                 const formattedPnL = (isWin ? '+' : '-') + formatMoney(Math.abs(pnlNum), curr);
                 const dayName = getDayNameFromDateStr(t.date);
 
-                // 1. Render Table Row
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-emerald-500/5 transition";
                 tr.innerHTML = `
@@ -2142,7 +2134,6 @@
                 `;
                 tbody.appendChild(tr);
 
-                // 2. Render Cards View Item
                 const card = document.createElement('div');
                 card.className = "glass-card rounded-2xl p-4 space-y-3 flex flex-col justify-between";
                 
@@ -2657,4 +2648,3 @@
     </script>
 </body>
 </html>
- 
