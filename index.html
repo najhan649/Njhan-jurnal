@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
@@ -52,6 +52,14 @@
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(16, 185, 129, 0.25);
             box-shadow: 0 25px 60px 0 rgba(0, 0, 0, 0.85);
+        }
+
+        /* Penyesuaian transparansi card landing agar animasi background canvas tembus pandang */
+        #landingModal .glass-card {
+            background: rgba(2, 4, 7, 0.82) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         .glass-card:hover {
@@ -182,7 +190,7 @@
     </header>
 
     <!-- LANDING SCREEN / WELCOME MODAL DENGAN LATAR BELAKANG SERAGAM & ELEGAN -->
-    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
         <div class="glass-card max-w-xl w-full rounded-3xl p-6 sm:p-10 space-y-8 text-center animate-fade-in relative z-20 border-emerald-500/30 shadow-2xl">
             
             <!-- Logo & Brand Header -->
