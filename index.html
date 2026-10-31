@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Najh.an Journal - Institutional Trading Terminal v8.0 Ultra Pro</title>
+    <title>Najh.an Journal - Institutional Trading Terminal v9.0 Ultimate</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -49,11 +49,11 @@
         }
 
         .glass-card {
-            background: rgba(8, 13, 10, 0.82);
+            background: rgba(8, 13, 10, 0.85);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(16, 185, 129, 0.22);
-            box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.6);
+            box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.7);
         }
 
         .glass-card:hover {
@@ -120,6 +120,14 @@
             box-shadow: 0 0 18px rgba(16, 185, 129, 0.55);
             border-color: transparent;
         }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-fade-in {
+            animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black">
@@ -135,7 +143,7 @@
                     </div>
                     <div>
                         <span class="font-extrabold text-base sm:text-lg text-white tracking-tight group-hover:text-emerald-400 transition">Najh.an <span class="text-emerald-400">Journal</span></span>
-                        <span class="block text-[9px] sm:text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v8.0</span>
+                        <span class="block text-[9px] sm:text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v9.0</span>
                     </div>
                 </div>
 
@@ -151,7 +159,7 @@
                         <span id="activeAccountHeaderName">Personal</span>
                     </button>
 
-                    <button id="authBtnHeader" onclick="openAuthModal()" class="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500 to-green-600 text-black text-xs font-bold rounded-xl shadow-md transition hover:scale-105">
+                    <button id="authBtnHeader" onclick="openLandingModal()" class="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500 to-green-600 text-black text-xs font-bold rounded-xl shadow-md transition hover:scale-105">
                         Login
                     </button>
                     <button id="logoutBtnHeader" onclick="handleLogout()" class="hidden px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 text-xs font-bold rounded-xl transition">
@@ -162,61 +170,90 @@
         </div>
     </header>
 
-    <!-- AUTHENTICATION MODAL & LANDING SCREEN (BEFORE LOGIN) -->
-    <div id="authModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-4">
-        <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-6 shadow-2xl relative border-emerald-500/40 text-center">
+    <!-- LANDING SCREEN / WELCOME MODAL (BEFORE LOGIN) -->
+    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/95 backdrop-blur-xl flex items-center justify-center p-4 overflow-y-auto">
+        <div class="max-w-2xl w-full space-y-6 text-center animate-fade-in py-8">
             
-            <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white transition">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-
-            <!-- Institutional Welcome Header -->
-            <div class="space-y-3 pt-2">
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-3xl mx-auto shadow-xl shadow-emerald-900/60 ring-2 ring-emerald-400/30">
+            <!-- Logo & Brand Header -->
+            <div class="space-y-3">
+                <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-4xl mx-auto shadow-2xl shadow-emerald-900/60 ring-4 ring-emerald-400/20 animate-pulse">
                     N
                 </div>
                 <div>
-                    <span class="px-3 py-1 rounded-full text-[10px] font-extrabold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 uppercase">
-                        Institutional Terminal v8.0
+                    <span class="px-3.5 py-1 rounded-full text-[11px] font-extrabold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 uppercase">
+                        Institutional Terminal v9.0 Ultimate
                     </span>
-                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight mt-2">WELCOME TRADER</h2>
-                    <p class="text-xs text-gray-400 mt-1 max-w-xs mx-auto">Kelola portofolio trading profesional Anda dengan jurnal cloud yang tersinkronisasi presisi.</p>
+                    <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight mt-3">WELCOME TRADER</h1>
+                    <p class="text-xs sm:text-sm text-gray-400 mt-2 max-w-md mx-auto">Terminal jurnal trading institusional dengan analitik presisi tinggi, kalender performa, dan sinkronisasi awan waktu nyata.</p>
                 </div>
             </div>
 
-            <!-- Auth Input Form -->
-            <div class="space-y-3.5 text-left pt-2">
+            <!-- Interactive Live Chart Preview Container -->
+            <div class="glass-card rounded-2xl p-4 sm:p-5 border-emerald-500/30 shadow-2xl space-y-2">
+                <div class="flex items-center justify-between text-[11px] font-bold text-gray-400 px-1">
+                    <span class="flex items-center gap-1.5 text-emerald-400"><i class="fa-solid fa-chart-line"></i> Market Growth Simulation</span>
+                    <span class="font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">+34.82% Equity</span>
+                </div>
+                <div class="h-44 sm:h-52 relative w-full">
+                    <canvas id="landingPreviewChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Action Buttons for Login & Signup -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-md mx-auto pt-2">
+                <button onclick="showLoginForm()" class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-black tracking-wider uppercase rounded-xl transition shadow-lg shadow-emerald-950/50 transform hover:scale-[1.02]">
+                    <i class="fa-solid fa-right-to-bracket mr-1.5"></i> Login Terminal
+                </button>
+                <button onclick="showSignUpForm()" class="w-full py-3.5 bg-[#080e0b] hover:bg-[#0d1711] text-emerald-400 border border-emerald-500/30 text-xs font-bold tracking-wider uppercase rounded-xl transition hover:border-emerald-500">
+                    <i class="fa-solid fa-user-plus mr-1.5"></i> Create New Account
+                </button>
+            </div>
+
+            <div class="text-[10px] text-gray-500 font-mono pt-2">
+                Najh.an Trading Systems &copy; 2026 &bull; Institutional Grade Security
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTHENTICATION INPUT MODAL (HIDDEN BY DEFAULT, POPPED ON BUTTON CLICK) -->
+    <div id="authFormModal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-sm w-full space-y-5 shadow-2xl relative border-emerald-500/40 text-center animate-fade-in">
+            <button onclick="closeAuthFormModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="space-y-1">
+                <div id="authModalIcon" class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-black text-xl mx-auto mb-2">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3 id="authModalTitle" class="text-xl font-black text-white tracking-tight">Login Terminal</h3>
+                <p id="authModalSub" class="text-xs text-gray-400">Masukkan kredensial akun cloud Anda.</p>
+            </div>
+
+            <div class="space-y-3.5 text-left">
                 <div>
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">EMAIL ADDRESS</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-envelope absolute left-3.5 top-3 text-gray-500 text-xs"></i>
-                        <input type="email" id="authEmail" placeholder="trader@institutional.com" class="w-full bg-[#020407] border border-emerald-500/25 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
-                    </div>
+                    <input type="email" id="authEmail" placeholder="trader@institutional.com" class="w-full bg-[#020407] border border-emerald-500/25 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
                 </div>
 
                 <div>
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">PASSWORD</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-lock absolute left-3.5 top-3 text-gray-500 text-xs"></i>
-                        <input type="password" id="authPassword" placeholder="••••••••" class="w-full bg-[#020407] border border-emerald-500/25 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
-                    </div>
+                    <input type="password" id="authPassword" placeholder="••••••••" class="w-full bg-[#020407] border border-emerald-500/25 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
                 </div>
 
                 <div id="authErrorMsg" class="text-xs text-red-400 hidden text-center font-medium bg-red-500/10 p-2 rounded-xl border border-red-500/20"></div>
 
-                <div class="pt-2 space-y-2">
-                    <button onclick="handleEmailLogin()" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-black tracking-wider uppercase rounded-xl transition shadow-lg shadow-emerald-900/40 transform hover:scale-[1.01]">
-                        Login Terminal
-                    </button>
-                    <button onclick="handleEmailSignUp()" class="w-full py-3 bg-[#080e0b] hover:bg-[#0d1711] text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
-                        Create New Account
+                <div class="pt-2">
+                    <button id="authActionSubmitBtn" onclick="handleAuthSubmit()" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-black tracking-wider uppercase rounded-xl transition shadow-lg shadow-emerald-950/40">
+                        Sign In
                     </button>
                 </div>
-            </div>
-
-            <div class="pt-2 border-t border-emerald-500/10 text-[10px] text-gray-500 flex justify-between items-center">
-                <span>Najh.an Trading Systems</span>
-                <span class="text-emerald-500 font-mono">Secured Sync</span>
+                
+                <div class="text-center pt-1">
+                    <button onclick="toggleAuthMode()" id="authSwitchModeBtn" class="text-[11px] text-emerald-400 hover:underline font-semibold">
+                        Belum punya akun? Buat baru di sini
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -882,13 +919,14 @@
                 document.getElementById('logoutBtnHeader').classList.remove('hidden');
                 document.getElementById('cloudStatusBadge').classList.remove('hidden');
                 document.getElementById('userEmailDisplay').innerText = user.email || 'Cloud Synced';
-                closeAuthModal();
+                closeLandingModal();
+                closeAuthFormModal();
                 setupFirestoreListeners(user.uid);
             } else {
                 document.getElementById('authBtnHeader').classList.remove('hidden');
                 document.getElementById('logoutBtnHeader').classList.add('hidden');
                 document.getElementById('cloudStatusBadge').classList.add('hidden');
-                openAuthModal();
+                openLandingModal();
             }
         });
 
@@ -942,7 +980,7 @@
             await setDoc(acc2Ref, { name: 'Funded Challenge', type: 'FUNDED', currency: 'USD', startingBalance: 50000, created: Date.now() - 1000 });
         }
 
-        window.handleEmailLogin = async () => {
+        window.handleAuthSubmit = async () => {
             const email = document.getElementById('authEmail').value.trim();
             const pass = document.getElementById('authPassword').value;
             const errEl = document.getElementById('authErrorMsg');
@@ -955,29 +993,13 @@
             }
 
             try {
-                await signInWithEmailAndPassword(auth, email, pass);
+                if (isSignUpMode) {
+                    await createUserWithEmailAndPassword(auth, email, pass);
+                } else {
+                    await signInWithEmailAndPassword(auth, email, pass);
+                }
             } catch (err) {
-                errEl.innerText = err.message || "Failed to sign in.";
-                errEl.classList.remove('hidden');
-            }
-        };
-
-        window.handleEmailSignUp = async () => {
-            const email = document.getElementById('authEmail').value.trim();
-            const pass = document.getElementById('authPassword').value;
-            const errEl = document.getElementById('authErrorMsg');
-            errEl.classList.add('hidden');
-
-            if (!email || !pass) {
-                errEl.innerText = "Please fill in email and password.";
-                errEl.classList.remove('hidden');
-                return;
-            }
-
-            try {
-                await createUserWithEmailAndPassword(auth, email, pass);
-            } catch (err) {
-                errEl.innerText = err.message || "Failed to create account.";
+                errEl.innerText = err.message || "Authentication failed.";
                 errEl.classList.remove('hidden');
             }
         };
@@ -1021,6 +1043,7 @@
         let charts = {};
         let isPrivacyMode = false;
         let logViewMode = 'table';
+        let isSignUpMode = false;
 
         const dayNamesID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
@@ -1041,6 +1064,91 @@
             } else {
                 dayDisplay.innerText = '';
             }
+        }
+
+        // Render preview chart di landing screen
+        function renderLandingPreviewChart() {
+            const canvasEl = document.getElementById('landingPreviewChart');
+            if (!canvasEl) return;
+            const ctx = canvasEl.getContext('2d');
+            
+            const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.45)');
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                    datasets: [{
+                        data: [1000, 1150, 1080, 1320, 1250, 1490, 1600, 1550, 1780, 1950],
+                        borderColor: '#10B981',
+                        borderWidth: 3,
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#10B981'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                    scales: {
+                        x: { display: false },
+                        y: { display: false }
+                    }
+                }
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderLandingPreviewChart();
+            populateAllYearFilters();
+            const now = new Date();
+            const mStr = String(now.getMonth() + 1).padStart(2, '0');
+            const dashMonthEl = document.getElementById('dashFilterMonth');
+            if (dashMonthEl) dashMonthEl.value = mStr;
+        });
+
+        function openLandingModal() {
+            document.getElementById('landingModal').classList.remove('hidden');
+        }
+
+        function closeLandingModal() {
+            document.getElementById('landingModal').classList.add('hidden');
+        }
+
+        function showLoginForm() {
+            isSignUpMode = false;
+            document.getElementById('authModalTitle').innerText = "Login Terminal";
+            document.getElementById('authModalSub').innerText = "Masukkan kredensial akun cloud Anda.";
+            document.getElementById('authActionSubmitBtn').innerText = "Sign In";
+            document.getElementById('authSwitchModeBtn').innerText = "Belum punya akun? Buat baru di sini";
+            document.getElementById('authFormModal').classList.remove('hidden');
+        }
+
+        function showSignUpForm() {
+            isSignUpMode = true;
+            document.getElementById('authModalTitle').innerText = "Create New Account";
+            document.getElementById('authModalSub').innerText = "Daftar akun baru untuk sinkronisasi cloud.";
+            document.getElementById('authActionSubmitBtn').innerText = "Sign Up";
+            document.getElementById('authSwitchModeBtn').innerText = "Sudah punya akun? Login di sini";
+            document.getElementById('authFormModal').classList.remove('hidden');
+        }
+
+        function toggleAuthMode() {
+            isSignUpMode = !isSignUpMode;
+            if (isSignUpMode) {
+                showSignUpForm();
+            } else {
+                showLoginForm();
+            }
+        }
+
+        function closeAuthFormModal() {
+            document.getElementById('authFormModal').classList.add('hidden');
         }
 
         function setLogViewMode(mode) {
@@ -1126,14 +1234,6 @@
         }
 
         window.populateAllYearFilters = populateAllYearFilters;
-
-        window.addEventListener('DOMContentLoaded', () => {
-            populateAllYearFilters();
-            const now = new Date();
-            const mStr = String(now.getMonth() + 1).padStart(2, '0');
-            const dashMonthEl = document.getElementById('dashFilterMonth');
-            if (dashMonthEl) dashMonthEl.value = mStr;
-        });
 
         function getActiveAccount() {
             return window.appData.accounts.find(a => a.id === window.appData.selectedAccountId) || window.appData.accounts[0];
@@ -1516,7 +1616,6 @@
                 selectedCalendarDateStr = null; 
             } else {
                 selectedCalendarDateStr = dateStr;
-                // Otomatis isi tanggal dan hari di Form Entry
                 document.getElementById('tradeDate').value = dateStr;
                 updateDayNameFromDateInput();
             }
@@ -2439,14 +2538,6 @@
             });
         }
 
-        function openAuthModal() {
-            document.getElementById('authModal').classList.remove('hidden');
-        }
-
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.add('hidden');
-        }
-
         function showNotice(msg) {
             document.getElementById('customModalIcon').innerHTML = `<i class="fa-solid fa-circle-info text-emerald-400"></i>`;
             document.getElementById('customModalTitle').innerText = "Information";
@@ -2462,8 +2553,11 @@
         window.renderAccountsList = renderAccountsList;
         window.refreshActiveAccountData = refreshActiveAccountData;
         window.showNotice = showNotice;
-        window.closeAuthModal = closeAuthModal;
-        window.openAuthModal = openAuthModal;
+        window.openLandingModal = openLandingModal;
+        window.closeLandingModal = closeLandingModal;
+        window.showLoginForm = showLoginForm;
+        window.showSignUpForm = showSignUpForm;
+        window.toggleAuthMode = toggleAuthMode;
     </script>
 </body>
 </html>
