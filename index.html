@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Najh.an Journal - Institutional Trading Terminal v9.2 Ultimate</title>
+    <title>Najh.an Journal - Institutional Trading Terminal v2.0</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -13,7 +13,7 @@
                 extend: {
                     colors: {
                         darkBg: '#020407',
-                        cardBg: 'rgba(8, 13, 10, 0.82)',
+                        cardBg: 'rgba(8, 13, 10, 0.92)',
                         cardBorder: 'rgba(16, 185, 129, 0.25)',
                         brandGreen: '#10B981',
                         brandGreenGlow: '#22C55E',
@@ -47,11 +47,11 @@
         }
 
         .glass-card {
-            background: rgba(8, 13, 10, 0.88);
+            background: rgba(8, 13, 10, 0.94);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(16, 185, 129, 0.22);
-            box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            box-shadow: 0 25px 60px 0 rgba(0, 0, 0, 0.85);
         }
 
         .glass-card:hover {
@@ -144,7 +144,7 @@
     <canvas id="networkCanvas"></canvas>
 
     <!-- TOP HEADER / NAVBAR -->
-    <header class="bg-[#04070a]/90 backdrop-blur-md border-b border-emerald-500/15 sticky top-0 z-40">
+    <header class="bg-[#04070a]/95 backdrop-blur-md border-b border-emerald-500/15 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo / Brand -->
@@ -154,7 +154,7 @@
                     </div>
                     <div>
                         <span class="font-extrabold text-base sm:text-lg text-white tracking-tight group-hover:text-emerald-400 transition">Najh.an <span class="text-emerald-400">Journal</span></span>
-                        <span class="block text-[9px] sm:text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v9.2</span>
+                        <span class="block text-[9px] sm:text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v2.0</span>
                     </div>
                 </div>
 
@@ -181,9 +181,9 @@
         </div>
     </header>
 
-    <!-- LANDING SCREEN / WELCOME MODAL DENGAN LATAR BELAKANG ANIMASI NODE -->
-    <div id="landingModal" class="fixed inset-0 z-30 bg-[#020407]/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-        <div class="max-w-xl w-full space-y-8 text-center animate-fade-in py-12 relative z-20">
+    <!-- LANDING SCREEN / WELCOME MODAL DENGAN LATAR BELAKANG SOLID & ELEGAN -->
+    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/92 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-card max-w-xl w-full rounded-3xl p-6 sm:p-10 space-y-8 text-center animate-fade-in relative z-20 border-emerald-500/30 shadow-2xl">
             
             <!-- Logo & Brand Header -->
             <div class="space-y-4">
@@ -192,15 +192,15 @@
                 </div>
                 <div>
                     <span class="px-3.5 py-1 rounded-full text-[11px] font-extrabold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 uppercase">
-                        Institutional Terminal v9.2 Ultimate
+                        Institutional Terminal v2.0 Ultimate
                     </span>
-                    <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight mt-4 drop-shadow-lg">WELCOME TRADER</h1>
+                    <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight mt-4 drop-shadow-lg">WELCOME TRADER</h1>
                     <p class="text-xs sm:text-sm text-gray-300 mt-3 max-w-md mx-auto leading-relaxed font-medium">Terminal jurnal trading institusional dengan analitik presisi tinggi, kalender performa, dan sinkronisasi awan waktu nyata.</p>
                 </div>
             </div>
 
             <!-- Action Buttons for Login & Signup -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md mx-auto pt-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md mx-auto pt-2">
                 <button onclick="showLoginForm()" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-black tracking-wider uppercase rounded-xl transition shadow-xl shadow-emerald-950/60 transform hover:scale-[1.03]">
                     <i class="fa-solid fa-right-to-bracket mr-1.5"></i> Login Terminal
                 </button>
@@ -209,7 +209,7 @@
                 </button>
             </div>
 
-            <div class="text-[10px] text-gray-400 font-mono pt-6">
+            <div class="text-[10px] text-gray-400 font-mono pt-4 border-t border-emerald-500/10">
                 Najh.an Trading Systems &copy; 2026 &bull; Institutional Grade Security
             </div>
         </div>
@@ -2140,7 +2140,7 @@
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${t.position}</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-emerald-500/20'}">${t.position}</span>
                                 <span class="font-black text-white text-sm">${t.pair}</span>
                             </div>
                             <div class="text-right">
