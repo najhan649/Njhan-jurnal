@@ -92,13 +92,13 @@
         }
 
         .calendar-day {
-            min-height: 78px;
+            min-height: 84px;
             height: auto;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
         @media (min-width: 640px) {
             .calendar-day {
-                min-height: 94px;
+                min-height: 100px;
             }
         }
 
@@ -601,6 +601,8 @@
                                 <option value="XAUUSD">XAUUSD</option>
                                 <option value="EURUSD">EURUSD</option>
                                 <option value="GBPUSD">GBPUSD</option>
+                                <option value="GBPJPY">GBPJPY</option>
+                                <option value="BTCUSD">BTCUSD</option>
                                 <option value="US100">US100</option>
                                 <option value="US30">US30</option>
                                 <option value="SPX500">SPX500</option>
@@ -764,6 +766,62 @@
                     <div class="glass-card p-4 rounded-2xl">
                         <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">EXPECTANCY</span>
                         <div id="analyticsExpectancy" class="text-xl font-black text-amber-400 mt-1 font-mono">$0.00</div>
+                    </div>
+                </div>
+
+                <!-- PER-PAIR PERFORMANCE COMPARISON MODULE -->
+                <div class="glass-card p-4 sm:p-6 rounded-2xl shadow-xl space-y-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-emerald-500/10 gap-2">
+                        <div>
+                            <h3 class="text-base font-black text-white tracking-tight">Per-Pair Performance Comparison</h3>
+                            <p class="text-[11px] text-gray-400">Analisis komparatif performa instrumen/pair secara mendalam</p>
+                        </div>
+                        <span id="comparingPairsBadge" class="px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 w-fit">Comparing 0 pairs</span>
+                    </div>
+
+                    <!-- 4 Summary Highlight Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                        <div class="bg-[#04070a] border border-emerald-500/15 rounded-xl p-3.5 space-y-1">
+                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Best PnL Pair</span>
+                            <div id="bestPnlPairName" class="text-sm font-black text-amber-400">—</div>
+                            <div id="bestPnlPairVal" class="text-xs font-mono font-bold text-emerald-400">—</div>
+                        </div>
+
+                        <div class="bg-[#04070a] border border-emerald-500/15 rounded-xl p-3.5 space-y-1">
+                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Highest Win Rate</span>
+                            <div id="highestWinRatePairName" class="text-sm font-black text-cyan-400">—</div>
+                            <div id="highestWinRatePairVal" class="text-xs font-mono font-bold text-white">—</div>
+                        </div>
+
+                        <div class="bg-[#04070a] border border-emerald-500/15 rounded-xl p-3.5 space-y-1">
+                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Lowest Drawdown</span>
+                            <div id="lowestDdPairName" class="text-sm font-black text-purple-400">—</div>
+                            <div id="lowestDdPairVal" class="text-xs font-mono font-bold text-red-400">—</div>
+                        </div>
+
+                        <div class="bg-[#04070a] border border-emerald-500/15 rounded-xl p-3.5 space-y-1">
+                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Best Profit Factor</span>
+                            <div id="bestPfPairName" class="text-sm font-black text-emerald-400">—</div>
+                            <div id="bestPfPairVal" class="text-xs font-mono font-bold text-cyan-400">—</div>
+                        </div>
+                    </div>
+
+                    <!-- Per-Pair Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-300">
+                            <thead class="bg-[#04070a] text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-emerald-500/10">
+                                <tr>
+                                    <th class="py-3 px-3.5">Pair</th>
+                                    <th class="py-3 px-3.5">Trades</th>
+                                    <th class="py-3 px-3.5">Win Rate</th>
+                                    <th class="py-3 px-3.5">Net PnL</th>
+                                    <th class="py-3 px-3.5">Max Drawdown</th>
+                                    <th class="py-3 px-3.5 text-right">Profit Factor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="perPairTableBody" class="divide-y divide-emerald-500/5">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -1560,7 +1618,6 @@
             document.getElementById('dashExpectancy').className = `text-2xl font-black mt-1 font-mono ${expectancy >= 0 ? 'text-amber-400' : 'text-red-400'}`;
         }
 
-        // FUNGSI KALENDER DENGAN PNL HARIAN
         function renderCalendar(trades, curr, containerId = 'calendarDays', labelId = 'calendarMonthLabel', subtextId = 'calendarSubtext', isMainDashboard = true) {
             const year = currentCalendarDate.getFullYear();
             const month = currentCalendarDate.getMonth();
@@ -1597,6 +1654,8 @@
                 monthTradeCount += dayTrades.length;
 
                 const dayNetPnL = dayTrades.reduce((s, t) => s + Number(t.netPnL), 0);
+                const dayWins = dayTrades.filter(t => Number(t.netPnL) > 0).length;
+                const dayLosses = dayTrades.filter(t => Number(t.netPnL) < 0).length;
 
                 const cell = document.createElement('div');
                 const isSelected = selectedCalendarDateStr === dayDateStr;
@@ -1629,8 +1688,10 @@
                             <div class="text-[9px] sm:text-[10px] font-mono ${colorClass} leading-tight truncate">
                                 ${formattedAmount}
                             </div>
-                            <div class="text-[8px] sm:text-[9px] text-gray-400 font-medium">
-                                ${dayTrades.length} trade${dayTrades.length > 1 ? 's' : ''}
+                            <div class="flex items-center gap-1 text-[8px] sm:text-[9px] font-bold font-sans">
+                                <span class="text-emerald-400">${dayWins}W</span>
+                                <span class="text-red-400">${dayLosses}L</span>
+                                <span class="text-gray-400 font-normal">(${dayTrades.length}t)</span>
                             </div>
                         </div>
                     `;
@@ -1854,6 +1915,8 @@
                 const dayDateStr = `${year}-${monthStr}-${String(day).padStart(2, '0')}`;
                 const dayTrades = tradesByDate[dayDateStr] || [];
                 const dayNetPnL = dayTrades.reduce((s, t) => s + Number(t.netPnL), 0);
+                const dayWins = dayTrades.filter(t => Number(t.netPnL) > 0).length;
+                const dayLosses = dayTrades.filter(t => Number(t.netPnL) < 0).length;
 
                 const isSelected = selectedCalendarDateStr === dayDateStr;
 
@@ -1880,8 +1943,10 @@
                             <div class="text-[9px] sm:text-[10px] font-mono ${colorClass} leading-tight truncate">
                                 ${formattedAmount}
                             </div>
-                            <div class="text-[8px] sm:text-[9px] text-gray-400 font-medium">
-                                ${dayTrades.length} trade${dayTrades.length > 1 ? 's' : ''}
+                            <div class="flex items-center gap-1 text-[8px] sm:text-[9px] font-bold font-sans">
+                                <span class="text-emerald-400">${dayWins}W</span>
+                                <span class="text-red-400">${dayLosses}L</span>
+                                <span class="text-gray-400 font-normal">(${dayTrades.length}t)</span>
                             </div>
                         </div>
                     `;
@@ -2364,6 +2429,9 @@
             const growthPct = ((totalPnL / Number(activeAcc.startingBalance)) * 100).toFixed(2);
             document.getElementById('equityGrowthPercentage').innerText = (growthPct >= 0 ? '+' : '') + growthPct + '%';
 
+            // RENDER PER-PAIR COMPARISON TABLE & HIGHLIGHTS
+            renderPerPairComparison(trades, curr);
+
             let cumulativeBalance = Number(activeAcc.startingBalance);
             const labels = ['Start'];
             const dataPoints = [cumulativeBalance];
@@ -2398,6 +2466,91 @@
             const buyPnL = trades.filter(t => t.position === 'BUY').reduce((s, t) => s + Number(t.netPnL), 0);
             const sellPnL = trades.filter(t => t.position === 'SELL').reduce((s, t) => s + Number(t.netPnL), 0);
             renderBarChart('orderTypeChart', ['BUY', 'SELL'], [buyPnL, sellPnL], 'PnL by Position', curr);
+        }
+
+        // FUNGSI RENDER PER-PAIR PERFORMANCE COMPARISON
+        function renderPerPairComparison(trades, curr) {
+            const pairMap = {};
+            trades.forEach(t => {
+                const p = t.pair || 'OTHER';
+                if (!pairMap[p]) {
+                    pairMap[p] = { pair: p, trades: 0, wins: 0, losses: 0, netPnL: 0, grossProfit: 0, grossLoss: 0, runningBal: 0, peakBal: 0, maxDD: 0 };
+                }
+                pairMap[p].trades += 1;
+                const pnl = Number(t.netPnL) || 0;
+                pairMap[p].netPnL += pnl;
+                if (pnl > 0) {
+                    pairMap[p].wins += 1;
+                    pairMap[p].grossProfit += pnl;
+                } else if (pnl < 0) {
+                    pairMap[p].losses += 1;
+                    pairMap[p].grossLoss += Math.abs(pnl);
+                }
+                pairMap[p].runningBal += pnl;
+                if (pairMap[p].runningBal > pairMap[p].peakBal) {
+                    pairMap[p].peakBal = pairMap[p].runningBal;
+                }
+                const dd = pairMap[p].runningBal - pairMap[p].peakBal;
+                if (dd < pairMap[p].maxDD) {
+                    pairMap[p].maxDD = dd;
+                }
+            });
+
+            const pairsArray = Object.values(pairMap);
+            document.getElementById('comparingPairsBadge').innerText = `Comparing ${pairsArray.length} pairs`;
+
+            if (pairsArray.length === 0) {
+                document.getElementById('bestPnlPairName').innerText = '—';
+                document.getElementById('bestPnlPairVal').innerText = '—';
+                document.getElementById('highestWinRatePairName').innerText = '—';
+                document.getElementById('highestWinRatePairVal').innerText = '—';
+                document.getElementById('lowestDdPairName').innerText = '—';
+                document.getElementById('lowestDdPairVal').innerText = '—';
+                document.getElementById('bestPfPairName').innerText = '—';
+                document.getElementById('bestPfPairVal').innerText = '—';
+                document.getElementById('perPairTableBody').innerHTML = `<tr><td colspan="6" class="py-6 text-center text-gray-500">Belum ada data trade untuk perbandingan pair.</td></tr>`;
+                return;
+            }
+
+            pairsArray.forEach(item => {
+                item.winRate = item.trades > 0 ? (item.wins / item.trades) * 100 : 0;
+                item.profitFactor = item.grossLoss > 0 ? (item.grossProfit / item.grossLoss) : (item.grossProfit > 0 ? 99.99 : 0.00);
+            });
+
+            const bestPnl = [...pairsArray].sort((a, b) => b.netPnL - a.netPnL)[0];
+            const bestWr = [...pairsArray].sort((a, b) => b.winRate - a.winRate)[0];
+            const lowestDd = [...pairsArray].sort((a, b) => a.maxDD - b.maxDD)[0]; // Max DD paling kecil (mendekati 0)
+            const bestPf = [...pairsArray].sort((a, b) => b.profitFactor - a.profitFactor)[0];
+
+            document.getElementById('bestPnlPairName').innerText = bestPnl.pair;
+            document.getElementById('bestPnlPairVal').innerText = (bestPnl.netPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(bestPnl.netPnL), curr);
+
+            document.getElementById('highestWinRatePairName').innerText = bestWr.pair;
+            document.getElementById('highestWinRatePairVal').innerText = `${Math.round(bestWr.winRate)}% (${bestWr.wins}W/${bestWr.losses}L)`;
+
+            document.getElementById('lowestDdPairName').innerText = lowestDd.pair;
+            document.getElementById('lowestDdPairVal').innerText = `${formatMoney(lowestDd.maxDD, curr)} Max DD`;
+
+            document.getElementById('bestPfPairName').innerText = bestPf.pair;
+            document.getElementById('bestPfPairVal').innerText = `PF: ${bestPf.profitFactor.toFixed(2)}`;
+
+            pairsArray.sort((a, b) => b.netPnL - a.netPnL);
+
+            let tbodyHtml = '';
+            pairsArray.forEach(item => {
+                const isWin = item.netPnL >= 0;
+                tbodyHtml += `
+                    <tr class="hover:bg-emerald-500/5 transition">
+                        <td class="py-3 px-3.5 font-bold text-white">${item.pair}</td>
+                        <td class="py-3 px-3.5 text-gray-300 font-mono">${item.trades} <span class="text-[10px] text-gray-400 font-sans">(${item.wins}W/${item.losses}L)</span></td>
+                        <td class="py-3 px-3.5 font-bold text-emerald-400 font-mono">${Math.round(item.winRate)}%</td>
+                        <td class="py-3 px-3.5 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'}">${(isWin ? '+' : '-') + formatMoney(Math.abs(item.netPnL), curr)}</td>
+                        <td class="py-3 px-3.5 font-mono text-red-400">${formatMoney(item.maxDD, curr)}</td>
+                        <td class="py-3 px-3.5 text-right font-mono font-bold text-cyan-400">${item.profitFactor.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('perPairTableBody').innerHTML = tbodyHtml;
         }
 
         function renderLineChart(canvasId, labels, data, label, curr) {
