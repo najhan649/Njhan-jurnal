@@ -849,7 +849,7 @@
                     </div>
                 </div>
 
-                <!-- 4. PER-PAIR PERFORMANCE COMPARISON & RADAR/DONUT PER-PAIR -->
+                <!-- 4. PER-PAIR PERFORMANCE COMPARISON & UPDATED SYMBOL DISTRIBUTION (DONUT) -->
                 <div class="glass-card p-4 sm:p-6 rounded-2xl shadow-xl space-y-6">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-emerald-500/10 gap-2">
                         <div>
@@ -886,12 +886,18 @@
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-                        <div class="lg:col-span-5 h-64 relative bg-[#04070a] border border-emerald-500/15 rounded-2xl p-4 flex flex-col justify-center">
-                            <h4 class="text-xs font-bold text-gray-400 uppercase mb-2">Symbol Distribution</h4>
-                            <div class="h-48 relative">
+                        <!-- Updated Symbol Distribution Donut Chart (Menyerupai Outcome Breakdown) -->
+                        <div class="lg:col-span-5 bg-[#04070a] border border-emerald-500/15 rounded-2xl p-5 flex flex-col items-center justify-center space-y-3">
+                            <h4 class="text-xs font-black text-white uppercase tracking-wider self-start">Symbol Distribution</h4>
+                            <div class="relative w-48 h-48 sm:w-52 sm:h-52">
                                 <canvas id="symbolChart"></canvas>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
+                                    <span id="symbolCenterTotal" class="text-xl font-black text-white font-mono">0</span>
+                                    <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">TOTAL PAIRS</span>
+                                </div>
                             </div>
                         </div>
+
                         <div class="lg:col-span-7 overflow-x-auto">
                             <table class="w-full text-left text-xs text-gray-300">
                                 <thead class="bg-[#04070a] text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-emerald-500/10">
@@ -911,7 +917,7 @@
                     </div>
                 </div>
 
-                <!-- 5. HOURLY ENTRY & MARKET SESSIONS -->
+                <!-- 5. HOURLY ENTRY & MARKET SESSIONS (Hanya Jam 12:00, 18:00, 00:00) -->
                 <div class="glass-card p-4 sm:p-6 rounded-2xl shadow-xl space-y-6">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-emerald-500/10 gap-2">
                         <div>
@@ -926,7 +932,7 @@
                             <div class="w-48 h-48 relative">
                                 <canvas id="hourlyRadarChart"></canvas>
                             </div>
-                            <span class="text-[10px] font-mono text-emerald-400/80 mt-1">Clock-Face Distribution</span>
+                            <span class="text-[10px] font-mono text-emerald-400/80 mt-1">Clock-Face Distribution (12:00, 18:00, 00:00)</span>
                         </div>
 
                         <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5" id="marketSessionsAnalyticsContainer">
@@ -934,7 +940,7 @@
                     </div>
                 </div>
 
-                <!-- 6. PNL BY WEEKDAY (DIAPERGARR KAN LEBIH BAGUS) -->
+                <!-- 6. PNL BY WEEKDAY -->
                 <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
                     <div class="flex justify-between items-center pb-2 border-b border-emerald-500/10">
                         <div>
@@ -947,7 +953,7 @@
                     </div>
                 </div>
 
-                <!-- 7. PNL BY ORDER TYPE / POSITION (DIAPERGARR KAN LEBIH BAGUS) -->
+                <!-- 7. PNL BY ORDER TYPE / POSITION -->
                 <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
                     <div class="flex justify-between items-center pb-2 border-b border-emerald-500/10">
                         <div>
@@ -2566,7 +2572,7 @@
             // 2. OUTCOME BREAKDOWN STATS & DONUT
             renderOutcomeBreakdownStats(trades, curr, wins, losses, grossProfit, grossLoss);
 
-            // 3. PER-PAIR PERFORMANCE COMPARISON & SYMBOL DONUT
+            // 3. PER-PAIR PERFORMANCE COMPARISON & UPDATED SYMBOL DISTRIBUTION DONUT
             renderPerPairComparison(trades, curr);
             const symbolMap = {};
             const symbolCount = {};
@@ -2576,11 +2582,11 @@
             });
             renderSymbolPerformanceChart('symbolChart', symbolMap, symbolCount, curr);
 
-            // 4. MARKET SESSIONS & RADAR CLOCK
+            // 4. MARKET SESSIONS & RADAR CLOCK (Fokus 12:00, 18:00, 00:00)
             renderMarketSessionsAnalytics(trades, curr);
             renderHourlyRadarChart(trades);
 
-            // 5. PNL BY WEEKDAY (DIAPERGARR KAN LEBIH BAGUS)
+            // 5. PNL BY WEEKDAY
             const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             const weekdayPnL = [0, 0, 0, 0, 0, 0, 0];
             trades.forEach(t => {
@@ -2589,7 +2595,7 @@
             });
             renderBarChart('weekdayChart', weekdays, weekdayPnL, 'PnL by Day', curr);
 
-            // 6. PNL BY ORDER TYPE / POSITION (DIAPERGARR KAN LEBIH BAGUS)
+            // 6. PNL BY ORDER TYPE / POSITION
             const buyPnL = trades.filter(t => t.position === 'BUY').reduce((s, t) => s + Number(t.netPnL), 0);
             const sellPnL = trades.filter(t => t.position === 'SELL').reduce((s, t) => s + Number(t.netPnL), 0);
             renderBarChart('orderTypeChart', ['BUY', 'SELL'], [buyPnL, sellPnL], 'PnL by Position', curr);
@@ -2639,10 +2645,9 @@
             if (charts['hourlyRadarChart']) charts['hourlyRadarChart'].destroy();
             const ctx = document.getElementById('hourlyRadarChart').getContext('2d');
             
-            // Simulasi distribusi jam entry 24 jam berdasarkan data session atau default shape seperti gambar referensi
+            // Konfigurasi jam clock-face dengan penekanan pada 12:00, 18:00, 00:00 sesuai gambar referensi
             const hourCounts = new Array(24).fill(1);
             trades.forEach(t => {
-                // Beri bobot berdasarkan sesi jika ada
                 if (t.session && t.session.includes('London')) {
                     for(let h=14; h<=22; h++) hourCounts[h % 24] += 2;
                 } else if (t.session && t.session.includes('New York')) {
@@ -2652,7 +2657,14 @@
                 }
             });
 
-            const labels24 = Array.from({length: 24}, (_, i) => String(i).padStart(2, '0') + ':00');
+            // Label fokus pada 00:00, 06:00, 12:00, 18:00 sesuai gambar referensi
+            const labels24 = Array.from({length: 24}, (_, i) => {
+                const hStr = String(i).padStart(2, '0') + ':00';
+                if (hStr === '00:00' || hStr === '06:00' || hStr === '12:00' || hStr === '18:00') {
+                    return hStr;
+                }
+                return ''; // Sembunyikan label minor agar bersih seperti di gambar referensi
+            });
 
             charts['hourlyRadarChart'] = new Chart(ctx, {
                 type: 'radar',
@@ -2660,7 +2672,7 @@
                     labels: labels24,
                     datasets: [{
                         data: hourCounts,
-                        backgroundColor: 'rgba(16, 185, 129, 0.25)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.28)',
                         borderColor: '#10B981',
                         borderWidth: 2,
                         pointRadius: 0
@@ -2675,7 +2687,7 @@
                             grid: { color: 'rgba(16, 185, 129, 0.15)' },
                             angleLines: { color: 'rgba(16, 185, 129, 0.15)' },
                             ticks: { display: false },
-                            pointLabels: { color: '#9CA3AF', font: { size: 8 } }
+                            pointLabels: { color: '#10B981', font: { size: 9, weight: 'bold' } }
                         }
                     }
                 }
@@ -2889,43 +2901,41 @@
             });
         }
 
+        // Simbol Distribution Donut Chart (Diperbarui menyerupai Outcome Breakdown)
         function renderSymbolPerformanceChart(canvasId, symbolMap, symbolCount, curr) {
             if (charts[canvasId]) charts[canvasId].destroy();
             const ctx = document.getElementById(canvasId).getContext('2d');
 
             const pairs = Object.keys(symbolMap);
             const pnls = pairs.map(p => symbolMap[p]);
-            
-            const formattedLabels = pairs.map(p => {
-                const val = symbolMap[p];
-                const formattedPnL = (val >= 0 ? '+' : '-') + formatMoney(Math.abs(val), curr);
-                const count = symbolCount[p] || 0;
-                return `${p}: ${formattedPnL} (${count} trades)`;
-            });
+            const totalPairsCount = pairs.length;
+
+            document.getElementById('symbolCenterTotal').innerText = totalPairsCount;
 
             charts[canvasId] = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: formattedLabels,
+                    labels: pairs,
                     datasets: [{
                         data: pnls.map(v => Math.abs(v) || 1),
-                        backgroundColor: ['#10B981', '#3B82F6', '#F59E0B', '#EC4899', '#8B5CF6', '#14B8A6'],
-                        borderWidth: 2,
+                        backgroundColor: ['#10B981', '#3B82F6', '#F59E0B', '#EC4899', '#8B5CF6', '#14B8A6', '#6366F1', '#1098AD'],
+                        borderWidth: 3,
                         borderColor: '#04070a'
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    cutout: '78%',
                     plugins: { 
-                        legend: { position: 'bottom', labels: { color: '#E5E7EB', font: { size: 10, weight: 'bold' } } },
+                        legend: { display: false },
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
                                     const pair = pairs[context.dataIndex];
                                     const val = symbolMap[pair];
                                     const formattedPnL = (val >= 0 ? '+' : '-') + formatMoney(Math.abs(val), curr);
-                                    return `${pair}: ${formattedPnL} (${symbolCount[pair]} trades)`;
+                                    return ` ${pair}: ${formattedPnL} (${symbolCount[pair]} trades)`;
                                 }
                             }
                         }
