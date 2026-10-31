@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Najh.an Journal - Professional Multi-Currency Trading Terminal</title>
+    <title>Najh.an Journal - Institutional Trading Terminal v4.0</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -12,13 +12,13 @@
             theme: {
                 extend: {
                     colors: {
-                        darkBg: '#05070a',
-                        cardBg: 'rgba(13, 19, 15, 0.75)',
-                        cardBorder: 'rgba(34, 197, 94, 0.2)',
+                        darkBg: '#030508',
+                        cardBg: 'rgba(9, 14, 11, 0.8)',
+                        cardBorder: 'rgba(16, 185, 129, 0.22)',
                         brandGreen: '#10B981',
                         brandGreenGlow: '#22C55E',
                         brandRed: '#EF4444',
-                        accentDark: '#0d1410'
+                        accentDark: '#0a100d'
                     },
                     fontFamily: {
                         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
@@ -39,25 +39,25 @@
     
     <style>
         body {
-            background: #05070a;
+            background: #030508;
             background-image: 
-                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.07) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(34, 197, 94, 0.04) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(34, 197, 94, 0.05) 0px, transparent 50%);
             color: #f1f5f9;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
         }
 
         .glass-card {
-            background: rgba(13, 19, 15, 0.72);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(34, 197, 94, 0.18);
-            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+            background: rgba(9, 14, 11, 0.78);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.5);
         }
 
         .glass-card:hover {
-            border-color: rgba(34, 197, 94, 0.38);
+            border-color: rgba(16, 185, 129, 0.4);
         }
 
         ::-webkit-scrollbar {
@@ -65,10 +65,10 @@
             height: 5px;
         }
         ::-webkit-scrollbar-track {
-            background: #05070a;
+            background: #030508;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(34, 197, 94, 0.3);
+            background: rgba(16, 185, 129, 0.35);
             border-radius: 9999px;
         }
         ::-webkit-scrollbar-thumb:hover {
@@ -82,14 +82,14 @@
         }
 
         .calendar-day {
-            min-height: 74px;
+            min-height: 76px;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .yearly-months-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
         }
 
         .btn-tag {
@@ -99,7 +99,7 @@
             background: linear-gradient(135deg, #10B981 0%, #059669 100%);
             color: #000000;
             font-weight: 700;
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+            box-shadow: 0 0 18px rgba(16, 185, 129, 0.55);
             border-color: transparent;
         }
     </style>
@@ -107,17 +107,17 @@
 <body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black">
 
     <!-- TOP HEADER / NAVBAR -->
-    <header class="bg-[#080c10]/90 backdrop-blur-md border-b border-emerald-500/10 sticky top-0 z-40">
+    <header class="bg-[#05080c]/90 backdrop-blur-md border-b border-emerald-500/15 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo / Brand -->
                 <div class="flex items-center gap-3 cursor-pointer group" onclick="switchView('accounts')">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-xl shadow-lg shadow-emerald-900/40 group-hover:scale-105 transition-transform duration-300">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-xl shadow-lg shadow-emerald-900/50 group-hover:scale-105 transition-transform duration-300">
                         N
                     </div>
                     <div>
                         <span class="font-extrabold text-lg text-white tracking-tight group-hover:text-emerald-400 transition">Najh.an <span class="text-emerald-400">Journal</span></span>
-                        <span class="block text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v3.5</span>
+                        <span class="block text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v4.0</span>
                     </div>
                 </div>
 
@@ -128,7 +128,7 @@
                         <span id="userEmailDisplay">Cloud Synced</span>
                     </div>
 
-                    <button id="headerAccountBadge" onclick="switchView('accounts')" class="hidden sm:flex items-center gap-2 bg-[#0e1711] hover:bg-[#142218] border border-emerald-500/20 text-xs font-semibold px-3.5 py-1.5 rounded-xl text-emerald-400 transition shadow-sm">
+                    <button id="headerAccountBadge" onclick="switchView('accounts')" class="hidden sm:flex items-center gap-2 bg-[#0a120e] hover:bg-[#0f1d15] border border-emerald-500/20 text-xs font-semibold px-3.5 py-1.5 rounded-xl text-emerald-400 transition shadow-sm">
                         <i class="fa-solid fa-wallet text-emerald-400 text-xs"></i>
                         <span id="activeAccountHeaderName">Personal</span>
                     </button>
@@ -145,7 +145,7 @@
     </header>
 
     <!-- AUTHENTICATION MODAL -->
-    <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-card rounded-2xl p-6 max-w-sm w-full space-y-5 shadow-2xl relative border-emerald-500/30">
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i class="fa-solid fa-xmark text-lg"></i>
@@ -162,12 +162,12 @@
             <div class="space-y-3">
                 <div>
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">EMAIL ADDRESS</label>
-                    <input type="email" id="authEmail" placeholder="yourname@gmail.com" class="w-full bg-[#05070a] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    <input type="email" id="authEmail" placeholder="yourname@gmail.com" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                 </div>
 
                 <div>
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">PASSWORD</label>
-                    <input type="password" id="authPassword" placeholder="••••••••" class="w-full bg-[#05070a] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    <input type="password" id="authPassword" placeholder="••••••••" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                 </div>
 
                 <div id="authErrorMsg" class="text-xs text-red-400 hidden text-center"></div>
@@ -175,7 +175,7 @@
                 <button onclick="handleEmailLogin()" class="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl transition shadow-lg shadow-emerald-900/30">
                     Login / Sign In
                 </button>
-                <button onclick="handleEmailSignUp()" class="w-full py-2.5 bg-[#0e1711] hover:bg-[#142218] text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
+                <button onclick="handleEmailSignUp()" class="w-full py-2.5 bg-[#0a120e] hover:bg-[#0f1d15] text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
                     Create New Account
                 </button>
             </div>
@@ -209,13 +209,13 @@
 
                     <div>
                         <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">ACCOUNT NAME</label>
-                        <input type="text" id="newAccountName" placeholder="e.g. Funded Apex $50k" class="w-full bg-[#05070a] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
+                        <input type="text" id="newAccountName" placeholder="e.g. Funded Apex $50k" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
                     </div>
 
                     <div class="grid grid-cols-3 gap-3">
                         <div>
                             <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">TYPE</label>
-                            <select id="newAccountType" class="w-full bg-[#05070a] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
+                            <select id="newAccountType" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
                                 <option value="PERSONAL">PERSONAL</option>
                                 <option value="FUNDED">FUNDED</option>
                                 <option value="DEMO">DEMO</option>
@@ -223,14 +223,14 @@
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">CURRENCY</label>
-                            <select id="newAccountCurrency" class="w-full bg-[#05070a] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-bold">
+                            <select id="newAccountCurrency" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-bold">
                                 <option value="USD">USD ($)</option>
                                 <option value="IDR">IDR (Rp)</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">STARTING BALANCE</label>
-                            <input type="number" id="newAccountBalance" placeholder="1000" value="1000" class="w-full bg-[#05070a] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-mono">
+                            <input type="number" id="newAccountBalance" placeholder="1000" value="1000" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-mono">
                         </div>
                     </div>
 
@@ -273,7 +273,7 @@
                 </div>
 
                 <div class="flex items-center gap-2 self-start sm:self-auto">
-                    <button onclick="switchView('accounts')" class="px-4 py-2 bg-[#0e1711] hover:bg-[#142218] text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm">
+                    <button onclick="switchView('accounts')" class="px-4 py-2 bg-[#0a120e] hover:bg-[#0f1d15] text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm">
                         <i class="fa-solid fa-right-left text-xs"></i> Switch Account
                     </button>
                 </div>
@@ -304,7 +304,7 @@
                         <p class="text-[11px] text-gray-400">Pilih bulan & tahun untuk melihat kalender dan metrik performa bulanan</p>
                     </div>
                     <div class="flex items-center gap-2 w-full sm:w-auto">
-                        <select id="dashFilterMonth" onchange="onDashFilterChange()" class="bg-[#05070a] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                        <select id="dashFilterMonth" onchange="onDashFilterChange()" class="bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                             <option value="01">Januari</option>
                             <option value="02">Februari</option>
                             <option value="03">Maret</option>
@@ -318,10 +318,10 @@
                             <option value="11">November</option>
                             <option value="12">Desember</option>
                         </select>
-                        <select id="dashFilterYear" onchange="onDashFilterChange()" class="bg-[#05070a] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                        <select id="dashFilterYear" onchange="onDashFilterChange()" class="bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                             <!-- Diisi dinamis -->
                         </select>
-                        <button onclick="resetDashFilterToCurrent()" class="px-3 py-1.5 bg-[#0e1711] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
+                        <button onclick="resetDashFilterToCurrent()" class="px-3 py-1.5 bg-[#0a120e] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
                             Bulan Ini
                         </button>
                     </div>
@@ -339,11 +339,11 @@
                                 <p id="calendarSubtext" class="text-[11px] text-gray-400">0 trades in current view</p>
                             </div>
                             <div class="flex items-center gap-2">
-                                <button onclick="navigateMonth(-1)" class="p-2 bg-[#0e1711] hover:bg-[#15251a] rounded-xl text-gray-300 text-xs border border-emerald-500/10 transition">
+                                <button onclick="navigateMonth(-1)" class="p-2 bg-[#0a120e] hover:bg-[#122017] rounded-xl text-gray-300 text-xs border border-emerald-500/10 transition">
                                     <i class="fa-solid fa-chevron-left"></i>
                                 </button>
                                 <span id="calendarMonthLabel" class="text-xs font-bold text-emerald-400 min-w-[110px] text-center font-mono">October 2026</span>
-                                <button onclick="navigateMonth(1)" class="p-2 bg-[#0e1711] hover:bg-[#15251a] rounded-xl text-gray-300 text-xs border border-emerald-500/10 transition">
+                                <button onclick="navigateMonth(1)" class="p-2 bg-[#0a120e] hover:bg-[#122017] rounded-xl text-gray-300 text-xs border border-emerald-500/10 transition">
                                     <i class="fa-solid fa-chevron-right"></i>
                                 </button>
                             </div>
@@ -428,10 +428,10 @@
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto">
                             <label class="text-[11px] text-gray-400 font-bold">Filter Tahun:</label>
-                            <select id="yearlyFilterYear" onchange="renderYearlyPerformance()" class="bg-[#05070a] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                            <select id="yearlyFilterYear" onchange="renderYearlyPerformance()" class="bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                                 <!-- Diisi dinamis -->
                             </select>
-                            <button onclick="resetYearlyFilterToCurrent()" class="px-3 py-1.5 bg-[#0e1711] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
+                            <button onclick="resetYearlyFilterToCurrent()" class="px-3 py-1.5 bg-[#0a120e] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
                                 Tahun Ini
                             </button>
                         </div>
@@ -478,14 +478,14 @@
                     <div class="flex items-center gap-3">
                         <h3 class="text-lg font-black text-white">Trade Journal</h3>
                         <!-- View Switcher -->
-                        <div class="flex bg-[#05070a] p-1 rounded-xl border border-emerald-500/20 text-xs">
+                        <div class="flex bg-[#030508] p-1 rounded-xl border border-emerald-500/20 text-xs">
                             <button onclick="setLogViewMode('table')" id="viewModeTableBtn" class="px-3 py-1 rounded-lg bg-emerald-500 text-black font-bold transition">Table</button>
                             <button onclick="setLogViewMode('cards')" id="viewModeCardsBtn" class="px-3 py-1 rounded-lg text-gray-400 hover:text-white transition">Cards</button>
                         </div>
                     </div>
                     
                     <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                        <select id="filterMonth" onchange="applyTradeLogFilter()" class="bg-[#05070a] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                        <select id="filterMonth" onchange="applyTradeLogFilter()" class="bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                             <option value="ALL">Semua Bulan</option>
                             <option value="01">Januari</option>
                             <option value="02">Februari</option>
@@ -501,15 +501,15 @@
                             <option value="12">Desember</option>
                         </select>
 
-                        <select id="filterYear" onchange="applyTradeLogFilter()" class="bg-[#05070a] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                        <select id="filterYear" onchange="applyTradeLogFilter()" class="bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                             <option value="ALL">Semua Tahun</option>
                         </select>
 
-                        <button onclick="resetTradeLogFilterToCurrentMonth()" class="px-3 py-1.5 bg-[#0e1711] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
+                        <button onclick="resetTradeLogFilterToCurrentMonth()" class="px-3 py-1.5 bg-[#0a120e] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
                             Bulan Ini
                         </button>
 
-                        <button onclick="resetTradeLogFilter()" class="px-3 py-1.5 bg-[#0e1711] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
+                        <button onclick="resetTradeLogFilter()" class="px-3 py-1.5 bg-[#0a120e] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
                             Reset
                         </button>
 
@@ -525,7 +525,7 @@
                         <h3 id="tradeFormTitle" class="text-sm font-bold text-white flex items-center gap-2">
                             <i class="fa-regular fa-pen-to-square text-emerald-400"></i> New Trade Entry
                         </h3>
-                        <button onclick="toggleTradeForm(false)" class="text-gray-400 hover:text-white text-xs px-2.5 py-1 bg-[#0e1711] rounded-lg border border-emerald-500/10">
+                        <button onclick="toggleTradeForm(false)" class="text-gray-400 hover:text-white text-xs px-2.5 py-1 bg-[#0a120e] rounded-lg border border-emerald-500/10">
                             <i class="fa-solid fa-xmark"></i> Cancel
                         </button>
                     </div>
@@ -536,12 +536,12 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">DATE *</label>
-                            <input type="date" id="tradeDate" class="w-full bg-[#05070a] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <input type="date" id="tradeDate" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                         </div>
 
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">PAIR *</label>
-                            <select id="tradePair" class="w-full bg-[#05070a] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <select id="tradePair" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                                 <option value="XAUUSD">XAUUSD</option>
                                 <option value="EURUSD">EURUSD</option>
                                 <option value="GBPUSD">GBPUSD</option>
@@ -559,7 +559,7 @@
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">POSITION *</label>
                             <div class="grid grid-cols-2 gap-2">
                                 <button type="button" id="posBuyBtn" onclick="selectPos('BUY')" class="py-2.5 border border-emerald-500 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-xl shadow-sm">BUY</button>
-                                <button type="button" id="posSellBtn" onclick="selectPos('SELL')" class="py-2.5 border border-emerald-500/10 bg-[#05070a] text-gray-400 text-xs font-bold rounded-xl">SELL</button>
+                                <button type="button" id="posSellBtn" onclick="selectPos('SELL')" class="py-2.5 border border-emerald-500/10 bg-[#030508] text-gray-400 text-xs font-bold rounded-xl">SELL</button>
                             </div>
                         </div>
                     </div>
@@ -568,15 +568,15 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">NET P/L *</label>
-                            <input type="number" step="any" id="tradeNetPnL" placeholder="100.00" oninput="calculateRR()" class="w-full bg-[#05070a] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+                            <input type="number" step="any" id="tradeNetPnL" placeholder="100.00" oninput="calculateRR()" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">RISK *</label>
-                            <input type="number" step="any" id="tradeRisk" placeholder="10.00" oninput="calculateRR()" class="w-full bg-[#05070a] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+                            <input type="number" step="any" id="tradeRisk" placeholder="10.00" oninput="calculateRR()" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">RR (AUTO)</label>
-                            <input type="number" step="any" id="tradeRR" placeholder="10.0" class="w-full bg-[#05070a] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-emerald-400 font-bold focus:outline-none font-mono">
+                            <input type="number" step="any" id="tradeRR" placeholder="10.0" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-emerald-400 font-bold focus:outline-none font-mono">
                         </div>
                     </div>
 
@@ -584,14 +584,14 @@
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">HTF OPPORTUNITY</label>
                         <div class="flex flex-wrap gap-2 items-center" id="htfOptionsGroup">
-                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#05070a] text-gray-300">Open to High</button>
-                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#05070a] text-gray-300">Open to Low</button>
-                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#05070a] text-gray-300">Low to Close</button>
-                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#05070a] text-gray-300">High to Close</button>
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">Open to High</button>
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">Open to Low</button>
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">Low to Close</button>
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">High to Close</button>
                             <button type="button" onclick="toggleCustomTagInput('htf')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
                         </div>
                         <div id="htfCustomInputContainer" class="hidden mt-2 flex gap-2">
-                            <input type="text" id="htfCustomText" placeholder="Ketik opsi HTF sendiri..." class="bg-[#05070a] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
+                            <input type="text" id="htfCustomText" placeholder="Ketik opsi HTF sendiri..." class="bg-[#030508] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
                             <button type="button" onclick="addCustomTag('htf')" class="px-3 py-1.5 bg-emerald-500 text-black font-bold text-xs rounded-xl">Tambah</button>
                         </div>
                     </div>
@@ -600,15 +600,15 @@
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">CONFLUENCE</label>
                         <div class="flex flex-wrap gap-2 items-center" id="confluenceOptionsGroup">
-                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#05070a] text-gray-300">No Confluence</button>
-                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#05070a] text-gray-300">SMT</button>
-                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#05070a] text-gray-300">SSMT</button>
-                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#05070a] text-gray-300">PSP</button>
-                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#05070a] text-gray-300">Hidden SMT</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">No Confluence</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">SMT</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">SSMT</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">PSP</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">Hidden SMT</button>
                             <button type="button" onclick="toggleCustomTagInput('confluence')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
                         </div>
                         <div id="confluenceCustomInputContainer" class="hidden mt-2 flex gap-2">
-                            <input type="text" id="confluenceCustomText" placeholder="Ketik opsi Confluence sendiri..." class="bg-[#05070a] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
+                            <input type="text" id="confluenceCustomText" placeholder="Ketik opsi Confluence sendiri..." class="bg-[#030508] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
                             <button type="button" onclick="addCustomTag('confluence')" class="px-3 py-1.5 bg-emerald-500 text-black font-bold text-xs rounded-xl">Tambah</button>
                         </div>
                     </div>
@@ -617,14 +617,14 @@
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">RESULT</label>
                         <div class="flex flex-wrap gap-2 items-center" id="resultOptionsGroup">
-                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#05070a] text-gray-300">Break Even</button>
-                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#05070a] text-gray-300">Full TP</button>
-                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#05070a] text-gray-300">SL</button>
-                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#05070a] text-gray-300">Partial</button>
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">Break Even</button>
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">Full TP</button>
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">SL</button>
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">Partial</button>
                             <button type="button" onclick="toggleCustomTagInput('result')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
                         </div>
                         <div id="resultCustomInputContainer" class="hidden mt-2 flex gap-2">
-                            <input type="text" id="resultCustomText" placeholder="Ketik opsi Result sendiri..." class="bg-[#05070a] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
+                            <input type="text" id="resultCustomText" placeholder="Ketik opsi Result sendiri..." class="bg-[#030508] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
                             <button type="button" onclick="addCustomTag('result')" class="px-3 py-1.5 bg-emerald-500 text-black font-bold text-xs rounded-xl">Tambah</button>
                         </div>
                     </div>
@@ -633,11 +633,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">TRADINGVIEW / CHART LINK</label>
-                            <input type="url" id="tradeLink" placeholder="https://www.tradingview.com/x/..." class="w-full bg-[#05070a] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <input type="url" id="tradeLink" placeholder="https://www.tradingview.com/x/..." class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">SCREENSHOT URL / LINK</label>
-                            <input type="text" id="tradeScreenshot" placeholder="Image URL or screenshot link" class="w-full bg-[#05070a] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <input type="text" id="tradeScreenshot" placeholder="Image URL or screenshot link" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                         </div>
                     </div>
 
@@ -654,7 +654,7 @@
                     <div id="tradeLogTableView" class="glass-card rounded-2xl overflow-hidden shadow-2xl">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-xs text-gray-300">
-                                <thead class="bg-[#060a0d] border-b border-emerald-500/10 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                <thead class="bg-[#05080d] border-b border-emerald-500/10 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                                     <tr>
                                         <th class="py-3.5 px-4">Date</th>
                                         <th class="py-3.5 px-4">Pair</th>
@@ -698,9 +698,9 @@
                     </h3>
                     <div class="flex items-center gap-2 text-xs">
                         <span class="text-gray-400">From:</span>
-                        <input type="date" id="analyticsFromDate" onchange="updateAnalyticsCharts()" class="bg-[#05070a] border border-emerald-500/20 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                        <input type="date" id="analyticsFromDate" onchange="updateAnalyticsCharts()" class="bg-[#030508] border border-emerald-500/20 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
                         <span class="text-gray-400">To:</span>
-                        <input type="date" id="analyticsToDate" onchange="updateAnalyticsCharts()" class="bg-[#05070a] border border-emerald-500/20 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                        <input type="date" id="analyticsToDate" onchange="updateAnalyticsCharts()" class="bg-[#030508] border border-emerald-500/20 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
                     </div>
                 </div>
 
@@ -775,7 +775,7 @@
     </main>
 
     <!-- CUSTOM NOTICE MODAL -->
-    <div id="customModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div id="customModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-card rounded-2xl p-5 max-w-sm w-full space-y-4 shadow-2xl text-center border-emerald-500/20">
             <div id="customModalIcon" class="text-3xl text-emerald-400"><i class="fa-solid fa-circle-info"></i></div>
             <h4 id="customModalTitle" class="text-base font-bold text-white">Notice</h4>
@@ -1368,7 +1368,7 @@
 
             for (let i = 0; i < adjustedFirstDay; i++) {
                 const emptyCell = document.createElement('div');
-                emptyCell.className = "calendar-day bg-[#06090c]/30 rounded-xl opacity-20 border border-transparent";
+                emptyCell.className = "calendar-day bg-[#040609]/30 rounded-xl opacity-20 border border-transparent";
                 calendarDaysContainer.appendChild(emptyCell);
             }
 
@@ -1390,7 +1390,7 @@
                 const isSelected = selectedCalendarDateStr === dayDateStr;
 
                 cell.className = `calendar-day rounded-xl p-1.5 flex flex-col justify-between border cursor-pointer ${
-                    isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/10' : 'border-emerald-500/10 bg-[#0e1711] hover:border-emerald-500/40'
+                    isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/10' : 'border-emerald-500/10 bg-[#0a120e] hover:border-emerald-500/40'
                 }`;
 
                 cell.onclick = () => selectCalendarDate(dayDateStr, isMainDashboard);
@@ -1486,7 +1486,7 @@
                 const isWin = pnlNum >= 0;
                 const formattedPnL = (isWin ? '+' : '-') + formatMoney(Math.abs(pnlNum), curr);
                 const card = document.createElement('div');
-                card.className = "bg-[#0e1711] border border-emerald-500/10 rounded-xl p-3 flex items-center justify-between gap-3 hover:border-emerald-500/30 transition";
+                card.className = "bg-[#0a120e] border border-emerald-500/10 rounded-xl p-3 flex items-center justify-between gap-3 hover:border-emerald-500/30 transition";
                 card.innerHTML = `
                     <div class="flex items-center gap-3">
                         <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${isWin ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">
@@ -1544,7 +1544,7 @@
                 const hasTrades = monthTrades.length > 0;
                 
                 card.className = `p-3.5 rounded-xl border cursor-pointer transition flex flex-col justify-between ${
-                    hasTrades ? (mPnL >= 0 ? 'bg-emerald-500/5 border-emerald-500/30 hover:border-emerald-500' : 'bg-red-500/5 border-red-500/30 hover:border-red-500') : 'bg-[#0e1711] border-emerald-500/10 opacity-60 hover:opacity-100'
+                    hasTrades ? (mPnL >= 0 ? 'bg-emerald-500/5 border-emerald-500/30 hover:border-emerald-500' : 'bg-red-500/5 border-red-500/30 hover:border-red-500') : 'bg-[#0a120e] border-emerald-500/10 opacity-60 hover:opacity-100'
                 }`;
 
                 card.onclick = () => showMonthDetailFromYearly(selectedYear, mNumStr, monthNames[m]);
@@ -1601,7 +1601,7 @@
 
             let calendarCellsHtml = '';
             for (let i = 0; i < adjustedFirstDay; i++) {
-                calendarCellsHtml += `<div class="calendar-day bg-[#06090c]/30 rounded-xl opacity-20 border border-transparent"></div>`;
+                calendarCellsHtml += `<div class="calendar-day bg-[#040609]/30 rounded-xl opacity-20 border border-transparent"></div>`;
             }
 
             for (let day = 1; day <= daysInMonth; day++) {
@@ -1619,7 +1619,7 @@
 
                 calendarCellsHtml += `
                     <div onclick="selectCalendarDate('${dayDateStr}', false)" class="calendar-day rounded-xl p-1.5 flex flex-col justify-between border cursor-pointer ${
-                        isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/10' : 'border-emerald-500/10 bg-[#0e1711] hover:border-emerald-500/40'
+                        isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/10' : 'border-emerald-500/10 bg-[#0a120e] hover:border-emerald-500/40'
                     }">
                         <div class="flex items-center justify-between text-[11px] font-bold ${dayTrades.length > 0 ? 'text-white' : 'text-gray-500'}">
                             <span>${day}</span>
@@ -1643,7 +1643,7 @@
                 tradesTableHtml = `
                     <div class="overflow-x-auto pt-2">
                         <table class="w-full text-left text-xs text-gray-300">
-                            <thead class="bg-[#060a0d] text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-emerald-500/10">
+                            <thead class="bg-[#05080d] text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-emerald-500/10">
                                 <tr>
                                     <th class="py-2 px-3">Date</th>
                                     <th class="py-2 px-3">Pair</th>
@@ -1677,31 +1677,31 @@
                     <h4 class="text-sm font-black text-emerald-400 flex items-center gap-2">
                         <i class="fa-solid fa-calendar-days"></i> Monthly Performance & Calendar View: ${monthName} ${year}
                     </h4>
-                    <button onclick="document.getElementById('selectedMonthDetailContainer').classList.add('hidden')" class="text-xs text-gray-400 hover:text-white px-2.5 py-1 bg-[#0e1711] rounded-lg border border-emerald-500/10">Tutup</button>
+                    <button onclick="document.getElementById('selectedMonthDetailContainer').classList.add('hidden')" class="text-xs text-gray-400 hover:text-white px-2.5 py-1 bg-[#0a120e] rounded-lg border border-emerald-500/10">Tutup</button>
                 </div>
 
                 <!-- Ringkasan Kartu Metrik -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div class="bg-[#0e1711] p-3 rounded-xl border border-emerald-500/10">
+                    <div class="bg-[#0a120e] p-3 rounded-xl border border-emerald-500/10">
                         <span class="text-[10px] text-gray-400 uppercase font-bold">Total PnL</span>
                         <div class="text-base font-black font-mono ${mPnL >= 0 ? 'text-emerald-400' : 'text-red-400'} mt-0.5">${(mPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(mPnL), curr)}</div>
                     </div>
-                    <div class="bg-[#0e1711] p-3 rounded-xl border border-emerald-500/10">
+                    <div class="bg-[#0a120e] p-3 rounded-xl border border-emerald-500/10">
                         <span class="text-[10px] text-gray-400 uppercase font-bold">Win Rate</span>
                         <div class="text-base font-black text-white mt-0.5">${mWinRate}% (${mWins}/${monthTrades.length})</div>
                     </div>
-                    <div class="bg-[#0e1711] p-3 rounded-xl border border-emerald-500/10">
+                    <div class="bg-[#0a120e] p-3 rounded-xl border border-emerald-500/10">
                         <span class="text-[10px] text-gray-400 uppercase font-bold">Avg R:R</span>
                         <div class="text-base font-black text-amber-400 font-mono mt-0.5">${avgRR}</div>
                     </div>
-                    <div class="bg-[#0e1711] p-3 rounded-xl border border-emerald-500/10">
+                    <div class="bg-[#0a120e] p-3 rounded-xl border border-emerald-500/10">
                         <span class="text-[10px] text-gray-400 uppercase font-bold">Total Trades</span>
                         <div class="text-base font-black text-emerald-400 mt-0.5">${monthTrades.length} Trades</div>
                     </div>
                 </div>
 
                 <!-- Tampilan Monthly Calendar View -->
-                <div class="bg-[#05070a] p-4 rounded-xl border border-emerald-500/10 space-y-3">
+                <div class="bg-[#030508] p-4 rounded-xl border border-emerald-500/10 space-y-3">
                     <div class="flex items-center justify-between">
                         <div class="text-xs font-bold text-gray-300">Kalender Harian — ${monthName} ${year} (Klik tanggal untuk filter)</div>
                         ${selectedCalendarDateStr ? `<button onclick="selectedCalendarDateStr=null; showMonthDetailFromYearly(${year}, '${monthStr}', '${monthName}')" class="text-[11px] text-emerald-400 hover:underline font-bold">Reset Filter Tanggal</button>` : ''}
@@ -1810,10 +1810,10 @@
                     <td class="py-3.5 px-4 text-gray-400 text-[11px] whitespace-nowrap">${t.htf || '—'}</td>
                     <td class="py-3.5 px-4 text-gray-400 text-[11px] whitespace-nowrap">${t.confluence || '—'}</td>
                     <td class="py-3.5 px-4 whitespace-nowrap">
-                        <span class="px-2 py-0.5 rounded text-[10px] bg-[#0e1711] text-gray-300 border border-emerald-500/10">${t.result || 'N/A'}</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] bg-[#0a120e] text-gray-300 border border-emerald-500/10">${t.result || 'N/A'}</span>
                     </td>
                     <td class="py-3.5 px-4 text-right whitespace-nowrap">
-                        <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#0e1711] hover:bg-emerald-500 hover:text-black text-emerald-400 border border-emerald-500/20 text-[11px] rounded-lg transition mr-1">Edit</button>
+                        <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#0a120e] hover:bg-emerald-500 hover:text-black text-emerald-400 border border-emerald-500/20 text-[11px] rounded-lg transition mr-1">Edit</button>
                         <button onclick="deleteTrade('${t.id}')" class="px-2.5 py-1 bg-red-500/20 hover:bg-red-500 hover:text-white text-red-400 border border-red-500/30 text-[11px] rounded-lg transition"><i class="fa-solid fa-trash-can"></i></button>
                     </td>
                 `;
@@ -1856,7 +1856,7 @@
                     <div class="flex items-center justify-between pt-3 border-t border-emerald-500/10">
                         ${linkBtnHtml}
                         <div class="flex items-center gap-1.5 ml-auto">
-                            <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#0e1711] text-emerald-400 border border-emerald-500/20 text-[11px] rounded-lg">Edit</button>
+                            <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#0a120e] text-emerald-400 border border-emerald-500/20 text-[11px] rounded-lg">Edit</button>
                             <button onclick="deleteTrade('${t.id}')" class="px-2.5 py-1 bg-red-500/20 text-red-400 border border-red-500/30 text-[11px] rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                     </div>
@@ -1887,10 +1887,10 @@
 
             if (pos === 'BUY') {
                 buyBtn.className = "py-2.5 border border-emerald-500 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-xl shadow-sm";
-                sellBtn.className = "py-2.5 border border-emerald-500/10 bg-[#05070a] text-gray-400 text-xs font-bold rounded-xl";
+                sellBtn.className = "py-2.5 border border-emerald-500/10 bg-[#030508] text-gray-400 text-xs font-bold rounded-xl";
             } else {
                 sellBtn.className = "py-2.5 border border-red-500 bg-red-500/20 text-red-400 text-xs font-bold rounded-xl shadow-sm";
-                buyBtn.className = "py-2.5 border border-emerald-500/10 bg-[#05070a] text-gray-400 text-xs font-bold rounded-xl";
+                buyBtn.className = "py-2.5 border border-emerald-500/10 bg-[#030508] text-gray-400 text-xs font-bold rounded-xl";
             }
         }
 
@@ -1925,7 +1925,7 @@
 
             const newBtn = document.createElement('button');
             newBtn.type = 'button';
-            newBtn.className = 'btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#05070a] text-gray-300 active';
+            newBtn.className = 'btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300 active';
             newBtn.innerText = val;
             newBtn.onclick = function() { toggleTagOption(newBtn, category); };
 
@@ -2119,7 +2119,7 @@
             const ctx = document.getElementById(canvasId).getContext('2d');
             
             const gradient = ctx.createLinearGradient(0, 0, 0, 250);
-            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.35)');
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.4)');
             gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
 
             charts[canvasId] = new Chart(ctx, {
@@ -2153,9 +2153,9 @@
                         }
                     },
                     scales: {
-                        x: { grid: { color: 'rgba(34, 197, 94, 0.08)' }, ticks: { color: '#9CA3AF' } },
+                        x: { grid: { color: 'rgba(16, 185, 129, 0.08)' }, ticks: { color: '#9CA3AF' } },
                         y: { 
-                            grid: { color: 'rgba(34, 197, 94, 0.08)' }, 
+                            grid: { color: 'rgba(16, 185, 129, 0.08)' }, 
                             ticks: { 
                                 color: '#9CA3AF',
                                 callback: function(val) { 
@@ -2191,7 +2191,7 @@
                         data: pnls.map(v => Math.abs(v) || 1),
                         backgroundColor: ['#10B981', '#3B82F6', '#F59E0B', '#EC4899', '#8B5CF6', '#14B8A6'],
                         borderWidth: 2,
-                        borderColor: '#080c10'
+                        borderColor: '#05080c'
                     }]
                 },
                 options: {
@@ -2236,7 +2236,7 @@
                         data: [wins, losses, bes],
                         backgroundColor: ['#10B981', '#EF4444', '#6B7280'],
                         borderWidth: 2,
-                        borderColor: '#080c10'
+                        borderColor: '#05080c'
                     }]
                 },
                 options: {
@@ -2288,7 +2288,7 @@
                     scales: {
                         x: { grid: { display: false }, ticks: { color: '#9CA3AF' } },
                         y: { 
-                            grid: { color: 'rgba(34, 197, 94, 0.08)' }, 
+                            grid: { color: 'rgba(16, 185, 129, 0.08)' }, 
                             ticks: { 
                                 color: '#9CA3AF',
                                 callback: function(val) { 
