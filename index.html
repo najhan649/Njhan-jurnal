@@ -14,7 +14,7 @@
                     colors: {
                         darkBg: '#000000',
                         cardBg: '#000000',
-                        cardBorder: 'rgba(16, 185, 129, 0.3)',
+                        cardBorder: 'rgba(16, 185, 129, 0.4)',
                         brandGreen: '#10B981',
                         brandGreenGlow: '#22C55E',
                         brandRed: '#EF4444',
@@ -44,31 +44,29 @@
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .glass-card {
             background: #000000 !important;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            box-shadow: 0 25px 60px 0 rgba(0, 0, 0, 1);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            box-shadow: 0 15px 35px 0 rgba(0, 0, 0, 1);
         }
 
         .glass-card:hover {
-            border-color: rgba(16, 185, 129, 0.6);
+            border-color: rgba(16, 185, 129, 0.7);
         }
 
         ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
+            width: 4px;
+            height: 4px;
         }
         ::-webkit-scrollbar-track {
             background: #000000;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(16, 185, 129, 0.35);
+            background: rgba(16, 185, 129, 0.5);
             border-radius: 9999px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #10B981;
         }
 
         .calendar-grid {
@@ -83,9 +81,9 @@
         }
 
         .calendar-day {
-            min-height: 84px;
+            min-height: 75px;
             height: auto;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
         }
         @media (min-width: 640px) {
             .calendar-day {
@@ -95,8 +93,8 @@
 
         .yearly-months-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
         }
         @media (min-width: 640px) {
             .yearly-months-grid {
@@ -106,13 +104,13 @@
         }
 
         .btn-tag {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
         }
         .btn-tag.active {
             background: linear-gradient(135deg, #10B981 0%, #059669 100%);
             color: #000000;
             font-weight: 700;
-            box-shadow: 0 0 18px rgba(16, 185, 129, 0.55);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
             border-color: transparent;
         }
 
@@ -121,7 +119,7 @@
             to { opacity: 1; transform: scale(1); }
         }
         .animate-fade-in {
-            animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeInScale 0.3s ease forwards;
         }
 
         #networkCanvas {
@@ -136,7 +134,7 @@
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black relative bg-black">
+<body class="flex flex-col min-h-screen pb-12 relative bg-black">
 
     <!-- Interactive Background Network Canvas -->
     <canvas id="networkCanvas"></canvas>
@@ -146,12 +144,12 @@
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-2.5 cursor-pointer group" onclick="switchView('accounts')">
-                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-lg sm:text-xl shadow-lg shadow-emerald-900/50 group-hover:scale-105 transition-transform duration-300">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-lg sm:text-xl shadow-lg shadow-emerald-900/50">
                         N
                     </div>
                     <div>
-                        <span class="font-extrabold text-base sm:text-lg text-white tracking-tight group-hover:text-emerald-400 transition">NAJHAN</span>
-                        <span class="block text-[9px] sm:text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v2.0</span>
+                        <span class="font-extrabold text-base sm:text-lg text-white tracking-tight">NAJHAN</span>
+                        <span class="block text-[9px] sm:text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal</span>
                     </div>
                 </div>
 
@@ -161,12 +159,12 @@
                         <span id="userEmailDisplay">Cloud Synced</span>
                     </div>
 
-                    <button id="headerAccountBadge" onclick="switchView('accounts')" class="hidden sm:flex items-center gap-2 bg-[#000000] hover:bg-emerald-950/30 border border-emerald-500/30 text-xs font-semibold px-3.5 py-1.5 rounded-xl text-emerald-400 transition shadow-sm">
+                    <button id="headerAccountBadge" onclick="switchView('accounts')" class="hidden sm:flex items-center gap-2 bg-[#000000] hover:bg-emerald-950/30 border border-emerald-500/30 text-xs font-semibold px-3.5 py-1.5 rounded-xl text-emerald-400 transition">
                         <i class="fa-solid fa-wallet text-emerald-400 text-xs"></i>
                         <span id="activeAccountHeaderName">Personal</span>
                     </button>
 
-                    <button id="authBtnHeader" onclick="openLandingModal()" class="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500 to-green-600 text-black text-xs font-bold rounded-xl shadow-md transition hover:scale-105">
+                    <button id="authBtnHeader" onclick="openLandingModal()" class="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500 to-green-600 text-black text-xs font-bold rounded-xl shadow-md transition">
                         Login
                     </button>
                     <button id="logoutBtnHeader" onclick="handleLogout()" class="hidden px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 text-xs font-bold rounded-xl transition">
@@ -188,22 +186,18 @@
                     <span class="px-3.5 py-1 rounded-full text-[11px] font-extrabold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 uppercase">
                         CREATED BY NAJHAN
                     </span>
-                    <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight mt-4 drop-shadow-lg">WELCOME BACK TRADE LAB</h1>
-                    <p class="text-xs sm:text-sm text-gray-300 mt-3 max-w-md mx-auto leading-relaxed font-medium">Terminal jurnal trading institusional dengan analitik presisi tinggi, kalender performa, dan sinkronisasi awan waktu nyata.</p>
+                    <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight mt-4">WELCOME BACK TRADE LAB</h1>
+                    <p class="text-xs sm:text-sm text-gray-300 mt-3 max-w-md mx-auto leading-relaxed font-medium">Terminal jurnal trading institusional dengan analitik presisi tinggi dan kalender performa.</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md mx-auto pt-2">
-                <button onclick="showLoginForm()" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-black tracking-wider uppercase rounded-xl transition shadow-xl shadow-emerald-950/60 transform hover:scale-[1.03]">
+                <button onclick="showLoginForm()" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-green-600 text-black text-xs font-black tracking-wider uppercase rounded-xl transition shadow-xl">
                     <i class="fa-solid fa-right-to-bracket mr-1.5"></i> Login Terminal
                 </button>
-                <button onclick="showSignUpForm()" class="w-full py-4 bg-[#000000] hover:bg-emerald-950/30 text-emerald-400 border border-emerald-500/40 text-xs font-bold tracking-wider uppercase rounded-xl transition hover:border-emerald-500 shadow-xl">
+                <button onclick="showSignUpForm()" class="w-full py-4 bg-[#000000] hover:bg-emerald-950/30 text-emerald-400 border border-emerald-500/40 text-xs font-bold tracking-wider uppercase rounded-xl transition">
                     <i class="fa-solid fa-user-plus mr-1.5"></i> Create New Account
                 </button>
-            </div>
-
-            <div class="text-[10px] text-gray-400 font-mono pt-4 border-t border-emerald-500/10">
-                NAJHAN Trading Systems &copy; 2026 &bull; Institutional Grade Security
             </div>
         </div>
     </div>
@@ -237,7 +231,7 @@
                 <div id="authErrorMsg" class="text-xs text-red-400 hidden text-center font-medium bg-red-500/10 p-2 rounded-xl border border-red-500/20"></div>
 
                 <div class="pt-2">
-                    <button id="authActionSubmitBtn" onclick="handleAuthSubmit()" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-black tracking-wider uppercase rounded-xl transition shadow-lg shadow-emerald-950/40">
+                    <button id="authActionSubmitBtn" onclick="handleAuthSubmit()" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-black text-xs font-black tracking-wider uppercase rounded-xl transition shadow-lg">
                         Sign In
                     </button>
                 </div>
@@ -252,7 +246,7 @@
     </div>
 
     <!-- MAIN CONTAINER -->
-    <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pt-4 sm:pt-6 flex-grow w-full relative z-20">
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-6 flex-grow w-full relative z-20">
 
         <!-- ACCOUNT SELECTION VIEW -->
         <section id="accountsView" class="max-w-2xl mx-auto space-y-6 pt-4">
@@ -277,13 +271,13 @@
 
                     <div>
                         <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">ACCOUNT NAME</label>
-                        <input type="text" id="newAccountName" placeholder="e.g. Funded Apex $50k" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
+                        <input type="text" id="newAccountName" placeholder="e.g. Funded Apex $50k" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                     </div>
 
                     <div class="grid grid-cols-3 gap-3">
                         <div>
                             <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">TYPE</label>
-                            <select id="newAccountType" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
+                            <select id="newAccountType" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none">
                                 <option value="PERSONAL">PERSONAL</option>
                                 <option value="FUNDED">FUNDED</option>
                                 <option value="DEMO">DEMO</option>
@@ -291,20 +285,20 @@
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">CURRENCY</label>
-                            <select id="newAccountCurrency" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-bold">
+                            <select id="newAccountCurrency" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none font-bold">
                                 <option value="USD">USD ($)</option>
                                 <option value="IDR">IDR (Rp)</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">STARTING BALANCE</label>
-                            <input type="number" id="newAccountBalance" placeholder="1000" value="1000" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-mono">
+                            <input type="number" id="newAccountBalance" value="1000" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none font-mono">
                         </div>
                     </div>
 
                     <div class="flex justify-end gap-2 pt-2">
-                        <button onclick="toggleAddAccountForm(false)" class="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-xs font-semibold text-white rounded-xl transition border border-gray-800">Cancel</button>
-                        <button onclick="createAccount()" class="px-5 py-2 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl transition shadow-lg shadow-emerald-900/30">Save Account</button>
+                        <button onclick="toggleAddAccountForm(false)" class="px-4 py-2 bg-gray-900 text-xs font-semibold text-white rounded-xl border border-gray-800">Cancel</button>
+                        <button onclick="createAccount()" class="px-5 py-2 bg-gradient-to-r from-emerald-500 to-green-600 text-black text-xs font-bold rounded-xl shadow-lg">Save Account</button>
                     </div>
                 </div>
 
@@ -330,22 +324,22 @@
                     <div class="text-xs text-gray-400 font-medium flex items-center gap-2">
                         <span>Starting: <span id="activeStartingBalance" class="text-gray-200 font-mono">$1,000.00</span></span> 
                         <span>&nbsp;|&nbsp;</span>
-                        <span>Current Balance: <span id="activeCurrentBalance" class="text-emerald-400 font-mono font-bold">$1,000.00</span></span>
-                        <button onclick="togglePrivacyMode()" id="privacyToggleBtn" class="ml-2 text-gray-400 hover:text-emerald-400 transition" title="Toggle Privacy Mode">
+                        <span>Current: <span id="activeCurrentBalance" class="text-emerald-400 font-mono font-bold">$1,000.00</span></span>
+                        <button onclick="togglePrivacyMode()" id="privacyToggleBtn" class="ml-2 text-gray-400 hover:text-emerald-400 transition" title="Toggle Privacy">
                             <i class="fa-solid fa-eye text-xs"></i>
                         </button>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-2 self-start sm:self-auto">
-                    <button onclick="switchView('accounts')" class="px-4 py-2 bg-[#000000] hover:bg-emerald-950/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm">
+                    <button onclick="switchView('accounts')" class="px-4 py-2 bg-[#000000] hover:bg-emerald-950/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl transition flex items-center gap-2">
                         <i class="fa-solid fa-right-left text-xs"></i> Switch Account
                     </button>
                 </div>
             </div>
 
             <!-- Tab Navigation Header -->
-            <div class="border-b border-emerald-500/20 flex gap-2 sm:gap-6 text-xs sm:text-sm font-bold overflow-x-auto">
+            <div class="border-b border-emerald-500/20 flex gap-4 text-xs sm:text-sm font-bold overflow-x-auto">
                 <button onclick="setActiveTab('dashboard')" id="tabBtnDashboard" class="py-3 px-3 border-b-2 border-emerald-500 text-emerald-400 flex items-center gap-2 whitespace-nowrap transition">
                     <i class="fa-solid fa-chart-line text-xs"></i> Dashboard
                 </button>
@@ -365,24 +359,15 @@
                         <h3 class="text-sm font-bold text-white flex items-center gap-2">
                             <i class="fa-solid fa-filter text-emerald-400"></i> Monthly Performance Filter
                         </h3>
-                        <p class="text-[11px] text-gray-400">Pilih bulan & tahun untuk melihat kalender dan metrik performa bulanan</p>
+                        <p class="text-[11px] text-gray-400">Pilih bulan & tahun untuk melihat kalender dan metrik performa</p>
                     </div>
                     <div class="flex items-center gap-2 w-full sm:w-auto">
-                        <select id="dashFilterMonth" onchange="onDashFilterChange()" class="bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
-                            <option value="01">Januari</option>
-                            <option value="02">Februari</option>
-                            <option value="03">Maret</option>
-                            <option value="04">April</option>
-                            <option value="05">Mei</option>
-                            <option value="06">Juni</option>
-                            <option value="07">Juli</option>
-                            <option value="08">Agustus</option>
-                            <option value="09">September</option>
-                            <option value="10">Oktober</option>
-                            <option value="11">November</option>
-                            <option value="12">Desember</option>
+                        <select id="dashFilterMonth" onchange="onDashFilterChange()" class="bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none font-semibold">
+                            <option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option><option value="04">April</option>
+                            <option value="05">Mei</option><option value="06">Juni</option><option value="07">Juli</option><option value="08">Agustus</option>
+                            <option value="09">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
                         </select>
-                        <select id="dashFilterYear" onchange="onDashFilterChange()" class="bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                        <select id="dashFilterYear" onchange="onDashFilterChange()" class="bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none font-semibold">
                         </select>
                         <button onclick="resetDashFilterToCurrent()" class="px-3 py-1.5 bg-[#000000] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl transition whitespace-nowrap">
                             Bulan Ini
@@ -400,13 +385,9 @@
                                 <p id="calendarSubtext" class="text-[11px] text-gray-400">0 trades in current view</p>
                             </div>
                             <div class="flex items-center gap-1.5 sm:gap-2">
-                                <button onclick="navigateMonth(-1)" class="p-2 bg-[#000000] hover:bg-emerald-950/30 rounded-xl text-gray-300 text-xs border border-emerald-500/30 transition">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </button>
-                                <span id="calendarMonthLabel" class="text-xs font-bold text-emerald-400 min-w-[95px] sm:min-w-[110px] text-center font-mono">October 2026</span>
-                                <button onclick="navigateMonth(1)" class="p-2 bg-[#000000] hover:bg-emerald-950/30 rounded-xl text-gray-300 text-xs border border-emerald-500/30 transition">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </button>
+                                <button onclick="navigateMonth(-1)" class="p-2 bg-[#000000] rounded-xl text-gray-300 text-xs border border-emerald-500/30"><i class="fa-solid fa-chevron-left"></i></button>
+                                <span id="calendarMonthLabel" class="text-xs font-bold text-emerald-400 min-w-[95px] text-center font-mono">October 2026</span>
+                                <button onclick="navigateMonth(1)" class="p-2 bg-[#000000] rounded-xl text-gray-300 text-xs border border-emerald-500/30"><i class="fa-solid fa-chevron-right"></i></button>
                             </div>
                         </div>
 
@@ -419,8 +400,8 @@
 
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pt-3 text-[11px] text-gray-400 border-t border-emerald-500/15 gap-2">
                             <div class="flex items-center gap-3">
-                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-md bg-emerald-500/30 border border-emerald-500/50"></span> Profit Day</span>
-                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-md bg-red-500/30 border border-red-500/50"></span> Loss Day</span>
+                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-md bg-emerald-500/30 border border-emerald-500/50"></span> Profit</span>
+                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-md bg-red-500/30 border border-red-500/50"></span> Loss</span>
                             </div>
                             <button onclick="clearCalendarDateFilter()" class="text-emerald-400 hover:text-emerald-300 font-bold transition">Show All Month Trades</button>
                         </div>
@@ -449,7 +430,6 @@
                         <div class="flex gap-2 text-[10px] font-semibold text-gray-400 mt-1.5">
                             <span><span id="dashWinCount" class="text-emerald-400 font-bold">0</span> W</span>
                             <span><span id="dashLossCount" class="text-red-400 font-bold">0</span> L</span>
-                            <span><span id="dashBECount" class="text-gray-300 font-bold">0</span> BE</span>
                         </div>
                     </div>
 
@@ -457,7 +437,7 @@
                         <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Monthly PnL</span>
                         <div id="dashMonthlyPnL" class="text-2xl font-black text-emerald-400 mt-1 font-mono">+$0.00</div>
                         <div class="text-[10px] text-gray-400 mt-1.5">
-                            Profit: <span id="dashProfitVal" class="text-emerald-400 font-mono">$0.00</span> &nbsp;|&nbsp; Loss: <span id="dashLossVal" class="text-red-400 font-mono">$0.00</span>
+                            Profit: <span id="dashProfitVal" class="text-emerald-400 font-mono">$0.00</span>
                         </div>
                     </div>
 
@@ -480,11 +460,11 @@
                             <h3 class="text-sm font-bold text-white flex items-center gap-2">
                                 <i class="fa-solid fa-calendar-alt text-emerald-400"></i> Yearly Performance Calendar
                             </h3>
-                            <p class="text-[11px] text-gray-400">Klik salah satu kotak bulan untuk membuka rincian kalender harian & tabel trade.</p>
+                            <p class="text-[11px] text-gray-400">Klik salah satu kotak bulan untuk membuka rincian kalender harian.</p>
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto">
-                            <label class="text-[11px] text-gray-400 font-bold">Filter Tahun:</label>
-                            <select id="yearlyFilterYear" onchange="renderYearlyPerformance()" class="bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                            <label class="text-[11px] text-gray-400 font-bold">Filter:</label>
+                            <select id="yearlyFilterYear" onchange="renderYearlyPerformance()" class="bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none font-semibold">
                             </select>
                             <button onclick="resetYearlyFilterToCurrent()" class="px-3 py-1.5 bg-[#000000] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl transition whitespace-nowrap">
                                 Tahun Ini
@@ -498,7 +478,6 @@
                     <div id="selectedMonthDetailContainer" class="hidden pt-4 border-t border-emerald-500/15 space-y-4">
                     </div>
                 </div>
-
             </div>
 
             <!-- TAB 2: TRADE LOG -->
@@ -527,41 +506,26 @@
                     <div class="flex items-center gap-3">
                         <h3 class="text-lg font-black text-white">Trade Journal</h3>
                         <div class="flex bg-[#000000] p-1 rounded-xl border border-emerald-500/30 text-xs">
-                            <button onclick="setLogViewMode('table')" id="viewModeTableBtn" class="px-3 py-1 rounded-lg bg-emerald-500 text-black font-bold transition">Table</button>
-                            <button onclick="setLogViewMode('cards')" id="viewModeCardsBtn" class="px-3 py-1 rounded-lg text-gray-400 hover:text-white transition">Cards</button>
+                            <button onclick="setLogViewMode('table')" id="viewModeTableBtn" class="px-3 py-1 rounded-lg bg-emerald-500 text-black font-bold">Table</button>
+                            <button onclick="setLogViewMode('cards')" id="viewModeCardsBtn" class="px-3 py-1 rounded-lg text-gray-400">Cards</button>
                         </div>
                     </div>
                     
                     <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                        <select id="filterMonth" onchange="applyTradeLogFilter()" class="bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                        <select id="filterMonth" onchange="applyTradeLogFilter()" class="bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none font-semibold">
                             <option value="ALL">Semua Bulan</option>
-                            <option value="01">Januari</option>
-                            <option value="02">Februari</option>
-                            <option value="03">Maret</option>
-                            <option value="04">April</option>
-                            <option value="05">Mei</option>
-                            <option value="06">Juni</option>
-                            <option value="07">Juli</option>
-                            <option value="08">Agustus</option>
-                            <option value="09">September</option>
-                            <option value="10">Oktober</option>
-                            <option value="11">November</option>
-                            <option value="12">Desember</option>
+                            <option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option><option value="04">April</option>
+                            <option value="05">Mei</option><option value="06">Juni</option><option value="07">Juli</option><option value="08">Agustus</option>
+                            <option value="09">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
                         </select>
 
-                        <select id="filterYear" onchange="applyTradeLogFilter()" class="bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                        <select id="filterYear" onchange="applyTradeLogFilter()" class="bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none font-semibold">
                             <option value="ALL">Semua Tahun</option>
                         </select>
 
-                        <button onclick="resetTradeLogFilterToCurrentMonth()" class="px-3 py-1.5 bg-[#000000] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl transition whitespace-nowrap">
-                            Bulan Ini
-                        </button>
+                        <button onclick="resetTradeLogFilter()" class="px-3 py-1.5 bg-[#000000] text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl">Reset</button>
 
-                        <button onclick="resetTradeLogFilter()" class="px-3 py-1.5 bg-[#000000] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl transition">
-                            Reset
-                        </button>
-
-                        <button id="toggleNewTradeBtn" onclick="toggleTradeForm()" class="px-4 py-1.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl shadow-lg shadow-emerald-900/30 transition flex items-center gap-2 ml-auto sm:ml-0">
+                        <button id="toggleNewTradeBtn" onclick="toggleTradeForm()" class="px-4 py-1.5 bg-gradient-to-r from-emerald-500 to-green-600 text-black text-xs font-bold rounded-xl shadow-lg transition flex items-center gap-2 ml-auto sm:ml-0">
                             <i class="fa-solid fa-plus text-xs"></i> New Trade
                         </button>
                     </div>
@@ -572,9 +536,7 @@
                         <h3 id="tradeFormTitle" class="text-sm font-bold text-white flex items-center gap-2">
                             <i class="fa-regular fa-pen-to-square text-emerald-400"></i> New Trade Entry
                         </h3>
-                        <button onclick="toggleTradeForm(false)" class="text-gray-400 hover:text-white text-xs px-2.5 py-1 bg-[#000000] rounded-lg border border-emerald-500/30">
-                            <i class="fa-solid fa-xmark"></i> Cancel
-                        </button>
+                        <button onclick="toggleTradeForm(false)" class="text-gray-400 text-xs px-2.5 py-1 bg-[#000000] rounded-lg border border-emerald-500/30"><i class="fa-solid fa-xmark"></i></button>
                     </div>
 
                     <input type="hidden" id="editingTradeId" value="">
@@ -585,12 +547,12 @@
                                 <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">DATE *</label>
                                 <span id="tradeDayNameDisplay" class="text-[10px] font-bold text-emerald-400 font-mono"></span>
                             </div>
-                            <input type="date" id="tradeDate" onchange="updateDayNameFromDateInput()" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <input type="date" id="tradeDate" onchange="updateDayNameFromDateInput()" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none">
                         </div>
 
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">PAIR *</label>
-                            <select id="tradePair" onchange="checkPairCustom()" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <select id="tradePair" onchange="checkPairCustom()" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none">
                                 <option value="XAUUSD">XAUUSD</option>
                                 <option value="EURUSD">EURUSD</option>
                                 <option value="GBPUSD">GBPUSD</option>
@@ -598,29 +560,25 @@
                                 <option value="BTCUSD">BTCUSD</option>
                                 <option value="US100">US100</option>
                                 <option value="US30">US30</option>
-                                <option value="SPX500">SPX500</option>
-                                <option value="AUDUSD">AUDUSD</option>
-                                <option value="NZDUSD">NZDUSD</option>
-                                <option value="USDJPY">USDJPY</option>
                                 <option value="OTHER">Other Pair...</option>
                             </select>
-                            <input type="text" id="tradePairCustom" placeholder="Ketik pair custom..." class="hidden w-full mt-2 bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <input type="text" id="tradePairCustom" placeholder="Ketik pair..." class="hidden w-full mt-2 bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
                         </div>
 
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">SESSION *</label>
-                            <select id="tradeSession" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
-                                <option value="Asia Session (Tokyo/Sydney)">Asia Session (Tokyo/Sydney)</option>
+                            <select id="tradeSession" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none">
+                                <option value="Asia Session (Tokyo/Sydney)">Asia Session</option>
                                 <option value="London Session">London Session</option>
                                 <option value="New York Session">New York Session</option>
-                                <option value="London-NY Overlap 🔥">London-NY Overlap 🔥</option>
+                                <option value="London-NY Overlap 🔥">London-NY Overlap</option>
                             </select>
                         </div>
 
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">POSITION *</label>
                             <div class="grid grid-cols-2 gap-2">
-                                <button type="button" id="posBuyBtn" onclick="selectPos('BUY')" class="py-2.5 border border-emerald-500 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-xl shadow-sm">BUY</button>
+                                <button type="button" id="posBuyBtn" onclick="selectPos('BUY')" class="py-2.5 border border-emerald-500 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-xl">BUY</button>
                                 <button type="button" id="posSellBtn" onclick="selectPos('SELL')" class="py-2.5 border border-emerald-500/20 bg-[#000000] text-gray-400 text-xs font-bold rounded-xl">SELL</button>
                             </div>
                         </div>
@@ -629,78 +587,21 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">NET P/L *</label>
-                            <input type="number" step="any" id="tradeNetPnL" placeholder="100.00" oninput="calculateRR()" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+                            <input type="number" step="any" id="tradeNetPnL" placeholder="100.00" oninput="calculateRR()" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none font-mono">
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">RISK *</label>
-                            <input type="number" step="any" id="tradeRisk" placeholder="10.00" oninput="calculateRR()" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+                            <input type="number" step="any" id="tradeRisk" placeholder="10.00" oninput="calculateRR()" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none font-mono">
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">RR (AUTO)</label>
-                            <input type="number" step="any" id="tradeRR" placeholder="10.0" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-emerald-400 font-bold focus:outline-none font-mono">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">HTF OPPORTUNITY</label>
-                        <div class="flex flex-wrap gap-2 items-center" id="htfOptionsGroup">
-                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#000000] text-gray-300">Open to High</button>
-                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#000000] text-gray-300">Open to Low</button>
-                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#000000] text-gray-300">Low to Close</button>
-                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#000000] text-gray-300">High to Close</button>
-                            <button type="button" onclick="toggleCustomTagInput('htf')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
-                        </div>
-                        <div id="htfCustomInputContainer" class="hidden mt-2 flex gap-2">
-                            <input type="text" id="htfCustomText" placeholder="Ketik opsi HTF sendiri..." class="bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
-                            <button type="button" onclick="addCustomTag('htf')" class="px-3 py-1.5 bg-emerald-500 text-black font-bold text-xs rounded-xl">Tambah</button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">CONFLUENCE</label>
-                        <div class="flex flex-wrap gap-2 items-center" id="confluenceOptionsGroup">
-                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#000000] text-gray-300">No Confluence</button>
-                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#000000] text-gray-300">SMT</button>
-                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#000000] text-gray-300">SSMT</button>
-                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#000000] text-gray-300">PSP</button>
-                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#000000] text-gray-300">Hidden SMT</button>
-                            <button type="button" onclick="toggleCustomTagInput('confluence')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
-                        </div>
-                        <div id="confluenceCustomInputContainer" class="hidden mt-2 flex gap-2">
-                            <input type="text" id="confluenceCustomText" placeholder="Ketik opsi Confluence sendiri..." class="bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
-                            <button type="button" onclick="addCustomTag('confluence')" class="px-3 py-1.5 bg-emerald-500 text-black font-bold text-xs rounded-xl">Tambah</button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">RESULT</label>
-                        <div class="flex flex-wrap gap-2 items-center" id="resultOptionsGroup">
-                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#000000] text-gray-300">Break Even</button>
-                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#000000] text-gray-300">Full TP</button>
-                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#000000] text-gray-300">SL</button>
-                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#000000] text-gray-300">Partial</button>
-                            <button type="button" onclick="toggleCustomTagInput('result')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
-                        </div>
-                        <div id="resultCustomInputContainer" class="hidden mt-2 flex gap-2">
-                            <input type="text" id="resultCustomText" placeholder="Ketik opsi Result sendiri..." class="bg-[#000000] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
-                            <button type="button" onclick="addCustomTag('result')" class="px-3 py-1.5 bg-emerald-500 text-black font-bold text-xs rounded-xl">Tambah</button>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">TRADINGVIEW / CHART LINK</label>
-                            <input type="url" id="tradeLink" placeholder="https://www.tradingview.com/x/..." class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">SCREENSHOT URL / LINK</label>
-                            <input type="text" id="tradeScreenshot" placeholder="Image URL or screenshot link" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <input type="number" step="any" id="tradeRR" class="w-full bg-[#000000] border border-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-emerald-400 font-bold focus:outline-none font-mono">
                         </div>
                     </div>
 
                     <div class="flex justify-end gap-3 pt-3 border-t border-emerald-500/15">
-                        <button onclick="toggleTradeForm(false)" class="px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-xs font-semibold text-white rounded-xl transition border border-gray-800">Cancel</button>
-                        <button onclick="saveTrade()" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl transition shadow-lg shadow-emerald-900/30">Save Trade</button>
+                        <button onclick="toggleTradeForm(false)" class="px-5 py-2.5 bg-gray-900 text-xs font-semibold text-white rounded-xl border border-gray-800">Cancel</button>
+                        <button onclick="saveTrade()" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 text-black text-xs font-bold rounded-xl shadow-lg">Save Trade</button>
                     </div>
                 </div>
 
@@ -710,16 +611,13 @@
                             <table class="w-full text-left text-xs text-gray-300">
                                 <thead class="bg-[#000000] border-b border-emerald-500/15 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                                     <tr>
-                                        <th class="py-3.5 px-4">Date & Day</th>
+                                        <th class="py-3.5 px-4">Date</th>
                                         <th class="py-3.5 px-4">Pair</th>
                                         <th class="py-3.5 px-4">Session</th>
                                         <th class="py-3.5 px-4">Pos</th>
                                         <th class="py-3.5 px-4">Net P/L</th>
                                         <th class="py-3.5 px-4">Risk</th>
                                         <th class="py-3.5 px-4">RR</th>
-                                        <th class="py-3.5 px-4">HTF</th>
-                                        <th class="py-3.5 px-4">Confluence</th>
-                                        <th class="py-3.5 px-4">Result</th>
                                         <th class="py-3.5 px-4 text-right">Actions</th>
                                     </tr>
                                 </thead>
@@ -728,224 +626,27 @@
                             </table>
                         </div>
                     </div>
-
-                    <div id="tradeLogCardsView" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div id="tradeLogCardsView" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4">
                     </div>
-
                     <div id="noTradesPlaceholder" class="glass-card rounded-2xl p-12 text-center hidden mt-4">
                         <div class="text-4xl mb-3">👻</div>
                         <h4 class="text-sm font-bold text-white">No trades found</h4>
-                        <p class="text-xs text-gray-400 mt-1">Tidak ada trade yang cocok dengan filter bulan/tahun tersebut.</p>
                     </div>
                 </div>
             </div>
 
             <!-- TAB 3: ANALYTICS -->
             <div id="tabContentAnalytics" class="hidden space-y-6">
-
-                <!-- 1. BAGIAN ATAS (HEADER & SUMMARY CARDS) -->
                 <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
                         <i class="fa-solid fa-chart-line text-emerald-400"></i> Performance Analytics
                     </h3>
-                    <div class="flex items-center gap-2 text-xs">
-                        <span class="text-gray-400">From:</span>
-                        <input type="date" id="analyticsFromDate" onchange="updateAnalyticsCharts()" class="bg-[#000000] border border-emerald-500/30 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
-                        <span class="text-gray-400">To:</span>
-                        <input type="date" id="analyticsToDate" onchange="updateAnalyticsCharts()" class="bg-[#000000] border border-emerald-500/30 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
-                    </div>
                 </div>
-
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div class="glass-card p-4 rounded-2xl">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">TOTAL P&L</span>
-                        <div id="analyticsPnL" class="text-xl font-black text-emerald-400 mt-1 font-mono">+$0.00</div>
-                    </div>
-                    <div class="glass-card p-4 rounded-2xl">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">WIN RATE</span>
-                        <div id="analyticsWinRate" class="text-xl font-black text-emerald-400 mt-1">0%</div>
-                    </div>
-                    <div class="glass-card p-4 rounded-2xl">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">PROFIT FACTOR</span>
-                        <div id="analyticsProfitFactor" class="text-xl font-black text-cyan-400 mt-1 font-mono">0.00</div>
-                    </div>
-                    <div class="glass-card p-4 rounded-2xl">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">EXPECTANCY</span>
-                        <div id="analyticsExpectancy" class="text-xl font-black text-amber-400 mt-1 font-mono">$0.00</div>
-                    </div>
-                </div>
-
-                <!-- 2. EQUITY CURVE (TRADE GROWTH VIEW) -->
                 <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h4 class="text-sm font-bold text-white">Trade Growth View</h4>
-                            <p class="text-[11px] text-gray-400">Equity curve over time</p>
-                        </div>
-                        <span id="equityGrowthPercentage" class="text-sm font-black text-emerald-400 font-mono">+0.00%</span>
-                    </div>
-                    <div class="h-64 relative w-full">
-                        <canvas id="equityChart"></canvas>
-                    </div>
+                    <h4 class="text-sm font-bold text-white">Trade Growth View</h4>
+                    <div class="h-64 relative w-full"><canvas id="equityChart"></canvas></div>
                 </div>
-
-                <!-- 3. OUTCOME BREAKDOWN -->
-                <div class="glass-card p-4 sm:p-6 rounded-2xl shadow-xl space-y-6">
-                    <div class="border-b border-emerald-500/15 pb-3 text-center">
-                        <h3 class="text-base font-black text-white tracking-tight uppercase">Outcome Breakdown</h3>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-                        <div class="lg:col-span-5 flex flex-col items-center justify-center space-y-3">
-                            <div class="relative w-48 h-48 sm:w-56 sm:h-56">
-                                <canvas id="outcomeDonutChart"></canvas>
-                                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
-                                    <span id="outcomeWinRateCenter" class="text-2xl font-black text-white font-mono">0%</span>
-                                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">WIN RATE</span>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-6 text-xs font-bold pt-2">
-                                <span class="flex items-center gap-1.5 text-emerald-400"><span class="w-3 h-3 rounded-full bg-emerald-500"></span> <span id="legendWinCount">0</span> Win</span>
-                                <span class="flex items-center gap-1.5 text-red-400"><span class="w-3 h-3 rounded-full bg-red-500"></span> <span id="legendLossCount">0</span> Loss</span>
-                            </div>
-                        </div>
-
-                        <div class="lg:col-span-7 space-y-5">
-                            <div class="bg-[#000000] border border-emerald-500/30 rounded-2xl p-4 space-y-3">
-                                <h4 class="text-xs font-black text-white uppercase tracking-wider border-b border-emerald-500/15 pb-2">Average Win vs Loss</h4>
-                                <div class="grid grid-cols-2 gap-y-2 text-xs">
-                                    <span class="text-gray-400">Avg Win:</span>
-                                    <span id="statAvgWin" class="text-right font-mono font-bold text-emerald-400">+$0.00</span>
-                                    <span class="text-gray-400">Avg Loss:</span>
-                                    <span id="statAvgLoss" class="text-right font-mono font-bold text-red-400">-$0.00</span>
-                                    <span class="text-gray-400">Biggest Consec. Win:</span>
-                                    <span id="statMaxConsecWin" class="text-right font-bold text-emerald-400">0 Trades</span>
-                                    <span class="text-gray-400">Biggest Consec. Loss:</span>
-                                    <span id="statMaxConsecLoss" class="text-right font-bold text-red-400">0 Trades</span>
-                                </div>
-                            </div>
-
-                            <div class="bg-[#000000] border border-emerald-500/30 rounded-2xl p-4 space-y-3">
-                                <h4 class="text-xs font-black text-white uppercase tracking-wider border-b border-emerald-500/15 pb-2">Detail Summary</h4>
-                                <div class="grid grid-cols-2 gap-y-2 text-xs">
-                                    <span class="text-gray-400">Total Win:</span>
-                                    <span id="statTotalWin" class="text-right font-bold text-emerald-400">0 Trades</span>
-                                    <span class="text-gray-400">Total Lose:</span>
-                                    <span id="statTotalLose" class="text-right font-bold text-red-400">0 Trades</span>
-                                    <span class="text-gray-400">Total Gross Profit:</span>
-                                    <span id="statGrossProfit" class="text-right font-mono font-bold text-emerald-400">+$0.00</span>
-                                    <span class="text-gray-400">Total Gross Loss:</span>
-                                    <span id="statGrossLoss" class="text-right font-mono font-bold text-red-400">-$0.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. PER-PAIR PERFORMANCE COMPARISON -->
-                <div class="glass-card p-4 sm:p-6 rounded-2xl shadow-xl space-y-6">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-emerald-500/15 gap-2">
-                        <div>
-                            <h3 class="text-base font-black text-white tracking-tight">Per-Pair Performance Comparison</h3>
-                            <p class="text-[11px] text-gray-400">Analisis komparatif performa instrumen/pair secara mendalam</p>
-                        </div>
-                        <span id="comparingPairsBadge" class="px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 w-fit">Comparing 0 pairs</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-                        <div class="bg-[#000000] border border-emerald-500/30 rounded-xl p-3.5 space-y-1">
-                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Best PnL Pair</span>
-                            <div id="bestPnlPairName" class="text-sm font-black text-amber-400">—</div>
-                            <div id="bestPnlPairVal" class="text-xs font-mono font-bold text-emerald-400">—</div>
-                        </div>
-
-                        <div class="bg-[#000000] border border-emerald-500/30 rounded-xl p-3.5 space-y-1">
-                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Highest Win Rate</span>
-                            <div id="highestWinRatePairName" class="text-sm font-black text-cyan-400">—</div>
-                            <div id="highestWinRatePairVal" class="text-xs font-mono font-bold text-white">—</div>
-                        </div>
-
-                        <div class="bg-[#000000] border border-emerald-500/30 rounded-xl p-3.5 space-y-1">
-                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Lowest Drawdown</span>
-                            <div id="lowestDdPairName" class="text-sm font-black text-purple-400">—</div>
-                            <div id="lowestDdPairVal" class="text-xs font-mono font-bold text-red-400">—</div>
-                        </div>
-
-                        <div class="bg-[#000000] border border-emerald-500/30 rounded-xl p-3.5 space-y-1">
-                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Best Profit Factor</span>
-                            <div id="bestPfPairName" class="text-sm font-black text-emerald-400">—</div>
-                            <div id="bestPfPairVal" class="text-xs font-mono font-bold text-cyan-400">—</div>
-                        </div>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-gray-300">
-                            <thead class="bg-[#000000] text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-emerald-500/15">
-                                <tr>
-                                    <th class="py-3 px-3.5">Pair</th>
-                                    <th class="py-3 px-3.5">Trades</th>
-                                    <th class="py-3 px-3.5">Win Rate</th>
-                                    <th class="py-3 px-3.5">Net PnL</th>
-                                    <th class="py-3 px-3.5">Max Drawdown</th>
-                                    <th class="py-3 px-3.5 text-right">Profit Factor</th>
-                                </tr>
-                            </thead>
-                            <tbody id="perPairTableBody" class="divide-y divide-emerald-500/10">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- 5. HOURLY ENTRY & MARKET SESSIONS -->
-                <div class="glass-card p-4 sm:p-6 rounded-2xl shadow-xl space-y-6">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-emerald-500/15 gap-2">
-                        <div>
-                            <h3 class="text-base font-black text-white tracking-tight">Hourly Entry & Market Sessions</h3>
-                            <p class="text-[11px] text-gray-400">24-Hour Clock-Face Entry Distribution & Session Breakdown</p>
-                        </div>
-                        <span class="px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 w-fit">24-HOUR CLOCK (WIB)</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-                        <div class="lg:col-span-5 h-64 relative bg-[#000000] border border-emerald-500/30 rounded-2xl p-4 flex flex-col items-center justify-center">
-                            <div class="w-48 h-48 relative">
-                                <canvas id="hourlyRadarChart"></canvas>
-                            </div>
-                        </div>
-
-                        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5" id="marketSessionsAnalyticsContainer">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 6. PNL BY WEEKDAY -->
-                <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
-                    <div class="flex justify-between items-center pb-2 border-b border-emerald-500/15">
-                        <div>
-                            <h4 class="text-sm font-bold text-white">PnL by Weekday</h4>
-                            <p class="text-[11px] text-gray-400">Performa PnL harian dalam seminggu</p>
-                        </div>
-                    </div>
-                    <div class="h-60 relative w-full">
-                        <canvas id="weekdayChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- 7. PNL BY ORDER TYPE / POSITION -->
-                <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
-                    <div class="flex justify-between items-center pb-2 border-b border-emerald-500/15">
-                        <div>
-                            <h4 class="text-sm font-bold text-white">PnL by Order Type / Position</h4>
-                            <p class="text-[11px] text-gray-400">Perbandingan performa posisi BUY vs SELL</p>
-                        </div>
-                    </div>
-                    <div class="h-60 relative w-full">
-                        <canvas id="orderTypeChart"></canvas>
-                    </div>
-                </div>
-
             </div>
-
         </section>
     </main>
 
@@ -956,7 +657,7 @@
             <h4 id="customModalTitle" class="text-base font-bold text-white">Notice</h4>
             <p id="customModalMsg" class="text-xs text-gray-300 leading-relaxed"></p>
             <div id="customModalActions" class="flex justify-center gap-2 pt-2">
-                <button onclick="closeCustomModal()" class="px-5 py-2 bg-emerald-500 text-black text-xs font-bold rounded-xl shadow-lg">OK</button>
+                <button onclick="closeCustomModal()" class="px-5 py-2 bg-emerald-500 text-black text-xs font-bold rounded-xl">OK</button>
             </div>
         </div>
     </div>
@@ -964,47 +665,27 @@
     <!-- FIREBASE MODULE & REAL-TIME LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { 
-            getAuth, 
-            signInWithEmailAndPassword, 
-            createUserWithEmailAndPassword, 
-            signOut, 
-            onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { 
-            getFirestore, 
-            doc, 
-            setDoc, 
-            deleteDoc, 
-            collection, 
-            onSnapshot 
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const appId = 'najhan-terminal-app';
-        
         const firebaseConfig = {
           apiKey: "AIzaSyBDM-GgrBkfMmFjBH4NOZczudd2Ubw6NFQ",
           authDomain: "najhan-journal.firebaseapp.com",
           projectId: "najhan-journal",
           storageBucket: "najhan-journal.firebasestorage.app",
           messagingSenderId: "650825564074",
-          appId: "1:650825564074:web:1c09b74cbfdc3bfca135d3",
-          measurementId: "G-TPM076LFXN"
+          appId: "1:650825564074:web:1c09b74cbfdc3bfca135d3"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
         let currentUser = null;
         let accountsUnsub = null;
         let tradesUnsub = null;
 
-        window.appData = {
-            accounts: [],
-            trades: [],
-            selectedAccountId: null
-        };
+        window.appData = { accounts: [], trades: [], selectedAccountId: null };
 
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
@@ -1027,52 +708,36 @@
         function setupFirestoreListeners(userId) {
             if (accountsUnsub) accountsUnsub();
             if (tradesUnsub) tradesUnsub();
-
             const accountsCol = collection(db, 'artifacts', appId, 'users', userId, 'accounts');
             const tradesCol = collection(db, 'artifacts', appId, 'users', userId, 'trades');
 
             accountsUnsub = onSnapshot(accountsCol, (snapshot) => {
                 const accounts = [];
-                snapshot.forEach(docSnap => {
-                    accounts.push({ id: docSnap.id, ...docSnap.data() });
-                });
-                
+                snapshot.forEach(docSnap => accounts.push({ id: docSnap.id, ...docSnap.data() }));
                 if (accounts.length === 0) {
                     seedDefaultAccounts(userId);
                     return;
                 }
-
                 window.appData.accounts = accounts;
                 if (!window.appData.selectedAccountId || !accounts.find(a => a.id === window.appData.selectedAccountId)) {
                     window.appData.selectedAccountId = accounts[0].id;
                 }
-                
                 window.renderAccountsList();
                 window.refreshActiveAccountData();
-            }, (error) => {
-                console.error("Accounts listener error:", error);
             });
 
             tradesUnsub = onSnapshot(tradesCol, (snapshot) => {
                 const trades = [];
-                snapshot.forEach(docSnap => {
-                    trades.push({ id: docSnap.id, ...docSnap.data() });
-                });
+                snapshot.forEach(docSnap => trades.push({ id: docSnap.id, ...docSnap.data() }));
                 window.appData.trades = trades;
                 if (window.populateAllYearFilters) window.populateAllYearFilters();
                 window.renderAccountsList();
                 window.refreshActiveAccountData();
-            }, (error) => {
-                console.error("Trades listener error:", error);
             });
         }
 
         async function seedDefaultAccounts(userId) {
-            const acc1Ref = doc(db, 'artifacts', appId, 'users', userId, 'accounts', 'acc_1');
-            const acc2Ref = doc(db, 'artifacts', appId, 'users', userId, 'accounts', 'acc_2');
-
-            await setDoc(acc1Ref, { name: 'Main Account', type: 'PERSONAL', currency: 'USD', startingBalance: 1000, created: Date.now() });
-            await setDoc(acc2Ref, { name: 'Funded Challenge', type: 'FUNDED', currency: 'USD', startingBalance: 50000, created: Date.now() - 1000 });
+            await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'accounts', 'acc_1'), { name: 'Main Account', type: 'PERSONAL', currency: 'USD', startingBalance: 1000, created: Date.now() });
         }
 
         window.handleAuthSubmit = async () => {
@@ -1080,15 +745,8 @@
             const pass = document.getElementById('authPassword').value;
             const errEl = document.getElementById('authErrorMsg');
             errEl.classList.add('hidden');
-
-            if (!email || !pass) {
-                errEl.innerText = "Please fill in email and password.";
-                errEl.classList.remove('hidden');
-                return;
-            }
-
             try {
-                if (isSignUpMode) {
+                if (window.isSignUpMode) {
                     await createUserWithEmailAndPassword(auth, email, pass);
                 } else {
                     await signInWithEmailAndPassword(auth, email, pass);
@@ -1099,34 +757,11 @@
             }
         };
 
-        window.handleLogout = async () => {
-            await signOut(auth);
-            window.showNotice("Logged out successfully.");
-        };
-
-        window.saveAccountToCloud = async (accountObj) => {
-            if (!currentUser) return;
-            const accRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'accounts', accountObj.id);
-            await setDoc(accRef, accountObj);
-        };
-
-        window.deleteAccountFromCloud = async (accId) => {
-            if (!currentUser) return;
-            const accRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'accounts', accId);
-            await deleteDoc(accRef);
-        };
-
-        window.saveTradeToCloud = async (tradeObj) => {
-            if (!currentUser) return;
-            const tradeRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'trades', tradeObj.id);
-            await setDoc(tradeRef, tradeObj);
-        };
-
-        window.deleteTradeFromCloud = async (tradeId) => {
-            if (!currentUser) return;
-            const tradeRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'trades', tradeId);
-            await deleteDoc(tradeRef);
-        };
+        window.handleLogout = async () => { await signOut(auth); };
+        window.saveAccountToCloud = async (acc) => { if (currentUser) await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'accounts', acc.id), acc); };
+        window.deleteAccountFromCloud = async (id) => { if (currentUser) await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'accounts', id)); };
+        window.saveTradeToCloud = async (t) => { if (currentUser) await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'trades', t.id), t); };
+        window.deleteTradeFromCloud = async (id) => { if (currentUser) await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'trades', id)); };
     </script>
 
     <!-- MAIN APP LOGIC JS -->
@@ -1138,15 +773,13 @@
         let charts = {};
         let isPrivacyMode = false;
         let logViewMode = 'table';
-        let isSignUpMode = false;
-
+        window.isSignUpMode = false;
         const dayNamesID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
         function initInteractiveNetworkCanvas() {
             const canvas = document.getElementById('networkCanvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-
             let width = canvas.width = window.innerWidth;
             let height = canvas.height = window.innerHeight;
 
@@ -1155,104 +788,72 @@
                 height = canvas.height = window.innerHeight;
             });
 
-            let pointer = {
-                x: null,
-                y: null,
-                radius: 170
-            };
-
-            window.addEventListener('mousemove', (e) => {
-                pointer.x = e.clientX;
-                pointer.y = e.clientY;
-            });
-
-            window.addEventListener('mouseout', () => {
-                pointer.x = null;
-                pointer.y = null;
-            });
-
+            let pointer = { x: null, y: null, radius: 140 };
+            window.addEventListener('mousemove', (e) => { pointer.x = e.clientX; pointer.y = e.clientY; });
+            window.addEventListener('mouseout', () => { pointer.x = null; pointer.y = null; });
             window.addEventListener('touchmove', (e) => {
-                if (e.touches.length > 0) {
-                    pointer.x = e.touches[0].clientX;
-                    pointer.y = e.touches[0].clientY;
-                }
+                if (e.touches.length > 0) { pointer.x = e.touches[0].clientX; pointer.y = e.touches[0].clientY; }
             }, { passive: true });
-
-            window.addEventListener('touchend', () => {
-                pointer.x = null;
-                pointer.y = null;
-            });
+            window.addEventListener('touchend', () => { pointer.x = null; pointer.y = null; });
 
             const particles = [];
-            const particleCount = Math.floor((width * height) / 12000);
-            
-            const labelsList = [
-                'BTC/USD', 'ETH/USD', 'SOL/USD', 'XRP/USD', 'EUR/USD', 'GBP/USD', 'USD/JPY', 'AUD/USD', 'XAU/USD', 'US30', 'US100', 'SPX500',
-                'ENTRY', 'TP', 'SL', 'RR', 'SETUP', 'SMT', 'BOS', 'CHOCH', 'EQUITY', 'PROFIT', 'LOSS', 'BUY', 'SELL', 'ORDERBLOCK', 'FVG'
-            ];
+            const particleCount = Math.floor((width * height) / 14000);
+            const labelsList = ['BTC/USD', 'EUR/USD', 'XAU/USD', 'US30', 'ENTRY', 'TP', 'SL', 'BUY', 'SELL', 'BOS'];
 
             for (let i = 0; i < particleCount; i++) {
                 particles.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.3,
-                    vy: (Math.random() - 0.5) * 0.3,
-                    radius: Math.random() * 1.5 + 0.8,
+                    x: Math.random() * width, y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
+                    radius: Math.random() * 1.8 + 1,
                     text: labelsList[Math.floor(Math.random() * labelsList.length)]
                 });
             }
 
             function animate() {
-                // Memastikan latar belakang kanvas sepenuhnya hitam legam pekat tiap frame
+                // Background hitam pekat penuh untuk mencegah pantulan cahaya putih di HP
                 ctx.fillStyle = '#000000';
                 ctx.fillRect(0, 0, width, height);
 
                 for (let i = 0; i < particles.length; i++) {
                     let p = particles[i];
-                    p.x += p.vx;
-                    p.y += p.vy;
-
+                    p.x += p.vx; p.y += p.vy;
                     if (p.x < 0 || p.x > width) p.vx *= -1;
                     if (p.y < 0 || p.y > height) p.vy *= -1;
 
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(16, 185, 129, 0.12)'; 
+                    ctx.fillStyle = 'rgba(16, 185, 129, 0.25)'; // Ditingkatkan agar stabil di layar HP
                     ctx.fill();
 
                     if (p.text) {
                         ctx.font = '9px JetBrains Mono, monospace';
-                        ctx.fillStyle = 'rgba(16, 185, 129, 0.08)';
-                        ctx.fillText(p.text, p.x + 7, p.y - 7);
+                        ctx.fillStyle = 'rgba(16, 185, 129, 0.12)';
+                        ctx.fillText(p.text, p.x + 6, p.y - 6);
                     }
 
                     for (let j = i + 1; j < particles.length; j++) {
                         let p2 = particles[j];
-                        let dx = p.x - p2.x;
-                        let dy = p.y - p2.y;
+                        let dx = p.x - p2.x, dy = p.y - p2.y;
                         let dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if (dist < 120) {
+                        if (dist < 110) {
                             ctx.beginPath();
                             ctx.moveTo(p.x, p.y);
                             ctx.lineTo(p2.x, p2.y);
-                            ctx.strokeStyle = `rgba(16, 185, 129, ${0.03 * (1 - dist / 120)})`; 
-                            ctx.lineWidth = 0.4;
+                            ctx.strokeStyle = `rgba(16, 185, 129, ${0.07 * (1 - dist / 110)})`;
+                            ctx.lineWidth = 0.6;
                             ctx.stroke();
                         }
                     }
 
                     if (pointer.x !== null && pointer.y !== null) {
-                        let dxMouse = p.x - pointer.x;
-                        let dyMouse = p.y - pointer.y;
-                        let distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
-
-                        if (distMouse < pointer.radius) {
+                        let dx = p.x - pointer.x, dy = p.y - pointer.y;
+                        let dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < pointer.radius) {
                             ctx.beginPath();
                             ctx.moveTo(p.x, p.y);
                             ctx.lineTo(pointer.x, pointer.y);
-                            ctx.strokeStyle = `rgba(34, 197, 94, ${0.1 * (1 - distMouse / pointer.radius)})`;
-                            ctx.lineWidth = 0.5;
+                            ctx.strokeStyle = `rgba(34, 197, 94, ${0.15 * (1 - dist / pointer.radius)})`;
+                            ctx.lineWidth = 0.8;
                             ctx.stroke();
                         }
                     }
@@ -1264,294 +865,131 @@
 
         function getDayNameFromDateStr(dateStr) {
             if (!dateStr) return '';
-            const parts = dateStr.split('-');
-            if (parts.length !== 3) return '';
-            const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-            return dayNamesID[d.getDay()] || '';
+            const p = dateStr.split('-');
+            if (p.length !== 3) return '';
+            return dayNamesID[new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2])).getDay()] || '';
         }
 
         function updateDayNameFromDateInput() {
-            const dateVal = document.getElementById('tradeDate').value;
-            const dayDisplay = document.getElementById('tradeDayNameDisplay');
-            if (dateVal) {
-                const dayName = getDayNameFromDateStr(dateVal);
-                dayDisplay.innerText = dayName ? `(${dayName})` : '';
-            } else {
-                dayDisplay.innerText = '';
-            }
+            const val = document.getElementById('tradeDate').value;
+            document.getElementById('tradeDayNameDisplay').innerText = val ? `(${getDayNameFromDateStr(val)})` : '';
         }
 
         function checkPairCustom() {
             const sel = document.getElementById('tradePair').value;
-            const customInput = document.getElementById('tradePairCustom');
-            if (sel === 'OTHER') {
-                customInput.classList.remove('hidden');
-                customInput.focus();
-            } else {
-                customInput.classList.add('hidden');
-                customInput.value = '';
-            }
+            const custom = document.getElementById('tradePairCustom');
+            if (sel === 'OTHER') { custom.classList.remove('hidden'); custom.focus(); }
+            else { custom.classList.add('hidden'); custom.value = ''; }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             initInteractiveNetworkCanvas();
             populateAllYearFilters();
             const now = new Date();
-            const mStr = String(now.getMonth() + 1).padStart(2, '0');
-            const dashMonthEl = document.getElementById('dashFilterMonth');
-            if (dashMonthEl) dashMonthEl.value = mStr;
+            document.getElementById('dashFilterMonth').value = String(now.getMonth() + 1).padStart(2, '0');
         });
 
-        function openLandingModal() {
-            document.getElementById('landingModal').classList.remove('hidden');
-        }
-
-        function closeLandingModal() {
-            document.getElementById('landingModal').classList.add('hidden');
-        }
-
-        function showLoginForm() {
-            isSignUpMode = false;
-            document.getElementById('authModalTitle').innerText = "Login Terminal";
-            document.getElementById('authModalSub').innerText = "Masukkan kredensial akun cloud Anda.";
-            document.getElementById('authActionSubmitBtn').innerText = "Sign In";
-            document.getElementById('authSwitchModeBtn').innerText = "Belum punya akun? Buat baru di sini";
-            document.getElementById('authFormModal').classList.remove('hidden');
-        }
-
-        function showSignUpForm() {
-            isSignUpMode = true;
-            document.getElementById('authModalTitle').innerText = "Create New Account";
-            document.getElementById('authModalSub').innerText = "Daftar akun baru untuk sinkronisasi cloud.";
-            document.getElementById('authActionSubmitBtn').innerText = "Sign Up";
-            document.getElementById('authSwitchModeBtn').innerText = "Sudah punya akun? Login di sini";
-            document.getElementById('authFormModal').classList.remove('hidden');
-        }
-
-        function toggleAuthMode() {
-            isSignUpMode = !isSignUpMode;
-            if (isSignUpMode) {
-                showSignUpForm();
-            } else {
-                showLoginForm();
-            }
-        }
-
-        function closeAuthFormModal() {
-            document.getElementById('authFormModal').classList.add('hidden');
-        }
+        function openLandingModal() { document.getElementById('landingModal').classList.remove('hidden'); }
+        function closeLandingModal() { document.getElementById('landingModal').classList.add('hidden'); }
+        function showLoginForm() { window.isSignUpMode = false; document.getElementById('authFormModal').classList.remove('hidden'); }
+        function showSignUpForm() { window.isSignUpMode = true; document.getElementById('authFormModal').classList.remove('hidden'); }
+        function toggleAuthMode() { window.isSignUpMode = !window.isSignUpMode; }
+        function closeAuthFormModal() { document.getElementById('authFormModal').classList.add('hidden'); }
 
         function setLogViewMode(mode) {
             logViewMode = mode;
-            const tableBtn = document.getElementById('viewModeTableBtn');
-            const cardsBtn = document.getElementById('viewModeCardsBtn');
-            const tableDiv = document.getElementById('tradeLogTableView');
-            const cardsDiv = document.getElementById('tradeLogCardsView');
-
-            if (mode === 'table') {
-                tableBtn.className = "px-3 py-1 rounded-lg bg-emerald-500 text-black font-bold transition";
-                cardsBtn.className = "px-3 py-1 rounded-lg text-gray-400 hover:text-white transition";
-                tableDiv.classList.remove('hidden');
-                cardsDiv.classList.add('hidden');
-            } else {
-                cardsBtn.className = "px-3 py-1 rounded-lg bg-emerald-500 text-black font-bold transition";
-                tableBtn.className = "px-3 py-1 rounded-lg text-gray-400 hover:text-white transition";
-                cardsDiv.classList.remove('hidden');
-                tableDiv.classList.add('hidden');
-            }
+            document.getElementById('viewModeTableBtn').className = mode === 'table' ? "px-3 py-1 rounded-lg bg-emerald-500 text-black font-bold" : "px-3 py-1 rounded-lg text-gray-400";
+            document.getElementById('viewModeCardsBtn').className = mode === 'cards' ? "px-3 py-1 rounded-lg bg-emerald-500 text-black font-bold" : "px-3 py-1 rounded-lg text-gray-400";
+            document.getElementById('tradeLogTableView').classList.toggle('hidden', mode !== 'table');
+            document.getElementById('tradeLogCardsView').classList.toggle('hidden', mode !== 'cards');
             applyTradeLogFilter();
         }
 
         function togglePrivacyMode() {
             isPrivacyMode = !isPrivacyMode;
-            const btnIcon = document.querySelector('#privacyToggleBtn i');
-            if (isPrivacyMode) {
-                btnIcon.className = "fa-solid fa-eye-slash text-xs text-emerald-400";
-            } else {
-                btnIcon.className = "fa-solid fa-eye text-xs";
-            }
             refreshActiveAccountData();
         }
 
         function populateAllYearFilters() {
-            const currentYear = new Date().getFullYear();
-            const yearsSet = new Set([currentYear]);
-
+            const curY = new Date().getFullYear();
+            const years = new Set([curY]);
             if (window.appData && window.appData.trades) {
-                window.appData.trades.forEach(t => {
-                    if (t.date) {
-                        const y = parseInt(t.date.split('-')[0]);
-                        if (!isNaN(y)) yearsSet.add(y);
-                    }
-                });
+                window.appData.trades.forEach(t => { if (t.date) years.add(parseInt(t.date.split('-')[0])); });
             }
-
-            for (let y = currentYear - 5; y <= currentYear + 5; y++) {
-                yearsSet.add(y);
-            }
-
-            const sortedYears = Array.from(yearsSet).sort((a, b) => b - a);
-
-            const trYear = document.getElementById('filterYear');
-            if (trYear) {
-                const val = trYear.value;
-                trYear.innerHTML = '<option value="ALL">Semua Tahun</option>';
-                sortedYears.forEach(y => {
-                    trYear.innerHTML += `<option value="${y}">${y}</option>`;
-                });
-                trYear.value = val || 'ALL';
-            }
-
-            const dashYear = document.getElementById('dashFilterYear');
-            if (dashYear) {
-                const val = dashYear.value;
-                dashYear.innerHTML = '';
-                sortedYears.forEach(y => {
-                    dashYear.innerHTML += `<option value="${y}">${y}</option>`;
-                });
-                dashYear.value = val || currentYear;
-            }
-
-            const yearlySel = document.getElementById('yearlyFilterYear');
-            if (yearlySel) {
-                const val = yearlySel.value;
-                yearlySel.innerHTML = '';
-                sortedYears.forEach(y => {
-                    yearlySel.innerHTML += `<option value="${y}">${y}</option>`;
-                });
-                yearlySel.value = val || currentYear;
-            }
+            for (let y = curY - 3; y <= curY + 3; y++) years.add(y);
+            const sorted = Array.from(years).sort((a,b) => b-a);
+            
+            ['filterYear', 'dashFilterYear', 'yearlyFilterYear'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const val = el.value;
+                    el.innerHTML = id === 'filterYear' ? '<option value="ALL">Semua Tahun</option>' : '';
+                    sorted.forEach(y => { el.innerHTML += `<option value="${y}">${y}</option>`; });
+                    el.value = val || curY;
+                }
+            });
         }
-
         window.populateAllYearFilters = populateAllYearFilters;
 
-        function getActiveAccount() {
-            return window.appData.accounts.find(a => a.id === window.appData.selectedAccountId) || window.appData.accounts[0];
-        }
-
+        function getActiveAccount() { return window.appData.accounts.find(a => a.id === window.appData.selectedAccountId) || window.appData.accounts[0]; }
+        
         function formatMoney(amount, currency = 'USD') {
             if (isPrivacyMode) return '••••••';
             const num = Number(amount) || 0;
-            if (currency === 'IDR') {
-                return 'Rp ' + num.toLocaleString('id-ID', {maximumFractionDigits: 0});
-            } else {
-                return '$' + num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            }
+            return currency === 'IDR' ? 'Rp ' + num.toLocaleString('id-ID', {maximumFractionDigits: 0}) : '$' + num.toLocaleString('en-US', {minimumFractionDigits: 2});
         }
-
         function formatMoneyShort(amount, currency = 'USD') {
             if (isPrivacyMode) return '••••';
             const num = Number(amount) || 0;
-            if (currency === 'IDR') {
-                return 'Rp ' + num.toLocaleString('id-ID', {maximumFractionDigits: 0});
-            } else {
-                return '$' + num.toFixed(0);
-            }
+            return currency === 'IDR' ? 'Rp ' + num.toLocaleString('id-ID') : '$' + num.toFixed(0);
         }
 
         function switchView(view) {
-            const accountsView = document.getElementById('accountsView');
-            const workspaceView = document.getElementById('workspaceView');
-            const headerBadge = document.getElementById('headerAccountBadge');
-
-            if (view === 'accounts') {
-                accountsView.classList.remove('hidden');
-                workspaceView.classList.add('hidden');
-                headerBadge.classList.add('hidden');
-                renderAccountsList();
-            } else {
+            document.getElementById('accountsView').classList.toggle('hidden', view !== 'accounts');
+            document.getElementById('workspaceView').classList.toggle('hidden', view === 'accounts');
+            document.getElementById('headerAccountBadge').classList.toggle('hidden', view === 'accounts');
+            if (view === 'workspace') {
                 const active = getActiveAccount();
-                if (!active) {
-                    showNotice("Please select or create an account first.");
-                    return;
-                }
                 window.appData.selectedAccountId = active.id;
-                const curr = active.currency || 'USD';
-
-                accountsView.classList.add('hidden');
-                workspaceView.classList.remove('hidden');
-                headerBadge.classList.remove('hidden');
-
                 document.getElementById('activeAccountHeaderName').innerText = active.name;
                 document.getElementById('activeAccountName').innerText = active.name;
                 document.getElementById('activeTypeTag').innerText = active.type;
-                document.getElementById('activeCurrencyTag').innerText = curr;
-                document.getElementById('activeStartingBalance').innerText = formatMoney(active.startingBalance, curr);
-
+                document.getElementById('activeCurrencyTag').innerText = active.currency || 'USD';
                 refreshActiveAccountData();
+            } else {
+                renderAccountsList();
             }
         }
 
         function setActiveTab(tab) {
-            const tabs = ['dashboard', 'tradelog', 'analytics'];
-            tabs.forEach(t => {
-                const btn = document.getElementById('tabBtn' + capitalize(t));
-                const content = document.getElementById('tabContent' + capitalize(t));
-                
-                if (t === tab) {
-                    btn.classList.add('border-emerald-500', 'text-emerald-400');
-                    btn.classList.remove('border-transparent', 'text-gray-400');
-                    content.classList.remove('hidden');
-                } else {
-                    btn.classList.remove('border-emerald-500', 'text-emerald-400');
-                    btn.classList.add('border-transparent', 'text-gray-400');
-                    content.classList.add('hidden');
-                }
+            ['dashboard', 'tradelog', 'analytics'].forEach(t => {
+                document.getElementById('tabBtn' + capitalize(t)).className = t === tab ? "py-3 px-3 border-b-2 border-emerald-500 text-emerald-400 font-bold whitespace-nowrap" : "py-3 px-3 border-b-2 border-transparent text-gray-400 whitespace-nowrap";
+                document.getElementById('tabContent' + capitalize(t)).classList.toggle('hidden', t !== tab);
             });
-
-            if (tab === 'analytics') {
-                setTimeout(updateAnalyticsCharts, 100);
-            }
+            if (tab === 'analytics') setTimeout(updateAnalyticsCharts, 50);
         }
-
-        function capitalize(s) {
-            return s.charAt(0).toUpperCase() + s.slice(1);
-        }
+        function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
         function renderAccountsList() {
             const container = document.getElementById('accountsList');
             if (!container) return;
             container.innerHTML = '';
-
             window.appData.accounts.forEach(acc => {
-                const accTrades = window.appData.trades.filter(t => t.accountId === acc.id);
-                const netProfit = accTrades.reduce((sum, t) => sum + (Number(t.netPnL) || 0), 0);
-                const currentBalance = Number(acc.startingBalance) + netProfit;
-                const curr = acc.currency || 'USD';
-
+                const trades = window.appData.trades.filter(t => t.accountId === acc.id);
+                const net = trades.reduce((s, t) => s + (Number(t.netPnL) || 0), 0);
                 const card = document.createElement('div');
-                card.className = "glass-card hover:border-emerald-500 rounded-2xl p-4 sm:p-5 shadow-lg flex items-center justify-between transition duration-300 cursor-pointer group";
-                
+                card.className = "glass-card rounded-2xl p-4 flex items-center justify-between cursor-pointer transition";
                 card.onclick = (e) => {
-                    if (e.target.closest('.delete-acc-btn')) return;
+                    if (e.target.closest('.delete-acc')) return;
                     window.appData.selectedAccountId = acc.id;
                     switchView('workspace');
                 };
-
-                const balanceColorClass = netProfit > 0 ? 'text-emerald-400' : netProfit < 0 ? 'text-red-400' : 'text-emerald-400';
-
                 card.innerHTML = `
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider ${
-                                acc.type === 'FUNDED' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/35' :
-                                acc.type === 'DEMO' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/35' :
-                                'bg-emerald-500/10 text-emerald-400 border border-emerald-500/35'
-                            }">${acc.type}</span>
-                            <span class="px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-gray-900 text-gray-300 border border-gray-800">${curr}</span>
-                        </div>
-                        <h3 class="text-lg sm:text-xl font-black text-white group-hover:text-emerald-400 transition">${acc.name}</h3>
-                        <p class="text-xs sm:text-sm font-bold font-mono ${balanceColorClass}">
-                            ${formatMoney(currentBalance, curr)} 
-                            <span class="text-[10px] font-normal text-gray-400 font-sans ml-1">Starting: ${formatMoney(acc.startingBalance, curr)}</span>
-                        </p>
+                    <div>
+                        <h3 class="text-base font-black text-white">${acc.name}</h3>
+                        <p class="text-xs font-mono text-emerald-400">${formatMoney(Number(acc.startingBalance) + net, acc.currency)}</p>
                     </div>
-
-                    <div class="flex items-center gap-3">
-                        <button class="delete-acc-btn text-gray-500 hover:text-red-400 p-2 rounded-xl transition" onclick="confirmDeleteAccount('${acc.id}', '${acc.name}')" title="Delete Account">
-                            <i class="fa-solid fa-xmark text-lg"></i>
-                        </button>
-                    </div>
+                    <button class="delete-acc text-red-400 p-2" onclick="deleteAccountFromCloud('${acc.id}')"><i class="fa-solid fa-xmark"></i></button>
                 `;
                 container.appendChild(card);
             });
@@ -1564,273 +1002,137 @@
 
         async function createAccount() {
             const name = document.getElementById('newAccountName').value.trim();
-            const type = document.getElementById('newAccountType').value;
-            const currency = document.getElementById('newAccountCurrency').value;
-            const balance = parseFloat(document.getElementById('newAccountBalance').value);
-
-            if (!name || isNaN(balance)) {
-                showNotice("Please fill in valid account details.");
-                return;
-            }
-
-            const newAcc = {
-                id: 'acc_' + Date.now(),
-                name: name,
-                type: type,
-                currency: currency,
-                startingBalance: balance,
-                created: Date.now()
-            };
-
+            if (!name) return;
+            const newAcc = { id: 'acc_' + Date.now(), name, type: document.getElementById('newAccountType').value, currency: document.getElementById('newAccountCurrency').value, startingBalance: parseFloat(document.getElementById('newAccountBalance').value) || 1000 };
             await window.saveAccountToCloud(newAcc);
             window.appData.selectedAccountId = newAcc.id;
-
-            document.getElementById('newAccountName').value = '';
             toggleAddAccountForm(false);
             switchView('workspace');
         }
 
-        function confirmDeleteAccount(accId, name) {
-            if (window.appData.accounts.length <= 1) {
-                showNotice("You must keep at least one account.");
-                return;
-            }
-
-            if (confirm(`Hapus akun '${name}'? Data trade pada akun ini juga akan terhapus.`)) {
-                window.deleteAccountFromCloud(accId);
-                if (window.appData.selectedAccountId === accId) {
-                    window.appData.selectedAccountId = window.appData.accounts[0].id;
-                }
-            }
-        }
-
         function refreshActiveAccountData() {
-            const activeAcc = getActiveAccount();
-            if (!activeAcc) return;
-
-            const curr = activeAcc.currency || 'USD';
-            const trades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
+            const acc = getActiveAccount();
+            if (!acc) return;
+            const curr = acc.currency || 'USD';
+            const trades = window.appData.trades.filter(t => t.accountId === acc.id);
+            const totalPnL = trades.reduce((s, t) => s + (Number(t.netPnL) || 0), 0);
             
-            const totalPnL = trades.reduce((sum, t) => sum + (Number(t.netPnL) || 0), 0);
-            const currentBal = Number(activeAcc.startingBalance) + totalPnL;
+            document.getElementById('activeStartingBalance').innerText = formatMoney(acc.startingBalance, curr);
+            document.getElementById('activeCurrentBalance').innerText = formatMoney(Number(acc.startingBalance) + totalPnL, curr);
+            document.getElementById('tlBalance').innerText = formatMoney(Number(acc.startingBalance) + totalPnL, curr);
 
-            document.getElementById('activeStartingBalance').innerText = formatMoney(activeAcc.startingBalance, curr);
-            document.getElementById('activeCurrentBalance').innerText = formatMoney(currentBal, curr);
-            document.getElementById('tlBalance').innerText = formatMoney(currentBal, curr);
-
-            populateAllYearFilters();
             renderDashboard(trades, curr);
             renderYearlyPerformance();
             applyTradeLogFilter();
         }
 
         function onDashFilterChange() {
-            const m = document.getElementById('dashFilterMonth').value;
-            const y = document.getElementById('dashFilterYear').value;
-            currentCalendarDate = new Date(parseInt(y), parseInt(m) - 1, 1);
-            selectedCalendarDateStr = null; 
+            currentCalendarDate = new Date(parseInt(document.getElementById('dashFilterYear').value), parseInt(document.getElementById('dashFilterMonth').value) - 1, 1);
+            selectedCalendarDateStr = null;
             refreshActiveAccountData();
         }
 
         function resetDashFilterToCurrent() {
             const now = new Date();
-            const mStr = String(now.getMonth() + 1).padStart(2, '0');
-            const yStr = String(now.getFullYear());
-            document.getElementById('dashFilterMonth').value = mStr;
-            document.getElementById('dashFilterYear').value = yStr;
+            document.getElementById('dashFilterMonth').value = String(now.getMonth() + 1).padStart(2, '0');
+            document.getElementById('dashFilterYear').value = now.getFullYear();
             currentCalendarDate = new Date();
             selectedCalendarDateStr = null;
             refreshActiveAccountData();
         }
 
         function resetYearlyFilterToCurrent() {
-            const now = new Date();
-            const yStr = String(now.getFullYear());
-            const yearlySel = document.getElementById('yearlyFilterYear');
-            if (yearlySel) {
-                yearlySel.value = yStr;
-                renderYearlyPerformance();
-            }
+            document.getElementById('yearlyFilterYear').value = new Date().getFullYear();
+            renderYearlyPerformance();
         }
 
-        function resetTradeLogFilterToCurrentMonth() {
-            const now = new Date();
-            const mStr = String(now.getMonth() + 1).padStart(2, '0');
-            const yStr = String(now.getFullYear());
-            document.getElementById('filterMonth').value = mStr;
-            document.getElementById('filterYear').value = yStr;
+        function resetTradeLogFilter() {
+            document.getElementById('filterMonth').value = 'ALL';
+            document.getElementById('filterYear').value = 'ALL';
             applyTradeLogFilter();
         }
 
         function renderDashboard(trades, curr) {
-            const mSel = document.getElementById('dashFilterMonth').value;
-            const ySel = document.getElementById('dashFilterYear').value;
-            currentCalendarDate = new Date(parseInt(ySel), parseInt(mSel) - 1, 1);
-
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
             renderCalendar(trades, curr, 'calendarDays', 'calendarMonthLabel', 'calendarSubtext', true);
             renderRecentTrades(trades, curr);
 
-            const year = currentCalendarDate.getFullYear();
-            const month = currentCalendarDate.getMonth();
-
-            const monthTrades = trades.filter(t => {
+            const mTrades = trades.filter(t => {
                 const d = new Date(t.date);
                 return d.getFullYear() === year && d.getMonth() === month;
             });
 
-            const winCount = monthTrades.filter(t => Number(t.netPnL) > 0).length;
-            const lossCount = monthTrades.filter(t => Number(t.netPnL) < 0).length;
-            const beCount = monthTrades.filter(t => Number(t.netPnL) === 0).length;
-            const total = monthTrades.length;
-
-            const winRate = total > 0 ? Math.round((winCount / total) * 100) : 0;
-
-            const profitVal = monthTrades.filter(t => Number(t.netPnL) > 0).reduce((s, t) => s + Number(t.netPnL), 0);
-            const lossVal = monthTrades.filter(t => Number(t.netPnL) < 0).reduce((s, t) => s + Math.abs(Number(t.netPnL)), 0);
-            const monthPnL = profitVal - lossVal;
-
-            const grossProfit = profitVal;
-            const grossLoss = lossVal;
-            const profitFactor = grossLoss > 0 ? (grossProfit / grossLoss).toFixed(2) : (grossProfit > 0 ? 'Infinite' : '0.00');
-            const avgWin = winCount > 0 ? grossProfit / winCount : 0;
-            const avgLoss = lossCount > 0 ? grossLoss / lossCount : 0;
-            const winProb = total > 0 ? winCount / total : 0;
-            const lossProb = total > 0 ? lossCount / total : 0;
-            const expectancy = (winProb * avgWin) - (lossProb * avgLoss);
+            const wins = mTrades.filter(t => Number(t.netPnL) > 0).length;
+            const losses = mTrades.filter(t => Number(t.netPnL) < 0).length;
+            const total = mTrades.length;
+            const winRate = total > 0 ? Math.round((wins / total) * 100) : 0;
+            const pVal = mTrades.filter(t => Number(t.netPnL) > 0).reduce((s, t) => s + Number(t.netPnL), 0);
+            const lVal = mTrades.filter(t => Number(t.netPnL) < 0).reduce((s, t) => s + Math.abs(Number(t.netPnL)), 0);
+            const mPnL = pVal - lVal;
 
             document.getElementById('dashWinRate').innerText = winRate + '%';
-            document.getElementById('dashWinCount').innerText = winCount;
-            document.getElementById('dashLossCount').innerText = lossCount;
-            document.getElementById('dashBECount').innerText = beCount;
-
-            document.getElementById('dashMonthlyPnL').innerText = (monthPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(monthPnL), curr);
-            document.getElementById('dashMonthlyPnL').className = `text-2xl font-black mt-1 font-mono ${monthPnL >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
-            document.getElementById('dashProfitVal').innerText = formatMoney(profitVal, curr);
-            document.getElementById('dashLossVal').innerText = formatMoney(lossVal, curr);
-
-            document.getElementById('dashProfitFactor').innerText = profitFactor;
-            document.getElementById('dashExpectancy').innerText = (expectancy >= 0 ? '+' : '-') + formatMoney(Math.abs(expectancy), curr);
-            document.getElementById('dashExpectancy').className = `text-2xl font-black mt-1 font-mono ${expectancy >= 0 ? 'text-amber-400' : 'text-red-400'}`;
+            document.getElementById('dashWinCount').innerText = wins;
+            document.getElementById('dashLossCount').innerText = losses;
+            document.getElementById('dashMonthlyPnL').innerText = (mPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(mPnL), curr);
+            document.getElementById('dashProfitVal').innerText = formatMoney(pVal, curr);
+            document.getElementById('dashProfitFactor').innerText = lVal > 0 ? (pVal / lVal).toFixed(2) : '0.00';
+            document.getElementById('dashExpectancy').innerText = total > 0 ? formatMoney((pVal - lVal) / total, curr) : '$0.00';
         }
 
-        function renderCalendar(trades, curr, containerId = 'calendarDays', labelId = 'calendarMonthLabel', subtextId = 'calendarSubtext', isMainDashboard = true) {
+        function renderCalendar(trades, curr, containerId, labelId, subtextId, isMain) {
             const year = currentCalendarDate.getFullYear();
             const month = currentCalendarDate.getMonth();
-
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            const labelEl = document.getElementById(labelId);
-            if (labelEl) labelEl.innerText = `${monthNames[month]} ${year}`;
+            document.getElementById(labelId).innerText = `${monthNames[month]} ${year}`;
+            
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
 
-            const calendarDaysContainer = document.getElementById(containerId);
-            if (!calendarDaysContainer) return;
-            calendarDaysContainer.innerHTML = '';
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1;
+            const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
             const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-            for (let i = 0; i < adjustedFirstDay; i++) {
-                const emptyCell = document.createElement('div');
-                emptyCell.className = "calendar-day bg-[#000000] rounded-xl opacity-20 border border-transparent";
-                calendarDaysContainer.appendChild(emptyCell);
+            for (let i = 0; i < firstDay; i++) {
+                container.innerHTML += `<div class="calendar-day bg-[#000000] rounded-xl opacity-10"></div>`;
             }
 
-            const tradesByDate = {};
-            trades.forEach(t => {
-                if (!tradesByDate[t.date]) tradesByDate[t.date] = [];
-                tradesByDate[t.date].push(t);
-            });
+            const byDate = {};
+            trades.forEach(t => { if (!byDate[t.date]) byDate[t.date] = []; byDate[t.date].push(t); });
 
-            let monthTradeCount = 0;
-
+            let count = 0;
             for (let day = 1; day <= daysInMonth; day++) {
-                const dayDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const dayTrades = tradesByDate[dayDateStr] || [];
-                monthTradeCount += dayTrades.length;
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dTrades = byDate[dateStr] || [];
+                count += dTrades.length;
+                const dNet = dTrades.reduce((s, t) => s + Number(t.netPnL), 0);
 
-                const dayNetPnL = dayTrades.reduce((s, t) => s + Number(t.netPnL), 0);
-
-                const cell = document.createElement('div');
-                const isSelected = selectedCalendarDateStr === dayDateStr;
-
-                let bgDayClass = 'border-emerald-500/20 bg-[#000000] hover:border-emerald-500';
-                if (dayTrades.length > 0) {
-                    if (dayNetPnL > 0) {
-                        bgDayClass = 'border-emerald-500/60 bg-emerald-500/20 hover:bg-emerald-500/30';
-                    } else if (dayNetPnL < 0) {
-                        bgDayClass = 'border-red-500/60 bg-red-500/20 hover:bg-red-500/30';
-                    } else {
-                        bgDayClass = 'border-gray-500/40 bg-gray-900/40 hover:bg-gray-800';
-                    }
+                let bg = 'border-emerald-500/20 bg-[#000000]';
+                if (dTrades.length > 0) {
+                    bg = dNet >= 0 ? 'border-emerald-500/60 bg-emerald-500/20' : 'border-red-500/60 bg-red-500/20';
                 }
+                if (selectedCalendarDateStr === dateStr) bg += ' ring-2 ring-emerald-400';
 
-                if (isSelected) {
-                    bgDayClass += ' ring-2 ring-emerald-400 border-emerald-400';
-                }
-
-                cell.className = `calendar-day rounded-xl p-1.5 sm:p-2 flex flex-col justify-between border cursor-pointer transition ${bgDayClass}`;
-                cell.onclick = () => selectCalendarDate(dayDateStr, isMainDashboard);
-
-                let badgeHTML = '';
-                if (dayTrades.length > 0) {
-                    const colorClass = dayNetPnL >= 0 ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
-                    const formattedAmount = (dayNetPnL >= 0 ? '+' : '-') + formatMoneyShort(Math.abs(dayNetPnL), curr);
-                    
-                    badgeHTML = `
-                        <div class="space-y-0.5 mt-1">
-                            <div class="text-[10px] sm:text-[11px] font-mono ${colorClass} leading-tight truncate">
-                                ${formattedAmount}
-                            </div>
-                            <div class="text-[8px] sm:text-[9px] text-gray-400 font-medium">
-                                ${dayTrades.length} trade${dayTrades.length > 1 ? 's' : ''}
-                            </div>
-                        </div>
-                    `;
-                }
-
-                cell.innerHTML = `
-                    <div class="flex items-center justify-between text-[10px] sm:text-[11px] font-bold ${dayTrades.length > 0 ? 'text-white' : 'text-gray-500'}">
-                        <span>${day}</span>
-                        ${dayTrades.length > 0 ? `<span class="w-1.5 h-1.5 rounded-full ${dayNetPnL >= 0 ? 'bg-emerald-400 shadow-sm shadow-emerald-400' : 'bg-red-400 shadow-sm shadow-red-400'}"></span>` : ''}
-                    </div>
-                    ${badgeHTML}
-                `;
-
-                calendarDaysContainer.appendChild(cell);
+                let badge = dTrades.length > 0 ? `<div class="text-[9px] font-mono font-bold ${dNet >= 0 ? 'text-emerald-400' : 'text-red-400'}">${formatMoneyShort(dNet, curr)}</div>` : '';
+                container.innerHTML += `
+                    <div class="calendar-day rounded-xl p-1.5 flex flex-col justify-between border cursor-pointer ${bg}" onclick="selectCalendarDate('${dateStr}', ${isMain})">
+                        <div class="text-[10px] font-bold text-gray-300">${day}</div>
+                        ${badge}
+                    </div>`;
             }
-
-            const subtextEl = document.getElementById(subtextId);
-            if (subtextEl) subtextEl.innerText = `${monthTradeCount} trades in ${monthNames[month]}`;
+            document.getElementById(subtextId).innerText = `${count} trades`;
         }
 
         function navigateMonth(dir) {
             currentCalendarDate.setMonth(currentCalendarDate.getMonth() + dir);
-            const newMStr = String(currentCalendarDate.getMonth() + 1).padStart(2, '0');
-            const newYStr = String(currentCalendarDate.getFullYear());
-            document.getElementById('dashFilterMonth').value = newMStr;
-            document.getElementById('dashFilterYear').value = newYStr;
-            selectedCalendarDateStr = null; 
+            document.getElementById('dashFilterMonth').value = String(currentCalendarDate.getMonth() + 1).padStart(2, '0');
+            document.getElementById('dashFilterYear').value = currentCalendarDate.getFullYear();
+            selectedCalendarDateStr = null;
             refreshActiveAccountData();
         }
 
-        function selectCalendarDate(dateStr, isMainDashboard = true) {
-            if (selectedCalendarDateStr === dateStr) {
-                selectedCalendarDateStr = null; 
-            } else {
-                selectedCalendarDateStr = dateStr;
-                document.getElementById('tradeDate').value = dateStr;
-                updateDayNameFromDateInput();
-            }
-            if (isMainDashboard) {
-                refreshActiveAccountData();
-            } else {
-                const parts = dateStr.split('-');
-                const y = parseInt(parts[0]);
-                const mStr = parts[1];
-                const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-                const mName = monthNames[parseInt(mStr) - 1];
-                showMonthDetailFromYearly(y, mStr, mName);
-            }
+        function selectCalendarDate(dateStr, isMain) {
+            selectedCalendarDateStr = selectedCalendarDateStr === dateStr ? null : dateStr;
+            if (isMain) refreshActiveAccountData();
         }
 
         function clearCalendarDateFilter() {
@@ -1840,1110 +1142,128 @@
 
         function renderRecentTrades(trades, curr) {
             const container = document.getElementById('recentTradesContainer');
-            const titleEl = document.getElementById('recentTradesTitle');
-            const subtitleEl = document.getElementById('recentTradesFilterSubtitle');
-            const badgeEl = document.getElementById('recentTradesCountBadge');
-
             container.innerHTML = '';
-
-            const year = currentCalendarDate.getFullYear();
-            const month = currentCalendarDate.getMonth();
-
-            let monthTrades = trades.filter(t => {
-                if (!t.date) return false;
+            let mTrades = trades.filter(t => {
                 const d = new Date(t.date);
-                return d.getFullYear() === year && d.getMonth() === month;
+                return d.getFullYear() === currentCalendarDate.getFullYear() && d.getMonth() === currentCalendarDate.getMonth();
             });
+            if (selectedCalendarDateStr) mTrades = mTrades.filter(t => t.date === selectedCalendarDateStr);
 
-            if (selectedCalendarDateStr) {
-                monthTrades = monthTrades.filter(t => t.date === selectedCalendarDateStr);
-                const dayName = getDayNameFromDateStr(selectedCalendarDateStr);
-                titleEl.innerText = `Trades for ${selectedCalendarDateStr} ${dayName ? '(' + dayName + ')' : ''}`;
-                subtitleEl.innerText = "Filtered by selected calendar date";
-            } else {
-                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                titleEl.innerText = `Trades in ${monthNames[month]} ${year}`;
-                subtitleEl.innerText = "Showing trades for active month";
-            }
-
-            monthTrades.sort((a, b) => new Date(b.date) - new Date(a.date));
-            badgeEl.innerText = `${monthTrades.length} trades`;
-
-            if (monthTrades.length === 0) {
-                container.innerHTML = `
-                    <div class="py-12 text-center text-gray-500 text-xs">
-                        Tidak ada trade pada ${selectedCalendarDateStr ? 'tanggal ' + selectedCalendarDateStr : 'bulan ini'}.
-                    </div>
-                `;
-                return;
-            }
-
-            monthTrades.forEach(t => {
-                const pnlNum = Number(t.netPnL) || 0;
-                const isWin = pnlNum >= 0;
-                const formattedPnL = (isWin ? '+' : '-') + formatMoney(Math.abs(pnlNum), curr);
-                const dayName = getDayNameFromDateStr(t.date);
-                const card = document.createElement('div');
-                card.className = "bg-[#000000] border border-emerald-500/20 rounded-xl p-3 flex items-center justify-between gap-3 hover:border-emerald-500/60 transition";
-                card.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${isWin ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/35' : 'bg-red-500/10 text-red-400 border border-red-500/35'}">
-                            ${t.position}
-                        </span>
+            mTrades.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(t => {
+                const isWin = Number(t.netPnL) >= 0;
+                container.innerHTML += `
+                    <div class="bg-[#000000] border border-emerald-500/20 rounded-xl p-3 flex justify-between items-center text-xs">
                         <div>
-                            <div class="text-xs font-bold text-white flex items-center gap-2">
-                                ${t.pair}
-                                <span class="text-[10px] text-gray-400 font-mono font-normal">${t.date} ${dayName ? '<b class="text-emerald-400/80">(' + dayName + ')</b>' : ''}</span>
-                            </div>
-                            <div class="text-[10px] text-gray-400 mt-0.5">
-                                Session: <span class="text-emerald-400">${t.session || '—'}</span> &nbsp;|&nbsp; RR: <span class="text-amber-400 font-bold font-mono">${t.rr || '0'}</span>
-                            </div>
+                            <span class="font-bold text-white">${t.pair}</span> <span class="${isWin ? 'text-emerald-400' : 'text-red-400'} font-bold">(${t.position})</span>
+                            <div class="text-[10px] text-gray-400">${t.date}</div>
                         </div>
-                    </div>
-                    <div class="text-right font-mono">
-                        <div class="text-xs font-black ${isWin ? 'text-emerald-400' : 'text-red-400'}">
-                            ${formattedPnL}
-                        </div>
-                        <div class="text-[10px] text-gray-400">Risk: ${formatMoney(t.risk || 0, curr)}</div>
-                    </div>
-                `;
-                container.appendChild(card);
+                        <div class="font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'}">${formatMoney(t.netPnL, curr)}</div>
+                    </div>`;
             });
         }
 
         function renderYearlyPerformance() {
-            const activeAcc = getActiveAccount();
-            if (!activeAcc) return;
-            const curr = activeAcc.currency || 'USD';
-            const trades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
-
-            const yearSelect = document.getElementById('yearlyFilterYear');
-            const selectedYear = yearSelect ? parseInt(yearSelect.value) : new Date().getFullYear();
-
+            const acc = getActiveAccount();
+            if (!acc) return;
+            const year = parseInt(document.getElementById('yearlyFilterYear').value) || new Date().getFullYear();
             const container = document.getElementById('yearlyMonthsCalendarGrid');
-            if (!container) return;
             container.innerHTML = '';
+            const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
 
-            const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-
-            for (let m = 0; m < 12; m++) {
-                const mNumStr = String(m + 1).padStart(2, '0');
-                const monthTrades = trades.filter(t => {
-                    if (!t.date) return false;
-                    const parts = t.date.split('-');
-                    return parseInt(parts[0]) === selectedYear && parseInt(parts[1]) === (m + 1);
-                });
-
-                const mPnL = monthTrades.reduce((sum, t) => sum + Number(t.netPnL || 0), 0);
-
-                const card = document.createElement('div');
-                const hasTrades = monthTrades.length > 0;
-                
-                card.className = `p-3.5 rounded-xl border cursor-pointer transition flex flex-col justify-between ${
-                    hasTrades ? (mPnL >= 0 ? 'bg-emerald-500/10 border-emerald-500/40 hover:border-emerald-500' : 'bg-red-500/10 border-red-500/40 hover:border-red-500') : 'bg-[#000000] border-emerald-500/20 opacity-60 hover:opacity-100'
-                }`;
-
-                card.onclick = () => showMonthDetailFromYearly(selectedYear, mNumStr, monthNames[m]);
-
-                card.innerHTML = `
-                    <div class="flex items-center justify-between text-xs font-bold text-white mb-2">
-                        <span>${monthNames[m]}</span>
-                        <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/15 px-1.5 py-0.5 rounded font-bold">${monthTrades.length} trades</span>
-                    </div>
-                    <div>
-                        <div class="text-xs sm:text-sm font-black font-mono ${hasTrades ? (mPnL >= 0 ? 'text-emerald-400' : 'text-red-400') : 'text-gray-500'}">
-                            ${hasTrades ? ((mPnL >= 0 ? '+' : '-') + formatMoneyShort(Math.abs(mPnL), curr)) : '—'}
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            }
-        }
-
-        function showMonthDetailFromYearly(year, monthStr, monthName) {
-            const activeAcc = getActiveAccount();
-            if (!activeAcc) return;
-            const curr = activeAcc.currency || 'USD';
-            const trades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
-
-            const monthIndex = parseInt(monthStr) - 1;
-            const monthTrades = trades.filter(t => {
-                if (!t.date) return false;
-                const parts = t.date.split('-');
-                return parseInt(parts[0]) === year && parts[1] === monthStr;
+            months.forEach((m, idx) => {
+                const mTrades = window.appData.trades.filter(t => t.accountId === acc.id && t.date.startsWith(`${year}-${String(idx+1).padStart(2,'0')}`));
+                const pnl = mTrades.reduce((s, t) => s + Number(t.netPnL), 0);
+                container.innerHTML += `
+                    <div class="p-3 rounded-xl border border-emerald-500/20 bg-[#000000] cursor-pointer" onclick="currentCalendarDate=new Date(${year}, ${idx}, 1); refreshActiveAccountData(); setActiveTab('dashboard');">
+                        <div class="text-xs font-bold text-white">${m}</div>
+                        <div class="text-xs font-mono font-bold ${pnl >= 0 ? 'text-emerald-400' : 'text-red-400'}">${mTrades.length > 0 ? formatMoneyShort(pnl, acc.currency) : '—'}</div>
+                    </div>`;
             });
-
-            const detailContainer = document.getElementById('selectedMonthDetailContainer');
-            detailContainer.classList.remove('hidden');
-
-            const mPnL = monthTrades.reduce((sum, t) => sum + Number(t.netPnL || 0), 0);
-            const mWins = monthTrades.filter(t => Number(t.netPnL) > 0).length;
-            const mWinRate = monthTrades.length > 0 ? Math.round((mWins / monthTrades.length) * 100) : 0;
-            const avgRR = monthTrades.length > 0 ? (monthTrades.reduce((s, t) => s + (Number(t.rr) || 0), 0) / monthTrades.length).toFixed(2) : 0;
-
-            const firstDay = new Date(year, monthIndex, 1).getDay();
-            const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1;
-            const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
-
-            const tradesByDate = {};
-            monthTrades.forEach(t => {
-                if (!tradesByDate[t.date]) tradesByDate[t.date] = [];
-                tradesByDate[t.date].push(t);
-            });
-
-            let calendarCellsHtml = '';
-            for (let i = 0; i < adjustedFirstDay; i++) {
-                calendarCellsHtml += `<div class="calendar-day bg-[#000000] rounded-xl opacity-20 border border-transparent"></div>`;
-            }
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayDateStr = `${year}-${monthStr}-${String(day).padStart(2, '0')}`;
-                const dayTrades = tradesByDate[dayDateStr] || [];
-                const dayNetPnL = dayTrades.reduce((s, t) => s + Number(t.netPnL), 0);
-
-                const isSelected = selectedCalendarDateStr === dayDateStr;
-
-                let bgDayClass = 'border-emerald-500/20 bg-[#000000] hover:border-emerald-500';
-                if (dayTrades.length > 0) {
-                    if (dayNetPnL > 0) {
-                        bgDayClass = 'border-emerald-500/60 bg-emerald-500/20 hover:bg-emerald-500/30';
-                    } else if (dayNetPnL < 0) {
-                        bgDayClass = 'border-red-500/60 bg-red-500/20 hover:bg-red-500/30';
-                    } else {
-                        bgDayClass = 'border-gray-500/40 bg-gray-900/40 hover:bg-gray-800';
-                    }
-                }
-                if (isSelected) {
-                    bgDayClass += ' ring-2 ring-emerald-400 border-emerald-400';
-                }
-
-                let badgeHTML = '';
-                if (dayTrades.length > 0) {
-                    const colorClass = dayNetPnL >= 0 ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
-                    const formattedAmount = (dayNetPnL >= 0 ? '+' : '-') + formatMoneyShort(Math.abs(dayNetPnL), curr);
-                    badgeHTML = `
-                        <div class="space-y-0.5 mt-1">
-                            <div class="text-[10px] sm:text-[11px] font-mono ${colorClass} leading-tight truncate">
-                                ${formattedAmount}
-                            </div>
-                            <div class="text-[8px] sm:text-[9px] text-gray-400 font-medium">
-                                ${dayTrades.length} trade${dayTrades.length > 1 ? 's' : ''}
-                            </div>
-                        </div>
-                    `;
-                }
-
-                calendarCellsHtml += `
-                    <div onclick="selectCalendarDate('${dayDateStr}', false)" class="calendar-day rounded-xl p-1.5 sm:p-2 flex flex-col justify-between border cursor-pointer transition ${bgDayClass}">
-                        <div class="flex items-center justify-between text-[10px] sm:text-[11px] font-bold ${dayTrades.length > 0 ? 'text-white' : 'text-gray-500'}">
-                            <span>${day}</span>
-                            ${dayTrades.length > 0 ? `<span class="w-1.5 h-1.5 rounded-full ${dayNetPnL >= 0 ? 'bg-emerald-400 shadow-sm shadow-emerald-400' : 'bg-red-400 shadow-sm shadow-red-400'}"></span>` : ''}
-                        </div>
-                        ${badgeHTML}
-                    </div>
-                `;
-            }
-
-            let displayedTrades = [...monthTrades];
-            if (selectedCalendarDateStr && selectedCalendarDateStr.startsWith(`${year}-${monthStr}`)) {
-                displayedTrades = displayedTrades.filter(t => t.date === selectedCalendarDateStr);
-            }
-
-            let tradesTableHtml = '';
-            if (displayedTrades.length === 0) {
-                tradesTableHtml = `<div class="text-xs text-gray-500 py-4 text-center">Tidak ada catatan trade ${selectedCalendarDateStr ? 'pada tanggal ' + selectedCalendarDateStr : 'pada bulan ' + monthName + ' ' + year}.</div>`;
-            } else {
-                displayedTrades.sort((a, b) => new Date(b.date) - new Date(a.date));
-                tradesTableHtml = `
-                    <div class="overflow-x-auto pt-2">
-                        <table class="w-full text-left text-xs text-gray-300">
-                            <thead class="bg-[#000000] text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-emerald-500/15">
-                                <tr>
-                                    <th class="py-3 px-3">Date & Day</th>
-                                    <th class="py-3 px-3">Pair</th>
-                                    <th class="py-3 px-3">Session</th>
-                                    <th class="py-3 px-3">Pos</th>
-                                    <th class="py-3 px-3">Net P/L</th>
-                                    <th class="py-3 px-3">Risk</th>
-                                    <th class="py-3 px-3">RR</th>
-                                    <th class="py-3 px-3">HTF</th>
-                                    <th class="py-3 px-3">Confluence</th>
-                                    <th class="py-3 px-3">Result</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-emerald-500/10">
-                `;
-                displayedTrades.forEach(t => {
-                    const pnl = Number(t.netPnL) || 0;
-                    const isWin = pnl >= 0;
-                    const dayName = getDayNameFromDateStr(t.date);
-                    tradesTableHtml += `
-                        <tr class="hover:bg-emerald-500/10">
-                            <td class="py-3 px-3 font-mono text-[11px] text-gray-300">
-                                <div>${t.date}</div>
-                                <div class="text-[9px] text-emerald-400 font-bold">${dayName}</div>
-                            </td>
-                            <td class="py-3 px-3 font-bold text-white">${t.pair}</td>
-                            <td class="py-3 px-3 text-emerald-400 text-[11px]">${t.session || '—'}</td>
-                            <td class="py-3 px-3"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/35' : 'bg-red-500/10 text-red-400 border border-red-500/35'}">${t.position}</span></td>
-                            <td class="py-3 px-3 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'}">${(isWin ? '+' : '-') + formatMoney(Math.abs(pnl), curr)}</td>
-                            <td class="py-3 px-3 font-mono text-gray-400">${formatMoney(t.risk || 0, curr)}</td>
-                            <td class="py-3 px-3 font-mono font-bold text-amber-400">${t.rr || '0'}</td>
-                            <td class="py-3 px-3 text-gray-400 text-[10px]">${t.htf || '—'}</td>
-                            <td class="py-3 px-3 text-gray-400 text-[10px]">${t.confluence || '—'}</td>
-                            <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] bg-[#000000] text-gray-300 border border-emerald-500/20">${t.result || 'N/A'}</span></td>
-                        </tr>
-                    `;
-                });
-                tradesTableHtml += `</tbody></table></div>`;
-            }
-
-            detailContainer.innerHTML = `
-                <div class="flex items-center justify-between pb-2 border-b border-emerald-500/15">
-                    <h4 class="text-sm font-black text-emerald-400 flex items-center gap-2">
-                        <i class="fa-solid fa-calendar-days"></i> Monthly Performance & Calendar View: ${monthName} ${year}
-                    </h4>
-                    <button onclick="document.getElementById('selectedMonthDetailContainer').classList.add('hidden')" class="text-xs text-gray-400 hover:text-white px-2.5 py-1 bg-[#000000] rounded-lg border border-emerald-500/30">Tutup</button>
-                </div>
-
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div class="bg-[#000000] p-3 rounded-xl border border-emerald-500/20">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold">Total PnL</span>
-                        <div class="text-base font-black font-mono ${mPnL >= 0 ? 'text-emerald-400' : 'text-red-400'} mt-0.5">${(mPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(mPnL), curr)}</div>
-                    </div>
-                    <div class="bg-[#000000] p-3 rounded-xl border border-emerald-500/20">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold">Win Rate</span>
-                        <div class="text-base font-black text-white mt-0.5">${mWinRate}% (${mWins}/${monthTrades.length})</div>
-                    </div>
-                    <div class="bg-[#000000] p-3 rounded-xl border border-emerald-500/20">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold">Avg R:R</span>
-                        <div class="text-base font-black text-amber-400 font-mono mt-0.5">${avgRR}</div>
-                    </div>
-                    <div class="bg-[#000000] p-3 rounded-xl border border-emerald-500/20">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold">Total Trades</span>
-                        <div class="text-base font-black text-emerald-400 mt-0.5">${monthTrades.length} Trades</div>
-                    </div>
-                </div>
-
-                <div class="bg-[#000000] p-4 rounded-xl border border-emerald-500/20 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <div class="text-xs font-bold text-gray-300">Kalender Harian — ${monthName} ${year} (Klik tanggal untuk filter)</div>
-                        ${selectedCalendarDateStr ? `<button onclick="selectedCalendarDateStr=null; showMonthDetailFromYearly(${year}, '${monthStr}', '${monthName}')" class="text-[11px] text-emerald-400 hover:underline font-bold">Reset Filter Tanggal</button>` : ''}
-                    </div>
-                    <div class="calendar-grid text-center text-[10px] font-black text-gray-400 uppercase tracking-widest py-1 border-b border-emerald-500/10">
-                        <div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div><div>Su</div>
-                    </div>
-                    <div class="calendar-grid gap-1 sm:gap-1.5">
-                        ${calendarCellsHtml}
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <div class="text-xs font-bold text-gray-300">Daftar Trade ${selectedCalendarDateStr ? 'pada ' + selectedCalendarDateStr : 'Bulan ' + monthName + ' ' + year} (${displayedTrades.length} trades)</div>
-                    ${tradesTableHtml}
-                </div>
-            `;
         }
 
         function applyTradeLogFilter() {
-            const activeAcc = getActiveAccount();
-            if (!activeAcc) return;
-            const curr = activeAcc.currency || 'USD';
+            const acc = getActiveAccount();
+            if (!acc) return;
+            let trades = window.appData.trades.filter(t => t.accountId === acc.id);
+            const m = document.getElementById('filterMonth').value;
+            const y = document.getElementById('filterYear').value;
 
-            let trades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
-
-            const selectedMonth = document.getElementById('filterMonth').value;
-            const selectedYear = document.getElementById('filterYear').value;
-
-            if (selectedMonth !== 'ALL' || selectedYear !== 'ALL') {
+            if (m !== 'ALL' || y !== 'ALL') {
                 trades = trades.filter(t => {
-                    if (!t.date) return false;
-                    const parts = t.date.split('-');
-                    const yearPart = parts[0];
-                    const monthPart = parts[1];
-
-                    const matchYear = (selectedYear === 'ALL' || yearPart === selectedYear);
-                    const matchMonth = (selectedMonth === 'ALL' || monthPart === selectedMonth);
-
-                    return matchYear && matchMonth;
+                    const p = t.date.split('-');
+                    return (y === 'ALL' || p[0] === y) && (m === 'ALL' || p[1] === m);
                 });
             }
-
-            renderTradeLogContainer(trades, curr);
-        }
-
-        function resetTradeLogFilter() {
-            document.getElementById('filterMonth').value = 'ALL';
-            document.getElementById('filterYear').value = 'ALL';
-            applyTradeLogFilter();
+            renderTradeLogContainer(trades, acc.currency);
         }
 
         function renderTradeLogContainer(trades, curr) {
             const tbody = document.getElementById('tradeLogTableBody');
-            const cardsContainer = document.getElementById('tradeLogCardsView');
-            const placeholder = document.getElementById('noTradesPlaceholder');
-            
             tbody.innerHTML = '';
-            cardsContainer.innerHTML = '';
-
-            const totalPnL = trades.reduce((sum, t) => sum + (Number(t.netPnL) || 0), 0);
-            const wins = trades.filter(t => Number(t.netPnL) > 0).length;
-            const winRate = trades.length > 0 ? Math.round((wins / trades.length) * 100) : 0;
-
-            document.getElementById('tlTotalPnL').innerText = (totalPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(totalPnL), curr);
-            document.getElementById('tlTotalPnL').className = `text-xl font-black ${totalPnL >= 0 ? 'text-emerald-400' : 'text-red-400'} mt-1 font-mono`;
-            document.getElementById('tlWinRate').innerText = winRate + '%';
-            document.getElementById('tlTotalTrades').innerText = trades.length;
-
-            if (trades.length === 0) {
-                placeholder.classList.remove('hidden');
-                document.getElementById('tradeLogTableView').classList.add('hidden');
-                cardsContainer.classList.add('hidden');
-                return;
-            } else {
-                placeholder.classList.add('hidden');
-                if (logViewMode === 'table') {
-                    document.getElementById('tradeLogTableView').classList.remove('hidden');
-                } else {
-                    cardsContainer.classList.remove('hidden');
-                }
-            }
-
-            const sorted = [...trades].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            sorted.forEach(t => {
-                const pnlNum = Number(t.netPnL) || 0;
-                const isWin = pnlNum >= 0;
-                const formattedPnL = (isWin ? '+' : '-') + formatMoney(Math.abs(pnlNum), curr);
-                const dayName = getDayNameFromDateStr(t.date);
-
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-emerald-500/10 transition";
-                tr.innerHTML = `
-                    <td class="py-3.5 px-4 font-mono text-[11px] text-gray-300 whitespace-nowrap">
-                        <div>${t.date}</div>
-                        <div class="text-[10px] text-emerald-400 font-bold">${dayName}</div>
-                    </td>
-                    <td class="py-3.5 px-4 font-bold text-white whitespace-nowrap">${t.pair}</td>
-                    <td class="py-3.5 px-4 text-emerald-400 text-xs whitespace-nowrap">${t.session || '—'}</td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/35' : 'bg-red-500/10 text-red-400 border border-red-500/35'}">${t.position}</span>
-                    </td>
-                    <td class="py-3.5 px-4 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'} whitespace-nowrap">
-                        ${formattedPnL}
-                    </td>
-                    <td class="py-3.5 px-4 font-mono text-gray-400 whitespace-nowrap">${formatMoney(t.risk || 0, curr)}</td>
-                    <td class="py-3.5 px-4 font-mono font-bold text-amber-400 whitespace-nowrap">${t.rr || '0'}</td>
-                    <td class="py-3.5 px-4 text-gray-400 text-[11px] whitespace-nowrap">${t.htf || '—'}</td>
-                    <td class="py-3.5 px-4 text-gray-400 text-[11px] whitespace-nowrap">${t.confluence || '—'}</td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
-                        <span class="px-2 py-0.5 rounded text-[10px] bg-[#000000] text-gray-300 border border-emerald-500/20">${t.result || 'N/A'}</span>
-                    </td>
-                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
-                        <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#000000] hover:bg-emerald-500 hover:text-black text-emerald-400 border border-emerald-500/30 text-[11px] rounded-lg transition mr-1">Edit</button>
-                        <button onclick="deleteTrade('${t.id}')" class="px-2.5 py-1 bg-red-500/20 hover:bg-red-500 hover:text-white text-red-400 border border-red-500/30 text-[11px] rounded-lg transition"><i class="fa-solid fa-trash-can"></i></button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-
-                const card = document.createElement('div');
-                card.className = "glass-card rounded-2xl p-4 space-y-3 flex flex-col justify-between";
-                
-                let linkBtnHtml = '';
-                if (t.link) {
-                    linkBtnHtml = `<a href="${t.link}" target="_blank" class="text-[11px] text-emerald-400 hover:underline flex items-center gap-1"><i class="fa-solid fa-chart-line"></i> Chart Link</a>`;
-                }
-
-                card.innerHTML = `
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/35' : 'bg-red-500/10 text-red-400 border border-red-500/35'}">${t.position}</span>
-                                <span class="font-black text-white text-sm">${t.pair}</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-xs font-mono text-gray-400 block">${t.date}</span>
-                                <span class="text-[10px] font-bold text-emerald-400 block">${dayName}</span>
-                            </div>
-                        </div>
-                        <div class="text-[11px] text-emerald-400 font-semibold">Session: ${t.session || '—'}</div>
-                        <div class="flex items-center justify-between pt-1 border-t border-emerald-500/15">
-                            <div>
-                                <span class="text-[10px] text-gray-400 uppercase">Net P/L</span>
-                                <div class="font-mono text-base font-black ${isWin ? 'text-emerald-400' : 'text-red-400'}">${formattedPnL}</div>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-[10px] text-gray-400 uppercase">R:R</span>
-                                <div class="font-mono text-sm font-bold text-amber-400">${t.rr || '0'}</div>
-                            </div>
-                        </div>
-                        <div class="text-[11px] text-gray-300 space-y-1 pt-1">
-                            <div><b>HTF:</b> ${t.htf || '—'}</div>
-                            <div><b>Confluence:</b> ${t.confluence || '—'}</div>
-                            <div><b>Result:</b> ${t.result || '—'}</div>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between pt-3 border-t border-emerald-500/15">
-                        ${linkBtnHtml}
-                        <div class="flex items-center gap-1.5 ml-auto">
-                            <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#000000] text-emerald-400 border border-emerald-500/30 text-[11px] rounded-lg">Edit</button>
-                            <button onclick="deleteTrade('${t.id}')" class="px-2.5 py-1 bg-red-500/20 text-red-400 border border-red-500/30 text-[11px] rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
-                        </div>
-                    </div>
-                `;
-                cardsContainer.appendChild(card);
+            trades.forEach(t => {
+                const isWin = Number(t.netPnL) >= 0;
+                tbody.innerHTML += `
+                    <tr class="hover:bg-emerald-500/5">
+                        <td class="py-3 px-4 font-mono text-[11px]">${t.date}</td>
+                        <td class="py-3 px-4 font-bold text-white">${t.pair}</td>
+                        <td class="py-3 px-4 text-emerald-400 text-xs">${t.session || '—'}</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.position==='BUY'?'bg-emerald-500/10 text-emerald-400':'bg-red-500/10 text-red-400'}">${t.position}</span></td>
+                        <td class="py-3 px-4 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'}">${formatMoney(t.netPnL, curr)}</td>
+                        <td class="py-3 px-4 font-mono text-gray-400">${formatMoney(t.risk, curr)}</td>
+                        <td class="py-3 px-4 font-mono font-bold text-amber-400">${t.rr || '0'}</td>
+                        <td class="py-3 px-4 text-right"><button onclick="deleteTradeFromCloud('${t.id}')" class="text-red-400"><i class="fa-solid fa-trash-can"></i></button></td>
+                    </tr>`;
             });
         }
 
         function toggleTradeForm(show) {
-            const container = document.getElementById('tradeFormContainer');
-            if (show === undefined) {
-                container.classList.toggle('hidden');
-            } else {
-                container.classList.toggle('hidden', !show);
-            }
-
-            if (!container.classList.contains('hidden')) {
-                container.scrollIntoView({ behavior: 'smooth' });
-                if (!document.getElementById('tradeDate').value) {
-                    document.getElementById('tradeDate').value = new Date().toISOString().split('T')[0];
-                }
-                updateDayNameFromDateInput();
-            } else {
-                resetTradeForm();
-            }
+            document.getElementById('tradeFormContainer').classList.toggle('hidden', !show);
+            if (show) document.getElementById('tradeDate').value = new Date().toISOString().split('T')[0];
         }
 
         function selectPos(pos) {
             selectedPosition = pos;
-            const buyBtn = document.getElementById('posBuyBtn');
-            const sellBtn = document.getElementById('posSellBtn');
-
-            if (pos === 'BUY') {
-                buyBtn.className = "py-2.5 border border-emerald-500 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-xl shadow-sm";
-                sellBtn.className = "py-2.5 border border-emerald-500/20 bg-[#000000] text-gray-400 text-xs font-bold rounded-xl";
-            } else {
-                sellBtn.className = "py-2.5 border border-red-500 bg-red-500/20 text-red-400 text-xs font-bold rounded-xl shadow-sm";
-                buyBtn.className = "py-2.5 border border-emerald-500/20 bg-[#000000] text-gray-400 text-xs font-bold rounded-xl";
-            }
-        }
-
-        function toggleTagOption(btn, category) {
-            const txt = btn.innerText;
-            const group = selectedTags[category];
-
-            if (group.includes(txt)) {
-                selectedTags[category] = group.filter(x => x !== txt);
-                btn.classList.remove('active');
-            } else {
-                selectedTags[category].push(txt);
-                btn.classList.add('active');
-            }
-        }
-
-        function toggleCustomTagInput(category) {
-            const container = document.getElementById(category + 'CustomInputContainer');
-            container.classList.toggle('hidden');
-            if (!container.classList.contains('hidden')) {
-                document.getElementById(category + 'CustomText').focus();
-            }
-        }
-
-        function addCustomTag(category) {
-            const input = document.getElementById(category + 'CustomText');
-            const val = input.value.trim();
-            if (!val) return;
-
-            const groupDiv = document.getElementById(category + 'OptionsGroup');
-            const customBtn = groupDiv.querySelector('button:last-child');
-
-            const newBtn = document.createElement('button');
-            newBtn.type = 'button';
-            newBtn.className = 'btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#000000] text-gray-300 active';
-            newBtn.innerText = val;
-            newBtn.onclick = function() { toggleTagOption(newBtn, category); };
-
-            groupDiv.insertBefore(newBtn, customBtn);
-            selectedTags[category].push(val);
-
-            input.value = '';
-            document.getElementById(category + 'CustomInputContainer').classList.add('hidden');
+            document.getElementById('posBuyBtn').className = pos === 'BUY' ? "py-2.5 border border-emerald-500 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-xl" : "py-2.5 border border-emerald-500/20 bg-[#000000] text-gray-400 text-xs font-bold rounded-xl";
+            document.getElementById('posSellBtn').className = pos === 'SELL' ? "py-2.5 border border-red-500 bg-red-500/20 text-red-400 text-xs font-bold rounded-xl" : "py-2.5 border border-emerald-500/20 bg-[#000000] text-gray-400 text-xs font-bold rounded-xl";
         }
 
         function calculateRR() {
-            const pnl = parseFloat(document.getElementById('tradeNetPnL').value);
-            const risk = parseFloat(document.getElementById('tradeRisk').value);
-            if (!isNaN(pnl) && !isNaN(risk) && risk !== 0) {
-                const rr = (pnl / risk).toFixed(1);
-                document.getElementById('tradeRR').value = rr;
-            }
-        }
-
-        function resetTradeForm() {
-            document.getElementById('editingTradeId').value = '';
-            document.getElementById('tradeFormTitle').innerHTML = `<i class="fa-regular fa-pen-to-square text-emerald-400"></i> New Trade Entry`;
-            document.getElementById('tradeDate').value = new Date().toISOString().split('T')[0];
-            updateDayNameFromDateInput();
-            document.getElementById('tradePair').value = 'XAUUSD';
-            document.getElementById('tradePairCustom').value = '';
-            document.getElementById('tradePairCustom').classList.add('hidden');
-            document.getElementById('tradeSession').value = 'Asia Session (Tokyo/Sydney)';
-            selectPos('BUY');
-            document.getElementById('tradeNetPnL').value = '';
-            document.getElementById('tradeRisk').value = '';
-            document.getElementById('tradeRR').value = '';
-            document.getElementById('tradeLink').value = '';
-            document.getElementById('tradeScreenshot').value = '';
-
-            selectedTags = { htf: [], confluence: [], result: [] };
-            document.querySelectorAll('.btn-tag').forEach(b => b.classList.remove('active'));
-            ['htf', 'confluence', 'result'].forEach(cat => {
-                document.getElementById(cat + 'CustomInputContainer').classList.add('hidden');
-                document.getElementById(cat + 'CustomText').value = '';
-            });
+            const p = parseFloat(document.getElementById('tradeNetPnL').value), r = parseFloat(document.getElementById('tradeRisk').value);
+            if (!isNaN(p) && !isNaN(r) && r !== 0) document.getElementById('tradeRR').value = (p / r).toFixed(1);
         }
 
         async function saveTrade() {
-            const activeAcc = getActiveAccount();
-            if (!activeAcc) return;
-
-            const editId = document.getElementById('editingTradeId').value;
-            const date = document.getElementById('tradeDate').value;
-            let pair = document.getElementById('tradePair').value;
-            if (pair === 'OTHER') {
-                const customPairVal = document.getElementById('tradePairCustom').value.trim();
-                if (!customPairVal) {
-                    showNotice("Harap masukkan nama Pair kustom Anda!");
-                    return;
-                }
-                pair = customPairVal.toUpperCase();
-            }
-
-            const session = document.getElementById('tradeSession').value;
-            const pnl = parseFloat(document.getElementById('tradeNetPnL').value);
-            const risk = parseFloat(document.getElementById('tradeRisk').value);
-            const rr = parseFloat(document.getElementById('tradeRR').value);
-            const link = document.getElementById('tradeLink').value.trim();
-            const screenshot = document.getElementById('tradeScreenshot').value.trim();
-
-            if (!date || !pair || isNaN(pnl)) {
-                showNotice("Lengkapi field wajib! (Date, Pair, Net P/L)");
-                return;
-            }
-
-            const tradeObj = {
-                id: editId || 'tr_' + Date.now(),
-                accountId: activeAcc.id,
-                date: date,
-                pair: pair,
-                session: session,
+            const acc = getActiveAccount();
+            if (!acc) return;
+            const trade = {
+                id: 'tr_' + Date.now(), accountId: acc.id,
+                date: document.getElementById('tradeDate').value,
+                pair: document.getElementById('tradePair').value === 'OTHER' ? document.getElementById('tradePairCustom').value.toUpperCase() : document.getElementById('tradePair').value,
+                session: document.getElementById('tradeSession').value,
                 position: selectedPosition,
-                netPnL: pnl,
-                risk: isNaN(risk) ? 0 : risk,
-                rr: isNaN(rr) ? 0 : rr,
-                htf: selectedTags.htf.join(', ') || '',
-                confluence: selectedTags.confluence.join(', ') || '',
-                result: selectedTags.result.join(', ') || '',
-                link: link,
-                screenshot: screenshot
+                netPnL: parseFloat(document.getElementById('tradeNetPnL').value) || 0,
+                risk: parseFloat(document.getElementById('tradeRisk').value) || 0,
+                rr: parseFloat(document.getElementById('tradeRR').value) || 0
             };
-
-            await window.saveTradeToCloud(tradeObj);
+            await window.saveTradeToCloud(trade);
             toggleTradeForm(false);
         }
 
-        function editTrade(tradeId) {
-            const trade = window.appData.trades.find(t => t.id === tradeId);
-            if (!trade) return;
-
-            document.getElementById('editingTradeId').value = trade.id;
-            document.getElementById('tradeFormTitle').innerHTML = `<i class="fa-regular fa-pen-to-square text-emerald-400"></i> Edit Trade`;
-            document.getElementById('tradeDate').value = trade.date;
-            updateDayNameFromDateInput();
-
-            const pairSelect = document.getElementById('tradePair');
-            const customPairInput = document.getElementById('tradePairCustom');
-            const standardPairs = ['XAUUSD', 'EURUSD', 'GBPUSD', 'GBPJPY', 'BTCUSD', 'US100', 'US30', 'SPX500', 'AUDUSD', 'NZDUSD', 'USDJPY'];
-            
-            if (standardPairs.includes(trade.pair)) {
-                pairSelect.value = trade.pair;
-                customPairInput.classList.add('hidden');
-                customPairInput.value = '';
-            } else {
-                pairSelect.value = 'OTHER';
-                customPairInput.classList.remove('hidden');
-                customPairInput.value = trade.pair;
-            }
-
-            document.getElementById('tradeSession').value = trade.session || 'Asia Session (Tokyo/Sydney)';
-            selectPos(trade.position);
-            document.getElementById('tradeNetPnL').value = trade.netPnL;
-            document.getElementById('tradeRisk').value = trade.risk;
-            document.getElementById('tradeRR').value = trade.rr;
-            document.getElementById('tradeLink').value = trade.link || '';
-            document.getElementById('tradeScreenshot').value = trade.screenshot || '';
-
-            selectedTags = {
-                htf: trade.htf ? trade.htf.split(', ') : [],
-                confluence: trade.confluence ? trade.confluence.split(', ') : [],
-                result: trade.result ? trade.result.split(', ') : []
-            };
-
-            document.querySelectorAll('.btn-tag').forEach(b => {
-                const txt = b.innerText;
-                if (selectedTags.htf.includes(txt) || selectedTags.confluence.includes(txt) || selectedTags.result.includes(txt)) {
-                    b.classList.add('active');
-                } else {
-                    b.classList.remove('active');
-                }
-            });
-
-            toggleTradeForm(true);
-        }
-
-        async function deleteTrade(tradeId) {
-            if (confirm("Hapus trade ini dari journal?")) {
-                await window.deleteTradeFromCloud(tradeId);
-            }
-        }
-
         function updateAnalyticsCharts() {
-            const activeAcc = getActiveAccount();
-            if (!activeAcc) return;
-            const curr = activeAcc.currency || 'USD';
+            const acc = getActiveAccount();
+            if (!acc) return;
+            let trades = window.appData.trades.filter(t => t.accountId === acc.id).sort((a,b) => new Date(a.date)-new Date(b.date));
+            let bal = Number(acc.startingBalance);
+            const labels = ['Start'], data = [bal];
+            trades.forEach(t => { bal += Number(t.netPnL); labels.push(t.date); data.push(bal); });
 
-            let trades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
-            trades.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-            const fromDateStr = document.getElementById('analyticsFromDate').value;
-            const toDateStr = document.getElementById('analyticsToDate').value;
-
-            if (fromDateStr) trades = trades.filter(t => t.date >= fromDateStr);
-            if (toDateStr) trades = trades.filter(t => t.date <= toDateStr);
-
-            const totalPnL = trades.reduce((sum, t) => sum + Number(t.netPnL), 0);
-            const wins = trades.filter(t => Number(t.netPnL) > 0).length;
-            const losses = trades.filter(t => Number(t.netPnL) < 0).length;
-            const winRate = trades.length > 0 ? Math.round((wins / trades.length) * 100) : 0;
-
-            const grossProfit = trades.filter(t => Number(t.netPnL) > 0).reduce((s, t) => s + Number(t.netPnL), 0);
-            const grossLoss = trades.filter(t => Number(t.netPnL) < 0).reduce((s, t) => s + Math.abs(Number(t.netPnL)), 0);
-            const profitFactor = grossLoss > 0 ? (grossProfit / grossLoss).toFixed(2) : (grossProfit > 0 ? 'Infinite' : '0.00');
-            const avgWin = wins > 0 ? grossProfit / wins : 0;
-            const avgLoss = losses > 0 ? grossLoss / losses : 0;
-            const expectancy = trades.length > 0 ? ((wins / trades.length) * avgWin) - ((losses / trades.length) * avgLoss) : 0;
-
-            document.getElementById('analyticsPnL').innerText = (totalPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(totalPnL), curr);
-            document.getElementById('analyticsPnL').className = `text-xl font-black ${totalPnL >= 0 ? 'text-emerald-400' : 'text-red-400'} mt-1 font-mono`;
-            document.getElementById('analyticsWinRate').innerText = winRate + '%';
-            document.getElementById('analyticsProfitFactor').innerText = profitFactor;
-            document.getElementById('analyticsExpectancy').innerText = (expectancy >= 0 ? '+' : '-') + formatMoney(Math.abs(expectancy), curr);
-            document.getElementById('analyticsExpectancy').className = `text-xl font-black ${expectancy >= 0 ? 'text-amber-400' : 'text-red-400'} mt-1 font-mono`;
-
-            const growthPct = ((totalPnL / Number(activeAcc.startingBalance)) * 100).toFixed(2);
-            document.getElementById('equityGrowthPercentage').innerText = (growthPct >= 0 ? '+' : '') + growthPct + '%';
-
-            let cumulativeBalance = Number(activeAcc.startingBalance);
-            const labels = ['Start'];
-            const dataPoints = [cumulativeBalance];
-            trades.forEach(t => {
-                cumulativeBalance += Number(t.netPnL);
-                labels.push(t.date);
-                dataPoints.push(cumulativeBalance);
-            });
-            renderLineChart('equityChart', labels, dataPoints, 'Equity', curr);
-
-            renderOutcomeBreakdownStats(trades, curr, wins, losses, grossProfit, grossLoss);
-            renderPerPairComparison(trades, curr);
-            renderMarketSessionsAnalytics(trades, curr);
-            renderHourlyRadarChart(trades);
-
-            const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            const weekdayPnL = [0, 0, 0, 0, 0, 0, 0];
-            trades.forEach(t => {
-                const dayIdx = new Date(t.date).getDay();
-                weekdayPnL[dayIdx] += Number(t.netPnL);
-            });
-            renderBarChart('weekdayChart', weekdays, weekdayPnL, 'PnL by Day', curr);
-
-            const buyPnL = trades.filter(t => t.position === 'BUY').reduce((s, t) => s + Number(t.netPnL), 0);
-            const sellPnL = trades.filter(t => t.position === 'SELL').reduce((s, t) => s + Number(t.netPnL), 0);
-            renderBarChart('orderTypeChart', ['BUY', 'SELL'], [buyPnL, sellPnL], 'PnL by Position', curr);
-        }
-
-        function renderMarketSessionsAnalytics(trades, curr) {
-            const container = document.getElementById('marketSessionsAnalyticsContainer');
-            if (!container) return;
-
-            const sessionDefs = [
-                { name: 'Asia Session (Tokyo/Sydney)', time: '06:00 - 14:00 WIB' },
-                { name: 'London Session', time: '14:00 - 22:00 WIB' },
-                { name: 'New York Session', time: '19:00 - 03:00 WIB' },
-                { name: 'London-NY Overlap 🔥', time: '19:00 - 22:00 WIB (Peak Vol)' }
-            ];
-
-            container.innerHTML = '';
-
-            sessionDefs.forEach(def => {
-                const sTrades = trades.filter(t => (t.session || '') === def.name);
-                const sPnL = sTrades.reduce((sum, t) => sum + Number(t.netPnL || 0), 0);
-                const sWins = sTrades.filter(t => Number(t.netPnL) > 0).length;
-                const sWinRate = sTrades.length > 0 ? Math.round((sWins / sTrades.length) * 100) : 0;
-                const isWin = sPnL >= 0;
-
-                const card = document.createElement('div');
-                card.className = "bg-[#000000] border border-emerald-500/30 rounded-2xl p-4 flex items-center justify-between";
-                card.innerHTML = `
-                    <div class="space-y-1">
-                        <h4 class="text-xs sm:text-sm font-black text-white">${def.name}</h4>
-                        <p class="text-[10px] text-gray-400 font-mono">${def.time}</p>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-xs sm:text-sm font-black font-mono ${isWin ? 'text-emerald-400' : 'text-red-400'}">
-                            ${(isWin ? '+' : '-') + formatMoney(Math.abs(sPnL), curr)}
-                        </div>
-                        <div class="text-[10px] text-gray-400 mt-0.5">
-                            <b class="text-white">${sTrades.length}</b> Trades &bull; <span class="text-emerald-400 font-bold">${sWinRate}% WR</span>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function renderHourlyRadarChart(trades) {
-            if (charts['hourlyRadarChart']) charts['hourlyRadarChart'].destroy();
-            const ctx = document.getElementById('hourlyRadarChart').getContext('2d');
-            
-            const hourCounts = new Array(24).fill(1);
-            trades.forEach(t => {
-                if (t.session && t.session.includes('London')) {
-                    for(let h=14; h<=22; h++) hourCounts[h % 24] += 2;
-                } else if (t.session && t.session.includes('New York')) {
-                    for(let h=19; h<=27; h++) hourCounts[h % 24] += 2;
-                } else {
-                    for(let h=6; h<=14; h++) hourCounts[h % 24] += 1;
-                }
-            });
-
-            const labels24 = Array.from({length: 24}, (_, i) => {
-                const hNum = i;
-                if (hNum === 0) return '00:00';
-                if (hNum === 6) return '06:00';
-                if (hNum === 12) return '12:00';
-                if (hNum === 18) return '18:00';
-                return ''; 
-            });
-
-            charts['hourlyRadarChart'] = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: labels24,
-                    datasets: [{
-                        data: hourCounts,
-                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                        borderColor: '#10B981',
-                        borderWidth: 2,
-                        pointRadius: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        r: {
-                            grid: { 
-                                color: 'rgba(16, 185, 129, 0.15)',
-                                circular: true,
-                                count: 3 
-                            },
-                            angleLines: { 
-                                color: 'rgba(16, 185, 129, 0.2)',
-                                count: 4 
-                            },
-                            ticks: { display: false },
-                            pointLabels: { color: '#10B981', font: { size: 10, weight: 'bold' } }
-                        }
-                    }
-                }
-            });
-        }
-
-        function renderPerPairComparison(trades, curr) {
-            const pairMap = {};
-            trades.forEach(t => {
-                const p = t.pair || 'OTHER';
-                if (!pairMap[p]) {
-                    pairMap[p] = { pair: p, trades: 0, wins: 0, losses: 0, netPnL: 0, grossProfit: 0, grossLoss: 0, runningBal: 0, peakBal: 0, maxDD: 0 };
-                }
-                pairMap[p].trades += 1;
-                const pnl = Number(t.netPnL) || 0;
-                pairMap[p].netPnL += pnl;
-                if (pnl > 0) {
-                    pairMap[p].wins += 1;
-                    pairMap[p].grossProfit += pnl;
-                } else if (pnl < 0) {
-                    pairMap[p].losses += 1;
-                    pairMap[p].grossLoss += Math.abs(pnl);
-                }
-                pairMap[p].runningBal += pnl;
-                if (pairMap[p].runningBal > pairMap[p].peakBal) {
-                    pairMap[p].peakBal = pairMap[p].runningBal;
-                }
-                const dd = pairMap[p].runningBal - pairMap[p].peakBal;
-                if (dd < pairMap[p].maxDD) {
-                    pairMap[p].maxDD = dd;
-                }
-            });
-
-            const pairsArray = Object.values(pairMap);
-            document.getElementById('comparingPairsBadge').innerText = `Comparing ${pairsArray.length} pairs`;
-
-            if (pairsArray.length === 0) {
-                document.getElementById('bestPnlPairName').innerText = '—';
-                document.getElementById('bestPnlPairVal').innerText = '—';
-                document.getElementById('highestWinRatePairName').innerText = '—';
-                document.getElementById('highestWinRatePairVal').innerText = '—';
-                document.getElementById('lowestDdPairName').innerText = '—';
-                document.getElementById('lowestDdPairVal').innerText = '—';
-                document.getElementById('bestPfPairName').innerText = '—';
-                document.getElementById('bestPfPairVal').innerText = '—';
-                document.getElementById('perPairTableBody').innerHTML = `<tr><td colspan="6" class="py-6 text-center text-gray-500">Belum ada data trade untuk perbandingan pair.</td></tr>`;
-                return;
-            }
-
-            pairsArray.forEach(item => {
-                item.winRate = item.trades > 0 ? (item.wins / item.trades) * 100 : 0;
-                item.profitFactor = item.grossLoss > 0 ? (item.grossProfit / item.grossLoss) : (item.grossProfit > 0 ? 99.99 : 0.00);
-            });
-
-            const bestPnl = [...pairsArray].sort((a, b) => b.netPnL - a.netPnL)[0];
-            const bestWr = [...pairsArray].sort((a, b) => b.winRate - a.winRate)[0];
-            const lowestDd = [...pairsArray].sort((a, b) => a.maxDD - b.maxDD)[0];
-            const bestPf = [...pairsArray].sort((a, b) => b.profitFactor - a.profitFactor)[0];
-
-            document.getElementById('bestPnlPairName').innerText = bestPnl.pair;
-            document.getElementById('bestPnlPairVal').innerText = (bestPnl.netPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(bestPnl.netPnL), curr);
-
-            document.getElementById('highestWinRatePairName').innerText = bestWr.pair;
-            document.getElementById('highestWinRatePairVal').innerText = `${Math.round(bestWr.winRate)}% (${bestWr.wins}W/${bestWr.losses}L)`;
-
-            document.getElementById('lowestDdPairName').innerText = lowestDd.pair;
-            document.getElementById('lowestDdPairVal').innerText = `${formatMoney(lowestDd.maxDD, curr)} Max DD`;
-
-            document.getElementById('bestPfPairName').innerText = bestPf.pair;
-            document.getElementById('bestPfPairVal').innerText = `PF: ${bestPf.profitFactor.toFixed(2)}`;
-
-            pairsArray.sort((a, b) => b.netPnL - a.netPnL);
-
-            let tbodyHtml = '';
-            pairsArray.forEach(item => {
-                const isWin = item.netPnL >= 0;
-                tbodyHtml += `
-                    <tr class="hover:bg-emerald-500/10 transition">
-                        <td class="py-3 px-3.5 font-bold text-white">${item.pair}</td>
-                        <td class="py-3 px-3.5 text-gray-300 font-mono">${item.trades} <span class="text-[10px] text-gray-400 font-sans">(${item.wins}W/${item.losses}L)</span></td>
-                        <td class="py-3 px-3.5 font-bold text-emerald-400 font-mono">${Math.round(item.winRate)}%</td>
-                        <td class="py-3 px-3.5 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'}">${(isWin ? '+' : '-') + formatMoney(Math.abs(item.netPnL), curr)}</td>
-                        <td class="py-3 px-3.5 font-mono text-red-400">${formatMoney(item.maxDD, curr)}</td>
-                        <td class="py-3 px-3.5 text-right font-mono font-bold text-cyan-400">${item.profitFactor.toFixed(2)}</td>
-                    </tr>
-                `;
-            });
-            document.getElementById('perPairTableBody').innerHTML = tbodyHtml;
-        }
-
-        function renderOutcomeBreakdownStats(trades, curr, wins, losses, grossProfit, grossLoss) {
-            const totalTrades = trades.length;
-            const winRate = totalTrades > 0 ? Math.round((wins / totalTrades) * 100) : 0;
-
-            document.getElementById('outcomeWinRateCenter').innerText = winRate + '%';
-            document.getElementById('legendWinCount').innerText = wins;
-            document.getElementById('legendLossCount').innerText = losses;
-
-            const avgWin = wins > 0 ? grossProfit / wins : 0;
-            const avgLoss = losses > 0 ? grossLoss / losses : 0;
-
-            let maxConsecWin = 0, currentConsecWin = 0;
-            let maxConsecLoss = 0, currentConsecLoss = 0;
-
-            trades.forEach(t => {
-                const pnl = Number(t.netPnL) || 0;
-                if (pnl > 0) {
-                    currentConsecWin++;
-                    currentConsecLoss = 0;
-                    if (currentConsecWin > maxConsecWin) maxConsecWin = currentConsecWin;
-                } else if (pnl < 0) {
-                    currentConsecLoss++;
-                    currentConsecWin = 0;
-                    if (currentConsecLoss > maxConsecLoss) maxConsecLoss = currentConsecLoss;
-                }
-            });
-
-            document.getElementById('statAvgWin').innerText = '+' + formatMoney(avgWin, curr);
-            document.getElementById('statAvgLoss').innerText = '-' + formatMoney(avgLoss, curr);
-            document.getElementById('statMaxConsecWin').innerText = maxConsecWin + ' Trades';
-            document.getElementById('statMaxConsecLoss').innerText = maxConsecLoss + ' Trades';
-
-            document.getElementById('statTotalWin').innerText = wins + ' Trades';
-            document.getElementById('statTotalLose').innerText = losses + ' Trades';
-            document.getElementById('statGrossProfit').innerText = '+' + formatMoney(grossProfit, curr);
-            document.getElementById('statGrossLoss').innerText = '-' + formatMoney(grossLoss, curr);
-
-            if (charts['outcomeDonutChart']) charts['outcomeDonutChart'].destroy();
-            const ctx = document.getElementById('outcomeDonutChart').getContext('2d');
-            charts['outcomeDonutChart'] = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Win', 'Loss'],
-                    datasets: [{
-                        data: [wins || 0, losses || 0],
-                        backgroundColor: ['#10B981', '#EF4444'],
-                        borderWidth: 3,
-                        borderColor: '#000000'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '78%',
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return ` ${context.label}: ${context.raw} Trades`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function renderLineChart(canvasId, labels, data, label, curr) {
-            if (charts[canvasId]) charts[canvasId].destroy();
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            
-            const gradient = ctx.createLinearGradient(0, 0, 0, 250);
-            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.35)');
-            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
-
-            charts[canvasId] = new Chart(ctx, {
+            if (charts['equityChart']) charts['equityChart'].destroy();
+            charts['equityChart'] = new Chart(document.getElementById('equityChart').getContext('2d'), {
                 type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: label,
-                        data: data,
-                        borderColor: '#10B981',
-                        borderWidth: 2.5,
-                        backgroundColor: gradient,
-                        fill: true,
-                        tension: 0.35,
-                        pointRadius: 4,
-                        pointBackgroundColor: '#10B981'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { 
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const val = Number(context.raw) || 0;
-                                    return `Equity: ${formatMoney(val, curr)}`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: { grid: { color: 'rgba(16, 185, 129, 0.1)' }, ticks: { color: '#9CA3AF' } },
-                        y: { 
-                            grid: { color: 'rgba(16, 185, 129, 0.1)' }, 
-                            ticks: { 
-                                color: '#9CA3AF',
-                                callback: function(val) { 
-                                    const n = Number(val);
-                                    return formatMoneyShort(n, curr); 
-                                }
-                            } 
-                        }
-                    }
-                }
+                data: { labels, datasets: [{ data, borderColor: '#10B981', borderWidth: 2, fill: true, backgroundColor: 'rgba(16, 185, 129, 0.1)' }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#9CA3AF' } }, y: { ticks: { color: '#9CA3AF' } } } }
             });
         }
-
-        function renderBarChart(canvasId, labels, data, label, curr) {
-            if (charts[canvasId]) charts[canvasId].destroy();
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            charts[canvasId] = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: label,
-                        data: data,
-                        backgroundColor: data.map(v => v >= 0 ? '#10B981' : '#EF4444'),
-                        borderRadius: 8,
-                        barThickness: 32
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { 
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const val = Number(context.raw) || 0;
-                                    const formattedPnL = (val >= 0 ? '+' : '-') + formatMoney(Math.abs(val), curr);
-                                    return `PnL: ${formattedPnL}`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: { grid: { display: false }, ticks: { color: '#9CA3AF', font: { weight: 'bold' } } },
-                        y: { 
-                            grid: { color: 'rgba(16, 185, 129, 0.1)' }, 
-                            ticks: { 
-                                color: '#9CA3AF',
-                                callback: function(val) { 
-                                    const n = Number(val);
-                                    return formatMoneyShort(n, curr);
-                                }
-                            } 
-                        }
-                    }
-                }
-            });
-        }
-
-        function showNotice(msg) {
-            document.getElementById('customModalIcon').innerHTML = `<i class="fa-solid fa-circle-info text-emerald-400"></i>`;
-            document.getElementById('customModalTitle').innerText = "Information";
-            document.getElementById('customModalMsg').innerText = msg;
-            document.getElementById('customModalActions').innerHTML = `<button onclick="closeCustomModal()" class="px-5 py-2 bg-emerald-500 text-black text-xs font-bold rounded-xl shadow-lg hover:bg-emerald-400 transition">OK</button>`;
-            document.getElementById('customModal').classList.remove('hidden');
-        }
-
-        function closeCustomModal() {
-            document.getElementById('customModal').classList.add('hidden');
-        }
-
-        window.renderAccountsList = renderAccountsList;
-        window.refreshActiveAccountData = refreshActiveAccountData;
-        window.showNotice = showNotice;
-        window.openLandingModal = openLandingModal;
-        window.closeLandingModal = closeLandingModal;
-        window.showLoginForm = showLoginForm;
-        window.showSignUpForm = showSignUpForm;
-        window.toggleAuthMode = toggleAuthMode;
     </script>
 </body>
 </html>
