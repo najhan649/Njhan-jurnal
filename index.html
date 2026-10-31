@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Najh.an Journal - Institutional Trading Terminal v9.1 Ultimate</title>
+    <title>Najh.an Journal - Institutional Trading Terminal v9.2 Ultimate</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -47,7 +47,7 @@
         }
 
         .glass-card {
-            background: rgba(8, 13, 10, 0.85);
+            background: rgba(8, 13, 10, 0.88);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(16, 185, 129, 0.22);
@@ -126,15 +126,15 @@
             animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Canvas Background untuk animasi node/chart interaktif */
+        /* Canvas Background untuk animasi node interaktif sentuhan */
         #networkCanvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            pointer-events: none;
-            z-index: 10;
+            pointer-events: auto;
+            z-index: 1;
         }
     </style>
 </head>
@@ -154,7 +154,7 @@
                     </div>
                     <div>
                         <span class="font-extrabold text-base sm:text-lg text-white tracking-tight group-hover:text-emerald-400 transition">Najh.an <span class="text-emerald-400">Journal</span></span>
-                        <span class="block text-[9px] sm:text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v9.1</span>
+                        <span class="block text-[9px] sm:text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v9.2</span>
                     </div>
                 </div>
 
@@ -182,7 +182,7 @@
     </header>
 
     <!-- LANDING SCREEN / WELCOME MODAL DENGAN LATAR BELAKANG ANIMASI NODE -->
-    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+    <div id="landingModal" class="fixed inset-0 z-30 bg-[#020407]/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="max-w-xl w-full space-y-8 text-center animate-fade-in py-12 relative z-20">
             
             <!-- Logo & Brand Header -->
@@ -192,14 +192,14 @@
                 </div>
                 <div>
                     <span class="px-3.5 py-1 rounded-full text-[11px] font-extrabold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 uppercase">
-                        Institutional Terminal v9.1 Ultimate
+                        Institutional Terminal v9.2 Ultimate
                     </span>
                     <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight mt-4 drop-shadow-lg">WELCOME TRADER</h1>
                     <p class="text-xs sm:text-sm text-gray-300 mt-3 max-w-md mx-auto leading-relaxed font-medium">Terminal jurnal trading institusional dengan analitik presisi tinggi, kalender performa, dan sinkronisasi awan waktu nyata.</p>
                 </div>
             </div>
 
-            <!-- Action Buttons for Login & Signup (Di bawah tulisan welcome trader) -->
+            <!-- Action Buttons for Login & Signup -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md mx-auto pt-4">
                 <button onclick="showLoginForm()" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-black tracking-wider uppercase rounded-xl transition shadow-xl shadow-emerald-950/60 transform hover:scale-[1.03]">
                     <i class="fa-solid fa-right-to-bracket mr-1.5"></i> Login Terminal
@@ -215,9 +215,9 @@
         </div>
     </div>
 
-    <!-- AUTHENTICATION INPUT MODAL (POP-UP FORM LOGIN / SIGNUP) -->
+    <!-- AUTHENTICATION INPUT MODAL -->
     <div id="authFormModal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-sm w-full space-y-5 shadow-2xl relative border-emerald-500/40 text-center animate-fade-in z-30">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-sm w-full space-y-5 shadow-2xl relative border-emerald-500/40 text-center animate-fade-in z-40">
             <button onclick="closeAuthFormModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
@@ -1034,7 +1034,7 @@
         };
     </script>
 
-    <!-- MAIN APP & ANIMATED NETWORK BACKGROUND LOGIC JS -->
+    <!-- MAIN APP & INTERACTIVE TOUCH/MOUSE NETWORK CANVAS LOGIC JS -->
     <script>
         let currentCalendarDate = new Date();
         let selectedCalendarDateStr = null;
@@ -1047,8 +1047,8 @@
 
         const dayNamesID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
-        // ANIMASI LATAR BELAKANG NODE/CHART JARINGAN INTERAKTIF
-        function initNetworkCanvas() {
+        // INTERACTIVE TOUCH & MOUSE NODE CANVAS BACKGROUND
+        function initInteractiveNetworkCanvas() {
             const canvas = document.getElementById('networkCanvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
@@ -1061,25 +1061,53 @@
                 height = canvas.height = window.innerHeight;
             });
 
+            // Posisi pointer mouse atau sentuhan jari
+            let pointer = {
+                x: null,
+                y: null,
+                radius: 150
+            };
+
+            window.addEventListener('mousemove', (e) => {
+                pointer.x = e.clientX;
+                pointer.y = e.clientY;
+            });
+
+            window.addEventListener('mouseout', () => {
+                pointer.x = null;
+                pointer.y = null;
+            });
+
+            window.addEventListener('touchmove', (e) => {
+                if (e.touches.length > 0) {
+                    pointer.x = e.touches[0].clientX;
+                    pointer.y = e.touches[0].clientY;
+                }
+            }, { passive: true });
+
+            window.addEventListener('touchend', () => {
+                pointer.x = null;
+                pointer.y = null;
+            });
+
             const particles = [];
-            const particleCount = Math.floor((width * height) / 14000);
-            const labelsList = ['DATA', 'XAUUSD', 'EURUSD', 'BTC', 'ETH', 'ENTRY', 'TP', 'SL', 'RR', 'SETUP', 'ZONES', 'SMT', 'FLOW', 'BOS', 'CHOCH', '99.8%', 'EQUITY', 'PROFIT', 'LONG', 'SHORT'];
+            const particleCount = Math.floor((width * height) / 13000);
+            const labelsList = ['DATA', 'XAUUSD', 'EURUSD', 'BTC', 'ETH', 'ENTRY', 'TP', 'SL', 'RR', 'SETUP', 'ZONES', 'SMT', 'FLOW', 'BOS', 'CHOCH', '99.8%', 'EQUITY', 'PROFIT', 'LONG', 'SHORT', 'NODE', 'VPA', 'PIPS', 'RISK'];
 
             for (let i = 0; i < particleCount; i++) {
                 particles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.8,
-                    vy: (Math.random() - 0.5) * 0.8,
+                    vx: (Math.random() - 0.5) * 0.9,
+                    vy: (Math.random() - 0.5) * 0.9,
                     radius: Math.random() * 2 + 1.5,
-                    text: Math.random() > 0.6 ? labelsList[Math.floor(Math.random() * labelsList.length)] : null
+                    text: Math.random() > 0.55 ? labelsList[Math.floor(Math.random() * labelsList.length)] : null
                 });
             }
 
             function animate() {
                 ctx.clearRect(0, 0, width, height);
 
-                // Update & draw particles
                 for (let i = 0; i < particles.length; i++) {
                     let p = particles[i];
                     p.x += p.vx;
@@ -1090,16 +1118,16 @@
 
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(16, 185, 129, 0.45)';
+                    ctx.fillStyle = 'rgba(16, 185, 129, 0.5)';
                     ctx.fill();
 
                     if (p.text) {
                         ctx.font = '9px JetBrains Mono, monospace';
-                        ctx.fillStyle = 'rgba(16, 185, 129, 0.35)';
+                        ctx.fillStyle = 'rgba(16, 185, 129, 0.4)';
                         ctx.fillText(p.text, p.x + 6, p.y - 6);
                     }
 
-                    // Connect lines between nearby particles
+                    // Hubungkan antar partikel
                     for (let j = i + 1; j < particles.length; j++) {
                         let p2 = particles[j];
                         let dx = p.x - p2.x;
@@ -1110,8 +1138,24 @@
                             ctx.beginPath();
                             ctx.moveTo(p.x, p.y);
                             ctx.lineTo(p2.x, p2.y);
-                            ctx.strokeStyle = `rgba(16, 185, 129, ${0.18 * (1 - dist / 120)})`;
+                            ctx.strokeStyle = `rgba(16, 185, 129, ${0.2 * (1 - dist / 120)})`;
                             ctx.lineWidth = 0.8;
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Hubungkan garis interaktif ke pointer mouse / sentuhan jari
+                    if (pointer.x !== null && pointer.y !== null) {
+                        let dxMouse = p.x - pointer.x;
+                        let dyMouse = p.y - pointer.y;
+                        let distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+
+                        if (distMouse < pointer.radius) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(pointer.x, pointer.y);
+                            ctx.strokeStyle = `rgba(34, 197, 94, ${0.45 * (1 - distMouse / pointer.radius)})`;
+                            ctx.lineWidth = 1.2;
                             ctx.stroke();
                         }
                     }
@@ -1141,7 +1185,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            initNetworkCanvas();
+            initInteractiveNetworkCanvas();
             populateAllYearFilters();
             const now = new Date();
             const mStr = String(now.getMonth() + 1).padStart(2, '0');
