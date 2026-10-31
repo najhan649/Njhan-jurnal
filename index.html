@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
@@ -47,23 +47,15 @@
         }
 
         .glass-card {
-            background: rgba(8, 13, 10, 0.96);
+            background: rgba(8, 13, 10, 0.88);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(16, 185, 129, 0.25);
+            border: 1px solid rgba(16, 185, 129, 0.3);
             box-shadow: 0 25px 60px 0 rgba(0, 0, 0, 0.85);
         }
 
-        /* Penyesuaian transparansi card landing agar animasi background canvas tembus pandang */
-        #landingModal .glass-card {
-            background: rgba(2, 4, 7, 0.82) !important;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-
         .glass-card:hover {
-            border-color: rgba(16, 185, 129, 0.45);
+            border-color: rgba(16, 185, 129, 0.5);
         }
 
         ::-webkit-scrollbar {
@@ -134,7 +126,7 @@
             animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Canvas Background untuk animasi node interaktif sentuhan */
+        /* Canvas Background Jaringan Node Interaktif Persis Seperti Video */
         #networkCanvas {
             position: fixed;
             top: 0;
@@ -148,7 +140,7 @@
 </head>
 <body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black relative">
 
-    <!-- CANVAS ANIMASI LATAR BELAKANG NODE/CHART INTERAKTIF -->
+    <!-- CANVAS ANIMASI LATAR BELAKANG JARINGAN NODE SEPERTI DI VIDEO -->
     <canvas id="networkCanvas"></canvas>
 
     <!-- TOP HEADER / NAVBAR -->
@@ -189,8 +181,8 @@
         </div>
     </header>
 
-    <!-- LANDING SCREEN / WELCOME MODAL DENGAN LATAR BELAKANG SERAGAM & ELEGAN -->
-    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+    <!-- LANDING SCREEN / WELCOME MODAL DENGAN LATAR BELAKANG TRANSPARAN AGAR NODE TERLIHAT -->
+    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="glass-card max-w-xl w-full rounded-3xl p-6 sm:p-10 space-y-8 text-center animate-fade-in relative z-20 border-emerald-500/30 shadow-2xl">
             
             <!-- Logo & Brand Header -->
@@ -223,8 +215,8 @@
         </div>
     </div>
 
-    <!-- AUTHENTICATION INPUT MODAL (LATAR BELAKANG SERAGAM) -->
-    <div id="authFormModal" class="hidden fixed inset-0 z-50 bg-[#020407]/90 backdrop-blur-md flex items-center justify-center p-4">
+    <!-- AUTHENTICATION INPUT MODAL -->
+    <div id="authFormModal" class="hidden fixed inset-0 z-50 bg-[#020407]/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-sm w-full space-y-5 shadow-2xl relative border-emerald-500/40 text-center animate-fade-in z-40">
             <button onclick="closeAuthFormModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition">
                 <i class="fa-solid fa-xmark text-lg"></i>
@@ -1042,7 +1034,7 @@
         };
     </script>
 
-    <!-- MAIN APP & INTERACTIVE TOUCH/MOUSE NETWORK CANVAS LOGIC JS -->
+    <!-- MAIN APP & JARINGAN NODE INTERAKTIF PERSIS SEPERTI DI VIDEO -->
     <script>
         let currentCalendarDate = new Date();
         let selectedCalendarDateStr = null;
@@ -1055,7 +1047,7 @@
 
         const dayNamesID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
-        // INTERACTIVE TOUCH & MOUSE NODE CANVAS BACKGROUND (KOREKSI LINK/USD MENJADI LINK/USD)
+        // ANIMASI JARINGAN NODE & KOTAK "DATA" TENGAH SEPERTI DI VIDEO
         function initInteractiveNetworkCanvas() {
             const canvas = document.getElementById('networkCanvas');
             if (!canvas) return;
@@ -1070,19 +1062,14 @@
             });
 
             let pointer = {
-                x: null,
-                y: null,
-                radius: 170
+                x: width / 2,
+                y: height / 2,
+                radius: 200
             };
 
             window.addEventListener('mousemove', (e) => {
                 pointer.x = e.clientX;
                 pointer.y = e.clientY;
-            });
-
-            window.addEventListener('mouseout', () => {
-                pointer.x = null;
-                pointer.y = null;
             });
 
             window.addEventListener('touchmove', (e) => {
@@ -1092,91 +1079,112 @@
                 }
             }, { passive: true });
 
-            window.addEventListener('touchend', () => {
-                pointer.x = null;
-                pointer.y = null;
-            });
-
-            const particles = [];
-            const particleCount = Math.floor((width * height) / 8500);
-            
-            // Kumpulan label Kripto (LINK/USD dikapitalisasi), Forex, Indeks, dan Istilah Trading
-            const labelsList = [
-                // Kripto
-                'BTC/USD', 'ETH/USD', 'SOL/USD', 'XRP/USD', 'ADA/USD', 'DOGE/USD', 'AVAX/USD', 'LINK/USD', 'BNB/USD', 'MATIC/USD', 'DOT/USD', 'NEAR/USD',
-                // Forex
-                'EUR/USD', 'GBP/USD', 'USD/JPY', 'AUD/USD', 'NZD/USD', 'USD/CAD', 'USD/CHF', 'XAU/USD', 'EUR/GBP', 'AUD/JPY', 'GBP/JPY', 'EUR/JPY',
-                // Indices & Trading Terms
-                'US30', 'US100', 'SPX500', 'DAX40', 'FTSE100', 'NIFTY50', 'NIKKEI225', 'HANGSENG',
-                'ENTRY', 'TP', 'SL', 'RR', 'SETUP', 'SMT', 'SSMT', 'BOS', 'CHOCH', 'EQUITY', 'PROFIT', 'LOSS', 'BUY', 'SELL', 'LONG', 'SHORT', 'ORDERBLOCK', 'FVG'
+            const terms = [
+                'BTC/USD', 'ETH/USD', 'SOL/USD', 'LINK/USD', 'XAU/USD', 'EUR/USD', 'GBP/USD', 
+                'US30', 'US100', 'SPX500', 'ENTRY', 'TP', 'SL', 'RR', 'SETUP', 'SMT', 'BOS', 
+                'CHOCH', 'EQUITY', 'PROFIT', 'LOSS', 'BUY', 'SELL', 'ORDERBLOCK', 'FVG', 'DISCIPLINE',
+                'TARGET', 'PULLBACK', 'BREAKOUT', 'SWING', 'SCALP', 'SPREAD', 'PIP', 'LOT', 'MARGIN'
             ];
 
-            for (let i = 0; i < particleCount; i++) {
-                particles.push({
+            const nodes = [];
+            const nodeCount = Math.floor((width * height) / 9000);
+
+            for (let i = 0; i < nodeCount; i++) {
+                nodes.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.7,
-                    vy: (Math.random() - 0.5) * 0.7,
-                    radius: Math.random() * 2.2 + 1.2,
-                    text: labelsList[Math.floor(Math.random() * labelsList.length)]
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    radius: Math.random() * 2 + 1,
+                    text: terms[Math.floor(Math.random() * terms.length)]
                 });
             }
 
             function animate() {
                 ctx.clearRect(0, 0, width, height);
 
-                for (let i = 0; i < particles.length; i++) {
-                    let p = particles[i];
-                    p.x += p.vx;
-                    p.y += p.vy;
+                // Pusat Kotak "DATA" seperti di video
+                let centerX = width / 2;
+                let centerY = height / 2;
 
-                    if (p.x < 0 || p.x > width) p.vx *= -1;
-                    if (p.y < 0 || p.y > height) p.vy *= -1;
+                // Gambar Garis Saraf/Koneksi dari Center ke Pointer / Mouse
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(pointer.x, pointer.y);
+                ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
 
+                // Gambar Kotak Pusat "DATA"
+                ctx.fillStyle = 'rgba(8, 14, 11, 0.9)';
+                ctx.strokeStyle = '#10B981';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.roundRect(centerX - 45, centerY - 25, 90, 50, 8);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = 'bold 12px JetBrains Mono, monospace';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('DATA', centerX, centerY);
+
+                // Render Node-Node Terhubung di Sekitar
+                for (let i = 0; i < nodes.length; i++) {
+                    let n = nodes[i];
+                    n.x += n.vx;
+                    n.y += n.vy;
+
+                    if (n.x < 0 || n.x > width) n.vx *= -1;
+                    if (n.y < 0 || n.y > height) n.vy *= -1;
+
+                    // Titik Node
                     ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(16, 185, 129, 0.65)';
+                    ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = '#10B981';
                     ctx.fill();
 
-                    if (p.text) {
+                    // Teks Istilah Trading di Node
+                    if (n.text) {
                         ctx.font = '9px JetBrains Mono, monospace';
-                        ctx.fillStyle = 'rgba(16, 185, 129, 0.52)';
-                        ctx.fillText(p.text, p.x + 7, p.y - 7);
+                        ctx.fillStyle = 'rgba(16, 185, 129, 0.65)';
+                        ctx.textAlign = 'left';
+                        ctx.fillText(n.text, n.x + 8, n.y - 4);
                     }
 
-                    // Hubungkan antar partikel
-                    for (let j = i + 1; j < particles.length; j++) {
-                        let p2 = particles[j];
-                        let dx = p.x - p2.x;
-                        let dy = p.y - p2.y;
+                    // Hubungkan antar node terdekat
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        let n2 = nodes[j];
+                        let dx = n.x - n2.x;
+                        let dy = n.y - n2.y;
                         let dist = Math.sqrt(dx * dx + dy * dy);
 
-                        if (dist < 140) {
+                        if (dist < 130) {
                             ctx.beginPath();
-                            ctx.moveTo(p.x, p.y);
-                            ctx.lineTo(p2.x, p2.y);
-                            ctx.strokeStyle = `rgba(16, 185, 129, ${0.25 * (1 - dist / 140)})`;
-                            ctx.lineWidth = 0.8;
+                            ctx.moveTo(n.x, n.y);
+                            ctx.lineTo(n2.x, n2.y);
+                            ctx.strokeStyle = `rgba(16, 185, 129, ${0.2 * (1 - dist / 130)})`;
+                            ctx.lineWidth = 0.7;
                             ctx.stroke();
                         }
                     }
 
-                    // Hubungkan garis interaktif ke pointer mouse / sentuhan jari
-                    if (pointer.x !== null && pointer.y !== null) {
-                        let dxMouse = p.x - pointer.x;
-                        let dyMouse = p.y - pointer.y;
-                        let distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+                    // Reaksi sentuhan / kursor mouse mendekati node
+                    let dxMouse = n.x - pointer.x;
+                    let dyMouse = n.y - pointer.y;
+                    let distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
 
-                        if (distMouse < pointer.radius) {
-                            ctx.beginPath();
-                            ctx.moveTo(p.x, p.y);
-                            ctx.lineTo(pointer.x, pointer.y);
-                            ctx.strokeStyle = `rgba(34, 197, 94, ${0.55 * (1 - distMouse / pointer.radius)})`;
-                            ctx.lineWidth = 1.2;
-                            ctx.stroke();
-                        }
+                    if (distMouse < pointer.radius) {
+                        ctx.beginPath();
+                        ctx.moveTo(n.x, n.y);
+                        ctx.lineTo(pointer.x, pointer.y);
+                        ctx.strokeStyle = `rgba(34, 197, 94, ${0.6 * (1 - distMouse / pointer.radius)})`;
+                        ctx.lineWidth = 1.2;
+                        ctx.stroke();
                     }
                 }
+
                 requestAnimationFrame(animate);
             }
             animate();
