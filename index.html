@@ -178,7 +178,7 @@
         </div>
     </header>
 
-    <!-- LANDING SCREEN / WELCOME MODAL (Transparansi Lebih Tipis, Teks Sesuai Permintaan) -->
+    <!-- LANDING SCREEN / WELCOME MODAL -->
     <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/65 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="max-w-xl w-full text-center space-y-8 animate-fade-in relative z-20 px-4">
             <div class="space-y-4">
@@ -189,7 +189,7 @@
                     <span class="px-3.5 py-1 rounded-full text-[11px] font-extrabold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 uppercase">
                         CREATED BY NAJHAN
                     </span>
-                    <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight mt-4 drop-shadow-lg">WELCOME BACK TRADES</h1>
+                    <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight mt-4 drop-shadow-lg">WELCOME BACK TRADE LAB</h1>
                     <p class="text-xs sm:text-sm text-gray-300 mt-3 max-w-md mx-auto leading-relaxed font-medium">Terminal jurnal trading institusional dengan analitik presisi tinggi, kalender performa, dan sinkronisasi awan waktu nyata.</p>
                 </div>
             </div>
@@ -1061,6 +1061,7 @@
                 });
                 window.appData.trades = trades;
                 if (window.populateAllYearFilters) window.populateAllYearFilters();
+                window.renderAccountsList();
                 window.refreshActiveAccountData();
             }, (error) => {
                 console.error("Trades listener error:", error);
@@ -1458,6 +1459,7 @@
                 accountsView.classList.remove('hidden');
                 workspaceView.classList.add('hidden');
                 headerBadge.classList.add('hidden');
+                renderAccountsList();
             } else {
                 const active = getActiveAccount();
                 if (!active) {
@@ -1527,6 +1529,8 @@
                     switchView('workspace');
                 };
 
+                const balanceColorClass = netProfit > 0 ? 'text-emerald-400' : netProfit < 0 ? 'text-red-400' : 'text-emerald-400';
+
                 card.innerHTML = `
                     <div class="space-y-1">
                         <div class="flex items-center gap-2">
@@ -1538,7 +1542,10 @@
                             <span class="px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-gray-800 text-gray-300 border border-gray-700">${curr}</span>
                         </div>
                         <h3 class="text-lg sm:text-xl font-black text-white group-hover:text-emerald-400 transition">${acc.name}</h3>
-                        <p class="text-xs sm:text-sm font-bold font-mono text-emerald-400">${formatMoney(currentBalance, curr)} <span class="text-[10px] font-normal text-gray-400 font-sans">Starting: ${formatMoney(acc.startingBalance, curr)}</span></p>
+                        <p class="text-xs sm:text-sm font-bold font-mono ${balanceColorClass}">
+                            ${formatMoney(currentBalance, curr)} 
+                            <span class="text-[10px] font-normal text-gray-400 font-sans ml-1">Starting: ${formatMoney(acc.startingBalance, curr)}</span>
+                        </p>
                     </div>
 
                     <div class="flex items-center gap-3">
@@ -2537,7 +2544,6 @@
             const growthPct = ((totalPnL / Number(activeAcc.startingBalance)) * 100).toFixed(2);
             document.getElementById('equityGrowthPercentage').innerText = (growthPct >= 0 ? '+' : '') + growthPct + '%';
 
-            // 1. EQUITY CURVE
             let cumulativeBalance = Number(activeAcc.startingBalance);
             const labels = ['Start'];
             const dataPoints = [cumulativeBalance];
@@ -2548,17 +2554,11 @@
             });
             renderLineChart('equityChart', labels, dataPoints, 'Equity', curr);
 
-            // 2. OUTCOME BREAKDOWN STATS & DONUT
             renderOutcomeBreakdownStats(trades, curr, wins, losses, grossProfit, grossLoss);
-
-            // 3. PER-PAIR PERFORMANCE COMPARISON
             renderPerPairComparison(trades, curr);
-
-            // 4. MARKET SESSIONS & MINIMALIST RADAR CLOCK
             renderMarketSessionsAnalytics(trades, curr);
             renderHourlyRadarChart(trades);
 
-            // 5. PNL BY WEEKDAY
             const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             const weekdayPnL = [0, 0, 0, 0, 0, 0, 0];
             trades.forEach(t => {
@@ -2567,7 +2567,6 @@
             });
             renderBarChart('weekdayChart', weekdays, weekdayPnL, 'PnL by Day', curr);
 
-            // 6. PNL BY ORDER TYPE / POSITION
             const buyPnL = trades.filter(t => t.position === 'BUY').reduce((s, t) => s + Number(t.netPnL), 0);
             const sellPnL = trades.filter(t => t.position === 'SELL').reduce((s, t) => s + Number(t.netPnL), 0);
             renderBarChart('orderTypeChart', ['BUY', 'SELL'], [buyPnL, sellPnL], 'PnL by Position', curr);
