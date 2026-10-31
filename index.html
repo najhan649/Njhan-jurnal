@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Najh.an Journal - Institutional Trading Terminal v6.0 Pro</title>
+    <title>Najh.an Journal - Institutional Trading Terminal v7.0 Pro</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -87,15 +87,14 @@
             }
         }
 
-        /* Responsive Mobile Optimized Calendar Day Box */
         .calendar-day {
-            min-height: 68px;
+            min-height: 72px;
             height: auto;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
         @media (min-width: 640px) {
             .calendar-day {
-                min-height: 84px;
+                min-height: 86px;
             }
         }
 
@@ -136,7 +135,7 @@
                     </div>
                     <div>
                         <span class="font-extrabold text-base sm:text-lg text-white tracking-tight group-hover:text-emerald-400 transition">Najh.an <span class="text-emerald-400">Journal</span></span>
-                        <span class="block text-[9px] sm:text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v6.0</span>
+                        <span class="block text-[9px] sm:text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v7.0</span>
                     </div>
                 </div>
 
@@ -373,15 +372,15 @@
                             <div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div><div>Su</div>
                         </div>
 
-                        <!-- Days Grid (Mobile Responsive & Optimized PnL Display) -->
+                        <!-- Days Grid -->
                         <div id="calendarDays" class="calendar-grid gap-1 sm:gap-1.5">
                             <!-- Populated dynamically -->
                         </div>
 
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pt-3 text-[11px] text-gray-400 border-t border-emerald-500/10 gap-2">
                             <div class="flex items-center gap-3">
-                                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400"></span> Profit Day</span>
-                                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-500 shadow-sm shadow-red-500"></span> Loss Day</span>
+                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-md bg-emerald-500/25 border border-emerald-500/40"></span> Profit Day</span>
+                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-md bg-red-500/25 border border-red-500/40"></span> Loss Day</span>
                             </div>
                             <button onclick="clearCalendarDateFilter()" class="text-emerald-400 hover:text-emerald-300 font-bold transition">Show All Month Trades</button>
                         </div>
@@ -1412,10 +1411,23 @@
                 const cell = document.createElement('div');
                 const isSelected = selectedCalendarDateStr === dayDateStr;
 
-                cell.className = `calendar-day rounded-xl p-1 sm:p-1.5 flex flex-col justify-between border cursor-pointer ${
-                    isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/15' : 'border-emerald-500/15 bg-[#080e0b] hover:border-emerald-500/50'
-                }`;
+                // Dinamik Latar Belakang Tanggal (Profit = Hijau Transparan, Loss = Merah Transparan)
+                let bgDayClass = 'border-emerald-500/15 bg-[#080e0b] hover:border-emerald-500/50';
+                if (dayTrades.length > 0) {
+                    if (dayNetPnL > 0) {
+                        bgDayClass = 'border-emerald-500/40 bg-emerald-500/15 hover:bg-emerald-500/25';
+                    } else if (dayNetPnL < 0) {
+                        bgDayClass = 'border-red-500/40 bg-red-500/15 hover:bg-red-500/25';
+                    } else {
+                        bgDayClass = 'border-gray-500/30 bg-gray-500/10 hover:bg-gray-500/20';
+                    }
+                }
 
+                if (isSelected) {
+                    bgDayClass += ' ring-2 ring-emerald-400 border-emerald-400';
+                }
+
+                cell.className = `calendar-day rounded-xl p-1 sm:p-1.5 flex flex-col justify-between border cursor-pointer transition ${bgDayClass}`;
                 cell.onclick = () => selectCalendarDate(dayDateStr, isMainDashboard);
 
                 let badgeHTML = '';
@@ -1646,6 +1658,20 @@
                 const dayNetPnL = dayTrades.reduce((s, t) => s + Number(t.netPnL), 0);
                 const isSelected = selectedCalendarDateStr === dayDateStr;
 
+                let bgDayClass = 'border-emerald-500/15 bg-[#080e0b] hover:border-emerald-500/40';
+                if (dayTrades.length > 0) {
+                    if (dayNetPnL > 0) {
+                        bgDayClass = 'border-emerald-500/40 bg-emerald-500/15 hover:bg-emerald-500/25';
+                    } else if (dayNetPnL < 0) {
+                        bgDayClass = 'border-red-500/40 bg-red-500/15 hover:bg-red-500/25';
+                    } else {
+                        bgDayClass = 'border-gray-500/30 bg-gray-500/10 hover:bg-gray-500/20';
+                    }
+                }
+                if (isSelected) {
+                    bgDayClass += ' ring-2 ring-emerald-400 border-emerald-400';
+                }
+
                 let badgeHTML = '';
                 if (dayTrades.length > 0) {
                     const colorClass = dayNetPnL >= 0 ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
@@ -1659,9 +1685,7 @@
                 }
 
                 calendarCellsHtml += `
-                    <div onclick="selectCalendarDate('${dayDateStr}', false)" class="calendar-day rounded-xl p-1 sm:p-1.5 flex flex-col justify-between border cursor-pointer ${
-                        isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/15' : 'border-emerald-500/15 bg-[#080e0b] hover:border-emerald-500/40'
-                    }">
+                    <div onclick="selectCalendarDate('${dayDateStr}', false)" class="calendar-day rounded-xl p-1 sm:p-1.5 flex flex-col justify-between border cursor-pointer transition ${bgDayClass}">
                         <div class="flex items-center justify-between text-[10px] sm:text-[11px] font-bold ${dayTrades.length > 0 ? 'text-white' : 'text-gray-500'}">
                             <span>${day}</span>
                             ${dayTrades.length > 0 ? `<span class="w-1.5 h-1.5 rounded-full ${dayNetPnL >= 0 ? 'bg-emerald-400 shadow-sm shadow-emerald-400' : 'bg-red-400 shadow-sm shadow-red-400'}"></span>` : ''}
@@ -2371,3 +2395,4 @@
     </script>
 </body>
 </html>
+      
