@@ -126,7 +126,6 @@
             animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Canvas Background Jaringan Node Persis Seperti Video */
         #networkCanvas {
             position: fixed;
             top: 0;
@@ -140,7 +139,7 @@
 </head>
 <body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black relative">
 
-    <!-- CANVAS ANIMASI LATAR BELAKANG JARINGAN NODE & KOTAK DATA SEPERTI DI VIDEO -->
+    <!-- CANVAS ANIMASI JARINGAN PASAR & NODE INTERAKTIF -->
     <canvas id="networkCanvas"></canvas>
 
     <!-- TOP HEADER / NAVBAR -->
@@ -181,7 +180,7 @@
         </div>
     </header>
 
-    <!-- LANDING SCREEN / WELCOME MODAL DENGAN KOTAK LOGIN & CREATE ACCOUNT -->
+    <!-- LANDING SCREEN / WELCOME MODAL -->
     <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/50 backdrop-blur-[2px] flex items-center justify-center p-4 overflow-y-auto">
         <div class="glass-card max-w-xl w-full rounded-3xl p-6 sm:p-10 space-y-8 text-center animate-fade-in relative z-20 border-emerald-500/30 shadow-2xl">
             
@@ -1000,7 +999,7 @@
                 }
             } catch (err) {
                 errEl.innerText = err.message || "Authentication failed.";
-                errEl.classList.remove('hidden');
+                errEl.classList.add('hidden');
             }
         };
 
@@ -1034,7 +1033,7 @@
         };
     </script>
 
-    <!-- MAIN APP & JARINGAN NODE INTERAKTIF PERSIS SEPERTI DI VIDEO -->
+    <!-- MAIN APP & JARINGAN NODE PASAR INTERAKTIF (TANPA KATA "DATA") -->
     <script>
         let currentCalendarDate = new Date();
         let selectedCalendarDateStr = null;
@@ -1047,7 +1046,7 @@
 
         const dayNamesID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
-        // ANIMASI JARINGAN NODE & KOTAK "DATA" TENGAH PERSIS SEPERTI DI VIDEO
+        // ANIMASI JARINGAN NODE BERUBAH MENJADI HARGA PASAR CRYPTO/FOREX/INDICES & REAKSI SENTUHAN
         function initInteractiveNetworkCanvas() {
             const canvas = document.getElementById('networkCanvas');
             if (!canvas) return;
@@ -1079,66 +1078,56 @@
                 }
             }, { passive: true });
 
-            const terms = [
-                'BTC/USD', 'ETH/USD', 'SOL/USD', 'LINK/USD', 'XAU/USD', 'EUR/USD', 'GBP/USD', 
-                'US30', 'US100', 'SPX500', 'ENTRY', 'TP', 'SL', 'RR', 'SETUP', 'SMT', 'BOS', 
-                'CHOCH', 'EQUITY', 'PROFIT', 'LOSS', 'BUY', 'SELL', 'ORDERBLOCK', 'FVG', 'DISCIPLINE',
-                'TARGET', 'PULLBACK', 'BREAKOUT', 'SWING', 'SCALP', 'SPREAD', 'PIP', 'LOT', 'MARGIN'
+            // Daftar instrumen Crypto, Forex, & Indices asli seperti di video
+            const marketItems = [
+                { name: 'BTC/USD', price: 92450.20 },
+                { name: 'ETH/USD', price: 3420.50 },
+                { name: 'SOL/USD', price: 185.75 },
+                { name: 'XAU/USD', price: 2742.10 },
+                { name: 'EUR/USD', price: 1.0854 },
+                { name: 'GBP/USD', price: 1.2965 },
+                { name: 'USD/JPY', price: 153.20 },
+                { name: 'US30', price: 43250.0 },
+                { name: 'US100', price: 20410.5 },
+                { name: 'SPX500', price: 5840.2 },
+                { name: 'LINK/USD', price: 18.40 },
+                { name: 'ADA/USD', price: 0.725 },
+                { name: 'AUD/USD', price: 0.658 }
             ];
 
             const nodes = [];
-            const nodeCount = Math.floor((width * height) / 8500);
+            const nodeCount = Math.floor((width * height) / 9000);
 
             for (let i = 0; i < nodeCount; i++) {
+                const item = marketItems[Math.floor(Math.random() * marketItems.length)];
                 nodes.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
                     vx: (Math.random() - 0.5) * 0.4,
                     vy: (Math.random() - 0.5) * 0.4,
                     radius: Math.random() * 2 + 1,
-                    text: terms[Math.floor(Math.random() * terms.length)]
+                    symbol: item.name,
+                    price: item.price + (Math.random() - 0.5) * (item.price * 0.002),
+                    updateTimer: Math.random() * 100
                 });
             }
 
             function animate() {
                 ctx.clearRect(0, 0, width, height);
 
-                // Pusat Kotak "DATA" seperti di video
-                let centerX = width / 2;
-                let centerY = height / 2;
-
-                // Garis Siku-siku / Orthogonal dari Center ke Kursor Sentuhan
-                ctx.beginPath();
-                ctx.moveTo(centerX, centerY);
-                ctx.lineTo(pointer.x, centerY);
-                ctx.lineTo(pointer.x, pointer.y);
-                ctx.strokeStyle = 'rgba(16, 185, 129, 0.45)';
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-
-                // Gambar Kotak Pusat "DATA"
-                ctx.fillStyle = 'rgba(8, 14, 11, 0.92)';
-                ctx.strokeStyle = '#10B981';
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.roundRect(centerX - 45, centerY - 25, 90, 50, 8);
-                ctx.fill();
-                ctx.stroke();
-
-                ctx.fillStyle = '#FFFFFF';
-                ctx.font = 'bold 12px JetBrains Mono, monospace';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('DATA', centerX, centerY);
-
-                // Render Node-Node Terhubung di Sekitar
-                for (let i = 0; i < nodes.length; i++) {
-                    let n = nodes[i];
+                // Update fluktuasi harga pasar secara realtime
+                nodes.forEach(n => {
                     n.x += n.vx;
                     n.y += n.vy;
 
                     if (n.x < 0 || n.x > width) n.vx *= -1;
                     if (n.y < 0 || n.y > height) n.vy *= -1;
+
+                    n.updateTimer++;
+                    if (n.updateTimer > 60) {
+                        n.price += (Math.random() - 0.49) * (n.price * 0.001);
+                        n.updateTimer = 0;
+                    }
 
                     // Titik Node
                     ctx.beginPath();
@@ -1146,13 +1135,12 @@
                     ctx.fillStyle = '#10B981';
                     ctx.fill();
 
-                    // Teks Istilah Trading di Node
-                    if (n.text) {
-                        ctx.font = '9px JetBrains Mono, monospace';
-                        ctx.fillStyle = 'rgba(16, 185, 129, 0.65)';
-                        ctx.textAlign = 'left';
-                        ctx.fillText(n.text, n.x + 8, n.y - 4);
-                    }
+                    // Label Simbol & Angka Harga Pasar yang Berubah
+                    let priceDisplay = n.price > 100 ? n.price.toFixed(2) : n.price.toFixed(4);
+                    ctx.font = '9px JetBrains Mono, monospace';
+                    ctx.fillStyle = 'rgba(16, 185, 129, 0.75)';
+                    ctx.textAlign = 'left';
+                    ctx.fillText(`${n.symbol}: ${priceDisplay}`, n.x + 8, n.y - 4);
 
                     // Hubungkan antar node terdekat dengan garis siku
                     for (let j = i + 1; j < nodes.length; j++) {
@@ -1181,11 +1169,11 @@
                         ctx.beginPath();
                         ctx.moveTo(n.x, n.y);
                         ctx.lineTo(pointer.x, pointer.y);
-                        ctx.strokeStyle = `rgba(34, 197, 94, ${0.6 * (1 - distMouse / pointer.radius)})`;
+                        ctx.strokeStyle = `rgba(34, 197, 94, ${0.65 * (1 - distMouse / pointer.radius)})`;
                         ctx.lineWidth = 1.2;
                         ctx.stroke();
                     }
-                }
+                });
 
                 requestAnimationFrame(animate);
             }
@@ -2669,3 +2657,4 @@
     </script>
 </body>
 </html>
+ 
