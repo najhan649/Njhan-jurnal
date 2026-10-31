@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Najh.an Journal - Institutional Trading Terminal v7.0 Pro</title>
+    <title>Najh.an Journal - Institutional Trading Terminal v8.0 Ultra Pro</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -135,7 +135,7 @@
                     </div>
                     <div>
                         <span class="font-extrabold text-base sm:text-lg text-white tracking-tight group-hover:text-emerald-400 transition">Najh.an <span class="text-emerald-400">Journal</span></span>
-                        <span class="block text-[9px] sm:text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v7.0</span>
+                        <span class="block text-[9px] sm:text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v8.0</span>
                     </div>
                 </div>
 
@@ -162,40 +162,61 @@
         </div>
     </header>
 
-    <!-- AUTHENTICATION MODAL -->
-    <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-card rounded-2xl p-6 max-w-sm w-full space-y-5 shadow-2xl relative border-emerald-500/30">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <i class="fa-solid fa-xmark text-lg"></i>
+    <!-- AUTHENTICATION MODAL & LANDING SCREEN (BEFORE LOGIN) -->
+    <div id="authModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-4">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-6 shadow-2xl relative border-emerald-500/40 text-center">
+            
+            <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white transition">
+                <i class="fa-solid fa-xmark text-xl"></i>
             </button>
 
-            <div class="text-center space-y-1">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center text-black font-black text-2xl mx-auto shadow-lg shadow-emerald-900/40">
+            <!-- Institutional Welcome Header -->
+            <div class="space-y-3 pt-2">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-3xl mx-auto shadow-xl shadow-emerald-900/60 ring-2 ring-emerald-400/30">
                     N
                 </div>
-                <h3 class="text-xl font-black text-white tracking-tight">Najh.an Cloud Sync</h3>
-                <p class="text-xs text-gray-400">Silakan login untuk akses jurnal aman lintas perangkat.</p>
+                <div>
+                    <span class="px-3 py-1 rounded-full text-[10px] font-extrabold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 uppercase">
+                        Institutional Terminal v8.0
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight mt-2">WELCOME TRADER</h2>
+                    <p class="text-xs text-gray-400 mt-1 max-w-xs mx-auto">Kelola portofolio trading profesional Anda dengan jurnal cloud yang tersinkronisasi presisi.</p>
+                </div>
             </div>
 
-            <div class="space-y-3">
+            <!-- Auth Input Form -->
+            <div class="space-y-3.5 text-left pt-2">
                 <div>
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">EMAIL ADDRESS</label>
-                    <input type="email" id="authEmail" placeholder="yourname@gmail.com" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    <div class="relative">
+                        <i class="fa-solid fa-envelope absolute left-3.5 top-3 text-gray-500 text-xs"></i>
+                        <input type="email" id="authEmail" placeholder="trader@institutional.com" class="w-full bg-[#020407] border border-emerald-500/25 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
+                    </div>
                 </div>
 
                 <div>
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">PASSWORD</label>
-                    <input type="password" id="authPassword" placeholder="••••••••" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-3.5 top-3 text-gray-500 text-xs"></i>
+                        <input type="password" id="authPassword" placeholder="••••••••" class="w-full bg-[#020407] border border-emerald-500/25 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
+                    </div>
                 </div>
 
-                <div id="authErrorMsg" class="text-xs text-red-400 hidden text-center"></div>
+                <div id="authErrorMsg" class="text-xs text-red-400 hidden text-center font-medium bg-red-500/10 p-2 rounded-xl border border-red-500/20"></div>
 
-                <button onclick="handleEmailLogin()" class="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl transition shadow-lg shadow-emerald-900/30">
-                    Login / Sign In
-                </button>
-                <button onclick="handleEmailSignUp()" class="w-full py-2.5 bg-[#080e0b] hover:bg-[#0d1711] text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
-                    Create New Account
-                </button>
+                <div class="pt-2 space-y-2">
+                    <button onclick="handleEmailLogin()" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-black tracking-wider uppercase rounded-xl transition shadow-lg shadow-emerald-900/40 transform hover:scale-[1.01]">
+                        Login Terminal
+                    </button>
+                    <button onclick="handleEmailSignUp()" class="w-full py-3 bg-[#080e0b] hover:bg-[#0d1711] text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
+                        Create New Account
+                    </button>
+                </div>
+            </div>
+
+            <div class="pt-2 border-t border-emerald-500/10 text-[10px] text-gray-500 flex justify-between items-center">
+                <span>Najh.an Trading Systems</span>
+                <span class="text-emerald-500 font-mono">Secured Sync</span>
             </div>
         </div>
     </div>
@@ -555,8 +576,11 @@
                     <!-- Form Inputs Grid -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">DATE *</label>
-                            <input type="date" id="tradeDate" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">DATE *</label>
+                                <span id="tradeDayNameDisplay" class="text-[10px] font-bold text-emerald-400 font-mono"></span>
+                            </div>
+                            <input type="date" id="tradeDate" onchange="updateDayNameFromDateInput()" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                         </div>
 
                         <div>
@@ -676,7 +700,7 @@
                             <table class="w-full text-left text-xs text-gray-300">
                                 <thead class="bg-[#04070a] border-b border-emerald-500/10 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                                     <tr>
-                                        <th class="py-3.5 px-4">Date</th>
+                                        <th class="py-3.5 px-4">Date & Day</th>
                                         <th class="py-3.5 px-4">Pair</th>
                                         <th class="py-3.5 px-4">Pos</th>
                                         <th class="py-3.5 px-4">Net P/L</th>
@@ -997,6 +1021,27 @@
         let charts = {};
         let isPrivacyMode = false;
         let logViewMode = 'table';
+
+        const dayNamesID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+
+        function getDayNameFromDateStr(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return '';
+            const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            return dayNamesID[d.getDay()] || '';
+        }
+
+        function updateDayNameFromDateInput() {
+            const dateVal = document.getElementById('tradeDate').value;
+            const dayDisplay = document.getElementById('tradeDayNameDisplay');
+            if (dateVal) {
+                const dayName = getDayNameFromDateStr(dateVal);
+                dayDisplay.innerText = dayName ? `(${dayName})` : '';
+            } else {
+                dayDisplay.innerText = '';
+            }
+        }
 
         function setLogViewMode(mode) {
             logViewMode = mode;
@@ -1411,7 +1456,6 @@
                 const cell = document.createElement('div');
                 const isSelected = selectedCalendarDateStr === dayDateStr;
 
-                // Dinamik Latar Belakang Tanggal (Profit = Hijau Transparan, Loss = Merah Transparan)
                 let bgDayClass = 'border-emerald-500/15 bg-[#080e0b] hover:border-emerald-500/50';
                 if (dayTrades.length > 0) {
                     if (dayNetPnL > 0) {
@@ -1472,6 +1516,9 @@
                 selectedCalendarDateStr = null; 
             } else {
                 selectedCalendarDateStr = dateStr;
+                // Otomatis isi tanggal dan hari di Form Entry
+                document.getElementById('tradeDate').value = dateStr;
+                updateDayNameFromDateInput();
             }
             if (isMainDashboard) {
                 refreshActiveAccountData();
@@ -1509,7 +1556,8 @@
 
             if (selectedCalendarDateStr) {
                 monthTrades = monthTrades.filter(t => t.date === selectedCalendarDateStr);
-                titleEl.innerText = `Trades for ${selectedCalendarDateStr}`;
+                const dayName = getDayNameFromDateStr(selectedCalendarDateStr);
+                titleEl.innerText = `Trades for ${selectedCalendarDateStr} ${dayName ? '(' + dayName + ')' : ''}`;
                 subtitleEl.innerText = "Filtered by selected calendar date";
             } else {
                 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -1533,6 +1581,7 @@
                 const pnlNum = Number(t.netPnL) || 0;
                 const isWin = pnlNum >= 0;
                 const formattedPnL = (isWin ? '+' : '-') + formatMoney(Math.abs(pnlNum), curr);
+                const dayName = getDayNameFromDateStr(t.date);
                 const card = document.createElement('div');
                 card.className = "bg-[#080e0b] border border-emerald-500/15 rounded-xl p-3 flex items-center justify-between gap-3 hover:border-emerald-500/40 transition";
                 card.innerHTML = `
@@ -1543,7 +1592,7 @@
                         <div>
                             <div class="text-xs font-bold text-white flex items-center gap-2">
                                 ${t.pair}
-                                <span class="text-[10px] text-gray-400 font-mono font-normal">${t.date}</span>
+                                <span class="text-[10px] text-gray-400 font-mono font-normal">${t.date} ${dayName ? '<b class="text-emerald-400/80">(' + dayName + ')</b>' : ''}</span>
                             </div>
                             <div class="text-[10px] text-gray-400 mt-0.5">
                                 RR: <span class="text-amber-400 font-bold font-mono">${t.rr || '0'}</span> &nbsp;|&nbsp; Result: <span class="text-gray-300">${t.result || 'N/A'}</span>
@@ -1710,12 +1759,15 @@
                         <table class="w-full text-left text-xs text-gray-300">
                             <thead class="bg-[#04070a] text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-emerald-500/10">
                                 <tr>
-                                    <th class="py-2 px-3">Date</th>
-                                    <th class="py-2 px-3">Pair</th>
-                                    <th class="py-2 px-3">Pos</th>
-                                    <th class="py-2 px-3">Net P/L</th>
-                                    <th class="py-2 px-3">RR</th>
-                                    <th class="py-2 px-3">Result</th>
+                                    <th class="py-3 px-3">Date & Day</th>
+                                    <th class="py-3 px-3">Pair</th>
+                                    <th class="py-3 px-3">Pos</th>
+                                    <th class="py-3 px-3">Net P/L</th>
+                                    <th class="py-3 px-3">Risk</th>
+                                    <th class="py-3 px-3">RR</th>
+                                    <th class="py-3 px-3">HTF</th>
+                                    <th class="py-3 px-3">Confluence</th>
+                                    <th class="py-3 px-3">Result</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-emerald-500/5">
@@ -1723,14 +1775,21 @@
                 displayedTrades.forEach(t => {
                     const pnl = Number(t.netPnL) || 0;
                     const isWin = pnl >= 0;
+                    const dayName = getDayNameFromDateStr(t.date);
                     tradesTableHtml += `
                         <tr class="hover:bg-emerald-500/5">
-                            <td class="py-2 px-3 font-mono text-[11px] text-gray-300">${t.date}</td>
-                            <td class="py-2 px-3 font-bold text-white">${t.pair}</td>
-                            <td class="py-2 px-3"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}">${t.position}</span></td>
-                            <td class="py-2 px-3 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'}">${(isWin ? '+' : '-') + formatMoney(Math.abs(pnl), curr)}</td>
-                            <td class="py-2 px-3 font-mono text-amber-400">${t.rr || '0'}</td>
-                            <td class="py-2 px-3 text-gray-300 text-[10px]">${t.result || 'N/A'}</td>
+                            <td class="py-3 px-3 font-mono text-[11px] text-gray-300">
+                                <div>${t.date}</div>
+                                <div class="text-[9px] text-emerald-400 font-bold">${dayName}</div>
+                            </td>
+                            <td class="py-3 px-3 font-bold text-white">${t.pair}</td>
+                            <td class="py-3 px-3"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${t.position}</span></td>
+                            <td class="py-3 px-3 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'}">${(isWin ? '+' : '-') + formatMoney(Math.abs(pnl), curr)}</td>
+                            <td class="py-3 px-3 font-mono text-gray-400">${formatMoney(t.risk || 0, curr)}</td>
+                            <td class="py-3 px-3 font-mono font-bold text-amber-400">${t.rr || '0'}</td>
+                            <td class="py-3 px-3 text-gray-400 text-[10px]">${t.htf || '—'}</td>
+                            <td class="py-3 px-3 text-gray-400 text-[10px]">${t.confluence || '—'}</td>
+                            <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] bg-[#080e0b] text-gray-300 border border-emerald-500/10">${t.result || 'N/A'}</span></td>
                         </tr>
                     `;
                 });
@@ -1857,12 +1916,16 @@
                 const pnlNum = Number(t.netPnL) || 0;
                 const isWin = pnlNum >= 0;
                 const formattedPnL = (isWin ? '+' : '-') + formatMoney(Math.abs(pnlNum), curr);
+                const dayName = getDayNameFromDateStr(t.date);
 
                 // 1. Render Table Row
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-emerald-500/5 transition";
                 tr.innerHTML = `
-                    <td class="py-3.5 px-4 font-mono text-[11px] text-gray-300 whitespace-nowrap">${t.date}</td>
+                    <td class="py-3.5 px-4 font-mono text-[11px] text-gray-300 whitespace-nowrap">
+                        <div>${t.date}</div>
+                        <div class="text-[10px] text-emerald-400 font-bold">${dayName}</div>
+                    </td>
                     <td class="py-3.5 px-4 font-bold text-white whitespace-nowrap">${t.pair}</td>
                     <td class="py-3.5 px-4 whitespace-nowrap">
                         <span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${t.position}</span>
@@ -1900,7 +1963,10 @@
                                 <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${t.position}</span>
                                 <span class="font-black text-white text-sm">${t.pair}</span>
                             </div>
-                            <span class="text-xs font-mono text-gray-400">${t.date}</span>
+                            <div class="text-right">
+                                <span class="text-xs font-mono text-gray-400 block">${t.date}</span>
+                                <span class="text-[10px] font-bold text-emerald-400 block">${dayName}</span>
+                            </div>
                         </div>
                         <div class="flex items-center justify-between pt-1 border-t border-emerald-500/10">
                             <div>
@@ -1940,6 +2006,10 @@
 
             if (!container.classList.contains('hidden')) {
                 container.scrollIntoView({ behavior: 'smooth' });
+                if (!document.getElementById('tradeDate').value) {
+                    document.getElementById('tradeDate').value = new Date().toISOString().split('T')[0];
+                }
+                updateDayNameFromDateInput();
             } else {
                 resetTradeForm();
             }
@@ -2014,6 +2084,7 @@
             document.getElementById('editingTradeId').value = '';
             document.getElementById('tradeFormTitle').innerHTML = `<i class="fa-regular fa-pen-to-square text-emerald-400"></i> New Trade Entry`;
             document.getElementById('tradeDate').value = new Date().toISOString().split('T')[0];
+            updateDayNameFromDateInput();
             document.getElementById('tradePair').value = 'XAUUSD';
             selectPos('BUY');
             document.getElementById('tradeNetPnL').value = '';
@@ -2075,6 +2146,7 @@
             document.getElementById('editingTradeId').value = trade.id;
             document.getElementById('tradeFormTitle').innerHTML = `<i class="fa-regular fa-pen-to-square text-emerald-400"></i> Edit Trade`;
             document.getElementById('tradeDate').value = trade.date;
+            updateDayNameFromDateInput();
             document.getElementById('tradePair').value = trade.pair;
             selectPos(trade.position);
             document.getElementById('tradeNetPnL').value = trade.netPnL;
@@ -2395,4 +2467,4 @@
     </script>
 </body>
 </html>
-      
+ 
