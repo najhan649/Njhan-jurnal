@@ -13,12 +13,12 @@
                 extend: {
                     colors: {
                         darkBg: '#020407',
-                        cardBg: 'rgba(8, 13, 10, 0.94)',
+                        cardBg: '#020407',
                         cardBorder: 'rgba(16, 185, 129, 0.25)',
                         brandGreen: '#10B981',
                         brandGreenGlow: '#22C55E',
                         brandRed: '#EF4444',
-                        accentDark: '#080e0b'
+                        accentDark: '#04070a'
                     },
                     fontFamily: {
                         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
@@ -46,20 +46,13 @@
             overflow-x: hidden;
         }
 
+        /* KARTU DENGAN HITAM PEKAT MUTLAK (#020407) */
         .glass-card {
-            background: rgba(8, 13, 10, 0.96);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(16, 185, 129, 0.25);
-            box-shadow: 0 25px 60px 0 rgba(0, 0, 0, 0.85);
-        }
-
-        /* Khusus card di halaman Accounts agar hitam mutlak */
-        #accountsView .glass-card {
             background: #020407 !important;
             backdrop-filter: none !important;
             -webkit-backdrop-filter: none !important;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.22);
+            box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.95);
         }
 
         .glass-card:hover {
@@ -96,6 +89,7 @@
             min-height: 84px;
             height: auto;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #020407 !important;
         }
         @media (min-width: 640px) {
             .calendar-day {
@@ -145,13 +139,13 @@
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black relative">
+<body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black relative bg-[#020407]">
 
     <!-- Interactive Background Network Canvas -->
     <canvas id="networkCanvas"></canvas>
 
     <!-- TOP HEADER / NAVBAR -->
-    <header class="bg-[#020407]/90 backdrop-blur-md border-b border-emerald-500/15 sticky top-0 z-40">
+    <header class="bg-[#020407] border-b border-emerald-500/20 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-2.5 cursor-pointer group" onclick="switchView('accounts')">
@@ -165,12 +159,12 @@
                 </div>
 
                 <div class="flex items-center gap-2 sm:gap-3">
-                    <div id="cloudStatusBadge" class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <div id="cloudStatusBadge" class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-[#020407] text-emerald-400 border border-emerald-500/30">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                         <span id="userEmailDisplay">Cloud Synced</span>
                     </div>
 
-                    <button id="headerAccountBadge" onclick="switchView('accounts')" class="hidden sm:flex items-center gap-2 bg-[#080e0b] hover:bg-[#0d1711] border border-emerald-500/20 text-xs font-semibold px-3.5 py-1.5 rounded-xl text-emerald-400 transition shadow-sm">
+                    <button id="headerAccountBadge" onclick="switchView('accounts')" class="hidden sm:flex items-center gap-2 bg-[#020407] hover:bg-[#050a07] border border-emerald-500/20 text-xs font-semibold px-3.5 py-1.5 rounded-xl text-emerald-400 transition shadow-sm">
                         <i class="fa-solid fa-wallet text-emerald-400 text-xs"></i>
                         <span id="activeAccountHeaderName">Personal</span>
                     </button>
@@ -187,14 +181,14 @@
     </header>
 
     <!-- LANDING SCREEN / WELCOME MODAL -->
-    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/65 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-        <div class="max-w-xl w-full text-center space-y-8 animate-fade-in relative z-20 px-4">
+    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407] flex items-center justify-center p-4 overflow-y-auto">
+        <div class="max-w-xl w-full text-center space-y-8 animate-fade-in relative z-20 px-4 bg-[#020407]">
             <div class="space-y-4">
                 <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-4xl mx-auto shadow-2xl shadow-emerald-900/60 ring-4 ring-emerald-400/20 animate-pulse">
                     N
                 </div>
                 <div>
-                    <span class="px-3.5 py-1 rounded-full text-[11px] font-extrabold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 uppercase">
+                    <span class="px-3.5 py-1 rounded-full text-[11px] font-extrabold tracking-widest text-emerald-400 bg-[#020407] border border-emerald-500/30 uppercase">
                         CREATED BY NAJHAN
                     </span>
                     <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight mt-4 drop-shadow-lg">WELCOME BACK TRADE LAB</h1>
@@ -206,7 +200,7 @@
                 <button onclick="showLoginForm()" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-black tracking-wider uppercase rounded-xl transition shadow-xl shadow-emerald-950/60 transform hover:scale-[1.03]">
                     <i class="fa-solid fa-right-to-bracket mr-1.5"></i> Login Terminal
                 </button>
-                <button onclick="showSignUpForm()" class="w-full py-4 bg-[#080e0b]/90 hover:bg-[#0d1711] text-emerald-400 border border-emerald-500/40 text-xs font-bold tracking-wider uppercase rounded-xl transition hover:border-emerald-500 shadow-xl">
+                <button onclick="showSignUpForm()" class="w-full py-4 bg-[#020407] hover:bg-[#050a07] text-emerald-400 border border-emerald-500/40 text-xs font-bold tracking-wider uppercase rounded-xl transition hover:border-emerald-500 shadow-xl">
                     <i class="fa-solid fa-user-plus mr-1.5"></i> Create New Account
                 </button>
             </div>
@@ -218,14 +212,14 @@
     </div>
 
     <!-- AUTHENTICATION INPUT MODAL -->
-    <div id="authFormModal" class="hidden fixed inset-0 z-50 bg-[#020407]/90 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-sm w-full space-y-5 shadow-2xl relative border-emerald-500/40 text-center animate-fade-in z-40">
+    <div id="authFormModal" class="hidden fixed inset-0 z-50 bg-[#020407] flex items-center justify-center p-4">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-sm w-full space-y-5 shadow-2xl relative border-emerald-500/40 text-center animate-fade-in z-40 bg-[#020407]">
             <button onclick="closeAuthFormModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
 
             <div class="space-y-1">
-                <div id="authModalIcon" class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-black text-xl mx-auto mb-2">
+                <div id="authModalIcon" class="w-12 h-12 rounded-2xl bg-[#020407] border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-black text-xl mx-auto mb-2">
                     <i class="fa-solid fa-lock"></i>
                 </div>
                 <h3 id="authModalTitle" class="text-xl font-black text-white tracking-tight">Login Terminal</h3>
@@ -261,19 +255,19 @@
     </div>
 
     <!-- MAIN CONTAINER -->
-    <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pt-4 sm:pt-6 flex-grow w-full relative z-20">
+    <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pt-4 sm:pt-6 flex-grow w-full relative z-20 bg-[#020407]">
 
-        <!-- ACCOUNT SELECTION VIEW (Latar belakang hitam mutlak) -->
-        <section id="accountsView" class="max-w-2xl mx-auto space-y-6 pt-4">
+        <!-- ACCOUNT SELECTION VIEW -->
+        <section id="accountsView" class="max-w-2xl mx-auto space-y-6 pt-4 bg-[#020407] relative z-10 p-2">
             <div class="text-center space-y-2">
-                <span class="px-3 py-1 rounded-full text-[11px] font-bold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 uppercase">
+                <span class="px-3 py-1 rounded-full text-[11px] font-bold tracking-widest text-emerald-400 bg-[#020407] border border-emerald-500/20 uppercase">
                     Portfolio Management
                 </span>
                 <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Your Accounts</h1>
                 <p class="text-xs sm:text-sm text-gray-400">Pilih akun trading aktif atau buat akun baru.</p>
             </div>
 
-            <div class="glass-card rounded-2xl p-5 shadow-2xl">
+            <div class="glass-card rounded-2xl p-5 shadow-2xl bg-[#020407]">
                 <div id="addAccountForm" class="hidden space-y-4">
                     <div class="flex justify-between items-center pb-3 border-b border-emerald-500/10">
                         <h3 class="text-sm font-bold text-white flex items-center gap-2">
@@ -312,12 +306,12 @@
                     </div>
 
                     <div class="flex justify-end gap-2 pt-2">
-                        <button onclick="toggleAddAccountForm(false)" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-white rounded-xl transition">Cancel</button>
+                        <button onclick="toggleAddAccountForm(false)" class="px-4 py-2 bg-[#020407] border border-emerald-500/20 hover:bg-[#050a07] text-xs font-semibold text-white rounded-xl transition">Cancel</button>
                         <button onclick="createAccount()" class="px-5 py-2 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl transition shadow-lg shadow-emerald-900/30">Save Account</button>
                     </div>
                 </div>
 
-                <button id="showAddAccountBtn" onclick="toggleAddAccountForm(true)" class="w-full py-3.5 border-2 border-dashed border-emerald-500/20 hover:border-emerald-500/50 rounded-xl text-gray-400 hover:text-emerald-400 text-xs font-bold tracking-wide flex items-center justify-center gap-2 transition">
+                <button id="showAddAccountBtn" onclick="toggleAddAccountForm(true)" class="w-full py-3.5 border-2 border-dashed border-emerald-500/20 hover:border-emerald-500/50 rounded-xl text-gray-400 hover:text-emerald-400 text-xs font-bold tracking-wide flex items-center justify-center gap-2 transition bg-[#020407]">
                     <i class="fa-solid fa-plus text-xs"></i> Add Account
                 </button>
             </div>
@@ -327,13 +321,13 @@
         </section>
 
         <!-- MAIN JOURNAL WORKSPACE -->
-        <section id="workspaceView" class="hidden space-y-5 sm:space-y-6">
+        <section id="workspaceView" class="hidden space-y-5 sm:space-y-6 bg-[#020407] relative z-10">
 
-            <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+            <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl bg-[#020407]">
                 <div>
                     <div class="flex items-center gap-2.5 mb-1">
-                        <span id="activeTypeTag" class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">PERSONAL</span>
-                        <span id="activeCurrencyTag" class="px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-cyan-500/10 text-cyan-400 border border-cyan-500/25">USD</span>
+                        <span id="activeTypeTag" class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-[#020407] text-emerald-400 border border-emerald-500/25">PERSONAL</span>
+                        <span id="activeCurrencyTag" class="px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-[#020407] text-cyan-400 border border-cyan-500/25">USD</span>
                         <h2 id="activeAccountName" class="text-xl sm:text-2xl font-black text-white tracking-tight">Main Account</h2>
                     </div>
                     <div class="text-xs text-gray-400 font-medium flex items-center gap-2">
@@ -347,14 +341,14 @@
                 </div>
 
                 <div class="flex items-center gap-2 self-start sm:self-auto">
-                    <button onclick="switchView('accounts')" class="px-4 py-2 bg-[#080e0b] hover:bg-[#0d1711] text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm">
+                    <button onclick="switchView('accounts')" class="px-4 py-2 bg-[#020407] hover:bg-[#050a07] text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm">
                         <i class="fa-solid fa-right-left text-xs"></i> Switch Account
                     </button>
                 </div>
             </div>
 
             <!-- Tab Navigation Header -->
-            <div class="border-b border-emerald-500/10 flex gap-2 sm:gap-6 text-xs sm:text-sm font-bold overflow-x-auto">
+            <div class="border-b border-emerald-500/20 flex gap-2 sm:gap-6 text-xs sm:text-sm font-bold overflow-x-auto bg-[#020407]">
                 <button onclick="setActiveTab('dashboard')" id="tabBtnDashboard" class="py-3 px-3 border-b-2 border-emerald-500 text-emerald-400 flex items-center gap-2 whitespace-nowrap transition">
                     <i class="fa-solid fa-chart-line text-xs"></i> Dashboard
                 </button>
@@ -367,9 +361,9 @@
             </div>
 
             <!-- TAB 1: DASHBOARD -->
-            <div id="tabContentDashboard" class="space-y-5 sm:space-y-6">
+            <div id="tabContentDashboard" class="space-y-5 sm:space-y-6 bg-[#020407]">
 
-                <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#020407]">
                     <div>
                         <h3 class="text-sm font-bold text-white flex items-center gap-2">
                             <i class="fa-solid fa-filter text-emerald-400"></i> Monthly Performance Filter
@@ -393,14 +387,14 @@
                         </select>
                         <select id="dashFilterYear" onchange="onDashFilterChange()" class="bg-[#020407] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                         </select>
-                        <button onclick="resetDashFilterToCurrent()" class="px-3 py-1.5 bg-[#080e0b] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
+                        <button onclick="resetDashFilterToCurrent()" class="px-3 py-1.5 bg-[#020407] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
                             Bulan Ini
                         </button>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
-                    <div class="lg:col-span-7 glass-card rounded-2xl p-3 sm:p-5 space-y-3 sm:space-y-4">
+                    <div class="lg:col-span-7 glass-card rounded-2xl p-3 sm:p-5 space-y-3 sm:space-y-4 bg-[#020407]">
                         <div class="flex items-center justify-between pb-3 border-b border-emerald-500/10">
                             <div>
                                 <h3 class="text-sm font-bold text-white flex items-center gap-2">
@@ -409,11 +403,11 @@
                                 <p id="calendarSubtext" class="text-[11px] text-gray-400">0 trades in current view</p>
                             </div>
                             <div class="flex items-center gap-1.5 sm:gap-2">
-                                <button onclick="navigateMonth(-1)" class="p-2 bg-[#080e0b] hover:bg-[#122017] rounded-xl text-gray-300 text-xs border border-emerald-500/10 transition">
+                                <button onclick="navigateMonth(-1)" class="p-2 bg-[#020407] hover:bg-[#050a07] rounded-xl text-gray-300 text-xs border border-emerald-500/15 transition">
                                     <i class="fa-solid fa-chevron-left"></i>
                                 </button>
                                 <span id="calendarMonthLabel" class="text-xs font-bold text-emerald-400 min-w-[95px] sm:min-w-[110px] text-center font-mono">October 2026</span>
-                                <button onclick="navigateMonth(1)" class="p-2 bg-[#080e0b] hover:bg-[#122017] rounded-xl text-gray-300 text-xs border border-emerald-500/10 transition">
+                                <button onclick="navigateMonth(1)" class="p-2 bg-[#020407] hover:bg-[#050a07] rounded-xl text-gray-300 text-xs border border-emerald-500/15 transition">
                                     <i class="fa-solid fa-chevron-right"></i>
                                 </button>
                             </div>
@@ -428,21 +422,21 @@
 
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pt-3 text-[11px] text-gray-400 border-t border-emerald-500/10 gap-2">
                             <div class="flex items-center gap-3">
-                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-md bg-emerald-500/25 border border-emerald-500/40"></span> Profit Day</span>
-                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-md bg-red-500/25 border border-red-500/40"></span> Loss Day</span>
+                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-md bg-[#020407] border border-emerald-500/40"></span> Profit Day</span>
+                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-md bg-[#020407] border border-red-500/40"></span> Loss Day</span>
                             </div>
                             <button onclick="clearCalendarDateFilter()" class="text-emerald-400 hover:text-emerald-300 font-bold transition">Show All Month Trades</button>
                         </div>
                     </div>
 
-                    <div class="lg:col-span-5 glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between">
+                    <div class="lg:col-span-5 glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between bg-[#020407]">
                         <div>
                             <div class="flex items-center justify-between pb-3 border-b border-emerald-500/10 mb-3">
                                 <div>
                                     <h3 id="recentTradesTitle" class="text-sm font-bold text-white">Recent Trades</h3>
                                     <p id="recentTradesFilterSubtitle" class="text-[11px] text-gray-400">Latest across all time</p>
                                 </div>
-                                <span id="recentTradesCountBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">0 trades</span>
+                                <span id="recentTradesCountBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#020407] text-emerald-400 border border-emerald-500/20">0 trades</span>
                             </div>
 
                             <div id="recentTradesContainer" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
@@ -452,7 +446,7 @@
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                    <div class="glass-card rounded-2xl p-4">
+                    <div class="glass-card rounded-2xl p-4 bg-[#020407]">
                         <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Win Rate</span>
                         <div id="dashWinRate" class="text-2xl font-black text-emerald-400 mt-1">0%</div>
                         <div class="flex gap-2 text-[10px] font-semibold text-gray-400 mt-1.5">
@@ -462,7 +456,7 @@
                         </div>
                     </div>
 
-                    <div class="glass-card rounded-2xl p-4">
+                    <div class="glass-card rounded-2xl p-4 bg-[#020407]">
                         <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Monthly PnL</span>
                         <div id="dashMonthlyPnL" class="text-2xl font-black text-emerald-400 mt-1 font-mono">+$0.00</div>
                         <div class="text-[10px] text-gray-400 mt-1.5">
@@ -470,20 +464,20 @@
                         </div>
                     </div>
 
-                    <div class="glass-card rounded-2xl p-4">
+                    <div class="glass-card rounded-2xl p-4 bg-[#020407]">
                         <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Profit Factor</span>
                         <div id="dashProfitFactor" class="text-2xl font-black text-cyan-400 mt-1 font-mono">0.00</div>
                         <div class="text-[10px] text-gray-400 mt-1.5">Ratio Gross Win / Loss</div>
                     </div>
 
-                    <div class="glass-card rounded-2xl p-4">
+                    <div class="glass-card rounded-2xl p-4 bg-[#020407]">
                         <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Expectancy</span>
                         <div id="dashExpectancy" class="text-2xl font-black text-amber-400 mt-1 font-mono">$0.00</div>
                         <div class="text-[10px] text-gray-400 mt-1.5">Average per trade</div>
                     </div>
                 </div>
 
-                <div class="glass-card rounded-2xl p-4 sm:p-5 space-y-4 shadow-xl">
+                <div class="glass-card rounded-2xl p-4 sm:p-5 space-y-4 shadow-xl bg-[#020407]">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-emerald-500/10 gap-3">
                         <div>
                             <h3 class="text-sm font-bold text-white flex items-center gap-2">
@@ -495,7 +489,7 @@
                             <label class="text-[11px] text-gray-400 font-bold">Filter Tahun:</label>
                             <select id="yearlyFilterYear" onchange="renderYearlyPerformance()" class="bg-[#020407] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                             </select>
-                            <button onclick="resetYearlyFilterToCurrent()" class="px-3 py-1.5 bg-[#080e0b] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
+                            <button onclick="resetYearlyFilterToCurrent()" class="px-3 py-1.5 bg-[#020407] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
                                 Tahun Ini
                             </button>
                         </div>
@@ -511,22 +505,22 @@
             </div>
 
             <!-- TAB 2: TRADE LOG -->
-            <div id="tabContentTradelog" class="hidden space-y-6">
+            <div id="tabContentTradelog" class="hidden space-y-6 bg-[#020407]">
 
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div class="glass-card p-4 rounded-2xl text-center">
+                    <div class="glass-card p-4 rounded-2xl text-center bg-[#020407]">
                         <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">TOTAL P&L</span>
                         <div id="tlTotalPnL" class="text-xl font-black text-emerald-400 mt-1 font-mono">+$0.00</div>
                     </div>
-                    <div class="glass-card p-4 rounded-2xl text-center">
+                    <div class="glass-card p-4 rounded-2xl text-center bg-[#020407]">
                         <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">WIN RATE</span>
                         <div id="tlWinRate" class="text-xl font-black text-emerald-400 mt-1">0%</div>
                     </div>
-                    <div class="glass-card p-4 rounded-2xl text-center">
+                    <div class="glass-card p-4 rounded-2xl text-center bg-[#020407]">
                         <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">TRADES</span>
                         <div id="tlTotalTrades" class="text-xl font-black text-white mt-1">0</div>
                     </div>
-                    <div class="glass-card p-4 rounded-2xl text-center">
+                    <div class="glass-card p-4 rounded-2xl text-center bg-[#020407]">
                         <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">BALANCE</span>
                         <div id="tlBalance" class="text-xl font-black text-amber-400 mt-1 font-mono">$1,000.00</div>
                     </div>
@@ -562,11 +556,11 @@
                             <option value="ALL">Semua Tahun</option>
                         </select>
 
-                        <button onclick="resetTradeLogFilterToCurrentMonth()" class="px-3 py-1.5 bg-[#080e0b] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
+                        <button onclick="resetTradeLogFilterToCurrentMonth()" class="px-3 py-1.5 bg-[#020407] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
                             Bulan Ini
                         </button>
 
-                        <button onclick="resetTradeLogFilter()" class="px-3 py-1.5 bg-[#080e0b] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
+                        <button onclick="resetTradeLogFilter()" class="px-3 py-1.5 bg-[#020407] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
                             Reset
                         </button>
 
@@ -576,12 +570,12 @@
                     </div>
                 </div>
 
-                <div id="tradeFormContainer" class="hidden glass-card rounded-2xl p-4 sm:p-6 shadow-2xl space-y-5">
+                <div id="tradeFormContainer" class="hidden glass-card rounded-2xl p-4 sm:p-6 shadow-2xl space-y-5 bg-[#020407]">
                     <div class="flex justify-between items-center border-b border-emerald-500/10 pb-3">
                         <h3 id="tradeFormTitle" class="text-sm font-bold text-white flex items-center gap-2">
                             <i class="fa-regular fa-pen-to-square text-emerald-400"></i> New Trade Entry
                         </h3>
-                        <button onclick="toggleTradeForm(false)" class="text-gray-400 hover:text-white text-xs px-2.5 py-1 bg-[#080e0b] rounded-lg border border-emerald-500/10">
+                        <button onclick="toggleTradeForm(false)" class="text-gray-400 hover:text-white text-xs px-2.5 py-1 bg-[#020407] rounded-lg border border-emerald-500/15">
                             <i class="fa-solid fa-xmark"></i> Cancel
                         </button>
                     </div>
@@ -657,7 +651,7 @@
                             <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">Open to Low</button>
                             <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">Low to Close</button>
                             <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">High to Close</button>
-                            <button type="button" onclick="toggleCustomTagInput('htf')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
+                            <button type="button" onclick="toggleCustomTagInput('htf')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-[#020407] text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
                         </div>
                         <div id="htfCustomInputContainer" class="hidden mt-2 flex gap-2">
                             <input type="text" id="htfCustomText" placeholder="Ketik opsi HTF sendiri..." class="bg-[#020407] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
@@ -673,7 +667,7 @@
                             <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">SSMT</button>
                             <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">PSP</button>
                             <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">Hidden SMT</button>
-                            <button type="button" onclick="toggleCustomTagInput('confluence')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
+                            <button type="button" onclick="toggleCustomTagInput('confluence')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-[#020407] text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
                         </div>
                         <div id="confluenceCustomInputContainer" class="hidden mt-2 flex gap-2">
                             <input type="text" id="confluenceCustomText" placeholder="Ketik opsi Confluence sendiri..." class="bg-[#020407] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
@@ -688,7 +682,7 @@
                             <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">Full TP</button>
                             <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">SL</button>
                             <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">Partial</button>
-                            <button type="button" onclick="toggleCustomTagInput('result')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
+                            <button type="button" onclick="toggleCustomTagInput('result')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-[#020407] text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
                         </div>
                         <div id="resultCustomInputContainer" class="hidden mt-2 flex gap-2">
                             <input type="text" id="resultCustomText" placeholder="Ketik opsi Result sendiri..." class="bg-[#020407] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
@@ -708,16 +702,16 @@
                     </div>
 
                     <div class="flex justify-end gap-3 pt-3 border-t border-emerald-500/10">
-                        <button onclick="toggleTradeForm(false)" class="px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-white rounded-xl transition">Cancel</button>
+                        <button onclick="toggleTradeForm(false)" class="px-5 py-2.5 bg-[#020407] border border-emerald-500/20 hover:bg-[#050a07] text-xs font-semibold text-white rounded-xl transition">Cancel</button>
                         <button onclick="saveTrade()" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl transition shadow-lg shadow-emerald-900/30">Save Trade</button>
                     </div>
                 </div>
 
                 <div id="tradeLogContainerWrapper">
-                    <div id="tradeLogTableView" class="glass-card rounded-2xl overflow-hidden shadow-2xl">
+                    <div id="tradeLogTableView" class="glass-card rounded-2xl overflow-hidden shadow-2xl bg-[#020407]">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-xs text-gray-300">
-                                <thead class="bg-[#04070a] border-b border-emerald-500/10 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                <thead class="bg-[#020407] border-b border-emerald-500/10 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                                     <tr>
                                         <th class="py-3.5 px-4">Date & Day</th>
                                         <th class="py-3.5 px-4">Pair</th>
@@ -741,7 +735,7 @@
                     <div id="tradeLogCardsView" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     </div>
 
-                    <div id="noTradesPlaceholder" class="glass-card rounded-2xl p-12 text-center hidden mt-4">
+                    <div id="noTradesPlaceholder" class="glass-card rounded-2xl p-12 text-center hidden mt-4 bg-[#020407]">
                         <div class="text-4xl mb-3">👻</div>
                         <h4 class="text-sm font-bold text-white">No trades found</h4>
                         <p class="text-xs text-gray-400 mt-1">Tidak ada trade yang cocok dengan filter bulan/tahun tersebut.</p>
@@ -750,10 +744,10 @@
             </div>
 
             <!-- TAB 3: ANALYTICS -->
-            <div id="tabContentAnalytics" class="hidden space-y-6">
+            <div id="tabContentAnalytics" class="hidden space-y-6 bg-[#020407]">
 
                 <!-- 1. BAGIAN ATAS (HEADER & SUMMARY CARDS) -->
-                <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#020407]">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
                         <i class="fa-solid fa-chart-line text-emerald-400"></i> Performance Analytics
                     </h3>
@@ -766,26 +760,26 @@
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div class="glass-card p-4 rounded-2xl">
+                    <div class="glass-card p-4 rounded-2xl bg-[#020407]">
                         <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">TOTAL P&L</span>
                         <div id="analyticsPnL" class="text-xl font-black text-emerald-400 mt-1 font-mono">+$0.00</div>
                     </div>
-                    <div class="glass-card p-4 rounded-2xl">
+                    <div class="glass-card p-4 rounded-2xl bg-[#020407]">
                         <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">WIN RATE</span>
                         <div id="analyticsWinRate" class="text-xl font-black text-emerald-400 mt-1">0%</div>
                     </div>
-                    <div class="glass-card p-4 rounded-2xl">
+                    <div class="glass-card p-4 rounded-2xl bg-[#020407]">
                         <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">PROFIT FACTOR</span>
                         <div id="analyticsProfitFactor" class="text-xl font-black text-cyan-400 mt-1 font-mono">0.00</div>
                     </div>
-                    <div class="glass-card p-4 rounded-2xl">
+                    <div class="glass-card p-4 rounded-2xl bg-[#020407]">
                         <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">EXPECTANCY</span>
                         <div id="analyticsExpectancy" class="text-xl font-black text-amber-400 mt-1 font-mono">$0.00</div>
                     </div>
                 </div>
 
                 <!-- 2. EQUITY CURVE (TRADE GROWTH VIEW) -->
-                <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+                <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3 bg-[#020407]">
                     <div class="flex justify-between items-center">
                         <div>
                             <h4 class="text-sm font-bold text-white">Trade Growth View</h4>
@@ -799,7 +793,7 @@
                 </div>
 
                 <!-- 3. OUTCOME BREAKDOWN -->
-                <div class="glass-card p-4 sm:p-6 rounded-2xl shadow-xl space-y-6">
+                <div class="glass-card p-4 sm:p-6 rounded-2xl shadow-xl space-y-6 bg-[#020407]">
                     <div class="border-b border-emerald-500/10 pb-3 text-center">
                         <h3 class="text-base font-black text-white tracking-tight uppercase">Outcome Breakdown</h3>
                     </div>
@@ -820,7 +814,7 @@
                         </div>
 
                         <div class="lg:col-span-7 space-y-5">
-                            <div class="bg-[#04070a] border border-emerald-500/15 rounded-2xl p-4 space-y-3">
+                            <div class="bg-[#020407] border border-emerald-500/15 rounded-2xl p-4 space-y-3">
                                 <h4 class="text-xs font-black text-white uppercase tracking-wider border-b border-emerald-500/10 pb-2">Average Win vs Loss</h4>
                                 <div class="grid grid-cols-2 gap-y-2 text-xs">
                                     <span class="text-gray-400">Avg Win:</span>
@@ -834,7 +828,7 @@
                                 </div>
                             </div>
 
-                            <div class="bg-[#04070a] border border-emerald-500/15 rounded-2xl p-4 space-y-3">
+                            <div class="bg-[#020407] border border-emerald-500/15 rounded-2xl p-4 space-y-3">
                                 <h4 class="text-xs font-black text-white uppercase tracking-wider border-b border-emerald-500/10 pb-2">Detail Summary</h4>
                                 <div class="grid grid-cols-2 gap-y-2 text-xs">
                                     <span class="text-gray-400">Total Win:</span>
@@ -852,35 +846,35 @@
                 </div>
 
                 <!-- 4. PER-PAIR PERFORMANCE COMPARISON -->
-                <div class="glass-card p-4 sm:p-6 rounded-2xl shadow-xl space-y-6">
+                <div class="glass-card p-4 sm:p-6 rounded-2xl shadow-xl space-y-6 bg-[#020407]">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-emerald-500/10 gap-2">
                         <div>
                             <h3 class="text-base font-black text-white tracking-tight">Per-Pair Performance Comparison</h3>
                             <p class="text-[11px] text-gray-400">Analisis komparatif performa instrumen/pair secara mendalam</p>
                         </div>
-                        <span id="comparingPairsBadge" class="px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 w-fit">Comparing 0 pairs</span>
+                        <span id="comparingPairsBadge" class="px-3 py-1 rounded-full text-[10px] font-bold bg-[#020407] text-emerald-400 border border-emerald-500/20 w-fit">Comparing 0 pairs</span>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-                        <div class="bg-[#04070a] border border-emerald-500/15 rounded-xl p-3.5 space-y-1">
+                        <div class="bg-[#020407] border border-emerald-500/15 rounded-xl p-3.5 space-y-1">
                             <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Best PnL Pair</span>
                             <div id="bestPnlPairName" class="text-sm font-black text-amber-400">—</div>
                             <div id="bestPnlPairVal" class="text-xs font-mono font-bold text-emerald-400">—</div>
                         </div>
 
-                        <div class="bg-[#04070a] border border-emerald-500/15 rounded-xl p-3.5 space-y-1">
+                        <div class="bg-[#020407] border border-emerald-500/15 rounded-xl p-3.5 space-y-1">
                             <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Highest Win Rate</span>
                             <div id="highestWinRatePairName" class="text-sm font-black text-cyan-400">—</div>
                             <div id="highestWinRatePairVal" class="text-xs font-mono font-bold text-white">—</div>
                         </div>
 
-                        <div class="bg-[#04070a] border border-emerald-500/15 rounded-xl p-3.5 space-y-1">
+                        <div class="bg-[#020407] border border-emerald-500/15 rounded-xl p-3.5 space-y-1">
                             <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Lowest Drawdown</span>
                             <div id="lowestDdPairName" class="text-sm font-black text-purple-400">—</div>
                             <div id="lowestDdPairVal" class="text-xs font-mono font-bold text-red-400">—</div>
                         </div>
 
-                        <div class="bg-[#04070a] border border-emerald-500/15 rounded-xl p-3.5 space-y-1">
+                        <div class="bg-[#020407] border border-emerald-500/15 rounded-xl p-3.5 space-y-1">
                             <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Best Profit Factor</span>
                             <div id="bestPfPairName" class="text-sm font-black text-emerald-400">—</div>
                             <div id="bestPfPairVal" class="text-xs font-mono font-bold text-cyan-400">—</div>
@@ -889,7 +883,7 @@
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs text-gray-300">
-                            <thead class="bg-[#04070a] text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-emerald-500/10">
+                            <thead class="bg-[#020407] text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-emerald-500/10">
                                 <tr>
                                     <th class="py-3 px-3.5">Pair</th>
                                     <th class="py-3 px-3.5">Trades</th>
@@ -906,17 +900,17 @@
                 </div>
 
                 <!-- 5. HOURLY ENTRY & MARKET SESSIONS -->
-                <div class="glass-card p-4 sm:p-6 rounded-2xl shadow-xl space-y-6">
+                <div class="glass-card p-4 sm:p-6 rounded-2xl shadow-xl space-y-6 bg-[#020407]">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-emerald-500/10 gap-2">
                         <div>
                             <h3 class="text-base font-black text-white tracking-tight">Hourly Entry & Market Sessions</h3>
                             <p class="text-[11px] text-gray-400">24-Hour Clock-Face Entry Distribution & Session Breakdown</p>
                         </div>
-                        <span class="px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 w-fit">24-HOUR CLOCK (WIB)</span>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-bold bg-[#020407] text-emerald-400 border border-emerald-500/20 w-fit">24-HOUR CLOCK (WIB)</span>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-                        <div class="lg:col-span-5 h-64 relative bg-[#04070a] border border-emerald-500/15 rounded-2xl p-4 flex flex-col items-center justify-center">
+                        <div class="lg:col-span-5 h-64 relative bg-[#020407] border border-emerald-500/15 rounded-2xl p-4 flex flex-col items-center justify-center">
                             <div class="w-48 h-48 relative">
                                 <canvas id="hourlyRadarChart"></canvas>
                             </div>
@@ -928,7 +922,7 @@
                 </div>
 
                 <!-- 6. PNL BY WEEKDAY -->
-                <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+                <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3 bg-[#020407]">
                     <div class="flex justify-between items-center pb-2 border-b border-emerald-500/10">
                         <div>
                             <h4 class="text-sm font-bold text-white">PnL by Weekday</h4>
@@ -941,7 +935,7 @@
                 </div>
 
                 <!-- 7. PNL BY ORDER TYPE / POSITION -->
-                <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+                <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3 bg-[#020407]">
                     <div class="flex justify-between items-center pb-2 border-b border-emerald-500/10">
                         <div>
                             <h4 class="text-sm font-bold text-white">PnL by Order Type / Position</h4>
@@ -959,8 +953,8 @@
     </main>
 
     <!-- CUSTOM NOTICE MODAL -->
-    <div id="customModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-card rounded-2xl p-5 max-w-sm w-full space-y-4 shadow-2xl text-center border-emerald-500/20">
+    <div id="customModal" class="hidden fixed inset-0 z-50 bg-[#020407] flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl p-5 max-w-sm w-full space-y-4 shadow-2xl text-center border-emerald-500/20 bg-[#020407]">
             <div id="customModalIcon" class="text-3xl text-emerald-400"><i class="fa-solid fa-circle-info"></i></div>
             <h4 id="customModalTitle" class="text-base font-bold text-white">Notice</h4>
             <p id="customModalMsg" class="text-xs text-gray-300 leading-relaxed"></p>
@@ -1529,7 +1523,7 @@
                 const curr = acc.currency || 'USD';
 
                 const card = document.createElement('div');
-                card.className = "glass-card hover:border-emerald-500/50 rounded-2xl p-4 sm:p-5 shadow-lg flex items-center justify-between transition duration-300 cursor-pointer group";
+                card.className = "glass-card hover:border-emerald-500/50 rounded-2xl p-4 sm:p-5 shadow-lg flex items-center justify-between transition duration-300 cursor-pointer group bg-[#020407]";
                 
                 card.onclick = (e) => {
                     if (e.target.closest('.delete-acc-btn')) return;
@@ -1543,11 +1537,11 @@
                     <div class="space-y-1">
                         <div class="flex items-center gap-2">
                             <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider ${
-                                acc.type === 'FUNDED' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' :
-                                acc.type === 'DEMO' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                                'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                                acc.type === 'FUNDED' ? 'bg-[#020407] text-cyan-400 border border-cyan-500/20' :
+                                acc.type === 'DEMO' ? 'bg-[#020407] text-amber-400 border border-amber-500/20' :
+                                'bg-[#020407] text-emerald-400 border border-emerald-500/20'
                             }">${acc.type}</span>
-                            <span class="px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-gray-800 text-gray-300 border border-gray-700">${curr}</span>
+                            <span class="px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-[#020407] text-gray-300 border border-emerald-500/20">${curr}</span>
                         </div>
                         <h3 class="text-lg sm:text-xl font-black text-white group-hover:text-emerald-400 transition">${acc.name}</h3>
                         <p class="text-xs sm:text-sm font-bold font-mono ${balanceColorClass}">
@@ -1740,7 +1734,7 @@
 
             for (let i = 0; i < adjustedFirstDay; i++) {
                 const emptyCell = document.createElement('div');
-                emptyCell.className = "calendar-day bg-[#040609]/30 rounded-xl opacity-25 border border-transparent";
+                emptyCell.className = "calendar-day bg-[#020407] rounded-xl opacity-20 border border-transparent";
                 calendarDaysContainer.appendChild(emptyCell);
             }
 
@@ -1762,14 +1756,14 @@
                 const cell = document.createElement('div');
                 const isSelected = selectedCalendarDateStr === dayDateStr;
 
-                let bgDayClass = 'border-emerald-500/15 bg-[#080e0b] hover:border-emerald-500/50';
+                let bgDayClass = 'border-emerald-500/15 bg-[#020407] hover:border-emerald-500/50';
                 if (dayTrades.length > 0) {
                     if (dayNetPnL > 0) {
-                        bgDayClass = 'border-emerald-500/40 bg-emerald-500/15 hover:bg-emerald-500/25';
+                        bgDayClass = 'border-emerald-500/40 bg-[#020407] hover:border-emerald-500';
                     } else if (dayNetPnL < 0) {
-                        bgDayClass = 'border-red-500/40 bg-red-500/15 hover:bg-red-500/25';
+                        bgDayClass = 'border-red-500/40 bg-[#020407] hover:border-red-500';
                     } else {
-                        bgDayClass = 'border-gray-500/30 bg-gray-500/10 hover:bg-gray-500/20';
+                        bgDayClass = 'border-gray-500/30 bg-[#020407] hover:border-gray-400';
                     }
                 }
 
@@ -1893,10 +1887,10 @@
                 const formattedPnL = (isWin ? '+' : '-') + formatMoney(Math.abs(pnlNum), curr);
                 const dayName = getDayNameFromDateStr(t.date);
                 const card = document.createElement('div');
-                card.className = "bg-[#080e0b] border border-emerald-500/15 rounded-xl p-3 flex items-center justify-between gap-3 hover:border-emerald-500/40 transition";
+                card.className = "bg-[#020407] border border-emerald-500/15 rounded-xl p-3 flex items-center justify-between gap-3 hover:border-emerald-500/40 transition";
                 card.innerHTML = `
                     <div class="flex items-center gap-3">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${isWin ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${isWin ? 'bg-[#020407] text-emerald-400 border border-emerald-500/20' : 'bg-[#020407] text-red-400 border border-red-500/20'}">
                             ${t.position}
                         </span>
                         <div>
@@ -1948,8 +1942,8 @@
                 const card = document.createElement('div');
                 const hasTrades = monthTrades.length > 0;
                 
-                card.className = `p-3.5 rounded-xl border cursor-pointer transition flex flex-col justify-between ${
-                    hasTrades ? (mPnL >= 0 ? 'bg-emerald-500/5 border-emerald-500/30 hover:border-emerald-500' : 'bg-red-500/5 border-red-500/30 hover:border-red-500') : 'bg-[#080e0b] border-emerald-500/10 opacity-60 hover:opacity-100'
+                card.className = `p-3.5 rounded-xl border cursor-pointer transition flex flex-col justify-between bg-[#020407] ${
+                    hasTrades ? (mPnL >= 0 ? 'border-emerald-500/30 hover:border-emerald-500' : 'border-red-500/30 hover:border-red-500') : 'border-emerald-500/10 opacity-60 hover:opacity-100'
                 }`;
 
                 card.onclick = () => showMonthDetailFromYearly(selectedYear, mNumStr, monthNames[m]);
@@ -1957,7 +1951,7 @@
                 card.innerHTML = `
                     <div class="flex items-center justify-between text-xs font-bold text-white mb-2">
                         <span>${monthNames[m]}</span>
-                        <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-bold">${monthTrades.length} trades</span>
+                        <span class="text-[9px] font-mono text-emerald-400 bg-[#020407] px-1.5 py-0.5 rounded font-bold border border-emerald-500/20">${monthTrades.length} trades</span>
                     </div>
                     <div>
                         <div class="text-xs sm:text-sm font-black font-mono ${hasTrades ? (mPnL >= 0 ? 'text-emerald-400' : 'text-red-400') : 'text-gray-500'}">
@@ -2002,7 +1996,7 @@
 
             let calendarCellsHtml = '';
             for (let i = 0; i < adjustedFirstDay; i++) {
-                calendarCellsHtml += `<div class="calendar-day bg-[#040609]/30 rounded-xl opacity-25 border border-transparent"></div>`;
+                calendarCellsHtml += `<div class="calendar-day bg-[#020407] rounded-xl opacity-20 border border-transparent"></div>`;
             }
 
             for (let day = 1; day <= daysInMonth; day++) {
@@ -2012,14 +2006,14 @@
 
                 const isSelected = selectedCalendarDateStr === dayDateStr;
 
-                let bgDayClass = 'border-emerald-500/15 bg-[#080e0b] hover:border-emerald-500/40';
+                let bgDayClass = 'border-emerald-500/15 bg-[#020407] hover:border-emerald-500/40';
                 if (dayTrades.length > 0) {
                     if (dayNetPnL > 0) {
-                        bgDayClass = 'border-emerald-500/40 bg-emerald-500/15 hover:bg-emerald-500/25';
+                        bgDayClass = 'border-emerald-500/40 bg-[#020407] hover:border-emerald-500';
                     } else if (dayNetPnL < 0) {
-                        bgDayClass = 'border-red-500/40 bg-red-500/15 hover:bg-red-500/25';
+                        bgDayClass = 'border-red-500/40 bg-[#020407] hover:border-red-500';
                     } else {
-                        bgDayClass = 'border-gray-500/30 bg-gray-500/10 hover:bg-gray-500/20';
+                        bgDayClass = 'border-gray-500/30 bg-[#020407] hover:border-gray-400';
                     }
                 }
                 if (isSelected) {
@@ -2066,7 +2060,7 @@
                 tradesTableHtml = `
                     <div class="overflow-x-auto pt-2">
                         <table class="w-full text-left text-xs text-gray-300">
-                            <thead class="bg-[#04070a] text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-emerald-500/10">
+                            <thead class="bg-[#020407] text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-emerald-500/10">
                                 <tr>
                                     <th class="py-3 px-3">Date & Day</th>
                                     <th class="py-3 px-3">Pair</th>
@@ -2094,13 +2088,13 @@
                             </td>
                             <td class="py-3 px-3 font-bold text-white">${t.pair}</td>
                             <td class="py-3 px-3 text-emerald-400 text-[11px]">${t.session || '—'}</td>
-                            <td class="py-3 px-3"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${t.position}</span></td>
+                            <td class="py-3 px-3"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold ${t.position === 'BUY' ? 'bg-[#020407] text-emerald-400 border border-emerald-500/20' : 'bg-[#020407] text-red-400 border border-red-500/20'}">${t.position}</span></td>
                             <td class="py-3 px-3 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'}">${(isWin ? '+' : '-') + formatMoney(Math.abs(pnl), curr)}</td>
                             <td class="py-3 px-3 font-mono text-gray-400">${formatMoney(t.risk || 0, curr)}</td>
                             <td class="py-3 px-3 font-mono font-bold text-amber-400">${t.rr || '0'}</td>
                             <td class="py-3 px-3 text-gray-400 text-[10px]">${t.htf || '—'}</td>
                             <td class="py-3 px-3 text-gray-400 text-[10px]">${t.confluence || '—'}</td>
-                            <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] bg-[#080e0b] text-gray-300 border border-emerald-500/10">${t.result || 'N/A'}</span></td>
+                            <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] bg-[#020407] text-gray-300 border border-emerald-500/10">${t.result || 'N/A'}</span></td>
                         </tr>
                     `;
                 });
@@ -2112,23 +2106,23 @@
                     <h4 class="text-sm font-black text-emerald-400 flex items-center gap-2">
                         <i class="fa-solid fa-calendar-days"></i> Monthly Performance & Calendar View: ${monthName} ${year}
                     </h4>
-                    <button onclick="document.getElementById('selectedMonthDetailContainer').classList.add('hidden')" class="text-xs text-gray-400 hover:text-white px-2.5 py-1 bg-[#080e0b] rounded-lg border border-emerald-500/10">Tutup</button>
+                    <button onclick="document.getElementById('selectedMonthDetailContainer').classList.add('hidden')" class="text-xs text-gray-400 hover:text-white px-2.5 py-1 bg-[#020407] rounded-lg border border-emerald-500/15">Tutup</button>
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div class="bg-[#080e0b] p-3 rounded-xl border border-emerald-500/10">
+                    <div class="bg-[#020407] p-3 rounded-xl border border-emerald-500/10">
                         <span class="text-[10px] text-gray-400 uppercase font-bold">Total PnL</span>
                         <div class="text-base font-black font-mono ${mPnL >= 0 ? 'text-emerald-400' : 'text-red-400'} mt-0.5">${(mPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(mPnL), curr)}</div>
                     </div>
-                    <div class="bg-[#080e0b] p-3 rounded-xl border border-emerald-500/10">
+                    <div class="bg-[#020407] p-3 rounded-xl border border-emerald-500/10">
                         <span class="text-[10px] text-gray-400 uppercase font-bold">Win Rate</span>
                         <div class="text-base font-black text-white mt-0.5">${mWinRate}% (${mWins}/${monthTrades.length})</div>
                     </div>
-                    <div class="bg-[#080e0b] p-3 rounded-xl border border-emerald-500/10">
+                    <div class="bg-[#020407] p-3 rounded-xl border border-emerald-500/10">
                         <span class="text-[10px] text-gray-400 uppercase font-bold">Avg R:R</span>
                         <div class="text-base font-black text-amber-400 font-mono mt-0.5">${avgRR}</div>
                     </div>
-                    <div class="bg-[#080e0b] p-3 rounded-xl border border-emerald-500/10">
+                    <div class="bg-[#020407] p-3 rounded-xl border border-emerald-500/10">
                         <span class="text-[10px] text-gray-400 uppercase font-bold">Total Trades</span>
                         <div class="text-base font-black text-emerald-400 mt-0.5">${monthTrades.length} Trades</div>
                     </div>
@@ -2236,7 +2230,7 @@
                     <td class="py-3.5 px-4 font-bold text-white whitespace-nowrap">${t.pair}</td>
                     <td class="py-3.5 px-4 text-emerald-400 text-xs whitespace-nowrap">${t.session || '—'}</td>
                     <td class="py-3.5 px-4 whitespace-nowrap">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${t.position}</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.position === 'BUY' ? 'bg-[#020407] text-emerald-400 border border-emerald-500/20' : 'bg-[#020407] text-red-400 border border-red-500/20'}">${t.position}</span>
                     </td>
                     <td class="py-3.5 px-4 font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-red-400'} whitespace-nowrap">
                         ${formattedPnL}
@@ -2246,17 +2240,17 @@
                     <td class="py-3.5 px-4 text-gray-400 text-[11px] whitespace-nowrap">${t.htf || '—'}</td>
                     <td class="py-3.5 px-4 text-gray-400 text-[11px] whitespace-nowrap">${t.confluence || '—'}</td>
                     <td class="py-3.5 px-4 whitespace-nowrap">
-                        <span class="px-2 py-0.5 rounded text-[10px] bg-[#080e0b] text-gray-300 border border-emerald-500/10">${t.result || 'N/A'}</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] bg-[#020407] text-gray-300 border border-emerald-500/10">${t.result || 'N/A'}</span>
                     </td>
                     <td class="py-3.5 px-4 text-right whitespace-nowrap">
-                        <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#080e0b] hover:bg-emerald-500 hover:text-black text-emerald-400 border border-emerald-500/20 text-[11px] rounded-lg transition mr-1">Edit</button>
+                        <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#020407] hover:bg-emerald-500 hover:text-black text-emerald-400 border border-emerald-500/20 text-[11px] rounded-lg transition mr-1">Edit</button>
                         <button onclick="deleteTrade('${t.id}')" class="px-2.5 py-1 bg-red-500/20 hover:bg-red-500 hover:text-white text-red-400 border border-red-500/30 text-[11px] rounded-lg transition"><i class="fa-solid fa-trash-can"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
 
                 const card = document.createElement('div');
-                card.className = "glass-card rounded-2xl p-4 space-y-3 flex flex-col justify-between";
+                card.className = "glass-card rounded-2xl p-4 space-y-3 flex flex-col justify-between bg-[#020407]";
                 
                 let linkBtnHtml = '';
                 if (t.link) {
@@ -2267,7 +2261,7 @@
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${t.position}</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${t.position === 'BUY' ? 'bg-[#020407] text-emerald-400 border border-emerald-500/20' : 'bg-[#020407] text-red-400 border border-red-500/20'}">${t.position}</span>
                                 <span class="font-black text-white text-sm">${t.pair}</span>
                             </div>
                             <div class="text-right">
@@ -2295,7 +2289,7 @@
                     <div class="flex items-center justify-between pt-3 border-t border-emerald-500/10">
                         ${linkBtnHtml}
                         <div class="flex items-center gap-1.5 ml-auto">
-                            <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#080e0b] text-emerald-400 border border-emerald-500/20 text-[11px] rounded-lg">Edit</button>
+                            <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#020407] text-emerald-400 border border-emerald-500/20 text-[11px] rounded-lg">Edit</button>
                             <button onclick="deleteTrade('${t.id}')" class="px-2.5 py-1 bg-red-500/20 text-red-400 border border-red-500/30 text-[11px] rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                     </div>
@@ -2601,7 +2595,7 @@
                 const isWin = sPnL >= 0;
 
                 const card = document.createElement('div');
-                card.className = "bg-[#04070a] border border-emerald-500/15 rounded-2xl p-4 flex items-center justify-between";
+                card.className = "bg-[#020407] border border-emerald-500/15 rounded-2xl p-4 flex items-center justify-between";
                 card.innerHTML = `
                     <div class="space-y-1">
                         <h4 class="text-xs sm:text-sm font-black text-white">${def.name}</h4>
@@ -2810,7 +2804,7 @@
                         data: [wins || 0, losses || 0],
                         backgroundColor: ['#10B981', '#EF4444'],
                         borderWidth: 3,
-                        borderColor: '#04070a'
+                        borderColor: '#020407'
                     }]
                 },
                 options: {
