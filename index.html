@@ -1047,7 +1047,7 @@
 
         const dayNamesID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
-        // INTERACTIVE TOUCH & MOUSE NODE CANVAS BACKGROUND
+        // INTERACTIVE TOUCH & MOUSE NODE CANVAS BACKGROUND (DENGAN KRIPTO, FOREX, & INDICES)
         function initInteractiveNetworkCanvas() {
             const canvas = document.getElementById('networkCanvas');
             if (!canvas) return;
@@ -1061,11 +1061,10 @@
                 height = canvas.height = window.innerHeight;
             });
 
-            // Posisi pointer mouse atau sentuhan jari
             let pointer = {
                 x: null,
                 y: null,
-                radius: 150
+                radius: 160
             };
 
             window.addEventListener('mousemove', (e) => {
@@ -1091,17 +1090,26 @@
             });
 
             const particles = [];
-            const particleCount = Math.floor((width * height) / 13000);
-            const labelsList = ['DATA', 'XAUUSD', 'EURUSD', 'BTC', 'ETH', 'ENTRY', 'TP', 'SL', 'RR', 'SETUP', 'ZONES', 'SMT', 'FLOW', 'BOS', 'CHOCH', '99.8%', 'EQUITY', 'PROFIT', 'LONG', 'SHORT', 'NODE', 'VPA', 'PIPS', 'RISK'];
+            const particleCount = Math.floor((width * height) / 12000);
+            
+            // Penambahan label Kripto, Forex, dan Indeks
+            const labelsList = [
+                // Kripto
+                'BTC/USD', 'ETH/USD', 'SOL/USD', 'XRP/USD', 'ADA', 'DOGE', 'AVAX', 'LINK',
+                // Forex
+                'EUR/USD', 'GBP/USD', 'USD/JPY', 'AUD/USD', 'NZD/USD', 'USD/CAD', 'USD/CHF', 'XAU/USD',
+                // Indices & Trading Terms
+                'US30', 'US100', 'SPX500', 'DAX', 'FTSE', 'NIFTY', 'ENTRY', 'TP', 'SL', 'RR', 'SETUP', 'SMT', 'BOS', 'CHOCH', 'EQUITY', 'PROFIT'
+            ];
 
             for (let i = 0; i < particleCount; i++) {
                 particles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.9,
-                    vy: (Math.random() - 0.5) * 0.9,
+                    vx: (Math.random() - 0.5) * 0.8,
+                    vy: (Math.random() - 0.5) * 0.8,
                     radius: Math.random() * 2 + 1.5,
-                    text: Math.random() > 0.55 ? labelsList[Math.floor(Math.random() * labelsList.length)] : null
+                    text: Math.random() > 0.5 ? labelsList[Math.floor(Math.random() * labelsList.length)] : null
                 });
             }
 
@@ -1118,12 +1126,12 @@
 
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(16, 185, 129, 0.5)';
+                    ctx.fillStyle = 'rgba(16, 185, 129, 0.55)';
                     ctx.fill();
 
                     if (p.text) {
                         ctx.font = '9px JetBrains Mono, monospace';
-                        ctx.fillStyle = 'rgba(16, 185, 129, 0.4)';
+                        ctx.fillStyle = 'rgba(16, 185, 129, 0.45)';
                         ctx.fillText(p.text, p.x + 6, p.y - 6);
                     }
 
@@ -1134,11 +1142,11 @@
                         let dy = p.y - p2.y;
                         let dist = Math.sqrt(dx * dx + dy * dy);
 
-                        if (dist < 120) {
+                        if (dist < 130) {
                             ctx.beginPath();
                             ctx.moveTo(p.x, p.y);
                             ctx.lineTo(p2.x, p2.y);
-                            ctx.strokeStyle = `rgba(16, 185, 129, ${0.2 * (1 - dist / 120)})`;
+                            ctx.strokeStyle = `rgba(16, 185, 129, ${0.22 * (1 - dist / 130)})`;
                             ctx.lineWidth = 0.8;
                             ctx.stroke();
                         }
@@ -1154,7 +1162,7 @@
                             ctx.beginPath();
                             ctx.moveTo(p.x, p.y);
                             ctx.lineTo(pointer.x, pointer.y);
-                            ctx.strokeStyle = `rgba(34, 197, 94, ${0.45 * (1 - distMouse / pointer.radius)})`;
+                            ctx.strokeStyle = `rgba(34, 197, 94, ${0.5 * (1 - distMouse / pointer.radius)})`;
                             ctx.lineWidth = 1.2;
                             ctx.stroke();
                         }
@@ -2140,7 +2148,7 @@
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-emerald-500/20'}">${t.position}</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${t.position}</span>
                                 <span class="font-black text-white text-sm">${t.pair}</span>
                             </div>
                             <div class="text-right">
