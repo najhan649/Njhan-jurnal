@@ -1560,7 +1560,7 @@
             document.getElementById('dashExpectancy').className = `text-2xl font-black mt-1 font-mono ${expectancy >= 0 ? 'text-amber-400' : 'text-red-400'}`;
         }
 
-        // FUNGSI KALENDER YANG DILENGKAPI TOTAL WIN & LOSS DI SETIAP HARI
+        // FUNGSI KALENDER DENGAN PNL HARIAN
         function renderCalendar(trades, curr, containerId = 'calendarDays', labelId = 'calendarMonthLabel', subtextId = 'calendarSubtext', isMainDashboard = true) {
             const year = currentCalendarDate.getFullYear();
             const month = currentCalendarDate.getMonth();
@@ -1597,10 +1597,6 @@
                 monthTradeCount += dayTrades.length;
 
                 const dayNetPnL = dayTrades.reduce((s, t) => s + Number(t.netPnL), 0);
-                
-                // Hitung total Win dan Loss pada hari tersebut
-                const dayWins = dayTrades.filter(t => Number(t.netPnL) > 0).length;
-                const dayLosses = dayTrades.filter(t => Number(t.netPnL) < 0).length;
 
                 const cell = document.createElement('div');
                 const isSelected = selectedCalendarDateStr === dayDateStr;
@@ -1633,10 +1629,8 @@
                             <div class="text-[9px] sm:text-[10px] font-mono ${colorClass} leading-tight truncate">
                                 ${formattedAmount}
                             </div>
-                            <div class="flex items-center gap-1.5 text-[8px] sm:text-[9px] font-bold font-sans">
-                                <span class="text-emerald-400">${dayWins}W</span>
-                                <span class="text-red-400">${dayLosses}L</span>
-                                <span class="text-gray-400 font-normal">(${dayTrades.length}t)</span>
+                            <div class="text-[8px] sm:text-[9px] text-gray-400 font-medium">
+                                ${dayTrades.length} trade${dayTrades.length > 1 ? 's' : ''}
                             </div>
                         </div>
                     `;
@@ -1860,9 +1854,6 @@
                 const dayDateStr = `${year}-${monthStr}-${String(day).padStart(2, '0')}`;
                 const dayTrades = tradesByDate[dayDateStr] || [];
                 const dayNetPnL = dayTrades.reduce((s, t) => s + Number(t.netPnL), 0);
-                
-                const dayWins = dayTrades.filter(t => Number(t.netPnL) > 0).length;
-                const dayLosses = dayTrades.filter(t => Number(t.netPnL) < 0).length;
 
                 const isSelected = selectedCalendarDateStr === dayDateStr;
 
@@ -1889,10 +1880,8 @@
                             <div class="text-[9px] sm:text-[10px] font-mono ${colorClass} leading-tight truncate">
                                 ${formattedAmount}
                             </div>
-                            <div class="flex items-center gap-1.5 text-[8px] sm:text-[9px] font-bold font-sans">
-                                <span class="text-emerald-400">${dayWins}W</span>
-                                <span class="text-red-400">${dayLosses}L</span>
-                                <span class="text-gray-400 font-normal">(${dayTrades.length}t)</span>
+                            <div class="text-[8px] sm:text-[9px] text-gray-400 font-medium">
+                                ${dayTrades.length} trade${dayTrades.length > 1 ? 's' : ''}
                             </div>
                         </div>
                     `;
