@@ -41,23 +41,23 @@
         body {
             background: #07090e;
             background-image: 
-                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(34, 197, 94, 0.03) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.06) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(34, 197, 94, 0.04) 0px, transparent 50%);
             color: #f1f5f9;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
         }
 
         .glass-card {
-            background: rgba(15, 22, 17, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(34, 197, 94, 0.15);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            background: rgba(15, 22, 17, 0.7);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(34, 197, 94, 0.18);
+            box-shadow: 0 10px 35px 0 rgba(0, 0, 0, 0.4);
         }
 
         .glass-card:hover {
-            border-color: rgba(34, 197, 94, 0.3);
+            border-color: rgba(34, 197, 94, 0.35);
         }
 
         ::-webkit-scrollbar {
@@ -99,7 +99,7 @@
             background: linear-gradient(135deg, #10B981 0%, #059669 100%);
             color: #000000;
             font-weight: 700;
-            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 14px rgba(16, 185, 129, 0.45);
             border-color: transparent;
         }
     </style>
@@ -107,7 +107,7 @@
 <body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black">
 
     <!-- TOP HEADER / NAVBAR -->
-    <header class="bg-[#0b1016]/80 backdrop-blur-md border-b border-emerald-500/10 sticky top-0 z-40">
+    <header class="bg-[#0b1016]/85 backdrop-blur-md border-b border-emerald-500/10 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo / Brand -->
@@ -117,7 +117,7 @@
                     </div>
                     <div>
                         <span class="font-extrabold text-lg text-white tracking-tight group-hover:text-emerald-400 transition">Najh.an <span class="text-emerald-400">Journal</span></span>
-                        <span class="block text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">https://njhan-jurnal.vercel.app</span>
+                        <span class="block text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Professional Terminal</span>
                     </div>
                 </div>
 
@@ -125,7 +125,7 @@
                 <div class="flex items-center gap-3">
                     <div id="cloudStatusBadge" class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span id="userEmailDisplay">Cloud Active</span>
+                        <span id="userEmailDisplay">Cloud Synced</span>
                     </div>
 
                     <button id="headerAccountBadge" onclick="switchView('accounts')" class="hidden sm:flex items-center gap-2 bg-[#121c15] hover:bg-[#18261d] border border-emerald-500/20 text-xs font-semibold px-3.5 py-1.5 rounded-xl text-emerald-400 transition shadow-sm">
@@ -156,7 +156,7 @@
                     N
                 </div>
                 <h3 class="text-xl font-black text-white tracking-tight">Najh.an Cloud Sync</h3>
-                <p class="text-xs text-gray-400">Silakan login dengan email Anda untuk menyinkronkan data.</p>
+                <p class="text-xs text-gray-400">Silakan login untuk akses jurnal dari perangkat apa pun.</p>
             </div>
 
             <div class="space-y-3">
@@ -189,10 +189,10 @@
         <section id="accountsView" class="max-w-2xl mx-auto space-y-6 pt-4">
             <div class="text-center space-y-2">
                 <span class="px-3 py-1 rounded-full text-[11px] font-bold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 uppercase">
-                    Welcome Back, Trader
+                    Professional Trading Accounts
                 </span>
                 <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Your Accounts</h1>
-                <p class="text-xs sm:text-sm text-gray-400">Select an account to start journaling your trades.</p>
+                <p class="text-xs sm:text-sm text-gray-400">Pilih atau buat akun trading untuk memulai jurnal Anda.</p>
             </div>
 
             <!-- New Account Form Toggle -->
@@ -209,7 +209,7 @@
 
                     <div>
                         <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">ACCOUNT NAME</label>
-                        <input type="text" id="newAccountName" placeholder="e.g. Najhan IDR" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
+                        <input type="text" id="newAccountName" placeholder="e.g. Main Funded Account" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
                     </div>
 
                     <div class="grid grid-cols-3 gap-3">
@@ -230,7 +230,7 @@
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">STARTING BALANCE</label>
-                            <input type="number" id="newAccountBalance" placeholder="500" value="500" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-mono">
+                            <input type="number" id="newAccountBalance" placeholder="1000" value="1000" class="w-full bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-mono">
                         </div>
                     </div>
 
@@ -254,16 +254,21 @@
         <!-- MAIN JOURNAL WORKSPACE -->
         <section id="workspaceView" class="hidden space-y-6">
 
-            <!-- Active Account Bar -->
+            <!-- Active Account Bar with Privacy Toggle -->
             <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
                 <div>
                     <div class="flex items-center gap-2.5 mb-1">
-                        <span id="activeTypeTag" class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PERSONAL</span>
-                        <span id="activeCurrencyTag" class="px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">USD</span>
-                        <h2 id="activeAccountName" class="text-xl sm:text-2xl font-black text-white tracking-tight">Najhan</h2>
+                        <span id="activeTypeTag" class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">PERSONAL</span>
+                        <span id="activeCurrencyTag" class="px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-cyan-500/10 text-cyan-400 border border-cyan-500/25">USD</span>
+                        <h2 id="activeAccountName" class="text-xl sm:text-2xl font-black text-white tracking-tight">Main Account</h2>
                     </div>
-                    <div class="text-xs text-gray-400 font-medium">
-                        Starting: <span id="activeStartingBalance" class="text-gray-200 font-mono">$500.00</span> &nbsp;|&nbsp; Current Balance: <span id="activeCurrentBalance" class="text-emerald-400 font-mono font-bold">$500.00</span>
+                    <div class="text-xs text-gray-400 font-medium flex items-center gap-2">
+                        <span>Starting: <span id="activeStartingBalance" class="text-gray-200 font-mono">$1,000.00</span></span> 
+                        <span>&nbsp;|&nbsp;</span>
+                        <span>Current Balance: <span id="activeCurrentBalance" class="text-emerald-400 font-mono font-bold">$1,000.00</span></span>
+                        <button onclick="togglePrivacyMode()" id="privacyToggleBtn" class="ml-2 text-gray-400 hover:text-emerald-400 transition" title="Toggle Privacy Mode">
+                            <i class="fa-solid fa-eye text-xs"></i>
+                        </button>
                     </div>
                 </div>
 
@@ -314,7 +319,7 @@
                             <option value="12">Desember</option>
                         </select>
                         <select id="dashFilterYear" onchange="onDashFilterChange()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
-                            <!-- Diisi dinamis infinity -->
+                            <!-- Diisi dinamis -->
                         </select>
                         <button onclick="resetDashFilterToCurrent()" class="px-3 py-1.5 bg-[#121c15] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
                             Bulan Ini
@@ -379,7 +384,7 @@
                     </div>
                 </div>
 
-                <!-- Monthly Metrics Summary Cards -->
+                <!-- Monthly Metrics Summary Cards (Upgraded with Profit Factor & Expectancy) -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                     <div class="glass-card rounded-2xl p-4">
                         <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Win Rate</span>
@@ -400,17 +405,15 @@
                     </div>
 
                     <div class="glass-card rounded-2xl p-4">
-                        <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Avg R:R</span>
-                        <div id="dashAvgRR" class="text-2xl font-black text-amber-400 mt-1 font-mono">0</div>
-                        <div class="text-[10px] text-gray-400 mt-1.5"><span id="dashTotalTradesMonth" class="text-gray-200 font-bold">0</span> trades this month</div>
+                        <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Profit Factor</span>
+                        <div id="dashProfitFactor" class="text-2xl font-black text-cyan-400 mt-1 font-mono">0.00</div>
+                        <div class="text-[10px] text-gray-400 mt-1.5">Ratio Gross Win / Loss</div>
                     </div>
 
                     <div class="glass-card rounded-2xl p-4">
-                        <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Status</span>
-                        <div id="dashStatusLabel" class="text-base sm:text-lg font-black text-emerald-400 mt-1 flex items-center gap-1.5">
-                            <i class="fa-solid fa-circle-check"></i> Profitable
-                        </div>
-                        <div id="dashStatusSub" class="text-[10px] text-gray-400 mt-1.5 font-mono">+$0.00 Net PnL</div>
+                        <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Expectancy</span>
+                        <div id="dashExpectancy" class="text-2xl font-black text-amber-400 mt-1 font-mono">$0.00</div>
+                        <div id="dashStatusSub" class="text-[10px] text-gray-400 mt-1.5">Average per trade</div>
                     </div>
                 </div>
 
@@ -426,7 +429,7 @@
                         <div class="flex items-center gap-2 w-full sm:w-auto">
                             <label class="text-[11px] text-gray-400 font-bold">Filter Tahun:</label>
                             <select id="yearlyFilterYear" onchange="renderYearlyPerformance()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
-                                <!-- Diisi dinamis infinity -->
+                                <!-- Diisi dinamis -->
                             </select>
                             <button onclick="resetYearlyFilterToCurrent()" class="px-3 py-1.5 bg-[#121c15] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
                                 Tahun Ini
@@ -441,7 +444,7 @@
 
                     <!-- KONTAINER DETAIL BULAN + MONTHLY CALENDAR VIEW DI BAWAH YEARLY -->
                     <div id="selectedMonthDetailContainer" class="hidden pt-4 border-t border-emerald-500/10 space-y-4">
-                        <!-- Dirender dinamis ketika bulan diklik -->
+                        <!-- Dirender dinamis -->
                     </div>
                 </div>
 
@@ -466,13 +469,20 @@
                     </div>
                     <div class="glass-card p-4 rounded-2xl text-center">
                         <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">BALANCE</span>
-                        <div id="tlBalance" class="text-xl font-black text-amber-400 mt-1 font-mono">$500.00</div>
+                        <div id="tlBalance" class="text-xl font-black text-amber-400 mt-1 font-mono">$1,000.00</div>
                     </div>
                 </div>
 
-                <!-- Action Button + Filter Bar -->
+                <!-- Action Button + Filter Bar + View Mode Switcher -->
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                    <h3 class="text-lg font-black text-white">Trade Journal</h3>
+                    <div class="flex items-center gap-3">
+                        <h3 class="text-lg font-black text-white">Trade Journal</h3>
+                        <!-- View Switcher -->
+                        <div class="flex bg-[#0a0f0c] p-1 rounded-xl border border-emerald-500/20 text-xs">
+                            <button onclick="setLogViewMode('table')" id="viewModeTableBtn" class="px-3 py-1 rounded-lg bg-emerald-500 text-black font-bold transition">Table</button>
+                            <button onclick="setLogViewMode('cards')" id="viewModeCardsBtn" class="px-3 py-1 rounded-lg text-gray-400 hover:text-white transition">Cards</button>
+                        </div>
+                    </div>
                     
                     <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                         <select id="filterMonth" onchange="applyTradeLogFilter()" class="bg-[#0a0f0c] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
@@ -638,30 +648,39 @@
                     </div>
                 </div>
 
-                <!-- Trades Table -->
-                <div class="glass-card rounded-2xl overflow-hidden shadow-2xl">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-gray-300">
-                            <thead class="bg-[#090f0b] border-b border-emerald-500/10 text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                                <tr>
-                                    <th class="py-3.5 px-4">Date</th>
-                                    <th class="py-3.5 px-4">Pair</th>
-                                    <th class="py-3.5 px-4">Pos</th>
-                                    <th class="py-3.5 px-4">Net P/L</th>
-                                    <th class="py-3.5 px-4">Risk</th>
-                                    <th class="py-3.5 px-4">RR</th>
-                                    <th class="py-3.5 px-4">HTF</th>
-                                    <th class="py-3.5 px-4">Confluence</th>
-                                    <th class="py-3.5 px-4">Result</th>
-                                    <th class="py-3.5 px-4 text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tradeLogTableBody" class="divide-y divide-emerald-500/5">
-                                <!-- Populated dynamically -->
-                            </tbody>
-                        </table>
+                <!-- Trades Container (Table View / Cards View) -->
+                <div id="tradeLogContainerWrapper">
+                    <!-- Table View Container -->
+                    <div id="tradeLogTableView" class="glass-card rounded-2xl overflow-hidden shadow-2xl">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs text-gray-300">
+                                <thead class="bg-[#090f0b] border-b border-emerald-500/10 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                    <tr>
+                                        <th class="py-3.5 px-4">Date</th>
+                                        <th class="py-3.5 px-4">Pair</th>
+                                        <th class="py-3.5 px-4">Pos</th>
+                                        <th class="py-3.5 px-4">Net P/L</th>
+                                        <th class="py-3.5 px-4">Risk</th>
+                                        <th class="py-3.5 px-4">RR</th>
+                                        <th class="py-3.5 px-4">HTF</th>
+                                        <th class="py-3.5 px-4">Confluence</th>
+                                        <th class="py-3.5 px-4">Result</th>
+                                        <th class="py-3.5 px-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tradeLogTableBody" class="divide-y divide-emerald-500/5">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div id="noTradesPlaceholder" class="p-10 text-center hidden">
+
+                    <!-- Cards View Container -->
+                    <div id="tradeLogCardsView" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <div id="noTradesPlaceholder" class="glass-card rounded-2xl p-12 text-center hidden mt-4">
                         <div class="text-4xl mb-3">👻</div>
                         <h4 class="text-sm font-bold text-white">No trades found</h4>
                         <p class="text-xs text-gray-400 mt-1">Tidak ada trade yang cocok dengan filter bulan/tahun tersebut.</p>
@@ -696,12 +715,12 @@
                         <div id="analyticsWinRate" class="text-xl font-black text-emerald-400 mt-1">0%</div>
                     </div>
                     <div class="glass-card p-4 rounded-2xl">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">TOTAL TRADES</span>
-                        <div id="analyticsTotalTrades" class="text-xl font-black text-white mt-1">0</div>
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">PROFIT FACTOR</span>
+                        <div id="analyticsProfitFactor" class="text-xl font-black text-cyan-400 mt-1 font-mono">0.00</div>
                     </div>
                     <div class="glass-card p-4 rounded-2xl">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">AVG R:R</span>
-                        <div id="analyticsAvgRR" class="text-xl font-black text-amber-400 mt-1 font-mono">0.0</div>
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">EXPECTANCY</span>
+                        <div id="analyticsExpectancy" class="text-xl font-black text-amber-400 mt-1 font-mono">$0.00</div>
                     </div>
                 </div>
 
@@ -818,15 +837,13 @@
                 document.getElementById('authBtnHeader').classList.add('hidden');
                 document.getElementById('logoutBtnHeader').classList.remove('hidden');
                 document.getElementById('cloudStatusBadge').classList.remove('hidden');
-                document.getElementById('userEmailDisplay').innerText = user.email || 'Cloud Active';
+                document.getElementById('userEmailDisplay').innerText = user.email || 'Cloud Synced';
                 closeAuthModal();
                 setupFirestoreListeners(user.uid);
             } else {
                 document.getElementById('authBtnHeader').classList.remove('hidden');
                 document.getElementById('logoutBtnHeader').classList.add('hidden');
                 document.getElementById('cloudStatusBadge').classList.add('hidden');
-                
-                // Jika belum login, otomatis buka modal login
                 openAuthModal();
             }
         });
@@ -877,8 +894,8 @@
             const acc1Ref = doc(db, 'artifacts', appId, 'users', userId, 'accounts', 'acc_1');
             const acc2Ref = doc(db, 'artifacts', appId, 'users', userId, 'accounts', 'acc_2');
 
-            await setDoc(acc1Ref, { name: 'Najhan USD', type: 'PERSONAL', currency: 'USD', startingBalance: 500, created: Date.now() });
-            await setDoc(acc2Ref, { name: 'Najhan IDR', type: 'FUNDED', currency: 'IDR', startingBalance: 5000000, created: Date.now() - 1000 });
+            await setDoc(acc1Ref, { name: 'Main Account', type: 'PERSONAL', currency: 'USD', startingBalance: 1000, created: Date.now() });
+            await setDoc(acc2Ref, { name: 'Funded Challenge', type: 'FUNDED', currency: 'USD', startingBalance: 50000, created: Date.now() - 1000 });
         }
 
         window.handleEmailLogin = async () => {
@@ -958,6 +975,40 @@
         let selectedPosition = 'BUY';
         let selectedTags = { htf: [], confluence: [], result: [] };
         let charts = {};
+        let isPrivacyMode = false;
+        let logViewMode = 'table';
+
+        function setLogViewMode(mode) {
+            logViewMode = mode;
+            const tableBtn = document.getElementById('viewModeTableBtn');
+            const cardsBtn = document.getElementById('viewModeCardsBtn');
+            const tableDiv = document.getElementById('tradeLogTableView');
+            const cardsDiv = document.getElementById('tradeLogCardsView');
+
+            if (mode === 'table') {
+                tableBtn.className = "px-3 py-1 rounded-lg bg-emerald-500 text-black font-bold transition";
+                cardsBtn.className = "px-3 py-1 rounded-lg text-gray-400 hover:text-white transition";
+                tableDiv.classList.remove('hidden');
+                cardsDiv.classList.add('hidden');
+            } else {
+                cardsBtn.className = "px-3 py-1 rounded-lg bg-emerald-500 text-black font-bold transition";
+                tableBtn.className = "px-3 py-1 rounded-lg text-gray-400 hover:text-white transition";
+                cardsDiv.classList.remove('hidden');
+                tableDiv.classList.add('hidden');
+            }
+            applyTradeLogFilter();
+        }
+
+        function togglePrivacyMode() {
+            isPrivacyMode = !isPrivacyMode;
+            const btnIcon = document.querySelector('#privacyToggleBtn i');
+            if (isPrivacyMode) {
+                btnIcon.className = "fa-solid fa-eye-slash text-xs text-emerald-400";
+            } else {
+                btnIcon.className = "fa-solid fa-eye text-xs";
+            }
+            refreshActiveAccountData();
+        }
 
         function populateAllYearFilters() {
             const currentYear = new Date().getFullYear();
@@ -1024,6 +1075,7 @@
         }
 
         function formatMoney(amount, currency = 'USD') {
+            if (isPrivacyMode) return '••••••';
             const num = Number(amount) || 0;
             if (currency === 'IDR') {
                 return 'Rp ' + num.toLocaleString('id-ID', {maximumFractionDigits: 0});
@@ -1033,6 +1085,7 @@
         }
 
         function formatMoneyShort(amount, currency = 'USD') {
+            if (isPrivacyMode) return '••••';
             const num = Number(amount) || 0;
             if (currency === 'IDR') {
                 return 'Rp ' + num.toLocaleString('id-ID', {maximumFractionDigits: 0});
@@ -1273,7 +1326,15 @@
             const lossVal = monthTrades.filter(t => Number(t.netPnL) < 0).reduce((s, t) => s + Math.abs(Number(t.netPnL)), 0);
             const monthPnL = profitVal - lossVal;
 
-            const avgRR = total > 0 ? (monthTrades.reduce((s, t) => s + (Number(t.rr) || 0), 0) / total).toFixed(2) : 0;
+            // Hitung Profit Factor & Expectancy
+            const grossProfit = profitVal;
+            const grossLoss = lossVal;
+            const profitFactor = grossLoss > 0 ? (grossProfit / grossLoss).toFixed(2) : (grossProfit > 0 ? 'Infinite' : '0.00');
+            const avgWin = winCount > 0 ? grossProfit / winCount : 0;
+            const avgLoss = lossCount > 0 ? grossLoss / lossCount : 0;
+            const winProb = total > 0 ? winCount / total : 0;
+            const lossProb = total > 0 ? lossCount / total : 0;
+            const expectancy = (winProb * avgWin) - (lossProb * avgLoss);
 
             document.getElementById('dashWinRate').innerText = winRate + '%';
             document.getElementById('dashWinCount').innerText = winCount;
@@ -1285,18 +1346,9 @@
             document.getElementById('dashProfitVal').innerText = formatMoney(profitVal, curr);
             document.getElementById('dashLossVal').innerText = formatMoney(lossVal, curr);
 
-            document.getElementById('dashAvgRR').innerText = avgRR;
-            document.getElementById('dashTotalTradesMonth').innerText = total;
-
-            const statusLabel = document.getElementById('dashStatusLabel');
-            if (monthPnL >= 0) {
-                statusLabel.innerHTML = `<i class="fa-solid fa-circle-check"></i> Profitable`;
-                statusLabel.className = "text-base sm:text-lg font-black text-emerald-400 mt-1 flex items-center gap-1.5";
-            } else {
-                statusLabel.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> In Loss`;
-                statusLabel.className = "text-base sm:text-lg font-black text-red-400 mt-1 flex items-center gap-1.5";
-            }
-            document.getElementById('dashStatusSub').innerText = `${monthPnL >= 0 ? '+' : '-'}${formatMoney(Math.abs(monthPnL), curr)} Net PnL`;
+            document.getElementById('dashProfitFactor').innerText = profitFactor;
+            document.getElementById('dashExpectancy').innerText = (expectancy >= 0 ? '+' : '-') + formatMoney(Math.abs(expectancy), curr);
+            document.getElementById('dashExpectancy').className = `text-2xl font-black mt-1 font-mono ${expectancy >= 0 ? 'text-amber-400' : 'text-red-400'}`;
         }
 
         function renderCalendar(trades, curr, containerId = 'calendarDays', labelId = 'calendarMonthLabel', subtextId = 'calendarSubtext', isMainDashboard = true) {
@@ -1462,7 +1514,6 @@
             });
         }
 
-        // RENDER YEARLY CALENDAR GRID
         function renderYearlyPerformance() {
             const activeAcc = getActiveAccount();
             if (!activeAcc) return;
@@ -1518,7 +1569,6 @@
             }
         }
 
-        // KETIKA BULAN DIKLIK -> MUNCUL RINGKASAN + MONTHLY CALENDAR VIEW LENGKAP DI BAWAH (BISA KLIK TANGGAL)
         function showMonthDetailFromYearly(year, monthStr, monthName) {
             const activeAcc = getActiveAccount();
             if (!activeAcc) return;
@@ -1651,7 +1701,7 @@
                     </div>
                 </div>
 
-                <!-- Tampilan Monthly Calendar View (Klik Tanggal) -->
+                <!-- Tampilan Monthly Calendar View -->
                 <div class="bg-[#0a0f0c] p-4 rounded-xl border border-emerald-500/10 space-y-3">
                     <div class="flex items-center justify-between">
                         <div class="text-xs font-bold text-gray-300">Kalender Harian — ${monthName} ${year} (Klik tanggal untuk filter)</div>
@@ -1673,7 +1723,6 @@
             `;
         }
 
-        // TRADE LOG FILTER
         function applyTradeLogFilter() {
             const activeAcc = getActiveAccount();
             if (!activeAcc) return;
@@ -1698,7 +1747,7 @@
                 });
             }
 
-            renderTradeLogTable(trades, curr);
+            renderTradeLogContainer(trades, curr);
         }
 
         function resetTradeLogFilter() {
@@ -1707,10 +1756,13 @@
             applyTradeLogFilter();
         }
 
-        function renderTradeLogTable(trades, curr) {
+        function renderTradeLogContainer(trades, curr) {
             const tbody = document.getElementById('tradeLogTableBody');
+            const cardsContainer = document.getElementById('tradeLogCardsView');
             const placeholder = document.getElementById('noTradesPlaceholder');
+            
             tbody.innerHTML = '';
+            cardsContainer.innerHTML = '';
 
             const totalPnL = trades.reduce((sum, t) => sum + (Number(t.netPnL) || 0), 0);
             const wins = trades.filter(t => Number(t.netPnL) > 0).length;
@@ -1723,9 +1775,16 @@
 
             if (trades.length === 0) {
                 placeholder.classList.remove('hidden');
+                document.getElementById('tradeLogTableView').classList.add('hidden');
+                cardsContainer.classList.add('hidden');
                 return;
             } else {
                 placeholder.classList.add('hidden');
+                if (logViewMode === 'table') {
+                    document.getElementById('tradeLogTableView').classList.remove('hidden');
+                } else {
+                    cardsContainer.classList.remove('hidden');
+                }
             }
 
             const sorted = [...trades].sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -1734,6 +1793,8 @@
                 const pnlNum = Number(t.netPnL) || 0;
                 const isWin = pnlNum >= 0;
                 const formattedPnL = (isWin ? '+' : '-') + formatMoney(Math.abs(pnlNum), curr);
+
+                // 1. Render Table Row
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-emerald-500/5 transition";
                 tr.innerHTML = `
@@ -1758,6 +1819,50 @@
                     </td>
                 `;
                 tbody.appendChild(tr);
+
+                // 2. Render Cards View Item
+                const card = document.createElement('div');
+                card.className = "glass-card rounded-2xl p-4 space-y-3 flex flex-col justify-between";
+                
+                let linkBtnHtml = '';
+                if (t.link) {
+                    linkBtnHtml = `<a href="${t.link}" target="_blank" class="text-[11px] text-emerald-400 hover:underline flex items-center gap-1"><i class="fa-solid fa-chart-line"></i> Chart Link</a>`;
+                }
+
+                card.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${t.position === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${t.position}</span>
+                                <span class="font-black text-white text-sm">${t.pair}</span>
+                            </div>
+                            <span class="text-xs font-mono text-gray-400">${t.date}</span>
+                        </div>
+                        <div class="flex items-center justify-between pt-1 border-t border-emerald-500/10">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase">Net P/L</span>
+                                <div class="font-mono text-base font-black ${isWin ? 'text-emerald-400' : 'text-red-400'}">${formattedPnL}</div>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[10px] text-gray-400 uppercase">R:R</span>
+                                <div class="font-mono text-sm font-bold text-amber-400">${t.rr || '0'}</div>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-gray-300 space-y-1 pt-1">
+                            <div><b>HTF:</b> ${t.htf || '—'}</div>
+                            <div><b>Confluence:</b> ${t.confluence || '—'}</div>
+                            <div><b>Result:</b> ${t.result || '—'}</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between pt-3 border-t border-emerald-500/10">
+                        ${linkBtnHtml}
+                        <div class="flex items-center gap-1.5 ml-auto">
+                            <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#121c15] text-emerald-400 border border-emerald-500/20 text-[11px] rounded-lg">Edit</button>
+                            <button onclick="deleteTrade('${t.id}')" class="px-2.5 py-1 bg-red-500/20 text-red-400 border border-red-500/30 text-[11px] rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                `;
+                cardsContainer.appendChild(card);
             });
         }
 
@@ -1954,14 +2059,22 @@
 
             const totalPnL = trades.reduce((sum, t) => sum + Number(t.netPnL), 0);
             const wins = trades.filter(t => Number(t.netPnL) > 0).length;
+            const losses = trades.filter(t => Number(t.netPnL) < 0).length;
             const winRate = trades.length > 0 ? Math.round((wins / trades.length) * 100) : 0;
-            const avgRR = trades.length > 0 ? (trades.reduce((s, t) => s + (Number(t.rr) || 0), 0) / trades.length).toFixed(1) : "0.0";
+
+            const grossProfit = trades.filter(t => Number(t.netPnL) > 0).reduce((s, t) => s + Number(t.netPnL), 0);
+            const grossLoss = trades.filter(t => Number(t.netPnL) < 0).reduce((s, t) => s + Math.abs(Number(t.netPnL)), 0);
+            const profitFactor = grossLoss > 0 ? (grossProfit / grossLoss).toFixed(2) : (grossProfit > 0 ? 'Infinite' : '0.00');
+            const avgWin = wins > 0 ? grossProfit / wins : 0;
+            const avgLoss = losses > 0 ? grossLoss / losses : 0;
+            const expectancy = trades.length > 0 ? ((wins / trades.length) * avgWin) - ((losses / trades.length) * avgLoss) : 0;
 
             document.getElementById('analyticsPnL').innerText = (totalPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(totalPnL), curr);
             document.getElementById('analyticsPnL').className = `text-xl font-black ${totalPnL >= 0 ? 'text-emerald-400' : 'text-red-400'} mt-1 font-mono`;
             document.getElementById('analyticsWinRate').innerText = winRate + '%';
-            document.getElementById('analyticsTotalTrades').innerText = trades.length;
-            document.getElementById('analyticsAvgRR').innerText = avgRR;
+            document.getElementById('analyticsProfitFactor').innerText = profitFactor;
+            document.getElementById('analyticsExpectancy').innerText = (expectancy >= 0 ? '+' : '-') + formatMoney(Math.abs(expectancy), curr);
+            document.getElementById('analyticsExpectancy').className = `text-xl font-black ${expectancy >= 0 ? 'text-amber-400' : 'text-red-400'} mt-1 font-mono`;
 
             const growthPct = ((totalPnL / Number(activeAcc.startingBalance)) * 100).toFixed(2);
             document.getElementById('equityGrowthPercentage').innerText = (growthPct >= 0 ? '+' : '') + growthPct + '%';
@@ -1986,7 +2099,6 @@
             });
             renderSymbolPerformanceChart('symbolChart', symbolMap, symbolCount, curr);
 
-            const losses = trades.filter(t => Number(t.netPnL) < 0).length;
             const bes = trades.filter(t => Number(t.netPnL) === 0).length;
             renderWinLossChart('winLossChart', wins, losses, bes, trades.length);
 
