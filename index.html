@@ -144,7 +144,7 @@
     <canvas id="networkCanvas"></canvas>
 
     <!-- TOP HEADER / NAVBAR -->
-    <header class="bg-[#04070a]/95 backdrop-blur-md border-b border-emerald-500/15 sticky top-0 z-40">
+    <header class="bg-[#04070a]/90 backdrop-blur-md border-b border-emerald-500/15 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo / Brand -->
@@ -181,8 +181,8 @@
         </div>
     </header>
 
-    <!-- LANDING SCREEN / WELCOME MODAL DENGAN LATAR BELAKANG SOLID & ELEGAN -->
-    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/92 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+    <!-- LANDING SCREEN / WELCOME MODAL DENGAN LATAR BELAKANG SERAGAM & ELEGAN -->
+    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
         <div class="glass-card max-w-xl w-full rounded-3xl p-6 sm:p-10 space-y-8 text-center animate-fade-in relative z-20 border-emerald-500/30 shadow-2xl">
             
             <!-- Logo & Brand Header -->
@@ -216,7 +216,7 @@
     </div>
 
     <!-- AUTHENTICATION INPUT MODAL -->
-    <div id="authFormModal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div id="authFormModal" class="hidden fixed inset-0 z-50 bg-[#020407]/90 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-sm w-full space-y-5 shadow-2xl relative border-emerald-500/40 text-center animate-fade-in z-40">
             <button onclick="closeAuthFormModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition">
                 <i class="fa-solid fa-xmark text-lg"></i>
@@ -1047,7 +1047,7 @@
 
         const dayNamesID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
-        // INTERACTIVE TOUCH & MOUSE NODE CANVAS BACKGROUND (DENGAN KRIPTO, FOREX, & INDICES)
+        // INTERACTIVE TOUCH & MOUSE NODE CANVAS BACKGROUND (DENGAN KRIPTO, FOREX, & INDICES DIPERBANYAK)
         function initInteractiveNetworkCanvas() {
             const canvas = document.getElementById('networkCanvas');
             if (!canvas) return;
@@ -1064,7 +1064,7 @@
             let pointer = {
                 x: null,
                 y: null,
-                radius: 160
+                radius: 170
             };
 
             window.addEventListener('mousemove', (e) => {
@@ -1090,26 +1090,28 @@
             });
 
             const particles = [];
-            const particleCount = Math.floor((width * height) / 12000);
+            // Jumlah partikel diperbanyak agar latar belakang penuh dan kaya teks
+            const particleCount = Math.floor((width * height) / 8500);
             
-            // Penambahan label Kripto, Forex, dan Indeks
+            // Kumpulan label Kripto, Forex, Indeks, dan Istilah Trading yang diperbanyak
             const labelsList = [
                 // Kripto
-                'BTC/USD', 'ETH/USD', 'SOL/USD', 'XRP/USD', 'ADA', 'DOGE', 'AVAX', 'LINK',
+                'BTC/USD', 'ETH/USD', 'SOL/USD', 'XRP/USD', 'ADA/USD', 'DOGE/USD', 'AVAX/USD', 'LINK/USD', 'BNB/USD', 'MATIC/USD', 'DOT/USD', 'NEAR/USD',
                 // Forex
-                'EUR/USD', 'GBP/USD', 'USD/JPY', 'AUD/USD', 'NZD/USD', 'USD/CAD', 'USD/CHF', 'XAU/USD',
+                'EUR/USD', 'GBP/USD', 'USD/JPY', 'AUD/USD', 'NZD/USD', 'USD/CAD', 'USD/CHF', 'XAU/USD', 'EUR/GBP', 'AUD/JPY', 'GBP/JPY', 'EUR/JPY',
                 // Indices & Trading Terms
-                'US30', 'US100', 'SPX500', 'DAX', 'FTSE', 'NIFTY', 'ENTRY', 'TP', 'SL', 'RR', 'SETUP', 'SMT', 'BOS', 'CHOCH', 'EQUITY', 'PROFIT'
+                'US30', 'US100', 'SPX500', 'DAX40', 'FTSE100', 'NIFTY50', 'NIKKEI225', 'HANGSENG',
+                'ENTRY', 'TP', 'SL', 'RR', 'SETUP', 'SMT', 'SSMT', 'BOS', 'CHOCH', 'EQUITY', 'PROFIT', 'LOSS', 'BUY', 'SELL', 'LONG', 'SHORT', 'ORDERBLOCK', 'FVG'
             ];
 
             for (let i = 0; i < particleCount; i++) {
                 particles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.8,
-                    vy: (Math.random() - 0.5) * 0.8,
-                    radius: Math.random() * 2 + 1.5,
-                    text: Math.random() > 0.5 ? labelsList[Math.floor(Math.random() * labelsList.length)] : null
+                    vx: (Math.random() - 0.5) * 0.7,
+                    vy: (Math.random() - 0.5) * 0.7,
+                    radius: Math.random() * 2.2 + 1.2,
+                    text: labelsList[Math.floor(Math.random() * labelsList.length)] // Sebagian besar/semua partikel memuat label agar ramai
                 });
             }
 
@@ -1126,13 +1128,13 @@
 
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(16, 185, 129, 0.55)';
+                    ctx.fillStyle = 'rgba(16, 185, 129, 0.65)';
                     ctx.fill();
 
                     if (p.text) {
                         ctx.font = '9px JetBrains Mono, monospace';
-                        ctx.fillStyle = 'rgba(16, 185, 129, 0.45)';
-                        ctx.fillText(p.text, p.x + 6, p.y - 6);
+                        ctx.fillStyle = 'rgba(16, 185, 129, 0.52)';
+                        ctx.fillText(p.text, p.x + 7, p.y - 7);
                     }
 
                     // Hubungkan antar partikel
@@ -1142,11 +1144,11 @@
                         let dy = p.y - p2.y;
                         let dist = Math.sqrt(dx * dx + dy * dy);
 
-                        if (dist < 130) {
+                        if (dist < 140) {
                             ctx.beginPath();
                             ctx.moveTo(p.x, p.y);
                             ctx.lineTo(p2.x, p2.y);
-                            ctx.strokeStyle = `rgba(16, 185, 129, ${0.22 * (1 - dist / 130)})`;
+                            ctx.strokeStyle = `rgba(16, 185, 129, ${0.25 * (1 - dist / 140)})`;
                             ctx.lineWidth = 0.8;
                             ctx.stroke();
                         }
@@ -1162,7 +1164,7 @@
                             ctx.beginPath();
                             ctx.moveTo(p.x, p.y);
                             ctx.lineTo(pointer.x, pointer.y);
-                            ctx.strokeStyle = `rgba(34, 197, 94, ${0.5 * (1 - distMouse / pointer.radius)})`;
+                            ctx.strokeStyle = `rgba(34, 197, 94, ${0.55 * (1 - distMouse / pointer.radius)})`;
                             ctx.lineWidth = 1.2;
                             ctx.stroke();
                         }
