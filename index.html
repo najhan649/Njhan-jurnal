@@ -13,7 +13,7 @@
                 extend: {
                     colors: {
                         darkBg: '#020407',
-                        cardBg: 'rgba(8, 13, 10, 0.94)',
+                        cardBg: 'rgba(8, 13, 10, 0.88)',
                         cardBorder: 'rgba(16, 185, 129, 0.25)',
                         brandGreen: '#10B981',
                         brandGreenGlow: '#22C55E',
@@ -47,7 +47,7 @@
         }
 
         .glass-card {
-            background: rgba(8, 13, 10, 0.88);
+            background: rgba(8, 13, 10, 0.85);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(16, 185, 129, 0.3);
@@ -126,7 +126,7 @@
             animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Canvas Background Jaringan Node Interaktif Persis Seperti Video */
+        /* Canvas Background Jaringan Node Persis Seperti Video */
         #networkCanvas {
             position: fixed;
             top: 0;
@@ -140,7 +140,7 @@
 </head>
 <body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black relative">
 
-    <!-- CANVAS ANIMASI LATAR BELAKANG JARINGAN NODE SEPERTI DI VIDEO -->
+    <!-- CANVAS ANIMASI LATAR BELAKANG JARINGAN NODE & KOTAK DATA SEPERTI DI VIDEO -->
     <canvas id="networkCanvas"></canvas>
 
     <!-- TOP HEADER / NAVBAR -->
@@ -181,8 +181,8 @@
         </div>
     </header>
 
-    <!-- LANDING SCREEN / WELCOME MODAL DENGAN LATAR BELAKANG TRANSPARAN AGAR NODE TERLIHAT -->
-    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <!-- LANDING SCREEN / WELCOME MODAL DENGAN KOTAK LOGIN & CREATE ACCOUNT -->
+    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/50 backdrop-blur-[2px] flex items-center justify-center p-4 overflow-y-auto">
         <div class="glass-card max-w-xl w-full rounded-3xl p-6 sm:p-10 space-y-8 text-center animate-fade-in relative z-20 border-emerald-500/30 shadow-2xl">
             
             <!-- Logo & Brand Header -->
@@ -1047,7 +1047,7 @@
 
         const dayNamesID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
-        // ANIMASI JARINGAN NODE & KOTAK "DATA" TENGAH SEPERTI DI VIDEO
+        // ANIMASI JARINGAN NODE & KOTAK "DATA" TENGAH PERSIS SEPERTI DI VIDEO
         function initInteractiveNetworkCanvas() {
             const canvas = document.getElementById('networkCanvas');
             if (!canvas) return;
@@ -1087,14 +1087,14 @@
             ];
 
             const nodes = [];
-            const nodeCount = Math.floor((width * height) / 9000);
+            const nodeCount = Math.floor((width * height) / 8500);
 
             for (let i = 0; i < nodeCount; i++) {
                 nodes.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.5,
-                    vy: (Math.random() - 0.5) * 0.5,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
                     radius: Math.random() * 2 + 1,
                     text: terms[Math.floor(Math.random() * terms.length)]
                 });
@@ -1107,16 +1107,17 @@
                 let centerX = width / 2;
                 let centerY = height / 2;
 
-                // Gambar Garis Saraf/Koneksi dari Center ke Pointer / Mouse
+                // Garis Siku-siku / Orthogonal dari Center ke Kursor Sentuhan
                 ctx.beginPath();
                 ctx.moveTo(centerX, centerY);
+                ctx.lineTo(pointer.x, centerY);
                 ctx.lineTo(pointer.x, pointer.y);
-                ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+                ctx.strokeStyle = 'rgba(16, 185, 129, 0.45)';
                 ctx.lineWidth = 1.5;
                 ctx.stroke();
 
                 // Gambar Kotak Pusat "DATA"
-                ctx.fillStyle = 'rgba(8, 14, 11, 0.9)';
+                ctx.fillStyle = 'rgba(8, 14, 11, 0.92)';
                 ctx.strokeStyle = '#10B981';
                 ctx.lineWidth = 2;
                 ctx.beginPath();
@@ -1153,7 +1154,7 @@
                         ctx.fillText(n.text, n.x + 8, n.y - 4);
                     }
 
-                    // Hubungkan antar node terdekat
+                    // Hubungkan antar node terdekat dengan garis siku
                     for (let j = i + 1; j < nodes.length; j++) {
                         let n2 = nodes[j];
                         let dx = n.x - n2.x;
@@ -1163,6 +1164,7 @@
                         if (dist < 130) {
                             ctx.beginPath();
                             ctx.moveTo(n.x, n.y);
+                            ctx.lineTo(n.x, n2.y);
                             ctx.lineTo(n2.x, n2.y);
                             ctx.strokeStyle = `rgba(16, 185, 129, ${0.2 * (1 - dist / 130)})`;
                             ctx.lineWidth = 0.7;
