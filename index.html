@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Najh.an Journal - Institutional Trading Terminal v5.0</title>
+    <title>Najh.an Journal - Institutional Trading Terminal v6.0 Pro</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -12,13 +12,13 @@
             theme: {
                 extend: {
                     colors: {
-                        darkBg: '#030508',
-                        cardBg: 'rgba(9, 14, 11, 0.8)',
-                        cardBorder: 'rgba(16, 185, 129, 0.22)',
+                        darkBg: '#020407',
+                        cardBg: 'rgba(8, 13, 10, 0.82)',
+                        cardBorder: 'rgba(16, 185, 129, 0.25)',
                         brandGreen: '#10B981',
                         brandGreenGlow: '#22C55E',
                         brandRed: '#EF4444',
-                        accentDark: '#0a100d'
+                        accentDark: '#080e0b'
                     },
                     fontFamily: {
                         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
@@ -39,25 +39,25 @@
     
     <style>
         body {
-            background: #030508;
+            background: #020407;
             background-image: 
-                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(34, 197, 94, 0.05) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.09) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(34, 197, 94, 0.06) 0px, transparent 50%);
             color: #f1f5f9;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
         }
 
         .glass-card {
-            background: rgba(9, 14, 11, 0.78);
+            background: rgba(8, 13, 10, 0.82);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(16, 185, 129, 0.22);
+            box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.6);
         }
 
         .glass-card:hover {
-            border-color: rgba(16, 185, 129, 0.4);
+            border-color: rgba(16, 185, 129, 0.45);
         }
 
         ::-webkit-scrollbar {
@@ -65,7 +65,7 @@
             height: 5px;
         }
         ::-webkit-scrollbar-track {
-            background: #030508;
+            background: #020407;
         }
         ::-webkit-scrollbar-thumb {
             background: rgba(16, 185, 129, 0.35);
@@ -78,18 +78,37 @@
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, minmax(0, 1fr));
-            gap: 6px;
+            gap: 4px;
         }
 
+        @media (min-width: 640px) {
+            .calendar-grid {
+                gap: 8px;
+            }
+        }
+
+        /* Responsive Mobile Optimized Calendar Day Box */
         .calendar-day {
-            min-height: 76px;
+            min-height: 68px;
+            height: auto;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @media (min-width: 640px) {
+            .calendar-day {
+                min-height: 84px;
+            }
         }
 
         .yearly-months-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+        }
+        @media (min-width: 640px) {
+            .yearly-months-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 14px;
+            }
         }
 
         .btn-tag {
@@ -107,28 +126,28 @@
 <body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black">
 
     <!-- TOP HEADER / NAVBAR -->
-    <header class="bg-[#05080c]/90 backdrop-blur-md border-b border-emerald-500/15 sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header class="bg-[#04070a]/90 backdrop-blur-md border-b border-emerald-500/15 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo / Brand -->
-                <div class="flex items-center gap-3 cursor-pointer group" onclick="switchView('accounts')">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-xl shadow-lg shadow-emerald-900/50 group-hover:scale-105 transition-transform duration-300">
+                <div class="flex items-center gap-2.5 cursor-pointer group" onclick="switchView('accounts')">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-lg sm:text-xl shadow-lg shadow-emerald-900/50 group-hover:scale-105 transition-transform duration-300">
                         N
                     </div>
                     <div>
-                        <span class="font-extrabold text-lg text-white tracking-tight group-hover:text-emerald-400 transition">Najh.an <span class="text-emerald-400">Journal</span></span>
-                        <span class="block text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v5.0</span>
+                        <span class="font-extrabold text-base sm:text-lg text-white tracking-tight group-hover:text-emerald-400 transition">Najh.an <span class="text-emerald-400">Journal</span></span>
+                        <span class="block text-[9px] sm:text-[10px] text-emerald-500/80 -mt-1 font-mono tracking-wider">Institutional Terminal v6.0</span>
                     </div>
                 </div>
 
                 <!-- Right Actions Header -->
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 sm:gap-3">
                     <div id="cloudStatusBadge" class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                         <span id="userEmailDisplay">Cloud Synced</span>
                     </div>
 
-                    <button id="headerAccountBadge" onclick="switchView('accounts')" class="hidden sm:flex items-center gap-2 bg-[#0a120e] hover:bg-[#0f1d15] border border-emerald-500/20 text-xs font-semibold px-3.5 py-1.5 rounded-xl text-emerald-400 transition shadow-sm">
+                    <button id="headerAccountBadge" onclick="switchView('accounts')" class="hidden sm:flex items-center gap-2 bg-[#080e0b] hover:bg-[#0d1711] border border-emerald-500/20 text-xs font-semibold px-3.5 py-1.5 rounded-xl text-emerald-400 transition shadow-sm">
                         <i class="fa-solid fa-wallet text-emerald-400 text-xs"></i>
                         <span id="activeAccountHeaderName">Personal</span>
                     </button>
@@ -162,12 +181,12 @@
             <div class="space-y-3">
                 <div>
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">EMAIL ADDRESS</label>
-                    <input type="email" id="authEmail" placeholder="yourname@gmail.com" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    <input type="email" id="authEmail" placeholder="yourname@gmail.com" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                 </div>
 
                 <div>
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">PASSWORD</label>
-                    <input type="password" id="authPassword" placeholder="••••••••" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    <input type="password" id="authPassword" placeholder="••••••••" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                 </div>
 
                 <div id="authErrorMsg" class="text-xs text-red-400 hidden text-center"></div>
@@ -175,7 +194,7 @@
                 <button onclick="handleEmailLogin()" class="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl transition shadow-lg shadow-emerald-900/30">
                     Login / Sign In
                 </button>
-                <button onclick="handleEmailSignUp()" class="w-full py-2.5 bg-[#0a120e] hover:bg-[#0f1d15] text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
+                <button onclick="handleEmailSignUp()" class="w-full py-2.5 bg-[#080e0b] hover:bg-[#0d1711] text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
                     Create New Account
                 </button>
             </div>
@@ -183,7 +202,7 @@
     </div>
 
     <!-- MAIN CONTAINER -->
-    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-6 flex-grow w-full">
+    <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pt-4 sm:pt-6 flex-grow w-full">
 
         <!-- ACCOUNT SELECTION VIEW -->
         <section id="accountsView" class="max-w-2xl mx-auto space-y-6 pt-4">
@@ -209,13 +228,13 @@
 
                     <div>
                         <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">ACCOUNT NAME</label>
-                        <input type="text" id="newAccountName" placeholder="e.g. Funded Apex $50k" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
+                        <input type="text" id="newAccountName" placeholder="e.g. Funded Apex $50k" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
                     </div>
 
                     <div class="grid grid-cols-3 gap-3">
                         <div>
                             <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">TYPE</label>
-                            <select id="newAccountType" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
+                            <select id="newAccountType" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
                                 <option value="PERSONAL">PERSONAL</option>
                                 <option value="FUNDED">FUNDED</option>
                                 <option value="DEMO">DEMO</option>
@@ -223,14 +242,14 @@
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">CURRENCY</label>
-                            <select id="newAccountCurrency" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-bold">
+                            <select id="newAccountCurrency" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-bold">
                                 <option value="USD">USD ($)</option>
                                 <option value="IDR">IDR (Rp)</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">STARTING BALANCE</label>
-                            <input type="number" id="newAccountBalance" placeholder="1000" value="1000" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-mono">
+                            <input type="number" id="newAccountBalance" placeholder="1000" value="1000" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition font-mono">
                         </div>
                     </div>
 
@@ -252,7 +271,7 @@
         </section>
 
         <!-- MAIN JOURNAL WORKSPACE -->
-        <section id="workspaceView" class="hidden space-y-6">
+        <section id="workspaceView" class="hidden space-y-5 sm:space-y-6">
 
             <!-- Active Account Bar with Privacy Toggle -->
             <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
@@ -273,7 +292,7 @@
                 </div>
 
                 <div class="flex items-center gap-2 self-start sm:self-auto">
-                    <button onclick="switchView('accounts')" class="px-4 py-2 bg-[#0a120e] hover:bg-[#0f1d15] text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm">
+                    <button onclick="switchView('accounts')" class="px-4 py-2 bg-[#080e0b] hover:bg-[#0d1711] text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm">
                         <i class="fa-solid fa-right-left text-xs"></i> Switch Account
                     </button>
                 </div>
@@ -293,7 +312,7 @@
             </div>
 
             <!-- TAB 1: DASHBOARD -->
-            <div id="tabContentDashboard" class="space-y-6">
+            <div id="tabContentDashboard" class="space-y-5 sm:space-y-6">
 
                 <!-- DASHBOARD FILTER BULAN & TAHUN -->
                 <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -304,7 +323,7 @@
                         <p class="text-[11px] text-gray-400">Pilih bulan & tahun untuk melihat kalender dan metrik performa bulanan</p>
                     </div>
                     <div class="flex items-center gap-2 w-full sm:w-auto">
-                        <select id="dashFilterMonth" onchange="onDashFilterChange()" class="bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                        <select id="dashFilterMonth" onchange="onDashFilterChange()" class="bg-[#020407] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                             <option value="01">Januari</option>
                             <option value="02">Februari</option>
                             <option value="03">Maret</option>
@@ -318,19 +337,19 @@
                             <option value="11">November</option>
                             <option value="12">Desember</option>
                         </select>
-                        <select id="dashFilterYear" onchange="onDashFilterChange()" class="bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                        <select id="dashFilterYear" onchange="onDashFilterChange()" class="bg-[#020407] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                             <!-- Diisi dinamis -->
                         </select>
-                        <button onclick="resetDashFilterToCurrent()" class="px-3 py-1.5 bg-[#0a120e] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
+                        <button onclick="resetDashFilterToCurrent()" class="px-3 py-1.5 bg-[#080e0b] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
                             Bulan Ini
                         </button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
 
                     <!-- Left Column: Calendar View -->
-                    <div class="lg:col-span-7 glass-card rounded-2xl p-4 sm:p-5 space-y-4">
+                    <div class="lg:col-span-7 glass-card rounded-2xl p-3 sm:p-5 space-y-3 sm:space-y-4">
                         <div class="flex items-center justify-between pb-3 border-b border-emerald-500/10">
                             <div>
                                 <h3 class="text-sm font-bold text-white flex items-center gap-2">
@@ -338,12 +357,12 @@
                                 </h3>
                                 <p id="calendarSubtext" class="text-[11px] text-gray-400">0 trades in current view</p>
                             </div>
-                            <div class="flex items-center gap-2">
-                                <button onclick="navigateMonth(-1)" class="p-2 bg-[#0a120e] hover:bg-[#122017] rounded-xl text-gray-300 text-xs border border-emerald-500/10 transition">
+                            <div class="flex items-center gap-1.5 sm:gap-2">
+                                <button onclick="navigateMonth(-1)" class="p-2 bg-[#080e0b] hover:bg-[#122017] rounded-xl text-gray-300 text-xs border border-emerald-500/10 transition">
                                     <i class="fa-solid fa-chevron-left"></i>
                                 </button>
-                                <span id="calendarMonthLabel" class="text-xs font-bold text-emerald-400 min-w-[110px] text-center font-mono">October 2026</span>
-                                <button onclick="navigateMonth(1)" class="p-2 bg-[#0a120e] hover:bg-[#122017] rounded-xl text-gray-300 text-xs border border-emerald-500/10 transition">
+                                <span id="calendarMonthLabel" class="text-xs font-bold text-emerald-400 min-w-[95px] sm:min-w-[110px] text-center font-mono">October 2026</span>
+                                <button onclick="navigateMonth(1)" class="p-2 bg-[#080e0b] hover:bg-[#122017] rounded-xl text-gray-300 text-xs border border-emerald-500/10 transition">
                                     <i class="fa-solid fa-chevron-right"></i>
                                 </button>
                             </div>
@@ -354,14 +373,16 @@
                             <div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div><div>Su</div>
                         </div>
 
-                        <!-- Days Grid -->
-                        <div id="calendarDays" class="calendar-grid gap-1.5">
+                        <!-- Days Grid (Mobile Responsive & Optimized PnL Display) -->
+                        <div id="calendarDays" class="calendar-grid gap-1 sm:gap-1.5">
                             <!-- Populated dynamically -->
                         </div>
 
-                        <div class="flex items-center justify-between pt-3 text-[11px] text-gray-400 border-t border-emerald-500/10">
-                            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400"></span> Profit Day</span>
-                            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-500 shadow-sm shadow-red-500"></span> Loss Day</span>
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pt-3 text-[11px] text-gray-400 border-t border-emerald-500/10 gap-2">
+                            <div class="flex items-center gap-3">
+                                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400"></span> Profit Day</span>
+                                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-500 shadow-sm shadow-red-500"></span> Loss Day</span>
+                            </div>
                             <button onclick="clearCalendarDateFilter()" class="text-emerald-400 hover:text-emerald-300 font-bold transition">Show All Month Trades</button>
                         </div>
                     </div>
@@ -413,12 +434,12 @@
                     <div class="glass-card rounded-2xl p-4">
                         <span class="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Expectancy</span>
                         <div id="dashExpectancy" class="text-2xl font-black text-amber-400 mt-1 font-mono">$0.00</div>
-                        <div id="dashStatusSub" class="text-[10px] text-gray-400 mt-1.5">Average per trade</div>
+                        <div class="text-[10px] text-gray-400 mt-1.5">Average per trade</div>
                     </div>
                 </div>
 
                 <!-- YEARLY PERFORMANCE SECTION -->
-                <div class="glass-card rounded-2xl p-5 space-y-4 shadow-xl">
+                <div class="glass-card rounded-2xl p-4 sm:p-5 space-y-4 shadow-xl">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-emerald-500/10 gap-3">
                         <div>
                             <h3 class="text-sm font-bold text-white flex items-center gap-2">
@@ -428,10 +449,10 @@
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto">
                             <label class="text-[11px] text-gray-400 font-bold">Filter Tahun:</label>
-                            <select id="yearlyFilterYear" onchange="renderYearlyPerformance()" class="bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                            <select id="yearlyFilterYear" onchange="renderYearlyPerformance()" class="bg-[#020407] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                                 <!-- Diisi dinamis -->
                             </select>
-                            <button onclick="resetYearlyFilterToCurrent()" class="px-3 py-1.5 bg-[#0a120e] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
+                            <button onclick="resetYearlyFilterToCurrent()" class="px-3 py-1.5 bg-[#080e0b] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
                                 Tahun Ini
                             </button>
                         </div>
@@ -478,14 +499,14 @@
                     <div class="flex items-center gap-3">
                         <h3 class="text-lg font-black text-white">Trade Journal</h3>
                         <!-- View Switcher -->
-                        <div class="flex bg-[#030508] p-1 rounded-xl border border-emerald-500/20 text-xs">
+                        <div class="flex bg-[#020407] p-1 rounded-xl border border-emerald-500/20 text-xs">
                             <button onclick="setLogViewMode('table')" id="viewModeTableBtn" class="px-3 py-1 rounded-lg bg-emerald-500 text-black font-bold transition">Table</button>
                             <button onclick="setLogViewMode('cards')" id="viewModeCardsBtn" class="px-3 py-1 rounded-lg text-gray-400 hover:text-white transition">Cards</button>
                         </div>
                     </div>
                     
                     <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                        <select id="filterMonth" onchange="applyTradeLogFilter()" class="bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                        <select id="filterMonth" onchange="applyTradeLogFilter()" class="bg-[#020407] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                             <option value="ALL">Semua Bulan</option>
                             <option value="01">Januari</option>
                             <option value="02">Februari</option>
@@ -501,15 +522,15 @@
                             <option value="12">Desember</option>
                         </select>
 
-                        <select id="filterYear" onchange="applyTradeLogFilter()" class="bg-[#030508] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
+                        <select id="filterYear" onchange="applyTradeLogFilter()" class="bg-[#020407] border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-semibold">
                             <option value="ALL">Semua Tahun</option>
                         </select>
 
-                        <button onclick="resetTradeLogFilterToCurrentMonth()" class="px-3 py-1.5 bg-[#0a120e] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
+                        <button onclick="resetTradeLogFilterToCurrentMonth()" class="px-3 py-1.5 bg-[#080e0b] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition whitespace-nowrap">
                             Bulan Ini
                         </button>
 
-                        <button onclick="resetTradeLogFilter()" class="px-3 py-1.5 bg-[#0a120e] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
+                        <button onclick="resetTradeLogFilter()" class="px-3 py-1.5 bg-[#080e0b] hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition">
                             Reset
                         </button>
 
@@ -525,7 +546,7 @@
                         <h3 id="tradeFormTitle" class="text-sm font-bold text-white flex items-center gap-2">
                             <i class="fa-regular fa-pen-to-square text-emerald-400"></i> New Trade Entry
                         </h3>
-                        <button onclick="toggleTradeForm(false)" class="text-gray-400 hover:text-white text-xs px-2.5 py-1 bg-[#0a120e] rounded-lg border border-emerald-500/10">
+                        <button onclick="toggleTradeForm(false)" class="text-gray-400 hover:text-white text-xs px-2.5 py-1 bg-[#080e0b] rounded-lg border border-emerald-500/10">
                             <i class="fa-solid fa-xmark"></i> Cancel
                         </button>
                     </div>
@@ -536,12 +557,12 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">DATE *</label>
-                            <input type="date" id="tradeDate" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <input type="date" id="tradeDate" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                         </div>
 
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">PAIR *</label>
-                            <select id="tradePair" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <select id="tradePair" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                                 <option value="XAUUSD">XAUUSD</option>
                                 <option value="EURUSD">EURUSD</option>
                                 <option value="GBPUSD">GBPUSD</option>
@@ -559,7 +580,7 @@
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">POSITION *</label>
                             <div class="grid grid-cols-2 gap-2">
                                 <button type="button" id="posBuyBtn" onclick="selectPos('BUY')" class="py-2.5 border border-emerald-500 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-xl shadow-sm">BUY</button>
-                                <button type="button" id="posSellBtn" onclick="selectPos('SELL')" class="py-2.5 border border-emerald-500/10 bg-[#030508] text-gray-400 text-xs font-bold rounded-xl">SELL</button>
+                                <button type="button" id="posSellBtn" onclick="selectPos('SELL')" class="py-2.5 border border-emerald-500/10 bg-[#020407] text-gray-400 text-xs font-bold rounded-xl">SELL</button>
                             </div>
                         </div>
                     </div>
@@ -568,15 +589,15 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">NET P/L *</label>
-                            <input type="number" step="any" id="tradeNetPnL" placeholder="100.00" oninput="calculateRR()" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+                            <input type="number" step="any" id="tradeNetPnL" placeholder="100.00" oninput="calculateRR()" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">RISK *</label>
-                            <input type="number" step="any" id="tradeRisk" placeholder="10.00" oninput="calculateRR()" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+                            <input type="number" step="any" id="tradeRisk" placeholder="10.00" oninput="calculateRR()" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">RR (AUTO)</label>
-                            <input type="number" step="any" id="tradeRR" placeholder="10.0" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-emerald-400 font-bold focus:outline-none font-mono">
+                            <input type="number" step="any" id="tradeRR" placeholder="10.0" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-emerald-400 font-bold focus:outline-none font-mono">
                         </div>
                     </div>
 
@@ -584,14 +605,14 @@
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">HTF OPPORTUNITY</label>
                         <div class="flex flex-wrap gap-2 items-center" id="htfOptionsGroup">
-                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">Open to High</button>
-                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">Open to Low</button>
-                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">Low to Close</button>
-                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">High to Close</button>
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">Open to High</button>
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">Open to Low</button>
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">Low to Close</button>
+                            <button type="button" onclick="toggleTagOption(this, 'htf')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">High to Close</button>
                             <button type="button" onclick="toggleCustomTagInput('htf')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
                         </div>
                         <div id="htfCustomInputContainer" class="hidden mt-2 flex gap-2">
-                            <input type="text" id="htfCustomText" placeholder="Ketik opsi HTF sendiri..." class="bg-[#030508] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
+                            <input type="text" id="htfCustomText" placeholder="Ketik opsi HTF sendiri..." class="bg-[#020407] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
                             <button type="button" onclick="addCustomTag('htf')" class="px-3 py-1.5 bg-emerald-500 text-black font-bold text-xs rounded-xl">Tambah</button>
                         </div>
                     </div>
@@ -600,15 +621,15 @@
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">CONFLUENCE</label>
                         <div class="flex flex-wrap gap-2 items-center" id="confluenceOptionsGroup">
-                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">No Confluence</button>
-                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">SMT</button>
-                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">SSMT</button>
-                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">PSP</button>
-                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">Hidden SMT</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">No Confluence</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">SMT</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">SSMT</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">PSP</button>
+                            <button type="button" onclick="toggleTagOption(this, 'confluence')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">Hidden SMT</button>
                             <button type="button" onclick="toggleCustomTagInput('confluence')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
                         </div>
                         <div id="confluenceCustomInputContainer" class="hidden mt-2 flex gap-2">
-                            <input type="text" id="confluenceCustomText" placeholder="Ketik opsi Confluence sendiri..." class="bg-[#030508] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
+                            <input type="text" id="confluenceCustomText" placeholder="Ketik opsi Confluence sendiri..." class="bg-[#020407] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
                             <button type="button" onclick="addCustomTag('confluence')" class="px-3 py-1.5 bg-emerald-500 text-black font-bold text-xs rounded-xl">Tambah</button>
                         </div>
                     </div>
@@ -617,14 +638,14 @@
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">RESULT</label>
                         <div class="flex flex-wrap gap-2 items-center" id="resultOptionsGroup">
-                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">Break Even</button>
-                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">Full TP</button>
-                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">SL</button>
-                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300">Partial</button>
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">Break Even</button>
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">Full TP</button>
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">SL</button>
+                            <button type="button" onclick="toggleTagOption(this, 'result')" class="btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300">Partial</button>
                             <button type="button" onclick="toggleCustomTagInput('result')" class="text-xs px-3 py-1.5 rounded-xl border border-dashed border-emerald-500/40 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition">+ Custom</button>
                         </div>
                         <div id="resultCustomInputContainer" class="hidden mt-2 flex gap-2">
-                            <input type="text" id="resultCustomText" placeholder="Ketik opsi Result sendiri..." class="bg-[#030508] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
+                            <input type="text" id="resultCustomText" placeholder="Ketik opsi Result sendiri..." class="bg-[#020407] border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 flex-grow">
                             <button type="button" onclick="addCustomTag('result')" class="px-3 py-1.5 bg-emerald-500 text-black font-bold text-xs rounded-xl">Tambah</button>
                         </div>
                     </div>
@@ -633,11 +654,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">TRADINGVIEW / CHART LINK</label>
-                            <input type="url" id="tradeLink" placeholder="https://www.tradingview.com/x/..." class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <input type="url" id="tradeLink" placeholder="https://www.tradingview.com/x/..." class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">SCREENSHOT URL / LINK</label>
-                            <input type="text" id="tradeScreenshot" placeholder="Image URL or screenshot link" class="w-full bg-[#030508] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <input type="text" id="tradeScreenshot" placeholder="Image URL or screenshot link" class="w-full bg-[#020407] border border-emerald-500/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                         </div>
                     </div>
 
@@ -654,7 +675,7 @@
                     <div id="tradeLogTableView" class="glass-card rounded-2xl overflow-hidden shadow-2xl">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-xs text-gray-300">
-                                <thead class="bg-[#05080d] border-b border-emerald-500/10 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                <thead class="bg-[#04070a] border-b border-emerald-500/10 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                                     <tr>
                                         <th class="py-3.5 px-4">Date</th>
                                         <th class="py-3.5 px-4">Pair</th>
@@ -698,9 +719,9 @@
                     </h3>
                     <div class="flex items-center gap-2 text-xs">
                         <span class="text-gray-400">From:</span>
-                        <input type="date" id="analyticsFromDate" onchange="updateAnalyticsCharts()" class="bg-[#030508] border border-emerald-500/20 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                        <input type="date" id="analyticsFromDate" onchange="updateAnalyticsCharts()" class="bg-[#020407] border border-emerald-500/20 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
                         <span class="text-gray-400">To:</span>
-                        <input type="date" id="analyticsToDate" onchange="updateAnalyticsCharts()" class="bg-[#030508] border border-emerald-500/20 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                        <input type="date" id="analyticsToDate" onchange="updateAnalyticsCharts()" class="bg-[#020407] border border-emerald-500/20 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
                     </div>
                 </div>
 
@@ -1267,7 +1288,7 @@
             const m = document.getElementById('dashFilterMonth').value;
             const y = document.getElementById('dashFilterYear').value;
             currentCalendarDate = new Date(parseInt(y), parseInt(m) - 1, 1);
-            selectedCalendarDateStr = null; // Reset filter tanggal saat bulan/tahun diganti
+            selectedCalendarDateStr = null; 
             refreshActiveAccountData();
         }
 
@@ -1370,7 +1391,7 @@
 
             for (let i = 0; i < adjustedFirstDay; i++) {
                 const emptyCell = document.createElement('div');
-                emptyCell.className = "calendar-day bg-[#040609]/30 rounded-xl opacity-20 border border-transparent";
+                emptyCell.className = "calendar-day bg-[#040609]/30 rounded-xl opacity-25 border border-transparent";
                 calendarDaysContainer.appendChild(emptyCell);
             }
 
@@ -1391,8 +1412,8 @@
                 const cell = document.createElement('div');
                 const isSelected = selectedCalendarDateStr === dayDateStr;
 
-                cell.className = `calendar-day rounded-xl p-1.5 flex flex-col justify-between border cursor-pointer ${
-                    isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/10' : 'border-emerald-500/10 bg-[#0a120e] hover:border-emerald-500/40'
+                cell.className = `calendar-day rounded-xl p-1 sm:p-1.5 flex flex-col justify-between border cursor-pointer ${
+                    isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/15' : 'border-emerald-500/15 bg-[#080e0b] hover:border-emerald-500/50'
                 }`;
 
                 cell.onclick = () => selectCalendarDate(dayDateStr, isMainDashboard);
@@ -1402,14 +1423,15 @@
                     const colorClass = dayNetPnL >= 0 ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
                     const formattedAmount = (dayNetPnL >= 0 ? '+' : '-') + formatMoneyShort(Math.abs(dayNetPnL), curr);
                     badgeHTML = `
-                        <div class="text-[9px] font-mono ${colorClass} truncate leading-tight mt-0.5">
-                            ${formattedAmount} (${dayTrades.length}t)
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-[9px] sm:text-[10px] font-mono ${colorClass} leading-tight mt-0.5 truncate">
+                            <span class="truncate">${formattedAmount}</span>
+                            <span class="text-[8px] sm:text-[9px] text-gray-400 font-sans font-semibold">(${dayTrades.length}t)</span>
                         </div>
                     `;
                 }
 
                 cell.innerHTML = `
-                    <div class="flex items-center justify-between text-[11px] font-bold ${dayTrades.length > 0 ? 'text-white' : 'text-gray-500'}">
+                    <div class="flex items-center justify-between text-[10px] sm:text-[11px] font-bold ${dayTrades.length > 0 ? 'text-white' : 'text-gray-500'}">
                         <span>${day}</span>
                         ${dayTrades.length > 0 ? `<span class="w-1.5 h-1.5 rounded-full ${dayNetPnL >= 0 ? 'bg-emerald-400 shadow-sm shadow-emerald-400' : 'bg-red-400 shadow-sm shadow-red-400'}"></span>` : ''}
                     </div>
@@ -1429,13 +1451,13 @@
             const newYStr = String(currentCalendarDate.getFullYear());
             document.getElementById('dashFilterMonth').value = newMStr;
             document.getElementById('dashFilterYear').value = newYStr;
-            selectedCalendarDateStr = null; // Reset filter tanggal saat navigasi bulan
+            selectedCalendarDateStr = null; 
             refreshActiveAccountData();
         }
 
         function selectCalendarDate(dateStr, isMainDashboard = true) {
             if (selectedCalendarDateStr === dateStr) {
-                selectedCalendarDateStr = null; // Toggle off jika diklik dua kali
+                selectedCalendarDateStr = null; 
             } else {
                 selectedCalendarDateStr = dateStr;
             }
@@ -1467,14 +1489,12 @@
             const year = currentCalendarDate.getFullYear();
             const month = currentCalendarDate.getMonth();
 
-            // Saring trade berdasarkan bulan aktif di Dashboard terlebih dahulu
             let monthTrades = trades.filter(t => {
                 if (!t.date) return false;
                 const d = new Date(t.date);
                 return d.getFullYear() === year && d.getMonth() === month;
             });
 
-            // Jika ada tanggal spesifik yang diklik di kalender, saring lagi berdasarkan tanggal tersebut
             if (selectedCalendarDateStr) {
                 monthTrades = monthTrades.filter(t => t.date === selectedCalendarDateStr);
                 titleEl.innerText = `Trades for ${selectedCalendarDateStr}`;
@@ -1502,7 +1522,7 @@
                 const isWin = pnlNum >= 0;
                 const formattedPnL = (isWin ? '+' : '-') + formatMoney(Math.abs(pnlNum), curr);
                 const card = document.createElement('div');
-                card.className = "bg-[#0a120e] border border-emerald-500/10 rounded-xl p-3 flex items-center justify-between gap-3 hover:border-emerald-500/30 transition";
+                card.className = "bg-[#080e0b] border border-emerald-500/15 rounded-xl p-3 flex items-center justify-between gap-3 hover:border-emerald-500/40 transition";
                 card.innerHTML = `
                     <div class="flex items-center gap-3">
                         <span class="px-2 py-0.5 rounded text-[10px] font-black tracking-wider ${isWin ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">
@@ -1560,7 +1580,7 @@
                 const hasTrades = monthTrades.length > 0;
                 
                 card.className = `p-3.5 rounded-xl border cursor-pointer transition flex flex-col justify-between ${
-                    hasTrades ? (mPnL >= 0 ? 'bg-emerald-500/5 border-emerald-500/30 hover:border-emerald-500' : 'bg-red-500/5 border-red-500/30 hover:border-red-500') : 'bg-[#0a120e] border-emerald-500/10 opacity-60 hover:opacity-100'
+                    hasTrades ? (mPnL >= 0 ? 'bg-emerald-500/5 border-emerald-500/30 hover:border-emerald-500' : 'bg-red-500/5 border-red-500/30 hover:border-red-500') : 'bg-[#080e0b] border-emerald-500/10 opacity-60 hover:opacity-100'
                 }`;
 
                 card.onclick = () => showMonthDetailFromYearly(selectedYear, mNumStr, monthNames[m]);
@@ -1617,7 +1637,7 @@
 
             let calendarCellsHtml = '';
             for (let i = 0; i < adjustedFirstDay; i++) {
-                calendarCellsHtml += `<div class="calendar-day bg-[#040609]/30 rounded-xl opacity-20 border border-transparent"></div>`;
+                calendarCellsHtml += `<div class="calendar-day bg-[#040609]/30 rounded-xl opacity-25 border border-transparent"></div>`;
             }
 
             for (let day = 1; day <= daysInMonth; day++) {
@@ -1630,14 +1650,19 @@
                 if (dayTrades.length > 0) {
                     const colorClass = dayNetPnL >= 0 ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
                     const formattedAmount = (dayNetPnL >= 0 ? '+' : '-') + formatMoneyShort(Math.abs(dayNetPnL), curr);
-                    badgeHTML = `<div class="text-[9px] font-mono ${colorClass} truncate leading-tight mt-0.5">${formattedAmount} (${dayTrades.length}t)</div>`;
+                    badgeHTML = `
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-[9px] sm:text-[10px] font-mono ${colorClass} leading-tight mt-0.5 truncate">
+                            <span class="truncate">${formattedAmount}</span>
+                            <span class="text-[8px] sm:text-[9px] text-gray-400 font-sans font-semibold">(${dayTrades.length}t)</span>
+                        </div>
+                    `;
                 }
 
                 calendarCellsHtml += `
-                    <div onclick="selectCalendarDate('${dayDateStr}', false)" class="calendar-day rounded-xl p-1.5 flex flex-col justify-between border cursor-pointer ${
-                        isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/10' : 'border-emerald-500/10 bg-[#0a120e] hover:border-emerald-500/40'
+                    <div onclick="selectCalendarDate('${dayDateStr}', false)" class="calendar-day rounded-xl p-1 sm:p-1.5 flex flex-col justify-between border cursor-pointer ${
+                        isSelected ? 'ring-2 ring-emerald-400 border-emerald-400 bg-emerald-500/15' : 'border-emerald-500/15 bg-[#080e0b] hover:border-emerald-500/40'
                     }">
-                        <div class="flex items-center justify-between text-[11px] font-bold ${dayTrades.length > 0 ? 'text-white' : 'text-gray-500'}">
+                        <div class="flex items-center justify-between text-[10px] sm:text-[11px] font-bold ${dayTrades.length > 0 ? 'text-white' : 'text-gray-500'}">
                             <span>${day}</span>
                             ${dayTrades.length > 0 ? `<span class="w-1.5 h-1.5 rounded-full ${dayNetPnL >= 0 ? 'bg-emerald-400 shadow-sm shadow-emerald-400' : 'bg-red-400 shadow-sm shadow-red-400'}"></span>` : ''}
                         </div>
@@ -1659,7 +1684,7 @@
                 tradesTableHtml = `
                     <div class="overflow-x-auto pt-2">
                         <table class="w-full text-left text-xs text-gray-300">
-                            <thead class="bg-[#05080d] text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-emerald-500/10">
+                            <thead class="bg-[#04070a] text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-emerald-500/10">
                                 <tr>
                                     <th class="py-2 px-3">Date</th>
                                     <th class="py-2 px-3">Pair</th>
@@ -1693,31 +1718,31 @@
                     <h4 class="text-sm font-black text-emerald-400 flex items-center gap-2">
                         <i class="fa-solid fa-calendar-days"></i> Monthly Performance & Calendar View: ${monthName} ${year}
                     </h4>
-                    <button onclick="document.getElementById('selectedMonthDetailContainer').classList.add('hidden')" class="text-xs text-gray-400 hover:text-white px-2.5 py-1 bg-[#0a120e] rounded-lg border border-emerald-500/10">Tutup</button>
+                    <button onclick="document.getElementById('selectedMonthDetailContainer').classList.add('hidden')" class="text-xs text-gray-400 hover:text-white px-2.5 py-1 bg-[#080e0b] rounded-lg border border-emerald-500/10">Tutup</button>
                 </div>
 
                 <!-- Ringkasan Kartu Metrik -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div class="bg-[#0a120e] p-3 rounded-xl border border-emerald-500/10">
+                    <div class="bg-[#080e0b] p-3 rounded-xl border border-emerald-500/10">
                         <span class="text-[10px] text-gray-400 uppercase font-bold">Total PnL</span>
                         <div class="text-base font-black font-mono ${mPnL >= 0 ? 'text-emerald-400' : 'text-red-400'} mt-0.5">${(mPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(mPnL), curr)}</div>
                     </div>
-                    <div class="bg-[#0a120e] p-3 rounded-xl border border-emerald-500/10">
+                    <div class="bg-[#080e0b] p-3 rounded-xl border border-emerald-500/10">
                         <span class="text-[10px] text-gray-400 uppercase font-bold">Win Rate</span>
                         <div class="text-base font-black text-white mt-0.5">${mWinRate}% (${mWins}/${monthTrades.length})</div>
                     </div>
-                    <div class="bg-[#0a120e] p-3 rounded-xl border border-emerald-500/10">
+                    <div class="bg-[#080e0b] p-3 rounded-xl border border-emerald-500/10">
                         <span class="text-[10px] text-gray-400 uppercase font-bold">Avg R:R</span>
                         <div class="text-base font-black text-amber-400 font-mono mt-0.5">${avgRR}</div>
                     </div>
-                    <div class="bg-[#0a120e] p-3 rounded-xl border border-emerald-500/10">
+                    <div class="bg-[#080e0b] p-3 rounded-xl border border-emerald-500/10">
                         <span class="text-[10px] text-gray-400 uppercase font-bold">Total Trades</span>
                         <div class="text-base font-black text-emerald-400 mt-0.5">${monthTrades.length} Trades</div>
                     </div>
                 </div>
 
                 <!-- Tampilan Monthly Calendar View -->
-                <div class="bg-[#030508] p-4 rounded-xl border border-emerald-500/10 space-y-3">
+                <div class="bg-[#020407] p-4 rounded-xl border border-emerald-500/10 space-y-3">
                     <div class="flex items-center justify-between">
                         <div class="text-xs font-bold text-gray-300">Kalender Harian — ${monthName} ${year} (Klik tanggal untuk filter)</div>
                         ${selectedCalendarDateStr ? `<button onclick="selectedCalendarDateStr=null; showMonthDetailFromYearly(${year}, '${monthStr}', '${monthName}')" class="text-[11px] text-emerald-400 hover:underline font-bold">Reset Filter Tanggal</button>` : ''}
@@ -1725,7 +1750,7 @@
                     <div class="calendar-grid text-center text-[10px] font-black text-gray-400 uppercase tracking-widest py-1 border-b border-emerald-500/5">
                         <div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div><div>Su</div>
                     </div>
-                    <div class="calendar-grid gap-1.5">
+                    <div class="calendar-grid gap-1 sm:gap-1.5">
                         ${calendarCellsHtml}
                     </div>
                 </div>
@@ -1826,10 +1851,10 @@
                     <td class="py-3.5 px-4 text-gray-400 text-[11px] whitespace-nowrap">${t.htf || '—'}</td>
                     <td class="py-3.5 px-4 text-gray-400 text-[11px] whitespace-nowrap">${t.confluence || '—'}</td>
                     <td class="py-3.5 px-4 whitespace-nowrap">
-                        <span class="px-2 py-0.5 rounded text-[10px] bg-[#0a120e] text-gray-300 border border-emerald-500/10">${t.result || 'N/A'}</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] bg-[#080e0b] text-gray-300 border border-emerald-500/10">${t.result || 'N/A'}</span>
                     </td>
                     <td class="py-3.5 px-4 text-right whitespace-nowrap">
-                        <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#0a120e] hover:bg-emerald-500 hover:text-black text-emerald-400 border border-emerald-500/20 text-[11px] rounded-lg transition mr-1">Edit</button>
+                        <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#080e0b] hover:bg-emerald-500 hover:text-black text-emerald-400 border border-emerald-500/20 text-[11px] rounded-lg transition mr-1">Edit</button>
                         <button onclick="deleteTrade('${t.id}')" class="px-2.5 py-1 bg-red-500/20 hover:bg-red-500 hover:text-white text-red-400 border border-red-500/30 text-[11px] rounded-lg transition"><i class="fa-solid fa-trash-can"></i></button>
                     </td>
                 `;
@@ -1872,7 +1897,7 @@
                     <div class="flex items-center justify-between pt-3 border-t border-emerald-500/10">
                         ${linkBtnHtml}
                         <div class="flex items-center gap-1.5 ml-auto">
-                            <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#0a120e] text-emerald-400 border border-emerald-500/20 text-[11px] rounded-lg">Edit</button>
+                            <button onclick="editTrade('${t.id}')" class="px-2.5 py-1 bg-[#080e0b] text-emerald-400 border border-emerald-500/20 text-[11px] rounded-lg">Edit</button>
                             <button onclick="deleteTrade('${t.id}')" class="px-2.5 py-1 bg-red-500/20 text-red-400 border border-red-500/30 text-[11px] rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                     </div>
@@ -1903,10 +1928,10 @@
 
             if (pos === 'BUY') {
                 buyBtn.className = "py-2.5 border border-emerald-500 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-xl shadow-sm";
-                sellBtn.className = "py-2.5 border border-emerald-500/10 bg-[#030508] text-gray-400 text-xs font-bold rounded-xl";
+                sellBtn.className = "py-2.5 border border-emerald-500/10 bg-[#020407] text-gray-400 text-xs font-bold rounded-xl";
             } else {
                 sellBtn.className = "py-2.5 border border-red-500 bg-red-500/20 text-red-400 text-xs font-bold rounded-xl shadow-sm";
-                buyBtn.className = "py-2.5 border border-emerald-500/10 bg-[#030508] text-gray-400 text-xs font-bold rounded-xl";
+                buyBtn.className = "py-2.5 border border-emerald-500/10 bg-[#020407] text-gray-400 text-xs font-bold rounded-xl";
             }
         }
 
@@ -1941,7 +1966,7 @@
 
             const newBtn = document.createElement('button');
             newBtn.type = 'button';
-            newBtn.className = 'btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#030508] text-gray-300 active';
+            newBtn.className = 'btn-tag text-xs px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-[#020407] text-gray-300 active';
             newBtn.innerText = val;
             newBtn.onclick = function() { toggleTagOption(newBtn, category); };
 
@@ -2207,7 +2232,7 @@
                         data: pnls.map(v => Math.abs(v) || 1),
                         backgroundColor: ['#10B981', '#3B82F6', '#F59E0B', '#EC4899', '#8B5CF6', '#14B8A6'],
                         borderWidth: 2,
-                        borderColor: '#05080c'
+                        borderColor: '#020407'
                     }]
                 },
                 options: {
@@ -2252,7 +2277,7 @@
                         data: [wins, losses, bes],
                         backgroundColor: ['#10B981', '#EF4444', '#6B7280'],
                         borderWidth: 2,
-                        borderColor: '#05080c'
+                        borderColor: '#020407'
                     }]
                 },
                 options: {
