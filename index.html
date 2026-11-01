@@ -2912,6 +2912,10 @@
         function renderBarChart(canvasId, labels, data, label, curr) {
             if (charts[canvasId]) charts[canvasId].destroy();
             const ctx = document.getElementById(canvasId).getContext('2d');
+            
+            // Set font family secara global untuk Chart.js agar konsisten menggunakan font Inter
+            Chart.defaults.font.family = 'Inter, system-ui, -apple-system, sans-serif';
+
             charts[canvasId] = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -2930,8 +2934,8 @@
                     plugins: { 
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: 'rgba(2, 4, 7, 0.9)',
-                            titleFont: { family: 'Inter', size: 12 },
+                            backgroundColor: 'rgba(2, 4, 7, 0.95)',
+                            titleFont: { family: 'Inter', size: 12, weight: 'bold' },
                             bodyFont: { family: 'Inter', size: 12 },
                             titleColor: '#10B981',
                             bodyColor: '#FFFFFF',
@@ -2949,7 +2953,10 @@
                     scales: {
                         x: { 
                             grid: { display: false }, 
-                            ticks: { color: '#9CA3AF', font: { weight: 'bold', size: 11, family: 'Inter' } } 
+                            ticks: { 
+                                color: '#9CA3AF', 
+                                font: { weight: '600', size: 11, family: 'Inter' } 
+                            } 
                         },
                         y: { 
                             grid: { color: 'rgba(16, 185, 129, 0.08)' }, 
