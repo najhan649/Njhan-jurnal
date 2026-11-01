@@ -2962,8 +2962,8 @@
                             grid: { color: 'rgba(16, 185, 129, 0.08)' }, 
                             ticks: { 
                                 color: '#9CA3AF',
-                                // Font Inter eksplisit pada sumbu Y agar sama persis dengan yang lain
-                                font: { size: 10, family: 'Inter', weight: '500' },
+                                // Font Inter eksplisit dengan weight '600' agar seragam dengan teks UI lain
+                                font: { size: 11, family: 'Inter', weight: '600' },
                                 callback: function(val) { 
                                     const n = Number(val);
                                     return formatMoneyShort(n, curr);
