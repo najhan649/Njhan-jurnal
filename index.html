@@ -776,11 +776,11 @@
                     </div>
                 </div>
 
-                <!-- 2. EQUITY CURVE (GAYA MENYERUPAI REFERENSI GAMBAR) -->
+                <!-- 2. EQUITY CURVE -->
                 <div class="glass-card p-5 sm:p-7 rounded-3xl shadow-2xl space-y-4 border border-emerald-500/30 bg-gradient-to-b from-[#060a08] to-[#020407]">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div>
-                            <span class="text-[10px] font-black uppercase tracking-widest text-emerald-400/80">PERFORMANCE CURVE</span>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-emerald-400/80">EQUITY CURVE</span>
                             <div id="analyticsEquityBigPnL" class="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono drop-shadow-[0_0_15px_rgba(16,185,129,0.5)] mt-1">
                                 +$0.00
                             </div>
@@ -1938,6 +1938,8 @@
                 });
 
                 const mPnL = monthTrades.reduce((sum, t) => sum + Number(t.netPnL || 0), 0);
+                const wins = monthTrades.filter(t => Number(t.netPnL) > 0).length;
+                const winRate = monthTrades.length > 0 ? Math.round((wins / monthTrades.length) * 100) : 0;
 
                 const card = document.createElement('div');
                 const hasTrades = monthTrades.length > 0;
@@ -1956,6 +1958,9 @@
                     <div>
                         <div class="text-xs sm:text-sm font-black font-mono ${hasTrades ? (mPnL >= 0 ? 'text-emerald-400' : 'text-red-400') : 'text-gray-500'}">
                             ${hasTrades ? ((mPnL >= 0 ? '+' : '-') + formatMoneyShort(Math.abs(mPnL), curr)) : '—'}
+                        </div>
+                        <div class="text-[10px] font-bold font-mono ${hasTrades ? 'text-gray-300' : 'text-gray-600'} mt-1">
+                            ${hasTrades ? `WR: ${winRate}%` : 'WR: —'}
                         </div>
                     </div>
                 `;
