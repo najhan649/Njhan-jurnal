@@ -2678,7 +2678,7 @@
                                 count: 4 
                             },
                             ticks: { display: false },
-                            pointLabels: { color: '#10B981', font: { size: 10, weight: 'bold' } }
+                            pointLabels: { color: '#10B981', font: { size: 10, weight: 'bold', family: 'Inter' } }
                         }
                     }
                 }
@@ -2826,6 +2826,9 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: {
+                            backgroundColor: 'rgba(2, 4, 7, 0.9)',
+                            titleFont: { family: 'Inter', size: 12 },
+                            bodyFont: { family: 'Inter', size: 12 },
                             callbacks: {
                                 label: function(context) {
                                     return ` ${context.label}: ${context.raw} Trades`;
@@ -2871,6 +2874,8 @@
                         legend: { display: false },
                         tooltip: {
                             backgroundColor: 'rgba(2, 4, 7, 0.9)',
+                            titleFont: { family: 'Inter', size: 12 },
+                            bodyFont: { family: 'Inter', size: 12 },
                             titleColor: '#10B981',
                             bodyColor: '#FFFFFF',
                             borderColor: 'rgba(16, 185, 129, 0.3)',
@@ -2886,13 +2891,13 @@
                     scales: {
                         x: { 
                             grid: { color: 'rgba(16, 185, 129, 0.06)' }, 
-                            ticks: { color: '#6B7280', font: { size: 10 } } 
+                            ticks: { color: '#6B7280', font: { size: 10, family: 'Inter' } } 
                         },
                         y: { 
                             grid: { color: 'rgba(16, 185, 129, 0.06)' }, 
                             ticks: { 
                                 color: '#6B7280',
-                                font: { size: 10 },
+                                font: { size: 10, family: 'Inter' },
                                 callback: function(val) { 
                                     const n = Number(val);
                                     return formatMoneyShort(n, curr); 
@@ -2925,21 +2930,32 @@
                     plugins: { 
                         legend: { display: false },
                         tooltip: {
+                            backgroundColor: 'rgba(2, 4, 7, 0.9)',
+                            titleFont: { family: 'Inter', size: 12 },
+                            bodyFont: { family: 'Inter', size: 12 },
+                            titleColor: '#10B981',
+                            bodyColor: '#FFFFFF',
+                            borderColor: 'rgba(16, 185, 129, 0.3)',
+                            borderWidth: 1,
                             callbacks: {
                                 label: function(context) {
                                     const val = Number(context.raw) || 0;
                                     const formattedPnL = (val >= 0 ? '+' : '-') + formatMoney(Math.abs(val), curr);
-                                    return `PnL: ${formattedPnL}`;
+                                    return ` PnL: ${formattedPnL}`;
                                 }
                             }
                         }
                     },
                     scales: {
-                        x: { grid: { display: false }, ticks: { color: '#9CA3AF', font: { weight: 'bold' } } },
+                        x: { 
+                            grid: { display: false }, 
+                            ticks: { color: '#9CA3AF', font: { weight: 'bold', size: 11, family: 'Inter' } } 
+                        },
                         y: { 
                             grid: { color: 'rgba(16, 185, 129, 0.08)' }, 
                             ticks: { 
                                 color: '#9CA3AF',
+                                font: { size: 10, family: 'Inter' },
                                 callback: function(val) { 
                                     const n = Number(val);
                                     return formatMoneyShort(n, curr);
