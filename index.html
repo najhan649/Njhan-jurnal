@@ -14,7 +14,7 @@
                     colors: {
                         darkBg: '#020407',
                         cardBg: '#020407',
-                        cardBorder: 'rgba(59, 130, 246, 0.35)',
+                        cardBorder: 'rgba(16, 185, 129, 0.2)', // Warna border tetap standar/bawaan
                         brandGreen: '#10B981',
                         brandGreenGlow: '#22C55E',
                         brandRed: '#EF4444',
@@ -50,14 +50,24 @@
             background: #020407;
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(59, 130, 246, 0.35);
-            box-shadow: 0 25px 60px 0 rgba(0, 0, 0, 0.85);
+            /* Warna border dibiarkan standar sesuai aslinya */
+            border: 1px solid rgba(16, 185, 129, 0.2); 
+            /* Efek glow/bayangan cahaya dibuat aktif selamanya (selalu muncul tanpa harus disentuh) */
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.15), 0 25px 60px 0 rgba(0, 0, 0, 0.85);
             transition: all 0.3s ease;
         }
 
-        .glass-card:hover {
-            border-color: rgba(59, 130, 246, 0.75);
-            box-shadow: 0 0 25px rgba(59, 130, 246, 0.25), 0 25px 60px 0 rgba(0, 0, 0, 0.85);
+        /* Jika ingin efek glow-nya sedikit berdenyut (pulsing) secara otomatis agar lebih hidup: */
+        @keyframes permanentGlow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(16, 185, 129, 0.12), 0 25px 60px 0 rgba(0, 0, 0, 0.85);
+            }
+            50% {
+                box-shadow: 0 0 28px rgba(16, 185, 129, 0.28), 0 25px 60px 0 rgba(0, 0, 0, 0.85);
+            }
+        }
+        .glass-card {
+            animation: permanentGlow 4s ease-in-out infinite;
         }
 
         ::-webkit-scrollbar {
@@ -149,7 +159,7 @@
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-2.5 cursor-pointer group" onclick="switchView('accounts')">
-                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-lg sm:text-xl shadow-lg shadow-emerald-900/50 group-hover:scale-105 transition-transform duration-300">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-lg sm:text-xl shadow-lg shadow-emerald-950/50 group-hover:scale-105 transition-transform duration-300">
                         N
                     </div>
                     <div>
@@ -184,7 +194,7 @@
     <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/65 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="max-w-xl w-full text-center space-y-8 animate-fade-in relative z-20 px-4">
             <div class="space-y-4">
-                <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-4xl mx-auto shadow-2xl shadow-emerald-900/60 ring-4 ring-emerald-400/20 animate-pulse">
+                <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-4xl mx-auto shadow-2xl shadow-emerald-950/60 ring-4 ring-emerald-400/20 animate-pulse">
                     N
                 </div>
                 <div>
@@ -307,7 +317,7 @@
 
                     <div class="flex justify-end gap-2 pt-2">
                         <button onclick="toggleAddAccountForm(false)" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-white rounded-xl transition">Cancel</button>
-                        <button onclick="createAccount()" class="px-5 py-2 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl transition shadow-lg shadow-emerald-900/30">Save Account</button>
+                        <button onclick="createAccount()" class="px-5 py-2 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-black text-xs font-bold rounded-xl transition shadow-lg shadow-emerald-950/30">Save Account</button>
                     </div>
                 </div>
 
