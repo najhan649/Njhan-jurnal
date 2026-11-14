@@ -14,7 +14,7 @@
                     colors: {
                         darkBg: '#020407',
                         cardBg: '#020407',
-                        cardBorder: 'rgba(16, 185, 129, 0.2)', // Warna border tetap standar/bawaan
+                        cardBorder: 'rgba(16, 185, 129, 0.2)',
                         brandGreen: '#10B981',
                         brandGreenGlow: '#22C55E',
                         brandRed: '#EF4444',
@@ -50,14 +50,11 @@
             background: #020407;
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            /* Warna border dibiarkan standar sesuai aslinya */
             border: 1px solid rgba(16, 185, 129, 0.2); 
-            /* Efek glow/bayangan cahaya dibuat aktif selamanya (selalu muncul tanpa harus disentuh) */
             box-shadow: 0 0 20px rgba(16, 185, 129, 0.15), 0 25px 60px 0 rgba(0, 0, 0, 0.85);
             transition: all 0.3s ease;
         }
 
-        /* Jika ingin efek glow-nya sedikit berdenyut (pulsing) secara otomatis agar lebih hidup: */
         @keyframes permanentGlow {
             0%, 100% {
                 box-shadow: 0 0 15px rgba(16, 185, 129, 0.12), 0 25px 60px 0 rgba(0, 0, 0, 0.85);
@@ -1554,29 +1551,39 @@
 
                 card.innerHTML = `
                     <div class="flex items-start justify-between cursor-pointer" onclick="window.appData.selectedAccountId = '${acc.id}'; switchView('workspace');">
-                        <div class="space-y-1">
-                            <div class="flex items-center gap-2">
-                                <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider ${
-                                    acc.type === 'FUNDED' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' :
-                                    acc.type === 'DEMO' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                                    'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                                }">${acc.type}</span>
-                                <span class="px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-gray-800 text-gray-300 border border-gray-700">${curr}</span>
+                        <div class="space-y-2 w-full">
+                            <!-- Header Atas: Jenis Akun & Nama Akun + Currency Kecil -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider ${
+                                        acc.type === 'FUNDED' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' :
+                                        acc.type === 'DEMO' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                                        'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                                    }">${acc.type}</span>
+                                </div>
+                                <button class="delete-acc-btn text-gray-500 hover:text-red-400 p-1 rounded-xl transition" onclick="event.stopPropagation(); confirmDeleteAccount('${acc.id}', '${acc.name}')" title="Delete Account">
+                                    <i class="fa-solid fa-xmark text-lg"></i>
+                                </button>
                             </div>
-                            <h3 class="text-xl font-black text-white group-hover:text-emerald-400 transition">${acc.name}</h3>
-                            <div class="flex items-center gap-2 text-xs font-mono font-bold ${balanceColorClass}">
-                                <span>${pnlSign}${formatMoney(netProfit, curr)}</span>
-                                <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">${pnlSign}${growthPct}% Growth</span>
-                            </div>
-                            <p class="text-[11px] text-gray-400 font-sans">
-                                Starting: <span class="font-mono text-gray-200">${formatMoney(acc.startingBalance, curr)}</span> &bull; Current: <span class="font-mono font-bold text-emerald-400">${formatMoney(currentBalance, curr)}</span>
-                            </p>
-                        </div>
 
-                        <div class="flex items-center gap-3">
-                            <button class="delete-acc-btn text-gray-500 hover:text-red-400 p-2 rounded-xl transition" onclick="confirmDeleteAccount('${acc.id}', '${acc.name}')" title="Delete Account">
-                                <i class="fa-solid fa-xmark text-lg"></i>
-                            </button>
+                            <div>
+                                <h3 class="text-xl font-black text-white group-hover:text-emerald-400 transition flex items-baseline gap-2">
+                                    ${acc.name} 
+                                    <span class="text-xs font-normal text-gray-400 lowercase font-mono">(${curr})</span>
+                                </h3>
+                            </div>
+
+                            <!-- Baris 2: Starting & Current Balance -->
+                            <div class="text-xs text-gray-400 font-sans">
+                                Starting : <span class="font-mono text-gray-200">${formatMoney(acc.startingBalance, curr)}</span> &bull; Current : <span class="font-mono font-bold text-emerald-400">${formatMoney(currentBalance, curr)}</span>
+                            </div>
+
+                            <!-- Baris 3: Total PnL & Growth Percentage -->
+                            <div class="flex items-center gap-2 text-xs font-mono font-bold pt-0.5">
+                                <span class="${balanceColorClass}">${pnlSign}${formatMoney(netProfit, curr)}</span>
+                                <span class="text-gray-500">&bull;</span>
+                                <span class="text-emerald-400 font-semibold">${pnlSign}${growthPct}% growth</span>
+                            </div>
                         </div>
                     </div>
 
