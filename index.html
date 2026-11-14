@@ -314,7 +314,7 @@
                 </button>
             </div>
 
-            <div id="accountsList" class="space-y-3">
+            <div id="accountsList" class="space-y-4">
             </div>
         </section>
 
@@ -1516,47 +1516,136 @@
             if (!container) return;
             container.innerHTML = '';
 
-            window.appData.accounts.forEach(acc => {
+            window.appData.accounts.forEach((acc, index) => {
                 const accTrades = window.appData.trades.filter(t => t.accountId === acc.id);
+                accTrades.sort((a, b) => new Date(a.date) - new Date(b.date));
+
                 const netProfit = accTrades.reduce((sum, t) => sum + (Number(t.netPnL) || 0), 0);
                 const currentBalance = Number(acc.startingBalance) + netProfit;
                 const curr = acc.currency || 'USD';
+                const growthPct = Number(acc.startingBalance) > 0 ? ((netProfit / Number(acc.startingBalance)) * 100).toFixed(2) : '0.00';
+
+                // Hitung data untuk Mini Equity Curve di Card Akun
+                let cumulativeBalance = Number(acc.startingBalance);
+                const chartLabels = ['Start'];
+                const chartData = [cumulativeBalance];
+                accTrades.forEach(t => {
+                    cumulativeBalance += Number(t.netPnL || 0);
+                    chartLabels.push(t.date);
+                    chartData.push(cumulativeBalance);
+                });
 
                 const card = document.createElement('div');
-                card.className = "glass-card hover:border-emerald-500/50 rounded-2xl p-4 sm:p-5 shadow-lg flex items-center justify-between transition duration-300 cursor-pointer group";
+                card.className = "glass-card hover:border-emerald-500/50 rounded-2xl p-5 shadow-xl transition duration-300 group space-y-4";
                 
-                card.onclick = (e) => {
-                    if (e.target.closest('.delete-acc-btn')) return;
-                    window.appData.selectedAccountId = acc.id;
-                    switchView('workspace');
-                };
-
                 const balanceColorClass = netProfit > 0 ? 'text-emerald-400' : netProfit < 0 ? 'text-red-400' : 'text-emerald-400';
+                const pnlSign = netProfit >= 0 ? '+' : '';
 
                 card.innerHTML = `
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider ${
-                                acc.type === 'FUNDED' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' :
-                                acc.type === 'DEMO' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                                'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                            }">${acc.type}</span>
-                            <span class="px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-gray-800 text-gray-300 border border-gray-700">${curr}</span>
+                    <div class="flex items-start justify-between cursor-pointer" onclick="window.appData.selectedAccountId = '${acc.id}'; switchView('workspace');">
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider ${
+                                    acc.type === 'FUNDED' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' :
+                                    acc.type === 'DEMO' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                                    'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                                }">${acc.type}</span>
+                                <span class="px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-gray-800 text-gray-300 border border-gray-700">${curr}</span>
+                            </div>
+                            <h3 class="text-xl font-black text-white group-hover:text-emerald-400 transition">${acc.name}</h3>
+                            <div class="flex items-center gap-2 text-xs font-mono font-bold ${balanceColorClass}">
+                                <span>${pnlSign}${formatMoney(netProfit, curr)}</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">${pnlSign}${growthPct}% Growth</span>
+                            </div>
+                            <p class="text-[11px] text-gray-400 font-sans">
+                                Starting: <span class="font-mono text-gray-200">${formatMoney(acc.startingBalance, curr)}</span> &bull; Current: <span class="font-mono font-bold text-emerald-400">${formatMoney(currentBalance, curr)}</span>
+                            </p>
                         </div>
-                        <h3 class="text-lg sm:text-xl font-black text-white group-hover:text-emerald-400 transition">${acc.name}</h3>
-                        <p class="text-xs sm:text-sm font-bold font-mono ${balanceColorClass}">
-                            ${formatMoney(currentBalance, curr)} 
-                            <span class="text-[10px] font-normal text-gray-400 font-sans ml-1">Starting: ${formatMoney(acc.startingBalance, curr)}</span>
-                        </p>
+
+                        <div class="flex items-center gap-3">
+                            <button class="delete-acc-btn text-gray-500 hover:text-red-400 p-2 rounded-xl transition" onclick="confirmDeleteAccount('${acc.id}', '${acc.name}')" title="Delete Account">
+                                <i class="fa-solid fa-xmark text-lg"></i>
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="flex items-center gap-3">
-                        <button class="delete-acc-btn text-gray-500 hover:text-red-400 p-2 rounded-xl transition" onclick="confirmDeleteAccount('${acc.id}', '${acc.name}')" title="Delete Account">
-                            <i class="fa-solid fa-xmark text-lg"></i>
-                        </button>
+                    <!-- Mini Equity Curve seperti TradeZella di bawah kartu akun -->
+                    <div class="bg-[#020407]/80 rounded-xl p-3 border border-emerald-500/15 cursor-pointer" onclick="window.appData.selectedAccountId = '${acc.id}'; switchView('workspace');">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[9px] font-black uppercase tracking-widest text-emerald-400/80">EQUITY CURVE</span>
+                            <span class="text-[9px] text-gray-400 font-mono">${accTrades.length} Trades Recorded</span>
+                        </div>
+                        <div class="h-28 w-full relative">
+                            <canvas id="miniEquityChart_${index}"></canvas>
+                        </div>
                     </div>
                 `;
                 container.appendChild(card);
+
+                // Render Chart.js setelah elemen ditambahkan ke DOM
+                setTimeout(() => {
+                    renderMiniAccountEquityChart(`miniEquityChart_${index}`, chartLabels, chartData, curr);
+                }, 50);
+            });
+        }
+
+        function renderMiniAccountEquityChart(canvasId, labels, data, curr) {
+            const canvasEl = document.getElementById(canvasId);
+            if (!canvasEl) return;
+            const ctx = canvasEl.getContext('2d');
+            
+            if (charts[canvasId]) charts[canvasId].destroy();
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 120);
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.35)');
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+
+            charts[canvasId] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        borderColor: '#22C55E',
+                        borderWidth: 2.5,
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.35,
+                        pointRadius: data.length > 15 ? 0 : 3,
+                        pointBackgroundColor: '#FFFFFF',
+                        pointBorderColor: '#22C55E'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(2, 4, 7, 0.9)',
+                            titleFont: { family: 'Inter', size: 10 },
+                            bodyFont: { family: 'Inter', size: 10 },
+                            titleColor: '#10B981',
+                            bodyColor: '#FFFFFF',
+                            callbacks: {
+                                label: function(context) {
+                                    return ` Equity: ${formatMoney(context.raw, curr)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { display: false },
+                        y: { 
+                            grid: { color: 'rgba(16, 185, 129, 0.06)' }, 
+                            ticks: { 
+                                color: '#6B7280',
+                                font: { size: 9, family: 'Inter' },
+                                callback: function(val) { return formatMoneyShort(val, curr); }
+                            } 
+                        }
+                    }
+                }
             });
         }
 
@@ -2548,7 +2637,6 @@
             document.getElementById('analyticsExpectancy').innerText = (expectancy >= 0 ? '+' : '-') + formatMoney(Math.abs(expectancy), curr);
             document.getElementById('analyticsExpectancy').className = `text-xl font-black ${expectancy >= 0 ? 'text-amber-400' : 'text-red-400'} mt-1 font-mono`;
 
-            // Update Big Net PnL Header in Equity Curve Box
             const bigPnLEl = document.getElementById('analyticsEquityBigPnL');
             if (bigPnLEl) {
                 bigPnLEl.innerText = (totalPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(totalPnL), curr);
@@ -2913,7 +3001,6 @@
             if (charts[canvasId]) charts[canvasId].destroy();
             const ctx = document.getElementById(canvasId).getContext('2d');
             
-            // Set font family secara global untuk Chart.js
             Chart.defaults.font.family = 'Inter, system-ui, -apple-system, sans-serif';
 
             charts[canvasId] = new Chart(ctx, {
@@ -2962,7 +3049,6 @@
                             grid: { color: 'rgba(16, 185, 129, 0.08)' }, 
                             ticks: { 
                                 color: '#9CA3AF',
-                                // Font Inter eksplisit dengan weight '600' agar seragam dengan teks UI lain
                                 font: { size: 11, family: 'Inter', weight: '600' },
                                 callback: function(val) { 
                                     const n = Number(val);
@@ -2980,7 +3066,7 @@
             document.getElementById('customModalTitle').innerText = "Information";
             document.getElementById('customModalMsg').innerText = msg;
             document.getElementById('customModalActions').innerHTML = `<button onclick="closeCustomModal()" class="px-5 py-2 bg-emerald-500 text-black text-xs font-bold rounded-xl shadow-lg hover:bg-emerald-400 transition">OK</button>`;
-            document.getElementById('customModal').classList.remove('hidden');
+            document.getElementById('customModal').classList.add('hidden');
         }
 
         function closeCustomModal() {
