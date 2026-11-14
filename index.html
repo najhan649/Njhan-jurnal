@@ -1525,7 +1525,6 @@
                 const curr = acc.currency || 'USD';
                 const growthPct = Number(acc.startingBalance) > 0 ? ((netProfit / Number(acc.startingBalance)) * 100).toFixed(2) : '0.00';
 
-                // Hitung data untuk Mini Equity Curve di Card Akun
                 let cumulativeBalance = Number(acc.startingBalance);
                 const chartLabels = ['Start'];
                 const chartData = [cumulativeBalance];
@@ -1569,7 +1568,7 @@
                         </div>
                     </div>
 
-                    <!-- Mini Equity Curve seperti TradeZella di bawah kartu akun -->
+                    <!-- Mini Equity Curve (White Line, Thin, No Dots) -->
                     <div class="bg-[#020407]/80 rounded-xl p-3 border border-emerald-500/15 cursor-pointer" onclick="window.appData.selectedAccountId = '${acc.id}'; switchView('workspace');">
                         <div class="flex items-center justify-between mb-1">
                             <span class="text-[9px] font-black uppercase tracking-widest text-emerald-400/80">EQUITY CURVE</span>
@@ -1582,7 +1581,6 @@
                 `;
                 container.appendChild(card);
 
-                // Render Chart.js setelah elemen ditambahkan ke DOM
                 setTimeout(() => {
                     renderMiniAccountEquityChart(`miniEquityChart_${index}`, chartLabels, chartData, curr);
                 }, 50);
@@ -1606,14 +1604,13 @@
                     labels: labels,
                     datasets: [{
                         data: data,
-                        borderColor: '#22C55E',
-                        borderWidth: 2.5,
+                        borderColor: '#FFFFFF', // Warna garis putih
+                        borderWidth: 1.8,       // Tidak terlalu tebal
                         backgroundColor: gradient,
                         fill: true,
                         tension: 0.35,
-                        pointRadius: data.length > 15 ? 0 : 3,
-                        pointBackgroundColor: '#FFFFFF',
-                        pointBorderColor: '#22C55E'
+                        pointRadius: 0,         // Menghilangkan titik-titik pada line
+                        pointHoverRadius: 3
                     }]
                 },
                 options: {
@@ -2943,16 +2940,13 @@
                     datasets: [{
                         label: label,
                         data: data,
-                        borderColor: '#22C55E',
-                        borderWidth: 3,
+                        borderColor: '#FFFFFF', // Warna garis putih pada Analytics Equity Curve
+                        borderWidth: 2,         // Tidak terlalu tebal
                         backgroundColor: gradient,
                         fill: true,
                         tension: 0.4,
-                        pointRadius: 3,
-                        pointBackgroundColor: '#FFFFFF',
-                        pointBorderColor: '#22C55E',
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 6
+                        pointRadius: 0,         // Tanpa titik-titik
+                        pointHoverRadius: 4
                     }]
                 },
                 options: {
@@ -3066,7 +3060,7 @@
             document.getElementById('customModalTitle').innerText = "Information";
             document.getElementById('customModalMsg').innerText = msg;
             document.getElementById('customModalActions').innerHTML = `<button onclick="closeCustomModal()" class="px-5 py-2 bg-emerald-500 text-black text-xs font-bold rounded-xl shadow-lg hover:bg-emerald-400 transition">OK</button>`;
-            document.getElementById('customModal').classList.add('hidden');
+            document.getElementById('customModal').classList.remove('hidden');
         }
 
         function closeCustomModal() {
