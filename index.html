@@ -1552,7 +1552,7 @@
                 card.innerHTML = `
                     <div class="flex items-start justify-between cursor-pointer" onclick="window.appData.selectedAccountId = '${acc.id}'; switchView('workspace');">
                         <div class="space-y-2 w-full">
-                            <!-- Header Atas: Jenis Akun & Nama Akun + Currency Kecil -->
+                            <!-- Header Atas: Jenis Akun & Tombol Hapus -->
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
                                     <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider ${
@@ -1566,19 +1566,20 @@
                                 </button>
                             </div>
 
+                            <!-- Nama Akun dengan Teks 'Personal' dan 'USD' yang Tetap Sesuai Permintaan -->
                             <div>
                                 <h3 class="text-xl font-black text-white group-hover:text-emerald-400 transition flex items-baseline gap-2">
-                                    ${acc.name} 
-                                    <span class="text-xs font-normal text-gray-400 lowercase font-mono">(${curr})</span>
+                                    Personal 
+                                    <span class="text-xs font-normal text-gray-400 lowercase font-mono">(usd)</span>
                                 </h3>
                             </div>
 
-                            <!-- Baris 2: Starting & Current Balance -->
+                            <!-- Starting & Current Balance -->
                             <div class="text-xs text-gray-400 font-sans">
                                 Starting : <span class="font-mono text-gray-200">${formatMoney(acc.startingBalance, curr)}</span> &bull; Current : <span class="font-mono font-bold text-emerald-400">${formatMoney(currentBalance, curr)}</span>
                             </div>
 
-                            <!-- Baris 3: Total PnL & Growth Percentage -->
+                            <!-- Total PnL & Growth Percentage -->
                             <div class="flex items-center gap-2 text-xs font-mono font-bold pt-0.5">
                                 <span class="${balanceColorClass}">${pnlSign}${formatMoney(netProfit, curr)}</span>
                                 <span class="text-gray-500">&bull;</span>
@@ -1587,7 +1588,7 @@
                         </div>
                     </div>
 
-                    <!-- Mini Equity Curve (White Line, Thin, No Dots) -->
+                    <!-- Mini Equity Curve -->
                     <div class="bg-[#020407] rounded-xl p-3 border border-emerald-500/15 cursor-pointer" onclick="window.appData.selectedAccountId = '${acc.id}'; switchView('workspace');">
                         <div class="flex items-center justify-between mb-1">
                             <span class="text-[9px] font-black uppercase tracking-widest text-emerald-400/80">EQUITY CURVE</span>
