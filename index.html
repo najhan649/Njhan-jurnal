@@ -1872,7 +1872,7 @@
                 let badgeHTML = '';
                 if (dayTrades.length > 0) {
                     const colorClass = dayNetPnL >= 0 ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
-                    const formattedAmount = (dayNetPnL >= 0 ? '+' : '-') + formatMoneyShort(Math.abs(dayNetPnL), curr);
+                    const formattedAmount = (dayNetPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(dayNetPnL), curr);
                     
                     badgeHTML = `
                         <div class="space-y-0.5 mt-1">
@@ -2052,7 +2052,7 @@
                     </div>
                     <div>
                         <div class="text-xs sm:text-sm font-black font-mono ${hasTrades ? (mPnL >= 0 ? 'text-emerald-400' : 'text-red-400') : 'text-gray-500'}">
-                            ${hasTrades ? ((mPnL >= 0 ? '+' : '-') + formatMoneyShort(Math.abs(mPnL), curr)) : '—'}
+                            ${hasTrades ? ((mPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(mPnL), curr)) : '—'}
                         </div>
                         <div class="text-[10px] font-bold font-mono ${hasTrades ? 'text-gray-300' : 'text-gray-600'} mt-1">
                             ${hasTrades ? `WR: ${winRate}%` : 'WR: —'}
@@ -2123,7 +2123,7 @@
                 let badgeHTML = '';
                 if (dayTrades.length > 0) {
                     const colorClass = dayNetPnL >= 0 ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
-                    const formattedAmount = (dayNetPnL >= 0 ? '+' : '-') + formatMoneyShort(Math.abs(dayNetPnL), curr);
+                    const formattedAmount = (dayNetPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(dayNetPnL), curr);
                     badgeHTML = `
                         <div class="space-y-0.5 mt-1">
                             <div class="text-[10px] sm:text-[11px] font-mono ${colorClass} leading-tight truncate">
