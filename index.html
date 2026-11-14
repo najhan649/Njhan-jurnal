@@ -1552,15 +1552,15 @@
                 card.innerHTML = `
                     <div class="flex items-start justify-between cursor-pointer" onclick="window.appData.selectedAccountId = '${acc.id}'; switchView('workspace');">
                         <div class="space-y-1">
-                            <div class="flex items-center gap-2">
-                                <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black tracking-wider ${
+                            <h3 class="text-xl font-black text-white group-hover:text-emerald-400 transition flex items-center gap-2">
+                                ${acc.name}
+                                <span class="px-2 py-0.5 rounded text-[9px] font-bold tracking-wider ${
                                     acc.type === 'FUNDED' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' :
                                     acc.type === 'DEMO' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
                                     'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                                 }">${acc.type}</span>
-                                <span class="px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider bg-gray-800 text-gray-300 border border-gray-700">${curr}</span>
-                            </div>
-                            <h3 class="text-xl font-black text-white group-hover:text-emerald-400 transition">${acc.name}</h3>
+                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider bg-gray-800 text-gray-300 border border-gray-700">${curr}</span>
+                            </h3>
                             <p class="text-[11px] text-gray-400 font-sans">
                                 Starting: <span class="font-mono text-gray-200">${formatMoney(acc.startingBalance, curr)}</span> &bull; Current: <span class="font-mono font-bold text-emerald-400">${formatMoney(currentBalance, curr)}</span>
                             </p>
