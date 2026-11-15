@@ -97,6 +97,45 @@
             font-variant-numeric: tabular-nums;
         }
 
+        /* Smooth Bar & Trajectory Animations */
+        .recap-bar-fill {
+            transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: width;
+        }
+
+        @keyframes recapRowSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .recap-row-enter {
+            animation: recapRowSlideIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+        }
+
+        @keyframes recapAreaFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .recap-traj-area-anim {
+            animation: recapAreaFade 0.65s ease-out forwards;
+        }
+
+        @keyframes recapDotPop {
+            0% { opacity: 0; transform: scale(0); }
+            75% { opacity: 1; transform: scale(1.25); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .recap-traj-dot-anim {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: recapDotPop 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.45s backwards;
+        }
+
         ::-webkit-scrollbar {
             width: 5px;
             height: 5px;
@@ -991,7 +1030,7 @@
 
             </div>
 
-            <!-- TAB 4: RECAP (100% MATCH VIDEO + NO SAT/SUN + NO EXNESS + W1-W5 DATE RANGES + THEME TOGGLE) -->
+            <!-- TAB 4: RECAP -->
             <div id="tabContentRecap" class="hidden space-y-6 pb-8">
 
                 <!-- Top Control Bar (Period, Navigation, Unit R/$, Theme Dark/Light) -->
@@ -1071,7 +1110,7 @@
                         <!-- MIDDLE SECTION: Horizontal Breakdown Bars -->
                         <div class="relative z-10 my-5">
                             <div id="recapBreakdownTitle" class="text-[10px] font-semibold opacity-55 mb-2.5">Weekly result</div>
-                            <div id="recapBarsList" class="space-y-2">
+                            <div id="recapBarsList" class="space-y-2.5">
                                 <!-- Generated dynamically via JS -->
                             </div>
                         </div>
@@ -1307,6 +1346,7 @@
         let lastRecapHeroNumeric = 0;
         let lastRecapStat2Numeric = 0;
         let lastRecapStat3Numeric = 0;
+        let lastRecapBarValues = [];
         let recapAnimFrames = {};
 
         const dayNamesID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -1674,6 +1714,7 @@
                 lastRecapHeroNumeric = 0;
                 lastRecapStat2Numeric = 0;
                 lastRecapStat3Numeric = 0;
+                lastRecapBarValues = [];
                 renderRecapCard(true);
             }
         }
@@ -3227,9 +3268,9 @@
         }
 
         // ==========================================
-        // RECAP TAB LOGIC + SMOOTH NUMBER ANIMATION
+        // RECAP TAB LOGIC + SMOOTH ANIMATIONS
         // ==========================================
-        function animateRecapValue(elementId, fromVal, toVal, unit, curr, duration = 450, isHero = false) {
+        function animateRecapValue(elementId, fromVal, toVal, unit, curr, duration = 480, isHero = false) {
             const el = document.getElementById(elementId);
             if (!el) return;
 
@@ -3246,7 +3287,7 @@
             const endVal = Number(toVal) || 0;
 
             if (Math.abs(endVal - startVal) < 0.0001) {
-                el.innerText = formatRecapMetric(endVal, unit, curr, isHero);
+                el.innerText = formatRecapMetric(endVal, unit, curr, isHero, false);
                 return;
             }
 
@@ -3281,6 +3322,7 @@
                     btn.className = "px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition";
                 }
             });
+            lastRecapBarValues = [];
             renderRecapCard(true);
         }
 
@@ -3394,6 +3436,33 @@
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         }
 
+        // Menghitung minggu dalam satu bulan berdasarkan Senin - Minggu (W1 s/d W6)
+        function getCalendarWeeksOfMonth(year, month) {
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const weeks = [];
+            let currentStart = 1;
+            let wIndex = 1;
+
+            while (currentStart <= daysInMonth) {
+                const startDate = new Date(year, month, currentStart);
+                const dayOfWeek = startDate.getDay(); // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
+                const daysUntilSunday = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
+                let currentEnd = currentStart + daysUntilSunday;
+                if (currentEnd > daysInMonth) currentEnd = daysInMonth;
+
+                weeks.push({
+                    label: `W${wIndex}`,
+                    rangeText: `${currentStart} - ${currentEnd}`,
+                    start: currentStart,
+                    end: currentEnd
+                });
+
+                currentStart = currentEnd + 1;
+                wIndex++;
+            }
+            return weeks;
+        }
+
         function renderRecapCard(shouldAnimate = true) {
             const activeAcc = getActiveAccount();
             if (!activeAcc) return;
@@ -3432,16 +3501,18 @@
                 stat2Label = 'avg per day';
                 stat3Label = 'best day';
 
-                // HANYA MONDAY - FRIDAY (SATURDAY & SUNDAY REMOVED)
+                // Monday - Friday dengan tanggal di bawah hari (contoh: Mon / Nov 9)
                 const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
                 for (let i = 0; i < 5; i++) {
                     const currDay = new Date(monday);
                     currDay.setDate(monday.getDate() + i);
                     const dStr = toLocalDateStr(currDay);
+                    const dateSubText = `${monthNamesShort[currDay.getMonth()]} ${currDay.getDate()}`;
                     const dTrades = allTrades.filter(t => t.date === dStr);
                     const sumVal = dTrades.reduce((acc, t) => acc + getTradeMetricValue(t, recapUnit), 0);
                     breakdownItems.push({
                         label: dayLabels[i],
+                        subLabel: dateSubText,
                         value: sumVal,
                         hasTrades: dTrades.length > 0
                     });
@@ -3453,6 +3524,7 @@
                 const month = recapRefDate.getMonth();
 
                 navLabel = `${monthNamesFull[month]} ${year}`;
+                cardDateRange = navLabel;
                 reportTitle = 'MONTHLY REPORT';
                 breakdownTitle = 'Weekly result';
                 stat1Label = 'Green weeks';
@@ -3465,34 +3537,8 @@
                     return parseInt(parts[0]) === year && (parseInt(parts[1]) - 1) === month;
                 });
 
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
-                
-                // W1-W5 exact date ranges matching video
-                const weekBuckets = [];
-                let startDay = 1;
-                let wIndex = 1;
-                while (startDay <= daysInMonth) {
-                    const dStart = new Date(year, month, startDay);
-                    let endDay = startDay + 6;
-                    if (endDay > daysInMonth) endDay = daysInMonth;
-                    const dEnd = new Date(year, month, endDay);
-
-                    const startStr = `${monthNamesShort[dStart.getMonth()]} ${dStart.getDate()}`;
-                    const endStr = dStart.getMonth() === dEnd.getMonth() ? `${dEnd.getDate()}` : `${monthNamesShort[dEnd.getMonth()]} ${dEnd.getDate()}`;
-                    const rangeLabel = `${startStr} - ${endStr}`;
-
-                    weekBuckets.push({
-                        label: `W${wIndex}`,
-                        rangeText: rangeLabel,
-                        start: startDay,
-                        end: endDay
-                    });
-                    startDay = endDay + 1;
-                    wIndex++;
-                }
-
-                // If currently viewing active month and reference date matches current month, set card date range to active week or full month range
-                cardDateRange = navLabel;
+                // Perhitungan W1 - W6 berdasarkan Senin - Minggu bulan tersebut
+                const weekBuckets = getCalendarWeeksOfMonth(year, month);
 
                 weekBuckets.forEach(w => {
                     const wTrades = filteredTrades.filter(t => {
@@ -3502,9 +3548,9 @@
                     const sumVal = wTrades.reduce((acc, t) => acc + getTradeMetricValue(t, recapUnit), 0);
                     breakdownItems.push({
                         label: w.label,
+                        subLabel: w.rangeText,
                         value: sumVal,
-                        hasTrades: wTrades.length > 0,
-                        subLabel: w.rangeText
+                        hasTrades: wTrades.length > 0
                     });
                 });
 
@@ -3544,7 +3590,7 @@
             document.getElementById('recapStat2Label').innerText = stat2Label;
             document.getElementById('recapStat3Label').innerText = stat3Label;
 
-            // Hero Metric Calculation & Smooth Animation
+            // Hero Metric Calculation & Smooth Rolling Animation
             const totalMetric = filteredTrades.reduce((acc, t) => acc + getTradeMetricValue(t, recapUnit), 0);
             const heroEl = document.getElementById('recapHeroValue');
             if (totalMetric < 0) {
@@ -3578,25 +3624,28 @@
             lastRecapStat2Numeric = avgBucketVal;
             lastRecapStat3Numeric = bestBucketVal;
 
-            // Render Horizontal Bars
+            // Render Horizontal Bars with Smooth Width & Value Animation
             const barsListEl = document.getElementById('recapBarsList');
             barsListEl.innerHTML = '';
 
             const maxAbs = Math.max(...breakdownItems.map(b => Math.abs(b.value)), 0.01);
             const isYearly = recapPeriod === 'year';
 
-            breakdownItems.forEach(item => {
+            breakdownItems.forEach((item, idx) => {
                 const row = document.createElement('div');
-                row.className = `flex items-center gap-2.5 ${isYearly ? 'text-[10px]' : 'text-[11px]'}`;
+                row.className = `flex items-center gap-2.5 ${isYearly ? 'text-[10px]' : 'text-[11px]'} ${shouldAnimate ? 'recap-row-enter' : ''}`;
+                if (shouldAnimate) {
+                    row.style.animationDelay = `${idx * 25}ms`;
+                }
 
-                const pct = item.hasTrades && item.value !== 0 ? Math.max((Math.abs(item.value) / maxAbs) * 100, 6) : 0;
+                const targetPct = item.hasTrades && item.value !== 0 ? Math.max((Math.abs(item.value) / maxAbs) * 100, 6) : 0;
                 const barTrackBg = recapTheme === 'dark' ? 'bg-white/[0.05]' : 'bg-black/[0.06]';
                 
                 let barFillHtml = '';
                 if (item.hasTrades && item.value > 0) {
-                    barFillHtml = `<div class="h-full rounded-full bg-gradient-to-r from-[#166534] to-[#4ade80] transition-all duration-500" style="width: ${pct}%"></div>`;
+                    barFillHtml = `<div data-target-width="${targetPct}%" class="recap-bar-fill h-full rounded-full bg-gradient-to-r from-[#166534] to-[#4ade80]" style="width: ${shouldAnimate ? '0%' : targetPct + '%'}"></div>`;
                 } else if (item.hasTrades && item.value < 0) {
-                    barFillHtml = `<div class="h-full rounded-full bg-gradient-to-r from-[#991b1b] to-[#f87171] transition-all duration-500" style="width: ${pct}%"></div>`;
+                    barFillHtml = `<div data-target-width="${targetPct}%" class="recap-bar-fill h-full rounded-full bg-gradient-to-r from-[#991b1b] to-[#f87171]" style="width: ${shouldAnimate ? '0%' : targetPct + '%'}"></div>`;
                 }
 
                 let valText = '–';
@@ -3610,22 +3659,50 @@
                             : 'opacity-70 font-semibold';
                 }
 
-                const labelDisplay = recapPeriod === 'month' && item.subLabel 
-                    ? `<span class="font-semibold opacity-60 shrink-0">${item.label} <span class="text-[9px] opacity-70 font-normal">(${item.subLabel})</span></span>`
-                    : `<span class="w-7 font-semibold opacity-60 shrink-0">${item.label}</span>`;
+                // Tampilan label hari + tanggal di bawahnya (Week) atau W1..W6 + tanggal di bawahnya (Month)
+                let labelHtml = '';
+                if (recapPeriod === 'week' || recapPeriod === 'month') {
+                    labelHtml = `
+                        <div class="w-11 shrink-0 leading-tight">
+                            <div class="font-bold opacity-85">${item.label}</div>
+                            <div class="text-[9px] opacity-45 font-normal tabular-nums">${item.subLabel || ''}</div>
+                        </div>
+                    `;
+                } else {
+                    labelHtml = `<span class="w-7 font-semibold opacity-60 shrink-0">${item.label}</span>`;
+                }
 
+                const valElemId = `recapBarVal_${idx}`;
                 row.innerHTML = `
-                    ${labelDisplay}
+                    ${labelHtml}
                     <div class="flex-grow ${isYearly ? 'h-2' : 'h-2.5'} rounded-full ${barTrackBg} overflow-hidden">
                         ${barFillHtml}
                     </div>
-                    <span class="w-16 text-right font-mono text-[10px] tabular-nums ${valColorClass} shrink-0">${valText}</span>
+                    <span id="${valElemId}" class="w-16 text-right font-mono text-[10px] tabular-nums ${valColorClass} shrink-0">${valText}</span>
                 `;
                 barsListEl.appendChild(row);
+
+                // Trigger smooth bar width & number animation
+                if (shouldAnimate && item.hasTrades) {
+                    const prevVal = lastRecapBarValues[idx] !== undefined ? lastRecapBarValues[idx] : 0;
+                    animateRecapValue(valElemId, prevVal, item.value, recapUnit, curr, 420, false);
+                }
             });
 
-            // Render Trajectory SVG
-            renderRecapTrajectorySvg(filteredTrades, recapUnit);
+            lastRecapBarValues = breakdownItems.map(b => b.hasTrades ? b.value : 0);
+
+            if (shouldAnimate) {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        barsListEl.querySelectorAll('.recap-bar-fill').forEach(barEl => {
+                            barEl.style.width = barEl.getAttribute('data-target-width');
+                        });
+                    });
+                });
+            }
+
+            // Render Trajectory SVG with Line-Draw Animation
+            renderRecapTrajectorySvg(filteredTrades, recapUnit, shouldAnimate);
 
             // Footer Stats (Account Name & WR)
             const totalTradesCount = filteredTrades.length;
@@ -3636,7 +3713,7 @@
             document.getElementById('recapFooterAccount').innerText = activeAcc.name || 'Personal';
         }
 
-        function renderRecapTrajectorySvg(trades, unit) {
+        function renderRecapTrajectorySvg(trades, unit, shouldAnimate = true) {
             const svg = document.getElementById('recapTrajectorySvg');
             if (!svg) return;
 
@@ -3652,9 +3729,19 @@
             if (sorted.length === 0) {
                 const midY = height / 2;
                 svg.innerHTML = `
-                    <line x1="${padX}" y1="${midY}" x2="${width - padX}" y2="${midY}" stroke="${lineColor}" stroke-width="2" stroke-linecap="round" />
-                    <circle cx="${width - padX}" cy="${midY}" r="3.5" fill="${lineColor}" />
+                    <line id="recapTrajLine" x1="${padX}" y1="${midY}" x2="${width - padX}" y2="${midY}" stroke="${lineColor}" stroke-width="2" stroke-linecap="round" />
+                    <circle class="${shouldAnimate ? 'recap-traj-dot-anim' : ''}" cx="${width - padX}" cy="${midY}" r="3.5" fill="${lineColor}" />
                 `;
+                if (shouldAnimate) {
+                    const lineEl = document.getElementById('recapTrajLine');
+                    const len = width - padX * 2;
+                    lineEl.style.strokeDasharray = len;
+                    lineEl.style.strokeDashoffset = len;
+                    requestAnimationFrame(() => {
+                        lineEl.style.transition = 'stroke-dashoffset 0.55s cubic-bezier(0.22, 1, 0.36, 1)';
+                        lineEl.style.strokeDashoffset = '0';
+                    });
+                }
                 return;
             }
 
@@ -3688,10 +3775,23 @@
                     </linearGradient>
                 </defs>
                 <line x1="${padX}" y1="${zeroY.toFixed(1)}" x2="${width - padX}" y2="${zeroY.toFixed(1)}" stroke="${baselineColor}" stroke-width="1" stroke-dasharray="3 3" />
-                <path d="${areaD}" fill="url(#recapTrajGrad)" />
-                <path d="${pathD}" fill="none" stroke="${lineColor}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
-                <circle cx="${lastPt.x.toFixed(1)}" cy="${lastPt.y.toFixed(1)}" r="3.5" fill="${lineColor}" />
+                <path class="${shouldAnimate ? 'recap-traj-area-anim' : ''}" d="${areaD}" fill="url(#recapTrajGrad)" />
+                <path id="recapTrajPath" d="${pathD}" fill="none" stroke="${lineColor}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                <circle class="${shouldAnimate ? 'recap-traj-dot-anim' : ''}" cx="${lastPt.x.toFixed(1)}" cy="${lastPt.y.toFixed(1)}" r="3.5" fill="${lineColor}" />
             `;
+
+            if (shouldAnimate) {
+                const pathEl = document.getElementById('recapTrajPath');
+                if (pathEl && typeof pathEl.getTotalLength === 'function') {
+                    const length = pathEl.getTotalLength();
+                    pathEl.style.strokeDasharray = length;
+                    pathEl.style.strokeDashoffset = length;
+                    requestAnimationFrame(() => {
+                        pathEl.style.transition = 'stroke-dashoffset 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+                        pathEl.style.strokeDashoffset = '0';
+                    });
+                }
+            }
         }
 
         async function downloadRecapStory() {
