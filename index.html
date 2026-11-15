@@ -1709,7 +1709,9 @@
             });
 
             if (tab === 'analytics') {
-                setTimeout(updateAnalyticsCharts, 100);
+                setTimeout(() => {
+                    updateAnalyticsCharts();
+                }, 120);
             } else if (tab === 'recap') {
                 lastRecapHeroNumeric = 0;
                 lastRecapStat2Numeric = 0;
@@ -3164,6 +3166,10 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 1200,
+                        easing: 'easeOutQuart'
+                    },
                     plugins: { 
                         legend: { display: false },
                         tooltip: {
@@ -3452,7 +3458,7 @@
 
                 weeks.push({
                     label: `W${wIndex}`,
-                    rangeText: `${currentStart} - ${currentEnd}`,
+                    rangeText: `${currentStart}-${currentEnd}`,
                     start: currentStart,
                     end: currentEnd
                 });
@@ -3659,7 +3665,6 @@
                             : 'opacity-70 font-semibold';
                 }
 
-                // Tampilan label hari + tanggal di bawahnya (Week) atau W1..W6 + tanggal di bawahnya (Month)
                 let labelHtml = '';
                 if (recapPeriod === 'week' || recapPeriod === 'month') {
                     labelHtml = `
@@ -3682,7 +3687,6 @@
                 `;
                 barsListEl.appendChild(row);
 
-                // Trigger smooth bar width & number animation
                 if (shouldAnimate && item.hasTrades) {
                     const prevVal = lastRecapBarValues[idx] !== undefined ? lastRecapBarValues[idx] : 0;
                     animateRecapValue(valElemId, prevVal, item.value, recapUnit, curr, 420, false);
@@ -3701,10 +3705,8 @@
                 });
             }
 
-            // Render Trajectory SVG with Line-Draw Animation
             renderRecapTrajectorySvg(filteredTrades, recapUnit, shouldAnimate);
 
-            // Footer Stats (Account Name & WR)
             const totalTradesCount = filteredTrades.length;
             const winsCount = filteredTrades.filter(t => Number(t.netPnL) > 0).length;
             const wrPct = totalTradesCount > 0 ? Math.round((winsCount / totalTradesCount) * 100) : 0;
