@@ -93,6 +93,10 @@
             border: 1px solid rgba(16, 185, 129, 0.15);
         }
 
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+
         ::-webkit-scrollbar {
             width: 5px;
             height: 5px;
@@ -987,7 +991,7 @@
 
             </div>
 
-            <!-- TAB 4: RECAP (100% MATCH VIDEO + NAJHAN BRANDING) -->
+            <!-- TAB 4: RECAP (100% MATCH VIDEO + ANIMATED NUMBERS + NAJHAN BRANDING) -->
             <div id="tabContentRecap" class="hidden space-y-6 pb-8">
 
                 <!-- Top Control Bar (Period, Navigation, Unit R/$, Theme Dark/Light) -->
@@ -1044,21 +1048,21 @@
                             <!-- Report Title & Big Hero Metric -->
                             <div class="mt-7">
                                 <div id="recapReportTypeTitle" class="text-[10px] font-bold tracking-[0.22em] uppercase opacity-50">MONTHLY REPORT</div>
-                                <div id="recapHeroValue" class="text-4xl sm:text-[44px] font-black tracking-tight mt-1 leading-none font-sans">+0.00R</div>
+                                <div id="recapHeroValue" class="text-4xl sm:text-[44px] font-black tracking-tight mt-1 leading-none font-sans tabular-nums">+0.00R</div>
                             </div>
 
                             <!-- 3 Mini Metric Boxes -->
                             <div class="grid grid-cols-3 gap-2.5 mt-6">
                                 <div id="recapBox1" class="recap-subcard-dark rounded-xl py-3 px-2 text-center">
-                                    <div id="recapStat1Val" class="text-xs sm:text-sm font-extrabold">0 / 0</div>
+                                    <div id="recapStat1Val" class="text-xs sm:text-sm font-extrabold tabular-nums">0 / 0</div>
                                     <div id="recapStat1Label" class="text-[9px] opacity-55 mt-0.5 font-medium">Green weeks</div>
                                 </div>
                                 <div id="recapBox2" class="recap-subcard-dark rounded-xl py-3 px-2 text-center">
-                                    <div id="recapStat2Val" class="text-xs sm:text-sm font-extrabold">0.00R</div>
+                                    <div id="recapStat2Val" class="text-xs sm:text-sm font-extrabold tabular-nums">0.00R</div>
                                     <div id="recapStat2Label" class="text-[9px] opacity-55 mt-0.5 font-medium">avg per week</div>
                                 </div>
                                 <div id="recapBox3" class="recap-subcard-dark rounded-xl py-3 px-2 text-center">
-                                    <div id="recapStat3Val" class="text-xs sm:text-sm font-extrabold">0.00R</div>
+                                    <div id="recapStat3Val" class="text-xs sm:text-sm font-extrabold tabular-nums">0.00R</div>
                                     <div id="recapStat3Label" class="text-[9px] opacity-55 mt-0.5 font-medium">best week</div>
                                 </div>
                             </div>
@@ -1295,11 +1299,15 @@
         let logViewMode = 'table';
         let isSignUpMode = false;
 
-        // Recap State Variables
+        // Recap State & Animation Variables
         let recapPeriod = 'month'; // 'week' | 'month' | 'year'
         let recapUnit = 'R';       // 'R' | '$'
         let recapTheme = 'dark';   // 'dark' | 'light'
         let recapRefDate = new Date();
+        let lastRecapHeroNumeric = 0;
+        let lastRecapStat2Numeric = 0;
+        let lastRecapStat3Numeric = 0;
+        let recapAnimFrames = {};
 
         const dayNamesID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
@@ -1663,7 +1671,10 @@
             if (tab === 'analytics') {
                 setTimeout(updateAnalyticsCharts, 100);
             } else if (tab === 'recap') {
-                renderRecapCard();
+                lastRecapHeroNumeric = 0;
+                lastRecapStat2Numeric = 0;
+                lastRecapStat3Numeric = 0;
+                renderRecapCard(true);
             }
         }
 
@@ -1870,7 +1881,7 @@
             renderDashboard(trades, curr);
             renderYearlyPerformance();
             applyTradeLogFilter();
-            renderRecapCard();
+            renderRecapCard(true);
         }
 
         function onDashFilterChange() {
@@ -3216,8 +3227,51 @@
         }
 
         // ==========================================
-        // RECAP TAB LOGIC (100% MATCH VIDEO)
+        // RECAP TAB LOGIC + SMOOTH NUMBER ANIMATION
         // ==========================================
+        function animateRecapValue(elementId, fromVal, toVal, unit, curr, duration = 450, isHero = false) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+
+            if (recapAnimFrames[elementId]) {
+                cancelAnimationFrame(recapAnimFrames[elementId]);
+            }
+
+            if (isPrivacyMode) {
+                el.innerText = '••••';
+                return;
+            }
+
+            const startVal = Number(fromVal) || 0;
+            const endVal = Number(toVal) || 0;
+
+            if (Math.abs(endVal - startVal) < 0.0001) {
+                el.innerText = formatRecapMetric(endVal, unit, curr, isHero);
+                return;
+            }
+
+            const startTime = performance.now();
+
+            function step(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                // Cubic ease-out matching the smooth snap in the video
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = startVal + (endVal - startVal) * eased;
+
+                el.innerText = formatRecapMetric(current, unit, curr, isHero, progress < 1);
+
+                if (progress < 1) {
+                    recapAnimFrames[elementId] = requestAnimationFrame(step);
+                } else {
+                    el.innerText = formatRecapMetric(endVal, unit, curr, isHero, false);
+                    delete recapAnimFrames[elementId];
+                }
+            }
+
+            recapAnimFrames[elementId] = requestAnimationFrame(step);
+        }
+
         function setRecapPeriod(period) {
             recapPeriod = period;
             ['week', 'month', 'year'].forEach(p => {
@@ -3228,10 +3282,11 @@
                     btn.className = "px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition";
                 }
             });
-            renderRecapCard();
+            renderRecapCard(true);
         }
 
         function setRecapUnit(unit) {
+            if (recapUnit === unit) return;
             recapUnit = unit;
             const rBtn = document.getElementById('recapUnitR');
             const dBtn = document.getElementById('recapUnitDollar');
@@ -3242,7 +3297,11 @@
                 dBtn.className = "w-7 h-7 rounded-full bg-white text-black font-black flex items-center justify-center shadow transition";
                 rBtn.className = "w-7 h-7 rounded-full text-gray-400 hover:text-white flex items-center justify-center transition";
             }
-            renderRecapCard();
+            // Start count-up from 0 (or previous visual state) when switching R <-> $
+            lastRecapHeroNumeric = 0;
+            lastRecapStat2Numeric = 0;
+            lastRecapStat3Numeric = 0;
+            renderRecapCard(true);
         }
 
         function setRecapTheme(theme) {
@@ -3277,7 +3336,7 @@
                 });
                 divider.className = "flex items-center justify-between text-[10px] opacity-70 pt-3 mt-2 border-t border-black/10";
             }
-            renderRecapCard();
+            renderRecapCard(false);
         }
 
         function navigateRecapPeriod(dir) {
@@ -3288,23 +3347,27 @@
             } else if (recapPeriod === 'year') {
                 recapRefDate.setFullYear(recapRefDate.getFullYear() + dir);
             }
-            renderRecapCard();
+            renderRecapCard(true);
         }
 
-        function formatRecapMetric(val, unit, curr = 'USD') {
+        function formatRecapMetric(val, unit, curr = 'USD', isHero = false, isAnimating = false) {
             if (isPrivacyMode) return '••••';
             const num = Number(val) || 0;
-            const sign = num > 0 ? '+' : num < 0 ? '-' : '';
+            const sign = num > 0.004 ? '+' : num < -0.004 ? '-' : '';
             const absVal = Math.abs(num);
 
             if (unit === 'R') {
                 return `${sign}${absVal.toFixed(2)}R`;
             } else {
                 if (curr === 'IDR') {
-                    return `${sign}Rp${absVal.toLocaleString('id-ID', { maximumFractionDigits: 0 })}`;
+                    return `${sign}Rp${Math.round(absVal).toLocaleString('id-ID')}`;
                 }
-                const formatted = absVal % 1 === 0 
-                    ? absVal.toLocaleString('en-US') 
+                // Show 2 decimals while rolling/animating (like +$286.72 -> +$398.45 -> +$400 in the video)
+                if (isHero && isAnimating) {
+                    return `${sign}$${absVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                }
+                const formatted = Math.abs(absVal - Math.round(absVal)) < 0.005
+                    ? Math.round(absVal).toLocaleString('en-US')
                     : absVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 return `${sign}$${formatted}`;
             }
@@ -3334,7 +3397,7 @@
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         }
 
-        function renderRecapCard() {
+        function renderRecapCard(shouldAnimate = true) {
             const activeAcc = getActiveAccount();
             if (!activeAcc) return;
 
@@ -3345,7 +3408,7 @@
             const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
             let filteredTrades = [];
-            let breakdownItems = []; // { label, value, hasTrades }
+            let breakdownItems = [];
             let navLabel = '';
             let cardDateRange = '';
             let reportTitle = '';
@@ -3463,17 +3526,23 @@
             document.getElementById('recapStat2Label').innerText = stat2Label;
             document.getElementById('recapStat3Label').innerText = stat3Label;
 
-            // Hero Metric Calculation
+            // Hero Metric Calculation & Smooth Animation
             const totalMetric = filteredTrades.reduce((acc, t) => acc + getTradeMetricValue(t, recapUnit), 0);
             const heroEl = document.getElementById('recapHeroValue');
-            heroEl.innerText = formatRecapMetric(totalMetric, recapUnit, curr);
             if (totalMetric < 0) {
-                heroEl.className = "text-4xl sm:text-[44px] font-black tracking-tight mt-1 leading-none font-sans text-red-400";
+                heroEl.className = "text-4xl sm:text-[44px] font-black tracking-tight mt-1 leading-none font-sans tabular-nums text-red-400";
             } else {
-                heroEl.className = "text-4xl sm:text-[44px] font-black tracking-tight mt-1 leading-none font-sans";
+                heroEl.className = "text-4xl sm:text-[44px] font-black tracking-tight mt-1 leading-none font-sans tabular-nums";
             }
 
-            // Mini Boxes Calculation
+            if (shouldAnimate) {
+                animateRecapValue('recapHeroValue', lastRecapHeroNumeric, totalMetric, recapUnit, curr, 480, true);
+            } else {
+                heroEl.innerText = formatRecapMetric(totalMetric, recapUnit, curr, true, false);
+            }
+            lastRecapHeroNumeric = totalMetric;
+
+            // Mini Boxes Calculation & Animation
             const activeBuckets = breakdownItems.filter(b => b.hasTrades);
             const greenBucketsCount = activeBuckets.filter(b => b.value > 0).length;
             const totalActiveBuckets = activeBuckets.length;
@@ -3481,8 +3550,15 @@
             const bestBucketVal = activeBuckets.length > 0 ? Math.max(...activeBuckets.map(b => b.value), 0) : 0;
 
             document.getElementById('recapStat1Val').innerText = `${greenBucketsCount} / ${totalActiveBuckets}`;
-            document.getElementById('recapStat2Val').innerText = formatRecapMetric(avgBucketVal, recapUnit, curr);
-            document.getElementById('recapStat3Val').innerText = formatRecapMetric(bestBucketVal, recapUnit, curr);
+            if (shouldAnimate) {
+                animateRecapValue('recapStat2Val', lastRecapStat2Numeric, avgBucketVal, recapUnit, curr, 420, false);
+                animateRecapValue('recapStat3Val', lastRecapStat3Numeric, bestBucketVal, recapUnit, curr, 420, false);
+            } else {
+                document.getElementById('recapStat2Val').innerText = formatRecapMetric(avgBucketVal, recapUnit, curr, false, false);
+                document.getElementById('recapStat3Val').innerText = formatRecapMetric(bestBucketVal, recapUnit, curr, false, false);
+            }
+            lastRecapStat2Numeric = avgBucketVal;
+            lastRecapStat3Numeric = bestBucketVal;
 
             // Render Horizontal Bars
             const barsListEl = document.getElementById('recapBarsList');
@@ -3500,9 +3576,9 @@
                 
                 let barFillHtml = '';
                 if (item.hasTrades && item.value > 0) {
-                    barFillHtml = `<div class="h-full rounded-full bg-gradient-to-r from-[#166534] to-[#4ade80]" style="width: ${pct}%"></div>`;
+                    barFillHtml = `<div class="h-full rounded-full bg-gradient-to-r from-[#166534] to-[#4ade80] transition-all duration-500" style="width: ${pct}%"></div>`;
                 } else if (item.hasTrades && item.value < 0) {
-                    barFillHtml = `<div class="h-full rounded-full bg-gradient-to-r from-[#991b1b] to-[#f87171]" style="width: ${pct}%"></div>`;
+                    barFillHtml = `<div class="h-full rounded-full bg-gradient-to-r from-[#991b1b] to-[#f87171] transition-all duration-500" style="width: ${pct}%"></div>`;
                 }
 
                 let valText = '–';
@@ -3521,7 +3597,7 @@
                     <div class="flex-grow ${isYearly ? 'h-2' : 'h-2.5'} rounded-full ${barTrackBg} overflow-hidden">
                         ${barFillHtml}
                     </div>
-                    <span class="w-16 text-right font-mono text-[10px] ${valColorClass} shrink-0">${valText}</span>
+                    <span class="w-16 text-right font-mono text-[10px] tabular-nums ${valColorClass} shrink-0">${valText}</span>
                 `;
                 barsListEl.appendChild(row);
             });
