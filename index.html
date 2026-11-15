@@ -97,6 +97,7 @@
             font-variant-numeric: tabular-nums;
         }
 
+        /* Smooth Bar & Trajectory Animations */
         .recap-bar-fill {
             transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
             will-change: width;
@@ -1708,9 +1709,9 @@
             });
 
             if (tab === 'analytics') {
-                requestAnimationFrame(() => {
-                    updateAnalyticsCharts();
-                });
+                setTimeout(() => {
+                    updateAnalyticsCharts(); // Memuat ulang chart sehingga animasi equity berjalan mulus
+                }, 120);
             } else if (tab === 'recap') {
                 lastRecapHeroNumeric = 0;
                 lastRecapStat2Numeric = 0;
@@ -3165,25 +3166,9 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    // Animasi diselaraskan mulus seperti Recap dari kiri ke kanan
                     animation: {
-                        duration: 900,
-                        easing: 'easeInOutCubic',
-                        x: {
-                            type: 'number',
-                            easing: 'easeInOutCubic',
-                            from: NaN
-                        },
-                        y: {
-                            type: 'number',
-                            easing: 'easeInOutCubic',
-                            from: function(context) {
-                                if (context.type === 'data') {
-                                    return context.chart.scales.y.getPixelForValue(0);
-                                }
-                                return 0;
-                            }
-                        }
+                        duration: 1200, // Durasi animasi bergerak (1.2 detik)
+                        easing: 'easeOutQuart'
                     },
                     plugins: { 
                         legend: { display: false },
