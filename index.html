@@ -3165,18 +3165,18 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    // Animasi diselaraskan agar langsung muncul mulus tanpa telat (seperti Recap)
+                    // Animasi diselaraskan mulus seperti Recap dari kiri ke kanan
                     animation: {
-                        duration: 500,
-                        easing: 'easeOutCubic',
+                        duration: 900,
+                        easing: 'easeInOutCubic',
                         x: {
                             type: 'number',
-                            easing: 'easeOutCubic',
+                            easing: 'easeInOutCubic',
                             from: NaN
                         },
                         y: {
                             type: 'number',
-                            easing: 'easeOutCubic',
+                            easing: 'easeInOutCubic',
                             from: function(context) {
                                 if (context.type === 'data') {
                                     return context.chart.scales.y.getPixelForValue(0);
