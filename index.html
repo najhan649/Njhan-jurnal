@@ -3146,9 +3146,8 @@
             gradient.addColorStop(0, 'rgba(16, 185, 129, 0.35)');
             gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
 
-            // ANIMASI EQUITY CURVE: Draw-in & Fade Smooth (Cubic Progression)
-            const totalDuration = 1100;
-            const delayBetweenPoints = totalDuration / Math.max(data.length, 1);
+            // EQUITY CURVE ANIMATION: Tanpa jeda (Smooth Continuous Draw-in)
+            const totalDuration = 1000;
             const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(data[0]) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
 
             charts[canvasId] = new Chart(ctx, {
@@ -3176,28 +3175,18 @@
                             easing: 'easeInOutCubic',
                             duration: totalDuration,
                             from: NaN,
-                            delay(context) {
-                                if (context.type !== 'data' || context.mode !== 'default') {
-                                    return 0;
-                                }
-                                return context.index * delayBetweenPoints;
-                            }
+                            delay: 0
                         },
                         y: {
                             type: 'number',
                             easing: 'easeInOutCubic',
                             duration: totalDuration,
                             from: previousY,
-                            delay(context) {
-                                if (context.type !== 'data' || context.mode !== 'default') {
-                                    return 0;
-                                }
-                                return context.index * delayBetweenPoints;
-                            }
+                            delay: 0
                         },
                         colors: {
                             type: 'color',
-                            duration: 1000
+                            duration: 800
                         }
                     },
                     plugins: { 
