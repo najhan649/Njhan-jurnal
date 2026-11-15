@@ -28,8 +28,9 @@
             }
         }
     </script>
-    <!-- Chart.js CDN -->
+    <!-- Chart.js & html2canvas CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- Google Font: Inter & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -65,6 +66,73 @@
         }
         .glass-card {
             animation: permanentGlow 4s ease-in-out infinite;
+        }
+
+        /* Recap Card Custom Styles (100% Match Video) */
+        .recap-story-dark {
+            background: radial-gradient(120% 75% at 50% 0%, #10321d 0%, #09130d 45%, #060907 100%);
+            color: #ffffff;
+            border: 1px solid rgba(34, 197, 94, 0.18);
+            box-shadow: 0 25px 65px rgba(0, 0, 0, 0.9), 0 0 40px rgba(16, 185, 129, 0.12);
+        }
+
+        .recap-story-light {
+            background: radial-gradient(120% 75% at 50% 0%, #dcfce7 0%, #f0fdf4 45%, #ffffff 100%);
+            color: #090d0b;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .recap-subcard-dark {
+            background: rgba(255, 255, 255, 0.035);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .recap-subcard-light {
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+        }
+
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .recap-bar-fill {
+            transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: width;
+        }
+
+        @keyframes recapRowSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .recap-row-enter {
+            animation: recapRowSlideIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+        }
+
+        @keyframes recapAreaFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .recap-traj-area-anim {
+            animation: recapAreaFade 0.65s ease-out forwards;
+        }
+
+        @keyframes recapDotPop {
+            0% { opacity: 0; transform: scale(0); }
+            75% { opacity: 1; transform: scale(1.25); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .recap-traj-dot-anim {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: recapDotPop 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.45s backwards;
         }
 
         ::-webkit-scrollbar {
@@ -364,6 +432,9 @@
                 </button>
                 <button onclick="setActiveTab('analytics')" id="tabBtnAnalytics" class="py-3 px-3 border-b-2 border-transparent text-gray-400 hover:text-gray-200 flex items-center gap-2 whitespace-nowrap transition">
                     <i class="fa-solid fa-chart-pie text-xs"></i> Analytics
+                </button>
+                <button onclick="setActiveTab('recap')" id="tabBtnRecap" class="py-3 px-3 border-b-2 border-transparent text-gray-400 hover:text-gray-200 flex items-center gap-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-share-nodes text-xs"></i> Recap
                 </button>
             </div>
 
@@ -958,6 +1029,120 @@
 
             </div>
 
+            <!-- TAB 4: RECAP -->
+            <div id="tabContentRecap" class="hidden space-y-6 pb-8">
+
+                <!-- Top Control Bar (Period, Navigation, Unit R/$, Theme Dark/Light) -->
+                <div class="glass-card p-3 sm:p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3 max-w-3xl mx-auto">
+                    
+                    <!-- Period Switcher: Week / Month / Year -->
+                    <div class="flex items-center bg-[#020407] p-1 rounded-xl border border-emerald-500/20 text-xs font-bold">
+                        <button onclick="setRecapPeriod('week')" id="recapPeriodWeek" class="px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition">Week</button>
+                        <button onclick="setRecapPeriod('month')" id="recapPeriodMonth" class="px-3.5 py-1.5 rounded-lg bg-white text-black font-extrabold shadow transition">Month</button>
+                        <button onclick="setRecapPeriod('year')" id="recapPeriodYear" class="px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition">Year</button>
+                    </div>
+
+                    <!-- Period Navigator: < November 2026 > -->
+                    <div class="flex items-center gap-2 text-xs font-bold text-white">
+                        <button onclick="navigateRecapPeriod(-1)" class="w-7 h-7 rounded-lg bg-[#020407] hover:bg-emerald-500/20 border border-emerald-500/20 flex items-center justify-center text-gray-300 transition">
+                            <i class="fa-solid fa-chevron-left text-[10px]"></i>
+                        </button>
+                        <span id="recapNavLabel" class="min-w-[125px] text-center font-semibold tracking-tight">November 2026</span>
+                        <button onclick="navigateRecapPeriod(1)" class="w-7 h-7 rounded-lg bg-[#020407] hover:bg-emerald-500/20 border border-emerald-500/20 flex items-center justify-center text-gray-300 transition">
+                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        </button>
+                    </div>
+
+                    <!-- Unit (R / $) & Theme (Dark / Light) -->
+                    <div class="flex items-center gap-2">
+                        <!-- Unit Toggle -->
+                        <div class="flex items-center bg-[#020407] p-1 rounded-full border border-emerald-500/20 text-xs font-bold">
+                            <button onclick="setRecapUnit('R')" id="recapUnitR" class="w-7 h-7 rounded-full bg-white text-black font-black flex items-center justify-center shadow transition">R</button>
+                            <button onclick="setRecapUnit('$')" id="recapUnitDollar" class="w-7 h-7 rounded-full text-gray-400 hover:text-white flex items-center justify-center transition">$</button>
+                        </div>
+
+                        <!-- Theme Toggle -->
+                        <div class="flex items-center bg-[#020407] p-1 rounded-xl border border-emerald-500/20 text-xs font-bold">
+                            <button onclick="setRecapTheme('dark')" id="recapThemeDark" class="px-3.5 py-1.5 rounded-lg bg-white text-black font-extrabold shadow transition">Dark</button>
+                            <button onclick="setRecapTheme('light')" id="recapThemeLight" class="px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition">Light</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Story Card Container (9:16 Aspect Ratio) -->
+                <div class="flex flex-col items-center justify-center space-y-5">
+                    <div id="recapStoryCard" class="recap-story-dark w-full max-w-[350px] sm:max-w-[370px] rounded-[28px] p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden transition-all duration-300" style="min-height: 615px;">
+                        
+                        <!-- Subtle Top Glow Effect -->
+                        <div id="recapTopGlow" class="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-44 bg-emerald-500/20 blur-3xl rounded-full pointer-events-none"></div>
+
+                        <!-- TOP SECTION: Brand Logo (NAJHAN) & Period Label -->
+                        <div class="relative z-10">
+                            <div class="flex items-center justify-between">
+                                <span id="recapBrandName" class="font-black text-sm sm:text-base tracking-[0.26em] uppercase">NAJHAN</span>
+                                <span id="recapCardDateRange" class="text-[10px] sm:text-[11px] font-medium opacity-55">November 2026</span>
+                            </div>
+
+                            <!-- Report Title & Big Hero Metric -->
+                            <div class="mt-7">
+                                <div id="recapReportTypeTitle" class="text-[10px] font-bold tracking-[0.22em] uppercase opacity-50">MONTHLY REPORT</div>
+                                <div id="recapHeroValue" class="text-4xl sm:text-[44px] font-black tracking-tight mt-1 leading-none font-sans tabular-nums">+0.00R</div>
+                            </div>
+
+                            <!-- 3 Mini Metric Boxes -->
+                            <div class="grid grid-cols-3 gap-2.5 mt-6">
+                                <div id="recapBox1" class="recap-subcard-dark rounded-xl py-3 px-2 text-center">
+                                    <div id="recapStat1Val" class="text-xs sm:text-sm font-extrabold tabular-nums">0 / 0</div>
+                                    <div id="recapStat1Label" class="text-[9px] opacity-55 mt-0.5 font-medium">Green weeks</div>
+                                </div>
+                                <div id="recapBox2" class="recap-subcard-dark rounded-xl py-3 px-2 text-center">
+                                    <div id="recapStat2Val" class="text-xs sm:text-sm font-extrabold tabular-nums">0.00R</div>
+                                    <div id="recapStat2Label" class="text-[9px] opacity-55 mt-0.5 font-medium">avg per week</div>
+                                </div>
+                                <div id="recapBox3" class="recap-subcard-dark rounded-xl py-3 px-2 text-center">
+                                    <div id="recapStat3Val" class="text-xs sm:text-sm font-extrabold tabular-nums">0.00R</div>
+                                    <div id="recapStat3Label" class="text-[9px] opacity-55 mt-0.5 font-medium">best week</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MIDDLE SECTION: Horizontal Breakdown Bars -->
+                        <div class="relative z-10 my-5">
+                            <div id="recapBreakdownTitle" class="text-[10px] font-semibold opacity-55 mb-2.5">Weekly result</div>
+                            <div id="recapBarsList" class="space-y-2.5">
+                                <!-- Generated dynamically via JS -->
+                            </div>
+                        </div>
+
+                        <!-- BOTTOM SECTION: Trajectory Line & Footer Meta -->
+                        <div class="relative z-10 pt-2">
+                            <div class="text-[10px] font-semibold opacity-55 mb-1.5">Trajectory</div>
+                            <div class="w-full h-14 relative">
+                                <svg id="recapTrajectorySvg" viewBox="0 0 280 56" class="w-full h-full overflow-visible">
+                                    <!-- Generated dynamically via JS -->
+                                </svg>
+                            </div>
+
+                            <div id="recapFooterDivider" class="flex items-center justify-between text-[10px] opacity-60 pt-3 mt-2 border-t border-white/10">
+                                <span id="recapFooterTrades">Trades: 0 &bull; WR: 0%</span>
+                                <span id="recapFooterAccount">Personal</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Download Story Button -->
+                    <div class="text-center space-y-2">
+                        <button onclick="downloadRecapStory()" id="downloadRecapBtn" class="px-6 py-2.5 bg-[#10B981] hover:bg-[#059669] text-black font-extrabold text-xs rounded-xl shadow-lg shadow-emerald-950/40 transition flex items-center gap-2 mx-auto transform hover:scale-[1.02]">
+                            <span>Download Story (9:16)</span>
+                            <i class="fa-solid fa-download text-xs"></i>
+                        </button>
+                        <p class="text-[10px] text-gray-500">Exports 1080 &times; 1920 for IG/TikTok Story. Only you can see your recap.</p>
+                    </div>
+                </div>
+
+            </div>
+
         </section>
     </main>
 
@@ -1151,6 +1336,17 @@
         let isPrivacyMode = false;
         let logViewMode = 'table';
         let isSignUpMode = false;
+
+        // Recap State & Animation Variables
+        let recapPeriod = 'month'; // 'week' | 'month' | 'year'
+        let recapUnit = 'R';       // 'R' | '$'
+        let recapTheme = 'dark';   // 'dark' | 'light'
+        let recapRefDate = new Date();
+        let lastRecapHeroNumeric = 0;
+        let lastRecapStat2Numeric = 0;
+        let lastRecapStat3Numeric = 0;
+        let lastRecapBarValues = [];
+        let recapAnimFrames = {};
 
         const dayNamesID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
@@ -1495,7 +1691,7 @@
         }
 
         function setActiveTab(tab) {
-            const tabs = ['dashboard', 'tradelog', 'analytics'];
+            const tabs = ['dashboard', 'tradelog', 'analytics', 'recap'];
             tabs.forEach(t => {
                 const btn = document.getElementById('tabBtn' + capitalize(t));
                 const content = document.getElementById('tabContent' + capitalize(t));
@@ -1512,7 +1708,15 @@
             });
 
             if (tab === 'analytics') {
-                setTimeout(updateAnalyticsCharts, 100);
+                requestAnimationFrame(() => {
+                    updateAnalyticsCharts();
+                });
+            } else if (tab === 'recap') {
+                lastRecapHeroNumeric = 0;
+                lastRecapStat2Numeric = 0;
+                lastRecapStat3Numeric = 0;
+                lastRecapBarValues = [];
+                renderRecapCard(true);
             }
         }
 
@@ -1577,7 +1781,6 @@
                         </div>
                     </div>
 
-                    <!-- Mini Equity Curve (White Line, Thin, No Dots) -->
                     <div class="bg-[#020407] rounded-xl p-3 border border-emerald-500/15 cursor-pointer" onclick="window.appData.selectedAccountId = '${acc.id}'; switchView('workspace');">
                         <div class="flex items-center justify-between mb-1">
                             <span class="text-[9px] font-black uppercase tracking-widest text-emerald-400/80">EQUITY CURVE</span>
@@ -1720,6 +1923,7 @@
             renderDashboard(trades, curr);
             renderYearlyPerformance();
             applyTradeLogFilter();
+            renderRecapCard(true);
         }
 
         function onDashFilterChange() {
@@ -2961,6 +3165,26 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    // Animasi diselaraskan mulus seperti Recap dari kiri ke kanan
+                    animation: {
+                        duration: 900,
+                        easing: 'easeInOutCubic',
+                        x: {
+                            type: 'number',
+                            easing: 'easeInOutCubic',
+                            from: NaN
+                        },
+                        y: {
+                            type: 'number',
+                            easing: 'easeInOutCubic',
+                            from: function(context) {
+                                if (context.type === 'data') {
+                                    return context.chart.scales.y.getPixelForValue(0);
+                                }
+                                return 0;
+                            }
+                        }
+                    },
                     plugins: { 
                         legend: { display: false },
                         tooltip: {
@@ -3064,6 +3288,553 @@
             });
         }
 
+        // ==========================================
+        // RECAP TAB LOGIC + SMOOTH ANIMATIONS
+        // ==========================================
+        function animateRecapValue(elementId, fromVal, toVal, unit, curr, duration = 480, isHero = false) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+
+            if (recapAnimFrames[elementId]) {
+                cancelAnimationFrame(recapAnimFrames[elementId]);
+            }
+
+            if (isPrivacyMode) {
+                el.innerText = '••••';
+                return;
+            }
+
+            const startVal = Number(fromVal) || 0;
+            const endVal = Number(toVal) || 0;
+
+            if (Math.abs(endVal - startVal) < 0.0001) {
+                el.innerText = formatRecapMetric(endVal, unit, curr, isHero, false);
+                return;
+            }
+
+            const startTime = performance.now();
+
+            function step(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = startVal + (endVal - startVal) * eased;
+
+                el.innerText = formatRecapMetric(current, unit, curr, isHero, progress < 1);
+
+                if (progress < 1) {
+                    recapAnimFrames[elementId] = requestAnimationFrame(step);
+                } else {
+                    el.innerText = formatRecapMetric(endVal, unit, curr, isHero, false);
+                    delete recapAnimFrames[elementId];
+                }
+            }
+
+            recapAnimFrames[elementId] = requestAnimationFrame(step);
+        }
+
+        function setRecapPeriod(period) {
+            recapPeriod = period;
+            ['week', 'month', 'year'].forEach(p => {
+                const btn = document.getElementById('recapPeriod' + capitalize(p));
+                if (p === period) {
+                    btn.className = "px-3.5 py-1.5 rounded-lg bg-white text-black font-extrabold shadow transition";
+                } else {
+                    btn.className = "px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition";
+                }
+            });
+            lastRecapBarValues = [];
+            renderRecapCard(true);
+        }
+
+        function setRecapUnit(unit) {
+            if (recapUnit === unit) return;
+            recapUnit = unit;
+            const rBtn = document.getElementById('recapUnitR');
+            const dBtn = document.getElementById('recapUnitDollar');
+            if (unit === 'R') {
+                rBtn.className = "w-7 h-7 rounded-full bg-white text-black font-black flex items-center justify-center shadow transition";
+                dBtn.className = "w-7 h-7 rounded-full text-gray-400 hover:text-white flex items-center justify-center transition";
+            } else {
+                dBtn.className = "w-7 h-7 rounded-full bg-white text-black font-black flex items-center justify-center shadow transition";
+                rBtn.className = "w-7 h-7 rounded-full text-gray-400 hover:text-white flex items-center justify-center transition";
+            }
+            lastRecapHeroNumeric = 0;
+            lastRecapStat2Numeric = 0;
+            lastRecapStat3Numeric = 0;
+            renderRecapCard(true);
+        }
+
+        function setRecapTheme(theme) {
+            recapTheme = theme;
+            const darkBtn = document.getElementById('recapThemeDark');
+            const lightBtn = document.getElementById('recapThemeLight');
+            const card = document.getElementById('recapStoryCard');
+            const topGlow = document.getElementById('recapTopGlow');
+            const boxes = ['recapBox1', 'recapBox2', 'recapBox3'].map(id => document.getElementById(id));
+            const divider = document.getElementById('recapFooterDivider');
+
+            if (theme === 'dark') {
+                darkBtn.className = "px-3.5 py-1.5 rounded-lg bg-white text-black font-extrabold shadow transition";
+                lightBtn.className = "px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition";
+                card.classList.remove('recap-story-light');
+                card.classList.add('recap-story-dark');
+                topGlow.className = "absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-44 bg-emerald-500/20 blur-3xl rounded-full pointer-events-none";
+                boxes.forEach(b => {
+                    b.classList.remove('recap-subcard-light');
+                    b.classList.add('recap-subcard-dark');
+                });
+                divider.className = "flex items-center justify-between text-[10px] opacity-60 pt-3 mt-2 border-t border-white/10";
+            } else {
+                lightBtn.className = "px-3.5 py-1.5 rounded-lg bg-white text-black font-extrabold shadow transition";
+                darkBtn.className = "px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition";
+                card.classList.remove('recap-story-dark');
+                card.classList.add('recap-story-light');
+                topGlow.className = "absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-44 bg-emerald-400/25 blur-3xl rounded-full pointer-events-none";
+                boxes.forEach(b => {
+                    b.classList.remove('recap-subcard-dark');
+                    b.classList.add('recap-subcard-light');
+                });
+                divider.className = "flex items-center justify-between text-[10px] opacity-70 pt-3 mt-2 border-t border-black/10";
+            }
+            renderRecapCard(false);
+        }
+
+        function navigateRecapPeriod(dir) {
+            if (recapPeriod === 'week') {
+                recapRefDate.setDate(recapRefDate.getDate() + (dir * 7));
+            } else if (recapPeriod === 'month') {
+                recapRefDate.setMonth(recapRefDate.getMonth() + dir);
+            } else if (recapPeriod === 'year') {
+                recapRefDate.setFullYear(recapRefDate.getFullYear() + dir);
+            }
+            renderRecapCard(true);
+        }
+
+        function formatRecapMetric(val, unit, curr = 'USD', isHero = false, isAnimating = false) {
+            if (isPrivacyMode) return '••••';
+            const num = Number(val) || 0;
+            const sign = num > 0.004 ? '+' : num < -0.004 ? '-' : '';
+            const absVal = Math.abs(num);
+
+            if (unit === 'R') {
+                return `${sign}${absVal.toFixed(2)}R`;
+            } else {
+                if (curr === 'IDR') {
+                    return `${sign}Rp${Math.round(absVal).toLocaleString('id-ID')}`;
+                }
+                if (isHero && isAnimating) {
+                    return `${sign}$${absVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                }
+                const formatted = Math.abs(absVal - Math.round(absVal)) < 0.005
+                    ? Math.round(absVal).toLocaleString('en-US')
+                    : absVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                return `${sign}$${formatted}`;
+            }
+        }
+
+        function getTradeMetricValue(t, unit) {
+            if (unit === 'R') {
+                if (t.rr !== undefined && t.rr !== null && t.rr !== '') {
+                    return Number(t.rr) || 0;
+                }
+                const risk = Number(t.risk) || 0;
+                const pnl = Number(t.netPnL) || 0;
+                return risk > 0 ? (pnl / risk) : 0;
+            } else {
+                return Number(t.netPnL) || 0;
+            }
+        }
+
+        function getMondayOfWeek(d) {
+            const date = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+            const day = date.getDay();
+            const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(date.setDate(diff));
+        }
+
+        function toLocalDateStr(d) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        function getCalendarWeeksOfMonth(year, month) {
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const weeks = [];
+            let currentStart = 1;
+            let wIndex = 1;
+
+            while (currentStart <= daysInMonth) {
+                const startDate = new Date(year, month, currentStart);
+                const dayOfWeek = startDate.getDay();
+                const daysUntilSunday = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
+                let currentEnd = currentStart + daysUntilSunday;
+                if (currentEnd > daysInMonth) currentEnd = daysInMonth;
+
+                weeks.push({
+                    label: `W${wIndex}`,
+                    rangeText: `${currentStart}-${currentEnd}`,
+                    start: currentStart,
+                    end: currentEnd
+                });
+
+                currentStart = currentEnd + 1;
+                wIndex++;
+            }
+            return weeks;
+        }
+
+        function renderRecapCard(shouldAnimate = true) {
+            const activeAcc = getActiveAccount();
+            if (!activeAcc) return;
+
+            const curr = activeAcc.currency || 'USD';
+            const allTrades = window.appData.trades.filter(t => t.accountId === activeAcc.id);
+
+            const monthNamesFull = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+            let filteredTrades = [];
+            let breakdownItems = [];
+            let navLabel = '';
+            let cardDateRange = '';
+            let reportTitle = '';
+            let breakdownTitle = '';
+            let stat1Label = '';
+            let stat2Label = '';
+            let stat3Label = '';
+
+            if (recapPeriod === 'week') {
+                const monday = getMondayOfWeek(recapRefDate);
+                const sunday = new Date(monday);
+                sunday.setDate(monday.getDate() + 6);
+
+                const monStr = `${monthNamesShort[monday.getMonth()]} ${monday.getDate()}`;
+                const sunStr = monday.getMonth() === sunday.getMonth()
+                    ? `${sunday.getDate()}`
+                    : `${monthNamesShort[sunday.getMonth()]} ${sunday.getDate()}`;
+                
+                navLabel = `${monStr} – ${sunStr}`;
+                cardDateRange = navLabel;
+                reportTitle = 'WEEKLY REPORT';
+                breakdownTitle = 'Daily result';
+                stat1Label = 'Green days';
+                stat2Label = 'avg per day';
+                stat3Label = 'best day';
+
+                const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+                for (let i = 0; i < 5; i++) {
+                    const currDay = new Date(monday);
+                    currDay.setDate(monday.getDate() + i);
+                    const dStr = toLocalDateStr(currDay);
+                    const dateSubText = `${monthNamesShort[currDay.getMonth()]} ${currDay.getDate()}`;
+                    const dTrades = allTrades.filter(t => t.date === dStr);
+                    const sumVal = dTrades.reduce((acc, t) => acc + getTradeMetricValue(t, recapUnit), 0);
+                    breakdownItems.push({
+                        label: dayLabels[i],
+                        subLabel: dateSubText,
+                        value: sumVal,
+                        hasTrades: dTrades.length > 0
+                    });
+                    filteredTrades.push(...dTrades);
+                }
+
+            } else if (recapPeriod === 'month') {
+                const year = recapRefDate.getFullYear();
+                const month = recapRefDate.getMonth();
+
+                navLabel = `${monthNamesFull[month]} ${year}`;
+                cardDateRange = navLabel;
+                reportTitle = 'MONTHLY REPORT';
+                breakdownTitle = 'Weekly result';
+                stat1Label = 'Green weeks';
+                stat2Label = 'avg per week';
+                stat3Label = 'best week';
+
+                filteredTrades = allTrades.filter(t => {
+                    if (!t.date) return false;
+                    const parts = t.date.split('-');
+                    return parseInt(parts[0]) === year && (parseInt(parts[1]) - 1) === month;
+                });
+
+                const weekBuckets = getCalendarWeeksOfMonth(year, month);
+
+                weekBuckets.forEach(w => {
+                    const wTrades = filteredTrades.filter(t => {
+                        const dayNum = parseInt(t.date.split('-')[2]);
+                        return dayNum >= w.start && dayNum <= w.end;
+                    });
+                    const sumVal = wTrades.reduce((acc, t) => acc + getTradeMetricValue(t, recapUnit), 0);
+                    breakdownItems.push({
+                        label: w.label,
+                        subLabel: w.rangeText,
+                        value: sumVal,
+                        hasTrades: wTrades.length > 0
+                    });
+                });
+
+            } else if (recapPeriod === 'year') {
+                const year = recapRefDate.getFullYear();
+
+                navLabel = `${year}`;
+                cardDateRange = `${year}`;
+                reportTitle = 'YEARLY REPORT';
+                breakdownTitle = 'Monthly result';
+                stat1Label = 'Green months';
+                stat2Label = 'avg per month';
+                stat3Label = 'best month';
+
+                filteredTrades = allTrades.filter(t => {
+                    if (!t.date) return false;
+                    return parseInt(t.date.split('-')[0]) === year;
+                });
+
+                for (let m = 0; m < 12; m++) {
+                    const mTrades = filteredTrades.filter(t => (parseInt(t.date.split('-')[1]) - 1) === m);
+                    const sumVal = mTrades.reduce((acc, t) => acc + getTradeMetricValue(t, recapUnit), 0);
+                    breakdownItems.push({
+                        label: monthNamesShort[m],
+                        value: sumVal,
+                        hasTrades: mTrades.length > 0
+                    });
+                }
+            }
+
+            document.getElementById('recapNavLabel').innerText = navLabel;
+            document.getElementById('recapCardDateRange').innerText = cardDateRange;
+            document.getElementById('recapReportTypeTitle').innerText = reportTitle;
+            document.getElementById('recapBreakdownTitle').innerText = breakdownTitle;
+            document.getElementById('recapStat1Label').innerText = stat1Label;
+            document.getElementById('recapStat2Label').innerText = stat2Label;
+            document.getElementById('recapStat3Label').innerText = stat3Label;
+
+            const totalMetric = filteredTrades.reduce((acc, t) => acc + getTradeMetricValue(t, recapUnit), 0);
+            const heroEl = document.getElementById('recapHeroValue');
+            if (totalMetric < 0) {
+                heroEl.className = "text-4xl sm:text-[44px] font-black tracking-tight mt-1 leading-none font-sans tabular-nums text-red-400";
+            } else {
+                heroEl.className = "text-4xl sm:text-[44px] font-black tracking-tight mt-1 leading-none font-sans tabular-nums";
+            }
+
+            if (shouldAnimate) {
+                animateRecapValue('recapHeroValue', lastRecapHeroNumeric, totalMetric, recapUnit, curr, 480, true);
+            } else {
+                heroEl.innerText = formatRecapMetric(totalMetric, recapUnit, curr, true, false);
+            }
+            lastRecapHeroNumeric = totalMetric;
+
+            const activeBuckets = breakdownItems.filter(b => b.hasTrades);
+            const greenBucketsCount = activeBuckets.filter(b => b.value > 0).length;
+            const totalActiveBuckets = activeBuckets.length;
+            const avgBucketVal = totalActiveBuckets > 0 ? (totalMetric / totalActiveBuckets) : 0;
+            const bestBucketVal = activeBuckets.length > 0 ? Math.max(...activeBuckets.map(b => b.value), 0) : 0;
+
+            document.getElementById('recapStat1Val').innerText = `${greenBucketsCount} / ${totalActiveBuckets}`;
+            if (shouldAnimate) {
+                animateRecapValue('recapStat2Val', lastRecapStat2Numeric, avgBucketVal, recapUnit, curr, 420, false);
+                animateRecapValue('recapStat3Val', lastRecapStat3Numeric, bestBucketVal, recapUnit, curr, 420, false);
+            } else {
+                document.getElementById('recapStat2Val').innerText = formatRecapMetric(avgBucketVal, recapUnit, curr, false, false);
+                document.getElementById('recapStat3Val').innerText = formatRecapMetric(bestBucketVal, recapUnit, curr, false, false);
+            }
+            lastRecapStat2Numeric = avgBucketVal;
+            lastRecapStat3Numeric = bestBucketVal;
+
+            const barsListEl = document.getElementById('recapBarsList');
+            barsListEl.innerHTML = '';
+
+            const maxAbs = Math.max(...breakdownItems.map(b => Math.abs(b.value)), 0.01);
+            const isYearly = recapPeriod === 'year';
+
+            breakdownItems.forEach((item, idx) => {
+                const row = document.createElement('div');
+                row.className = `flex items-center gap-2.5 ${isYearly ? 'text-[10px]' : 'text-[11px]'} ${shouldAnimate ? 'recap-row-enter' : ''}`;
+                if (shouldAnimate) {
+                    row.style.animationDelay = `${idx * 25}ms`;
+                }
+
+                const targetPct = item.hasTrades && item.value !== 0 ? Math.max((Math.abs(item.value) / maxAbs) * 100, 6) : 0;
+                const barTrackBg = recapTheme === 'dark' ? 'bg-white/[0.05]' : 'bg-black/[0.06]';
+                
+                let barFillHtml = '';
+                if (item.hasTrades && item.value > 0) {
+                    barFillHtml = `<div data-target-width="${targetPct}%" class="recap-bar-fill h-full rounded-full bg-gradient-to-r from-[#166534] to-[#4ade80]" style="width: ${shouldAnimate ? '0%' : targetPct + '%'}"></div>`;
+                } else if (item.hasTrades && item.value < 0) {
+                    barFillHtml = `<div data-target-width="${targetPct}%" class="recap-bar-fill h-full rounded-full bg-gradient-to-r from-[#991b1b] to-[#f87171]" style="width: ${shouldAnimate ? '0%' : targetPct + '%'}"></div>`;
+                }
+
+                let valText = '–';
+                let valColorClass = 'opacity-45';
+                if (item.hasTrades) {
+                    valText = formatRecapMetric(item.value, recapUnit, curr);
+                    valColorClass = item.value > 0 
+                        ? (recapTheme === 'dark' ? 'text-[#4ade80] font-bold' : 'text-[#15803d] font-bold')
+                        : item.value < 0 
+                            ? 'text-red-400 font-bold' 
+                            : 'opacity-70 font-semibold';
+                }
+
+                let labelHtml = '';
+                if (recapPeriod === 'week' || recapPeriod === 'month') {
+                    labelHtml = `
+                        <div class="w-11 shrink-0 leading-tight">
+                            <div class="font-bold opacity-85">${item.label}</div>
+                            <div class="text-[9px] opacity-45 font-normal tabular-nums">${item.subLabel || ''}</div>
+                        </div>
+                    `;
+                } else {
+                    labelHtml = `<span class="w-7 font-semibold opacity-60 shrink-0">${item.label}</span>`;
+                }
+
+                const valElemId = `recapBarVal_${idx}`;
+                row.innerHTML = `
+                    ${labelHtml}
+                    <div class="flex-grow ${isYearly ? 'h-2' : 'h-2.5'} rounded-full ${barTrackBg} overflow-hidden">
+                        ${barFillHtml}
+                    </div>
+                    <span id="${valElemId}" class="w-16 text-right font-mono text-[10px] tabular-nums ${valColorClass} shrink-0">${valText}</span>
+                `;
+                barsListEl.appendChild(row);
+
+                if (shouldAnimate && item.hasTrades) {
+                    const prevVal = lastRecapBarValues[idx] !== undefined ? lastRecapBarValues[idx] : 0;
+                    animateRecapValue(valElemId, prevVal, item.value, recapUnit, curr, 420, false);
+                }
+            });
+
+            lastRecapBarValues = breakdownItems.map(b => b.hasTrades ? b.value : 0);
+
+            if (shouldAnimate) {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        barsListEl.querySelectorAll('.recap-bar-fill').forEach(barEl => {
+                            barEl.style.width = barEl.getAttribute('data-target-width');
+                        });
+                    });
+                });
+            }
+
+            renderRecapTrajectorySvg(filteredTrades, recapUnit, shouldAnimate);
+
+            const totalTradesCount = filteredTrades.length;
+            const winsCount = filteredTrades.filter(t => Number(t.netPnL) > 0).length;
+            const wrPct = totalTradesCount > 0 ? Math.round((winsCount / totalTradesCount) * 100) : 0;
+
+            document.getElementById('recapFooterTrades').innerText = `Trades: ${totalTradesCount} • WR: ${wrPct}%`;
+            document.getElementById('recapFooterAccount').innerText = activeAcc.name || 'Personal';
+        }
+
+        function renderRecapTrajectorySvg(trades, unit, shouldAnimate = true) {
+            const svg = document.getElementById('recapTrajectorySvg');
+            if (!svg) return;
+
+            const sorted = [...trades].sort((a, b) => new Date(a.date) - new Date(b.date));
+            const width = 280;
+            const height = 50;
+            const padX = 6;
+            const padY = 8;
+
+            const lineColor = recapTheme === 'dark' ? '#4ade80' : '#16a34a';
+            const baselineColor = recapTheme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+
+            if (sorted.length === 0) {
+                const midY = height / 2;
+                svg.innerHTML = `
+                    <line id="recapTrajLine" x1="${padX}" y1="${midY}" x2="${width - padX}" y2="${midY}" stroke="${lineColor}" stroke-width="2" stroke-linecap="round" />
+                    <circle class="${shouldAnimate ? 'recap-traj-dot-anim' : ''}" cx="${width - padX}" cy="${midY}" r="3.5" fill="${lineColor}" />
+                `;
+                if (shouldAnimate) {
+                    const lineEl = document.getElementById('recapTrajLine');
+                    const len = width - padX * 2;
+                    lineEl.style.strokeDasharray = len;
+                    lineEl.style.strokeDashoffset = len;
+                    requestAnimationFrame(() => {
+                        lineEl.style.transition = 'stroke-dashoffset 0.55s cubic-bezier(0.22, 1, 0.36, 1)';
+                        lineEl.style.strokeDashoffset = '0';
+                    });
+                }
+                return;
+            }
+
+            let cum = 0;
+            const points = [0];
+            sorted.forEach(t => {
+                cum += getTradeMetricValue(t, unit);
+                points.push(cum);
+            });
+
+            const minVal = Math.min(...points, 0);
+            const maxVal = Math.max(...points, 0);
+            const range = (maxVal - minVal) || 1;
+
+            const coords = points.map((val, idx) => {
+                const x = padX + (idx / (points.length - 1)) * (width - padX * 2);
+                const y = (height - padY) - ((val - minVal) / range) * (height - padY * 2);
+                return { x, y };
+            });
+
+            const pathD = coords.map((c, idx) => `${idx === 0 ? 'M' : 'L'} ${c.x.toFixed(1)} ${c.y.toFixed(1)}`).join(' ');
+            const areaD = `${pathD} L ${coords[coords.length - 1].x.toFixed(1)} ${height} L ${coords[0].x.toFixed(1)} ${height} Z`;
+            const lastPt = coords[coords.length - 1];
+            const zeroY = (height - padY) - ((0 - minVal) / range) * (height - padY * 2);
+
+            svg.innerHTML = `
+                <defs>
+                    <linearGradient id="recapTrajGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="${lineColor}" stop-opacity="0.28" />
+                        <stop offset="100%" stop-color="${lineColor}" stop-opacity="0.0" />
+                    </linearGradient>
+                </defs>
+                <line x1="${padX}" y1="${zeroY.toFixed(1)}" x2="${width - padX}" y2="${zeroY.toFixed(1)}" stroke="${baselineColor}" stroke-width="1" stroke-dasharray="3 3" />
+                <path class="${shouldAnimate ? 'recap-traj-area-anim' : ''}" d="${areaD}" fill="url(#recapTrajGrad)" />
+                <path id="recapTrajPath" d="${pathD}" fill="none" stroke="${lineColor}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                <circle class="${shouldAnimate ? 'recap-traj-dot-anim' : ''}" cx="${lastPt.x.toFixed(1)}" cy="${lastPt.y.toFixed(1)}" r="3.5" fill="${lineColor}" />
+            `;
+
+            if (shouldAnimate) {
+                const pathEl = document.getElementById('recapTrajPath');
+                if (pathEl && typeof pathEl.getTotalLength === 'function') {
+                    const length = pathEl.getTotalLength();
+                    pathEl.style.strokeDasharray = length;
+                    pathEl.style.strokeDashoffset = length;
+                    requestAnimationFrame(() => {
+                        pathEl.style.transition = 'stroke-dashoffset 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+                        pathEl.style.strokeDashoffset = '0';
+                    });
+                }
+            }
+        }
+
+        async function downloadRecapStory() {
+            const cardEl = document.getElementById('recapStoryCard');
+            const btnEl = document.getElementById('downloadRecapBtn');
+            if (!cardEl || typeof html2canvas === 'undefined') {
+                showNotice("Fitur export sedang memuat. Silakan coba beberapa detik lagi.");
+                return;
+            }
+
+            const originalText = btnEl.innerHTML;
+            btnEl.innerHTML = `<span>Exporting...</span> <i class="fa-solid fa-spinner fa-spin text-xs"></i>`;
+            btnEl.disabled = true;
+
+            try {
+                const canvas = await html2canvas(cardEl, {
+                    scale: 3,
+                    backgroundColor: null,
+                    useCORS: true
+                });
+                const link = document.createElement('a');
+                link.download = `NAJHAN-Recap-${recapPeriod.toUpperCase()}-${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch (err) {
+                console.error(err);
+                showNotice("Gagal mengunduh gambar recap.");
+            } finally {
+                btnEl.innerHTML = originalText;
+                btnEl.disabled = false;
+            }
+        }
+
         function showNotice(msg) {
             document.getElementById('customModalIcon').innerHTML = `<i class="fa-solid fa-circle-info text-emerald-400"></i>`;
             document.getElementById('customModalTitle').innerText = "Information";
@@ -3086,4 +3857,4 @@
         window.toggleAuthMode = toggleAuthMode;
     </script>
 </body>
-    </html>
+</html>
