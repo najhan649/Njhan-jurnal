@@ -3146,6 +3146,11 @@
             gradient.addColorStop(0, 'rgba(16, 185, 129, 0.35)');
             gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
 
+            // ANIMASI EQUITY CURVE: Draw-in & Fade Smooth (Cubic Progression)
+            const totalDuration = 1100;
+            const delayBetweenPoints = totalDuration / Math.max(data.length, 1);
+            const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(data[0]) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
+
             charts[canvasId] = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -3154,42 +3159,52 @@
                         label: label,
                         data: data,
                         borderColor: '#FFFFFF',
-                        borderWidth: 2,
+                        borderWidth: 2.2,
                         backgroundColor: gradient,
                         fill: true,
-                        tension: 0.4,
+                        tension: 0.38,
                         pointRadius: 0,
-                        pointHoverRadius: 4
+                        pointHoverRadius: 5
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    // Animasi diselaraskan mulus seperti Recap dari kiri ke kanan
                     animation: {
-                        duration: 900,
-                        easing: 'easeInOutCubic',
                         x: {
                             type: 'number',
                             easing: 'easeInOutCubic',
-                            from: NaN
+                            duration: totalDuration,
+                            from: NaN,
+                            delay(context) {
+                                if (context.type !== 'data' || context.mode !== 'default') {
+                                    return 0;
+                                }
+                                return context.index * delayBetweenPoints;
+                            }
                         },
                         y: {
                             type: 'number',
                             easing: 'easeInOutCubic',
-                            from: function(context) {
-                                if (context.type === 'data') {
-                                    return context.chart.scales.y.getPixelForValue(0);
+                            duration: totalDuration,
+                            from: previousY,
+                            delay(context) {
+                                if (context.type !== 'data' || context.mode !== 'default') {
+                                    return 0;
                                 }
-                                return 0;
+                                return context.index * delayBetweenPoints;
                             }
+                        },
+                        colors: {
+                            type: 'color',
+                            duration: 1000
                         }
                     },
                     plugins: { 
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: 'rgba(2, 4, 7, 0.9)',
-                            titleFont: { family: 'Inter', size: 12 },
+                            backgroundColor: 'rgba(2, 4, 7, 0.95)',
+                            titleFont: { family: 'Inter', size: 12, weight: 'bold' },
                             bodyFont: { family: 'Inter', size: 12 },
                             titleColor: '#10B981',
                             bodyColor: '#FFFFFF',
