@@ -21,8 +21,8 @@
                         accentDark: '#020407'
                     },
                     fontFamily: {
-                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'Fira Code', 'Monaco', 'monospace']
+                        sans: ['Michroma', 'sans-serif'],
+                        mono: ['Michroma', 'monospace']
                     }
                 }
             }
@@ -31,10 +31,10 @@
     <!-- Chart.js & html2canvas CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- Google Font: Inter & JetBrains Mono -->
+    <!-- Google Font: Michroma -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
     <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -42,7 +42,7 @@
         body {
             background: #020407;
             color: #f1f5f9;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Michroma', sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -1430,7 +1430,7 @@
                     ctx.fill();
 
                     if (p.text) {
-                        ctx.font = '9px JetBrains Mono, monospace';
+                        ctx.font = '9px Michroma, monospace';
                         ctx.fillStyle = 'rgba(16, 185, 129, 0.52)';
                         ctx.fillText(p.text, p.x + 7, p.y - 7);
                     }
@@ -1831,8 +1831,8 @@
                         legend: { display: false },
                         tooltip: {
                             backgroundColor: 'rgba(2, 4, 7, 0.9)',
-                            titleFont: { family: 'Inter', size: 10 },
-                            bodyFont: { family: 'Inter', size: 10 },
+                            titleFont: { family: 'Michroma', size: 10 },
+                            bodyFont: { family: 'Michroma', size: 10 },
                             titleColor: '#10B981',
                             bodyColor: '#FFFFFF',
                             callbacks: {
@@ -1848,7 +1848,7 @@
                             grid: { color: 'rgba(16, 185, 129, 0.06)' }, 
                             ticks: { 
                                 color: '#6B7280',
-                                font: { size: 9, family: 'Inter' },
+                                font: { size: 9, family: 'Michroma' },
                                 callback: function(val) { return formatMoneyShort(val, curr); }
                             } 
                         }
@@ -2975,7 +2975,7 @@
                                 count: 4 
                             },
                             ticks: { display: false },
-                            pointLabels: { color: '#10B981', font: { size: 10, weight: 'bold', family: 'Inter' } }
+                            pointLabels: { color: '#10B981', font: { size: 10, weight: 'bold', family: 'Michroma' } }
                         }
                     }
                 }
@@ -3124,8 +3124,8 @@
                         legend: { display: false },
                         tooltip: {
                             backgroundColor: 'rgba(2, 4, 7, 0.9)',
-                            titleFont: { family: 'Inter', size: 12 },
-                            bodyFont: { family: 'Inter', size: 12 },
+                            titleFont: { family: 'Michroma', size: 12 },
+                            bodyFont: { family: 'Michroma', size: 12 },
                             callbacks: {
                                 label: function(context) {
                                     return ` ${context.label}: ${context.raw} Trades`;
@@ -3168,8 +3168,8 @@
                         legend: { display: false },
                         tooltip: {
                             backgroundColor: 'rgba(2, 4, 7, 0.9)',
-                            titleFont: { family: 'Inter', size: 12 },
-                            bodyFont: { family: 'Inter', size: 12 },
+                            titleFont: { family: 'Michroma', size: 12 },
+                            bodyFont: { family: 'Michroma', size: 12 },
                             titleColor: '#10B981',
                             bodyColor: '#FFFFFF',
                             borderColor: 'rgba(16, 185, 129, 0.3)',
@@ -3185,13 +3185,13 @@
                     scales: {
                         x: { 
                             grid: { color: 'rgba(16, 185, 129, 0.06)' }, 
-                            ticks: { color: '#6B7280', font: { size: 10, family: 'Inter' } } 
+                            ticks: { color: '#6B7280', font: { size: 10, family: 'Michroma' } } 
                         },
                         y: { 
                             grid: { color: 'rgba(16, 185, 129, 0.06)' }, 
                             ticks: { 
                                 color: '#6B7280',
-                                font: { size: 10, family: 'Inter' },
+                                font: { size: 10, family: 'Michroma' },
                                 callback: function(val) { 
                                     const n = Number(val);
                                     return formatMoneyShort(n, curr); 
@@ -3207,7 +3207,7 @@
             if (charts[canvasId]) charts[canvasId].destroy();
             const ctx = document.getElementById(canvasId).getContext('2d');
             
-            Chart.defaults.font.family = 'Inter, system-ui, -apple-system, sans-serif';
+            Chart.defaults.font.family = 'Michroma, sans-serif';
 
             charts[canvasId] = new Chart(ctx, {
                 type: 'bar',
@@ -3228,8 +3228,8 @@
                         legend: { display: false },
                         tooltip: {
                             backgroundColor: 'rgba(2, 4, 7, 0.95)',
-                            titleFont: { family: 'Inter', size: 12, weight: 'bold' },
-                            bodyFont: { family: 'Inter', size: 12 },
+                            titleFont: { family: 'Michroma', size: 12, weight: 'bold' },
+                            bodyFont: { family: 'Michroma', size: 12 },
                             titleColor: '#10B981',
                             bodyColor: '#FFFFFF',
                             borderColor: 'rgba(16, 185, 129, 0.3)',
@@ -3248,14 +3248,14 @@
                             grid: { display: false }, 
                             ticks: { 
                                 color: '#9CA3AF', 
-                                font: { weight: '600', size: 11, family: 'Inter' } 
+                                font: { weight: '600', size: 11, family: 'Michroma' } 
                             } 
                         },
                         y: { 
                             grid: { color: 'rgba(16, 185, 129, 0.08)' }, 
                             ticks: { 
                                 color: '#9CA3AF',
-                                font: { size: 11, family: 'Inter', weight: '600' },
+                                font: { size: 11, family: 'Michroma', weight: '600' },
                                 callback: function(val) { 
                                     const n = Number(val);
                                     return formatMoneyShort(n, curr);
@@ -3436,7 +3436,6 @@
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         }
 
-        // Menghitung minggu dalam satu bulan berdasarkan Senin - Minggu (W1 s/d W6)
         function getCalendarWeeksOfMonth(year, month) {
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const weeks = [];
@@ -3445,7 +3444,7 @@
 
             while (currentStart <= daysInMonth) {
                 const startDate = new Date(year, month, currentStart);
-                const dayOfWeek = startDate.getDay(); // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
+                const dayOfWeek = startDate.getDay();
                 const daysUntilSunday = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
                 let currentEnd = currentStart + daysUntilSunday;
                 if (currentEnd > daysInMonth) currentEnd = daysInMonth;
@@ -3501,7 +3500,6 @@
                 stat2Label = 'avg per day';
                 stat3Label = 'best day';
 
-                // Monday - Friday dengan tanggal di bawah hari (contoh: Mon / Nov 9)
                 const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
                 for (let i = 0; i < 5; i++) {
                     const currDay = new Date(monday);
@@ -3537,7 +3535,6 @@
                     return parseInt(parts[0]) === year && (parseInt(parts[1]) - 1) === month;
                 });
 
-                // Perhitungan W1 - W6 berdasarkan Senin - Minggu bulan tersebut
                 const weekBuckets = getCalendarWeeksOfMonth(year, month);
 
                 weekBuckets.forEach(w => {
@@ -3581,7 +3578,6 @@
                 }
             }
 
-            // Update Header & Labels
             document.getElementById('recapNavLabel').innerText = navLabel;
             document.getElementById('recapCardDateRange').innerText = cardDateRange;
             document.getElementById('recapReportTypeTitle').innerText = reportTitle;
@@ -3590,7 +3586,6 @@
             document.getElementById('recapStat2Label').innerText = stat2Label;
             document.getElementById('recapStat3Label').innerText = stat3Label;
 
-            // Hero Metric Calculation & Smooth Rolling Animation
             const totalMetric = filteredTrades.reduce((acc, t) => acc + getTradeMetricValue(t, recapUnit), 0);
             const heroEl = document.getElementById('recapHeroValue');
             if (totalMetric < 0) {
@@ -3606,7 +3601,6 @@
             }
             lastRecapHeroNumeric = totalMetric;
 
-            // Mini Boxes Calculation & Animation
             const activeBuckets = breakdownItems.filter(b => b.hasTrades);
             const greenBucketsCount = activeBuckets.filter(b => b.value > 0).length;
             const totalActiveBuckets = activeBuckets.length;
@@ -3624,7 +3618,6 @@
             lastRecapStat2Numeric = avgBucketVal;
             lastRecapStat3Numeric = bestBucketVal;
 
-            // Render Horizontal Bars with Smooth Width & Value Animation
             const barsListEl = document.getElementById('recapBarsList');
             barsListEl.innerHTML = '';
 
@@ -3659,7 +3652,6 @@
                             : 'opacity-70 font-semibold';
                 }
 
-                // Tampilan label hari + tanggal di bawahnya (Week) atau W1..W6 + tanggal di bawahnya (Month)
                 let labelHtml = '';
                 if (recapPeriod === 'week' || recapPeriod === 'month') {
                     labelHtml = `
@@ -3682,7 +3674,6 @@
                 `;
                 barsListEl.appendChild(row);
 
-                // Trigger smooth bar width & number animation
                 if (shouldAnimate && item.hasTrades) {
                     const prevVal = lastRecapBarValues[idx] !== undefined ? lastRecapBarValues[idx] : 0;
                     animateRecapValue(valElemId, prevVal, item.value, recapUnit, curr, 420, false);
@@ -3701,10 +3692,8 @@
                 });
             }
 
-            // Render Trajectory SVG with Line-Draw Animation
             renderRecapTrajectorySvg(filteredTrades, recapUnit, shouldAnimate);
 
-            // Footer Stats (Account Name & WR)
             const totalTradesCount = filteredTrades.length;
             const winsCount = filteredTrades.filter(t => Number(t.netPnL) > 0).length;
             const wrPct = totalTradesCount > 0 ? Math.round((winsCount / totalTradesCount) * 100) : 0;
