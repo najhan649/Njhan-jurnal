@@ -68,7 +68,7 @@
             animation: permanentGlow 4s ease-in-out infinite;
         }
 
-        /* Recap Card Custom Styles (100% Match Video) */
+        /* Recap Card Custom Styles */
         .recap-story-dark {
             background: radial-gradient(120% 75% at 50% 0%, #10321d 0%, #09130d 45%, #060907 100%);
             color: #ffffff;
@@ -1042,7 +1042,7 @@
                         <button onclick="setRecapPeriod('year')" id="recapPeriodYear" class="px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition">Year</button>
                     </div>
 
-                    <!-- Period Navigator: < November 2026 > -->
+                    <!-- Period Navigator -->
                     <div class="flex items-center gap-2 text-xs font-bold text-white">
                         <button onclick="navigateRecapPeriod(-1)" class="w-7 h-7 rounded-lg bg-[#020407] hover:bg-emerald-500/20 border border-emerald-500/20 flex items-center justify-center text-gray-300 transition">
                             <i class="fa-solid fa-chevron-left text-[10px]"></i>
@@ -1053,15 +1053,13 @@
                         </button>
                     </div>
 
-                    <!-- Unit (R / $) & Theme (Dark / Light) -->
+                    <!-- Unit & Theme -->
                     <div class="flex items-center gap-2">
-                        <!-- Unit Toggle -->
                         <div class="flex items-center bg-[#020407] p-1 rounded-full border border-emerald-500/20 text-xs font-bold">
                             <button onclick="setRecapUnit('R')" id="recapUnitR" class="w-7 h-7 rounded-full bg-white text-black font-black flex items-center justify-center shadow transition">R</button>
                             <button onclick="setRecapUnit('$')" id="recapUnitDollar" class="w-7 h-7 rounded-full text-gray-400 hover:text-white flex items-center justify-center transition">$</button>
                         </div>
 
-                        <!-- Theme Toggle -->
                         <div class="flex items-center bg-[#020407] p-1 rounded-xl border border-emerald-500/20 text-xs font-bold">
                             <button onclick="setRecapTheme('dark')" id="recapThemeDark" class="px-3.5 py-1.5 rounded-lg bg-white text-black font-extrabold shadow transition">Dark</button>
                             <button onclick="setRecapTheme('light')" id="recapThemeLight" class="px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition">Light</button>
@@ -1069,27 +1067,23 @@
                     </div>
                 </div>
 
-                <!-- Story Card Container (9:16 Aspect Ratio) -->
+                <!-- Story Card Container -->
                 <div class="flex flex-col items-center justify-center space-y-5">
                     <div id="recapStoryCard" class="recap-story-dark w-full max-w-[350px] sm:max-w-[370px] rounded-[28px] p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden transition-all duration-300" style="min-height: 615px;">
                         
-                        <!-- Subtle Top Glow Effect -->
                         <div id="recapTopGlow" class="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-44 bg-emerald-500/20 blur-3xl rounded-full pointer-events-none"></div>
 
-                        <!-- TOP SECTION: Brand Logo (NAJHAN) & Period Label -->
                         <div class="relative z-10">
                             <div class="flex items-center justify-between">
                                 <span id="recapBrandName" class="font-black text-sm sm:text-base tracking-[0.26em] uppercase">NAJHAN</span>
                                 <span id="recapCardDateRange" class="text-[10px] sm:text-[11px] font-medium opacity-55">November 2026</span>
                             </div>
 
-                            <!-- Report Title & Big Hero Metric -->
                             <div class="mt-7">
                                 <div id="recapReportTypeTitle" class="text-[10px] font-bold tracking-[0.22em] uppercase opacity-50">MONTHLY REPORT</div>
                                 <div id="recapHeroValue" class="text-4xl sm:text-[44px] font-black tracking-tight mt-1 leading-none font-sans tabular-nums">+0.00R</div>
                             </div>
 
-                            <!-- 3 Mini Metric Boxes -->
                             <div class="grid grid-cols-3 gap-2.5 mt-6">
                                 <div id="recapBox1" class="recap-subcard-dark rounded-xl py-3 px-2 text-center">
                                     <div id="recapStat1Val" class="text-xs sm:text-sm font-extrabold tabular-nums">0 / 0</div>
@@ -1106,20 +1100,16 @@
                             </div>
                         </div>
 
-                        <!-- MIDDLE SECTION: Horizontal Breakdown Bars -->
                         <div class="relative z-10 my-5">
                             <div id="recapBreakdownTitle" class="text-[10px] font-semibold opacity-55 mb-2.5">Weekly result</div>
                             <div id="recapBarsList" class="space-y-2.5">
-                                <!-- Generated dynamically via JS -->
                             </div>
                         </div>
 
-                        <!-- BOTTOM SECTION: Trajectory Line & Footer Meta -->
                         <div class="relative z-10 pt-2">
                             <div class="text-[10px] font-semibold opacity-55 mb-1.5">Trajectory</div>
                             <div class="w-full h-14 relative">
                                 <svg id="recapTrajectorySvg" viewBox="0 0 280 56" class="w-full h-full overflow-visible">
-                                    <!-- Generated dynamically via JS -->
                                 </svg>
                             </div>
 
@@ -1131,7 +1121,6 @@
 
                     </div>
 
-                    <!-- Download Story Button -->
                     <div class="text-center space-y-2">
                         <button onclick="downloadRecapStory()" id="downloadRecapBtn" class="px-6 py-2.5 bg-[#10B981] hover:bg-[#059669] text-black font-extrabold text-xs rounded-xl shadow-lg shadow-emerald-950/40 transition flex items-center gap-2 mx-auto transform hover:scale-[1.02]">
                             <span>Download Story (9:16)</span>
@@ -1337,10 +1326,9 @@
         let logViewMode = 'table';
         let isSignUpMode = false;
 
-        // Recap State & Animation Variables
-        let recapPeriod = 'month'; // 'week' | 'month' | 'year'
-        let recapUnit = 'R';       // 'R' | '$'
-        let recapTheme = 'dark';   // 'dark' | 'light'
+        let recapPeriod = 'month';
+        let recapUnit = 'R';
+        let recapTheme = 'dark';
         let recapRefDate = new Date();
         let lastRecapHeroNumeric = 0;
         let lastRecapStat2Numeric = 0;
@@ -1375,18 +1363,6 @@
             });
 
             window.addEventListener('mouseout', () => {
-                pointer.x = null;
-                pointer.y = null;
-            });
-
-            window.addEventListener('touchmove', (e) => {
-                if (e.touches.length > 0) {
-                    pointer.x = e.touches[0].clientX;
-                    pointer.y = e.touches[0].clientY;
-                }
-            }, { passive: true });
-
-            window.addEventListener('touchend', () => {
                 pointer.x = null;
                 pointer.y = null;
             });
@@ -3138,6 +3114,9 @@
             });
         }
 
+        // =========================================================================
+        // UPDATED EQUITY CURVE ANIMATION (EXACT MATCH TERMINAL ANIMATION SPEED & EASING)
+        // =========================================================================
         function renderLineChart(canvasId, labels, data, label, curr) {
             if (charts[canvasId]) charts[canvasId].destroy();
             const ctx = document.getElementById(canvasId).getContext('2d');
@@ -3146,8 +3125,7 @@
             gradient.addColorStop(0, 'rgba(16, 185, 129, 0.35)');
             gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
 
-            // ANIMASI EQUITY CURVE: Draw-in & Fade Smooth (Cubic Progression)
-            const totalDuration = 1100;
+            const totalDuration = 1200;
             const delayBetweenPoints = totalDuration / Math.max(data.length, 1);
             const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(data[0]) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
 
