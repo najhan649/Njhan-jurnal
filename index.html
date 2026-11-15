@@ -3165,23 +3165,18 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    // Animasi diselaraskan agar langsung muncul mulus tanpa telat (seperti Recap)
                     animation: {
-                        duration: 750, // Dipercepat menjadi 750ms agar langsung merespons dan sehalus tab recap
-                        easing: 'cubicBezier(0.22, 1, 0.36, 1)',
+                        duration: 500,
+                        easing: 'easeOutCubic',
                         x: {
                             type: 'number',
-                            easing: 'cubicBezier(0.22, 1, 0.36, 1)',
-                            from: NaN,
-                            delay(context) {
-                                if (context.type !== 'data' || context.mode !== 'default') {
-                                    return 0;
-                                }
-                                return context.dataIndex * 20; // Jeda antar titik dipercepat agar mengalir instan
-                            }
+                            easing: 'easeOutCubic',
+                            from: NaN
                         },
                         y: {
                             type: 'number',
-                            easing: 'cubicBezier(0.22, 1, 0.36, 1)',
+                            easing: 'easeOutCubic',
                             from: function(context) {
                                 if (context.type === 'data') {
                                     return context.chart.scales.y.getPixelForValue(0);
