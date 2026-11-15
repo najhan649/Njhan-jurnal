@@ -1708,9 +1708,9 @@
             });
 
             if (tab === 'analytics') {
-                setTimeout(() => {
-                    updateAnalyticsCharts(); // Memuat ulang chart sehingga animasi equity berjalan mulus
-                }, 120);
+                requestAnimationFrame(() => {
+                    updateAnalyticsCharts();
+                });
             } else if (tab === 'recap') {
                 lastRecapHeroNumeric = 0;
                 lastRecapStat2Numeric = 0;
@@ -3166,7 +3166,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     animation: {
-                        duration: 1400,
+                        duration: 1800, // Durasi 1.8 detik agar animasi bergerak smooth, elegan, dan pas
                         easing: 'easeOutQuart',
                         x: {
                             type: 'number',
@@ -3176,7 +3176,7 @@
                                 if (context.type !== 'data' || context.mode !== 'default') {
                                     return 0;
                                 }
-                                return context.dataIndex * 40;
+                                return context.dataIndex * 60; // Jeda titik per data agar mengalir natural
                             }
                         },
                         y: {
