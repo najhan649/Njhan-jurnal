@@ -97,7 +97,6 @@
             font-variant-numeric: tabular-nums;
         }
 
-        /* Smooth Bar & Trajectory Animations */
         .recap-bar-fill {
             transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
             will-change: width;
@@ -3167,8 +3166,29 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     animation: {
-                        duration: 1200, // Durasi animasi bergerak (1.2 detik)
-                        easing: 'easeOutQuart'
+                        duration: 1400,
+                        easing: 'easeOutQuart',
+                        x: {
+                            type: 'number',
+                            easing: 'easeOutQuart',
+                            from: NaN,
+                            delay(context) {
+                                if (context.type !== 'data' || context.mode !== 'default') {
+                                    return 0;
+                                }
+                                return context.dataIndex * 40;
+                            }
+                        },
+                        y: {
+                            type: 'number',
+                            easing: 'easeOutQuart',
+                            from: function(context) {
+                                if (context.type === 'data') {
+                                    return context.chart.scales.y.getPixelForValue(0);
+                                }
+                                return 0;
+                            }
+                        }
                     },
                     plugins: { 
                         legend: { display: false },
