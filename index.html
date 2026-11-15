@@ -3166,22 +3166,22 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     animation: {
-                        duration: 1800, // Durasi 1.8 detik agar animasi bergerak smooth, elegan, dan pas
-                        easing: 'easeOutQuart',
+                        duration: 750, // Dipercepat menjadi 750ms agar langsung merespons dan sehalus tab recap
+                        easing: 'cubicBezier(0.22, 1, 0.36, 1)',
                         x: {
                             type: 'number',
-                            easing: 'easeOutQuart',
+                            easing: 'cubicBezier(0.22, 1, 0.36, 1)',
                             from: NaN,
                             delay(context) {
                                 if (context.type !== 'data' || context.mode !== 'default') {
                                     return 0;
                                 }
-                                return context.dataIndex * 60; // Jeda titik per data agar mengalir natural
+                                return context.dataIndex * 20; // Jeda antar titik dipercepat agar mengalir instan
                             }
                         },
                         y: {
                             type: 'number',
-                            easing: 'easeOutQuart',
+                            easing: 'cubicBezier(0.22, 1, 0.36, 1)',
                             from: function(context) {
                                 if (context.type === 'data') {
                                     return context.chart.scales.y.getPixelForValue(0);
