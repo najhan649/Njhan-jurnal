@@ -991,7 +991,7 @@
 
             </div>
 
-            <!-- TAB 4: RECAP (100% MATCH VIDEO + ANIMATED NUMBERS + NAJHAN BRANDING) -->
+            <!-- TAB 4: RECAP (100% MATCH VIDEO + NO SAT/SUN + NO EXNESS + W1-W5 DATE RANGES + THEME TOGGLE) -->
             <div id="tabContentRecap" class="hidden space-y-6 pb-8">
 
                 <!-- Top Control Bar (Period, Navigation, Unit R/$, Theme Dark/Light) -->
@@ -1025,8 +1025,8 @@
 
                         <!-- Theme Toggle -->
                         <div class="flex items-center bg-[#020407] p-1 rounded-xl border border-emerald-500/20 text-xs font-bold">
-                            <button onclick="setRecapTheme('dark')" id="recapThemeDark" class="px-3 py-1.5 rounded-lg bg-white text-black font-extrabold shadow transition">Dark</button>
-                            <button onclick="setRecapTheme('light')" id="recapThemeLight" class="px-3 py-1.5 rounded-lg text-gray-400 hover:text-white transition">Light</button>
+                            <button onclick="setRecapTheme('dark')" id="recapThemeDark" class="px-3.5 py-1.5 rounded-lg bg-white text-black font-extrabold shadow transition">Dark</button>
+                            <button onclick="setRecapTheme('light')" id="recapThemeLight" class="px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition">Light</button>
                         </div>
                     </div>
                 </div>
@@ -1076,7 +1076,7 @@
                             </div>
                         </div>
 
-                        <!-- BOTTOM SECTION: Trajectory Line & Footer Meta (NO arkein education) -->
+                        <!-- BOTTOM SECTION: Trajectory Line & Footer Meta -->
                         <div class="relative z-10 pt-2">
                             <div class="text-[10px] font-semibold opacity-55 mb-1.5">Trajectory</div>
                             <div class="w-full h-14 relative">
@@ -3255,7 +3255,6 @@
             function step(now) {
                 const elapsed = now - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                // Cubic ease-out matching the smooth snap in the video
                 const eased = 1 - Math.pow(1 - progress, 3);
                 const current = startVal + (endVal - startVal) * eased;
 
@@ -3297,7 +3296,6 @@
                 dBtn.className = "w-7 h-7 rounded-full bg-white text-black font-black flex items-center justify-center shadow transition";
                 rBtn.className = "w-7 h-7 rounded-full text-gray-400 hover:text-white flex items-center justify-center transition";
             }
-            // Start count-up from 0 (or previous visual state) when switching R <-> $
             lastRecapHeroNumeric = 0;
             lastRecapStat2Numeric = 0;
             lastRecapStat3Numeric = 0;
@@ -3314,8 +3312,8 @@
             const divider = document.getElementById('recapFooterDivider');
 
             if (theme === 'dark') {
-                darkBtn.className = "px-3 py-1.5 rounded-lg bg-white text-black font-extrabold shadow transition";
-                lightBtn.className = "px-3 py-1.5 rounded-lg text-gray-400 hover:text-white transition";
+                darkBtn.className = "px-3.5 py-1.5 rounded-lg bg-white text-black font-extrabold shadow transition";
+                lightBtn.className = "px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition";
                 card.classList.remove('recap-story-light');
                 card.classList.add('recap-story-dark');
                 topGlow.className = "absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-44 bg-emerald-500/20 blur-3xl rounded-full pointer-events-none";
@@ -3325,8 +3323,8 @@
                 });
                 divider.className = "flex items-center justify-between text-[10px] opacity-60 pt-3 mt-2 border-t border-white/10";
             } else {
-                lightBtn.className = "px-3 py-1.5 rounded-lg bg-white text-black font-extrabold shadow transition";
-                darkBtn.className = "px-3 py-1.5 rounded-lg text-gray-400 hover:text-white transition";
+                lightBtn.className = "px-3.5 py-1.5 rounded-lg bg-white text-black font-extrabold shadow transition";
+                darkBtn.className = "px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition";
                 card.classList.remove('recap-story-dark');
                 card.classList.add('recap-story-light');
                 topGlow.className = "absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-44 bg-emerald-400/25 blur-3xl rounded-full pointer-events-none";
@@ -3362,7 +3360,6 @@
                 if (curr === 'IDR') {
                     return `${sign}Rp${Math.round(absVal).toLocaleString('id-ID')}`;
                 }
-                // Show 2 decimals while rolling/animating (like +$286.72 -> +$398.45 -> +$400 in the video)
                 if (isHero && isAnimating) {
                     return `${sign}$${absVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                 }
@@ -3435,8 +3432,9 @@
                 stat2Label = 'avg per day';
                 stat3Label = 'best day';
 
-                const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-                for (let i = 0; i < 7; i++) {
+                // HANYA MONDAY - FRIDAY (SATURDAY & SUNDAY REMOVED)
+                const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+                for (let i = 0; i < 5; i++) {
                     const currDay = new Date(monday);
                     currDay.setDate(monday.getDate() + i);
                     const dStr = toLocalDateStr(currDay);
@@ -3455,7 +3453,6 @@
                 const month = recapRefDate.getMonth();
 
                 navLabel = `${monthNamesFull[month]} ${year}`;
-                cardDateRange = navLabel;
                 reportTitle = 'MONTHLY REPORT';
                 breakdownTitle = 'Weekly result';
                 stat1Label = 'Green weeks';
@@ -3469,13 +3466,33 @@
                 });
 
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
-                const weekBuckets = [
-                    { label: 'W1', start: 1, end: 7 },
-                    { label: 'W2', start: 8, end: 14 },
-                    { label: 'W3', start: 15, end: 21 },
-                    { label: 'W4', start: 22, end: 28 },
-                    { label: 'W5', start: 29, end: daysInMonth }
-                ].filter(w => w.start <= daysInMonth);
+                
+                // W1-W5 exact date ranges matching video
+                const weekBuckets = [];
+                let startDay = 1;
+                let wIndex = 1;
+                while (startDay <= daysInMonth) {
+                    const dStart = new Date(year, month, startDay);
+                    let endDay = startDay + 6;
+                    if (endDay > daysInMonth) endDay = daysInMonth;
+                    const dEnd = new Date(year, month, endDay);
+
+                    const startStr = `${monthNamesShort[dStart.getMonth()]} ${dStart.getDate()}`;
+                    const endStr = dStart.getMonth() === dEnd.getMonth() ? `${dEnd.getDate()}` : `${monthNamesShort[dEnd.getMonth()]} ${dEnd.getDate()}`;
+                    const rangeLabel = `${startStr} - ${endStr}`;
+
+                    weekBuckets.push({
+                        label: `W${wIndex}`,
+                        rangeText: rangeLabel,
+                        start: startDay,
+                        end: endDay
+                    });
+                    startDay = endDay + 1;
+                    wIndex++;
+                }
+
+                // If currently viewing active month and reference date matches current month, set card date range to active week or full month range
+                cardDateRange = navLabel;
 
                 weekBuckets.forEach(w => {
                     const wTrades = filteredTrades.filter(t => {
@@ -3486,7 +3503,8 @@
                     breakdownItems.push({
                         label: w.label,
                         value: sumVal,
-                        hasTrades: wTrades.length > 0
+                        hasTrades: wTrades.length > 0,
+                        subLabel: w.rangeText
                     });
                 });
 
@@ -3592,8 +3610,12 @@
                             : 'opacity-70 font-semibold';
                 }
 
+                const labelDisplay = recapPeriod === 'month' && item.subLabel 
+                    ? `<span class="font-semibold opacity-60 shrink-0">${item.label} <span class="text-[9px] opacity-70 font-normal">(${item.subLabel})</span></span>`
+                    : `<span class="w-7 font-semibold opacity-60 shrink-0">${item.label}</span>`;
+
                 row.innerHTML = `
-                    <span class="w-7 font-semibold opacity-60 shrink-0">${item.label}</span>
+                    ${labelDisplay}
                     <div class="flex-grow ${isYearly ? 'h-2' : 'h-2.5'} rounded-full ${barTrackBg} overflow-hidden">
                         ${barFillHtml}
                     </div>
@@ -3686,7 +3708,7 @@
 
             try {
                 const canvas = await html2canvas(cardEl, {
-                    scale: 3, // High Resolution (1080x1920 equivalent)
+                    scale: 3,
                     backgroundColor: null,
                     useCORS: true
                 });
