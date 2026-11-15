@@ -1710,7 +1710,7 @@
 
             if (tab === 'analytics') {
                 setTimeout(() => {
-                    updateAnalyticsCharts();
+                    updateAnalyticsCharts(); // Memuat ulang chart sehingga animasi equity berjalan mulus
                 }, 120);
             } else if (tab === 'recap') {
                 lastRecapHeroNumeric = 0;
@@ -3167,7 +3167,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     animation: {
-                        duration: 1200,
+                        duration: 1200, // Durasi animasi bergerak (1.2 detik)
                         easing: 'easeOutQuart'
                     },
                     plugins: { 
@@ -3442,7 +3442,6 @@
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         }
 
-        // Menghitung minggu dalam satu bulan berdasarkan Senin - Minggu (W1 s/d W6)
         function getCalendarWeeksOfMonth(year, month) {
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const weeks = [];
@@ -3451,7 +3450,7 @@
 
             while (currentStart <= daysInMonth) {
                 const startDate = new Date(year, month, currentStart);
-                const dayOfWeek = startDate.getDay(); // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
+                const dayOfWeek = startDate.getDay();
                 const daysUntilSunday = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
                 let currentEnd = currentStart + daysUntilSunday;
                 if (currentEnd > daysInMonth) currentEnd = daysInMonth;
@@ -3507,7 +3506,6 @@
                 stat2Label = 'avg per day';
                 stat3Label = 'best day';
 
-                // Monday - Friday dengan tanggal di bawah hari (contoh: Mon / Nov 9)
                 const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
                 for (let i = 0; i < 5; i++) {
                     const currDay = new Date(monday);
@@ -3543,7 +3541,6 @@
                     return parseInt(parts[0]) === year && (parseInt(parts[1]) - 1) === month;
                 });
 
-                // Perhitungan W1 - W6 berdasarkan Senin - Minggu bulan tersebut
                 const weekBuckets = getCalendarWeeksOfMonth(year, month);
 
                 weekBuckets.forEach(w => {
@@ -3587,7 +3584,6 @@
                 }
             }
 
-            // Update Header & Labels
             document.getElementById('recapNavLabel').innerText = navLabel;
             document.getElementById('recapCardDateRange').innerText = cardDateRange;
             document.getElementById('recapReportTypeTitle').innerText = reportTitle;
@@ -3596,7 +3592,6 @@
             document.getElementById('recapStat2Label').innerText = stat2Label;
             document.getElementById('recapStat3Label').innerText = stat3Label;
 
-            // Hero Metric Calculation & Smooth Rolling Animation
             const totalMetric = filteredTrades.reduce((acc, t) => acc + getTradeMetricValue(t, recapUnit), 0);
             const heroEl = document.getElementById('recapHeroValue');
             if (totalMetric < 0) {
@@ -3612,7 +3607,6 @@
             }
             lastRecapHeroNumeric = totalMetric;
 
-            // Mini Boxes Calculation & Animation
             const activeBuckets = breakdownItems.filter(b => b.hasTrades);
             const greenBucketsCount = activeBuckets.filter(b => b.value > 0).length;
             const totalActiveBuckets = activeBuckets.length;
@@ -3630,7 +3624,6 @@
             lastRecapStat2Numeric = avgBucketVal;
             lastRecapStat3Numeric = bestBucketVal;
 
-            // Render Horizontal Bars with Smooth Width & Value Animation
             const barsListEl = document.getElementById('recapBarsList');
             barsListEl.innerHTML = '';
 
