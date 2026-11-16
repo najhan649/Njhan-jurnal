@@ -68,12 +68,12 @@
             animation: permanentGlow 4s ease-in-out infinite;
         }
 
-        /* Recap Card Custom Styles (100% Match Reference Style) */
+        /* Recap Card Custom Styles (100% Match Video) */
         .recap-story-dark {
-            background: radial-gradient(120% 75% at 50% 0%, #0d2113 0%, #060e09 45%, #020407 100%);
+            background: radial-gradient(120% 75% at 50% 0%, #10321d 0%, #09130d 45%, #060907 100%);
             color: #ffffff;
-            border: 1px solid rgba(34, 197, 94, 0.22);
-            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.95), 0 0 50px rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.18);
+            box-shadow: 0 25px 65px rgba(0, 0, 0, 0.9), 0 0 40px rgba(16, 185, 129, 0.12);
         }
 
         .recap-story-light {
@@ -84,8 +84,8 @@
         }
 
         .recap-subcard-dark {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+            background: rgba(255, 255, 255, 0.035);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .recap-subcard-light {
@@ -1070,66 +1070,63 @@
                     </div>
                 </div>
 
-                <!-- Story Card Container (9:16 Aspect Ratio - 100% Match Reference Style) -->
+                <!-- Story Card Container (9:16 Aspect Ratio) -->
                 <div class="flex flex-col items-center justify-center space-y-5">
-                    <div id="recapStoryCard" class="recap-story-dark w-full max-w-[350px] sm:max-w-[370px] rounded-[32px] p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden transition-all duration-300" style="min-height: 630px;">
+                    <div id="recapStoryCard" class="recap-story-dark w-full max-w-[350px] sm:max-w-[370px] rounded-[28px] p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden transition-all duration-300" style="min-height: 615px;">
                         
                         <!-- Subtle Top Glow Effect -->
                         <div id="recapTopGlow" class="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-44 bg-emerald-500/20 blur-3xl rounded-full pointer-events-none"></div>
 
-                        <!-- TOP SECTION: Brand Logo (NAJHAN) & Year Label -->
+                        <!-- TOP SECTION: Brand Logo (NAJHAN) & Period Label -->
                         <div class="relative z-10">
                             <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-6 h-6 rounded-lg bg-gradient-to-br from-emerald-400 to-green-700 flex items-center justify-center text-black font-black text-xs shadow-md">N</span>
-                                    <span id="recapBrandName" class="font-black text-sm tracking-[0.28em] uppercase text-white">NAJHAN</span>
-                                </div>
-                                <span id="recapCardYearTag" class="text-xs font-mono font-semibold tracking-wider opacity-60">2026</span>
+                                <span id="recapBrandName" class="font-black text-sm sm:text-base tracking-[0.26em] uppercase">NAJHAN</span>
+                                <span id="recapCardDateRange" class="text-[10px] sm:text-[11px] font-medium opacity-55">November 2026</span>
                             </div>
 
-                            <!-- Report Type & Big Hero Metric -->
-                            <div class="mt-6">
-                                <div id="recapReportTypeTitle" class="text-[10px] font-bold tracking-[0.24em] uppercase opacity-50">YEARLY REPORT</div>
-                                <div id="recapHeroValue" class="text-4xl sm:text-[46px] font-black tracking-tight mt-1 leading-none font-sans tabular-nums text-white">+2.00R</div>
+                            <!-- Report Title & Big Hero Metric -->
+                            <div class="mt-7">
+                                <div id="recapReportTypeTitle" class="text-[10px] font-bold tracking-[0.22em] uppercase opacity-50">MONTHLY REPORT</div>
+                                <div id="recapHeroValue" class="text-4xl sm:text-[44px] font-black tracking-tight mt-1 leading-none font-sans tabular-nums">+0.00R</div>
                             </div>
 
                             <!-- 3 Mini Metric Boxes -->
-                            <div class="grid grid-cols-3 gap-2 mt-5">
+                            <div class="grid grid-cols-3 gap-2.5 mt-6">
                                 <div id="recapBox1" class="recap-subcard-dark rounded-xl py-3 px-2 text-center">
-                                    <div id="recapStat1Val" class="text-xs font-extrabold tabular-nums text-white">1 / 1</div>
-                                    <div id="recapStat1Label" class="text-[9px] opacity-50 mt-0.5 font-medium">green months</div>
+                                    <div id="recapStat1Val" class="text-xs sm:text-sm font-extrabold tabular-nums">0 / 0</div>
+                                    <div id="recapStat1Label" class="text-[9px] opacity-55 mt-0.5 font-medium">Green weeks</div>
                                 </div>
                                 <div id="recapBox2" class="recap-subcard-dark rounded-xl py-3 px-2 text-center">
-                                    <div id="recapStat2Val" class="text-xs font-extrabold tabular-nums text-white">+2.00R</div>
-                                    <div id="recapStat2Label" class="text-[9px] opacity-50 mt-0.5 font-medium">avg per month</div>
+                                    <div id="recapStat2Val" class="text-xs sm:text-sm font-extrabold tabular-nums">0.00R</div>
+                                    <div id="recapStat2Label" class="text-[9px] opacity-55 mt-0.5 font-medium">avg per week</div>
                                 </div>
                                 <div id="recapBox3" class="recap-subcard-dark rounded-xl py-3 px-2 text-center">
-                                    <div id="recapStat3Val" class="text-xs font-extrabold tabular-nums text-white">+2.00R</div>
-                                    <div id="recapStat3Label" class="text-[9px] opacity-50 mt-0.5 font-medium">best month</div>
+                                    <div id="recapStat3Val" class="text-xs sm:text-sm font-extrabold tabular-nums">0.00R</div>
+                                    <div id="recapStat3Label" class="text-[9px] opacity-55 mt-0.5 font-medium">best week</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- MIDDLE SECTION: Horizontal Breakdown Bars -->
-                        <div class="relative z-10 my-4 bg-black/20 p-3.5 rounded-2xl border border-white/[0.04]">
-                            <div id="recapBreakdownTitle" class="text-[10px] font-semibold opacity-50 mb-2.5">Monthly result</div>
-                            <div id="recapBarsList" class="space-y-2">
+                        <div class="relative z-10 my-5">
+                            <div id="recapBreakdownTitle" class="text-[10px] font-semibold opacity-55 mb-2.5">Weekly result</div>
+                            <div id="recapBarsList" class="space-y-2.5">
                                 <!-- Generated dynamically via JS -->
                             </div>
                         </div>
 
                         <!-- BOTTOM SECTION: Trajectory Line & Footer Meta -->
-                        <div class="relative z-10 pt-1">
-                            <div class="text-[10px] font-semibold opacity-50 mb-1">Trajectory</div>
-                            <div class="w-full h-14 relative bg-black/25 rounded-xl border border-white/[0.04] p-1.5 overflow-hidden">
-                                <svg id="recapTrajectorySvg" viewBox="0 0 280 50" class="w-full h-full overflow-visible">
+                        <div class="relative z-10 pt-2">
+                            <div class="text-[10px] font-semibold opacity-55 mb-1.5">Trajectory</div>
+                            <div class="w-full h-14 relative">
+                                <svg id="recapTrajectorySvg" viewBox="0 0 280 56" class="w-full h-full overflow-visible">
                                     <!-- Generated dynamically via JS -->
                                 </svg>
                             </div>
 
-                            <div id="recapFooterDivider" class="flex items-center justify-between text-[10px] opacity-60 pt-2.5 mt-2 border-t border-white/10">
-                                <span id="recapFooterTrades">2 trades &bull; 50% win rate</span>
-                                <span id="recapFooterAccount">NAJHAN Terminal</span>
+                            <div id="recapFooterDivider" class="flex items-center justify-between text-[10px] opacity-60 pt-3 mt-2 border-t border-white/10">
+                                <span id="recapFooterTrades">Trades: 0 &bull; WR: 0%</span>
+                                <span id="recapFooterAccount">Personal</span>
                             </div>
                         </div>
 
@@ -1342,7 +1339,7 @@
         let isSignUpMode = false;
 
         // Recap State & Animation Variables
-        let recapPeriod = 'year';  // default 'year' to match photo style
+        let recapPeriod = 'month'; // 'week' | 'month' | 'year'
         let recapUnit = 'R';       // 'R' | '$'
         let recapTheme = 'dark';   // 'dark' | 'light'
         let recapRefDate = new Date();
@@ -3366,7 +3363,7 @@
                     b.classList.remove('recap-subcard-light');
                     b.classList.add('recap-subcard-dark');
                 });
-                divider.className = "flex items-center justify-between text-[10px] opacity-60 pt-2.5 mt-2 border-t border-white/10";
+                divider.className = "flex items-center justify-between text-[10px] opacity-60 pt-3 mt-2 border-t border-white/10";
             } else {
                 lightBtn.className = "px-3.5 py-1.5 rounded-lg bg-white text-black font-extrabold shadow transition";
                 darkBtn.className = "px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition";
@@ -3377,7 +3374,7 @@
                     b.classList.remove('recap-subcard-dark');
                     b.classList.add('recap-subcard-light');
                 });
-                divider.className = "flex items-center justify-between text-[10px] opacity-70 pt-2.5 mt-2 border-t border-black/10";
+                divider.className = "flex items-center justify-between text-[10px] opacity-70 pt-3 mt-2 border-t border-black/10";
             }
             renderRecapCard(false);
         }
@@ -3439,6 +3436,7 @@
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         }
 
+        // Menghitung minggu dalam satu bulan berdasarkan Senin - Minggu (W1 s/d W6)
         function getCalendarWeeksOfMonth(year, month) {
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const weeks = [];
@@ -3447,7 +3445,7 @@
 
             while (currentStart <= daysInMonth) {
                 const startDate = new Date(year, month, currentStart);
-                const dayOfWeek = startDate.getDay();
+                const dayOfWeek = startDate.getDay(); // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
                 const daysUntilSunday = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
                 let currentEnd = currentStart + daysUntilSunday;
                 if (currentEnd > daysInMonth) currentEnd = daysInMonth;
@@ -3478,7 +3476,7 @@
             let filteredTrades = [];
             let breakdownItems = [];
             let navLabel = '';
-            let cardYearTag = '';
+            let cardDateRange = '';
             let reportTitle = '';
             let breakdownTitle = '';
             let stat1Label = '';
@@ -3496,13 +3494,14 @@
                     : `${monthNamesShort[sunday.getMonth()]} ${sunday.getDate()}`;
                 
                 navLabel = `${monStr} – ${sunStr}`;
-                cardYearTag = `${monday.getFullYear()}`;
+                cardDateRange = navLabel;
                 reportTitle = 'WEEKLY REPORT';
                 breakdownTitle = 'Daily result';
-                stat1Label = 'green days';
+                stat1Label = 'Green days';
                 stat2Label = 'avg per day';
                 stat3Label = 'best day';
 
+                // Monday - Friday dengan tanggal di bawah hari (contoh: Mon / Nov 9)
                 const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
                 for (let i = 0; i < 5; i++) {
                     const currDay = new Date(monday);
@@ -3525,10 +3524,10 @@
                 const month = recapRefDate.getMonth();
 
                 navLabel = `${monthNamesFull[month]} ${year}`;
-                cardYearTag = `${year}`;
+                cardDateRange = navLabel;
                 reportTitle = 'MONTHLY REPORT';
                 breakdownTitle = 'Weekly result';
-                stat1Label = 'green weeks';
+                stat1Label = 'Green weeks';
                 stat2Label = 'avg per week';
                 stat3Label = 'best week';
 
@@ -3538,7 +3537,9 @@
                     return parseInt(parts[0]) === year && (parseInt(parts[1]) - 1) === month;
                 });
 
+                // Perhitungan W1 - W6 berdasarkan Senin - Minggu bulan tersebut
                 const weekBuckets = getCalendarWeeksOfMonth(year, month);
+
                 weekBuckets.forEach(w => {
                     const wTrades = filteredTrades.filter(t => {
                         const dayNum = parseInt(t.date.split('-')[2]);
@@ -3557,10 +3558,10 @@
                 const year = recapRefDate.getFullYear();
 
                 navLabel = `${year}`;
-                cardYearTag = `${year}`;
+                cardDateRange = `${year}`;
                 reportTitle = 'YEARLY REPORT';
                 breakdownTitle = 'Monthly result';
-                stat1Label = 'green months';
+                stat1Label = 'Green months';
                 stat2Label = 'avg per month';
                 stat3Label = 'best month';
 
@@ -3580,20 +3581,22 @@
                 }
             }
 
+            // Update Header & Labels
             document.getElementById('recapNavLabel').innerText = navLabel;
-            document.getElementById('recapCardYearTag').innerText = cardYearTag;
+            document.getElementById('recapCardDateRange').innerText = cardDateRange;
             document.getElementById('recapReportTypeTitle').innerText = reportTitle;
             document.getElementById('recapBreakdownTitle').innerText = breakdownTitle;
             document.getElementById('recapStat1Label').innerText = stat1Label;
             document.getElementById('recapStat2Label').innerText = stat2Label;
             document.getElementById('recapStat3Label').innerText = stat3Label;
 
+            // Hero Metric Calculation & Smooth Rolling Animation
             const totalMetric = filteredTrades.reduce((acc, t) => acc + getTradeMetricValue(t, recapUnit), 0);
             const heroEl = document.getElementById('recapHeroValue');
             if (totalMetric < 0) {
-                heroEl.className = "text-4xl sm:text-[46px] font-black tracking-tight mt-1 leading-none font-sans tabular-nums text-red-400";
+                heroEl.className = "text-4xl sm:text-[44px] font-black tracking-tight mt-1 leading-none font-sans tabular-nums text-red-400";
             } else {
-                heroEl.className = "text-4xl sm:text-[46px] font-black tracking-tight mt-1 leading-none font-sans tabular-nums text-white";
+                heroEl.className = "text-4xl sm:text-[44px] font-black tracking-tight mt-1 leading-none font-sans tabular-nums";
             }
 
             if (shouldAnimate) {
@@ -3603,13 +3606,14 @@
             }
             lastRecapHeroNumeric = totalMetric;
 
+            // Mini Boxes Calculation & Animation
             const activeBuckets = breakdownItems.filter(b => b.hasTrades);
             const greenBucketsCount = activeBuckets.filter(b => b.value > 0).length;
             const totalActiveBuckets = activeBuckets.length;
             const avgBucketVal = totalActiveBuckets > 0 ? (totalMetric / totalActiveBuckets) : 0;
             const bestBucketVal = activeBuckets.length > 0 ? Math.max(...activeBuckets.map(b => b.value), 0) : 0;
 
-            document.getElementById('recapStat1Val').innerText = `${greenBucketsCount} / ${totalActiveBuckets || 1}`;
+            document.getElementById('recapStat1Val').innerText = `${greenBucketsCount} / ${totalActiveBuckets}`;
             if (shouldAnimate) {
                 animateRecapValue('recapStat2Val', lastRecapStat2Numeric, avgBucketVal, recapUnit, curr, 420, false);
                 animateRecapValue('recapStat3Val', lastRecapStat3Numeric, bestBucketVal, recapUnit, curr, 420, false);
@@ -3620,6 +3624,7 @@
             lastRecapStat2Numeric = avgBucketVal;
             lastRecapStat3Numeric = bestBucketVal;
 
+            // Render Horizontal Bars with Smooth Width & Value Animation
             const barsListEl = document.getElementById('recapBarsList');
             barsListEl.innerHTML = '';
 
@@ -3630,40 +3635,41 @@
                 const row = document.createElement('div');
                 row.className = `flex items-center gap-2.5 ${isYearly ? 'text-[10px]' : 'text-[11px]'} ${shouldAnimate ? 'recap-row-enter' : ''}`;
                 if (shouldAnimate) {
-                    row.style.animationDelay = `${idx * 20}ms`;
+                    row.style.animationDelay = `${idx * 25}ms`;
                 }
 
                 const targetPct = item.hasTrades && item.value !== 0 ? Math.max((Math.abs(item.value) / maxAbs) * 100, 6) : 0;
-                const barTrackBg = recapTheme === 'dark' ? 'bg-white/[0.06]' : 'bg-black/[0.06]';
+                const barTrackBg = recapTheme === 'dark' ? 'bg-white/[0.05]' : 'bg-black/[0.06]';
                 
                 let barFillHtml = '';
                 if (item.hasTrades && item.value > 0) {
-                    barFillHtml = `<div data-target-width="${targetPct}%" class="recap-bar-fill h-full rounded-full bg-gradient-to-r from-[#15803d] to-[#4ade80]" style="width: ${shouldAnimate ? '0%' : targetPct + '%'}"></div>`;
+                    barFillHtml = `<div data-target-width="${targetPct}%" class="recap-bar-fill h-full rounded-full bg-gradient-to-r from-[#166534] to-[#4ade80]" style="width: ${shouldAnimate ? '0%' : targetPct + '%'}"></div>`;
                 } else if (item.hasTrades && item.value < 0) {
-                    barFillHtml = `<div data-target-width="${targetPct}%" class="recap-bar-fill h-full rounded-full bg-gradient-to-r from-[#b91c1c] to-[#f87171]" style="width: ${shouldAnimate ? '0%' : targetPct + '%'}"></div>`;
+                    barFillHtml = `<div data-target-width="${targetPct}%" class="recap-bar-fill h-full rounded-full bg-gradient-to-r from-[#991b1b] to-[#f87171]" style="width: ${shouldAnimate ? '0%' : targetPct + '%'}"></div>`;
                 }
 
                 let valText = '–';
-                let valColorClass = 'opacity-35';
+                let valColorClass = 'opacity-45';
                 if (item.hasTrades) {
                     valText = formatRecapMetric(item.value, recapUnit, curr);
                     valColorClass = item.value > 0 
-                        ? (recapTheme === 'dark' ? 'text-white font-bold' : 'text-gray-900 font-bold')
+                        ? (recapTheme === 'dark' ? 'text-[#4ade80] font-bold' : 'text-[#15803d] font-bold')
                         : item.value < 0 
                             ? 'text-red-400 font-bold' 
                             : 'opacity-70 font-semibold';
                 }
 
+                // Tampilan label hari + tanggal di bawahnya (Week) atau W1..W6 + tanggal di bawahnya (Month)
                 let labelHtml = '';
                 if (recapPeriod === 'week' || recapPeriod === 'month') {
                     labelHtml = `
-                        <div class="w-12 shrink-0 leading-tight">
-                            <div class="font-bold opacity-85 text-white">${item.label}</div>
+                        <div class="w-11 shrink-0 leading-tight">
+                            <div class="font-bold opacity-85">${item.label}</div>
                             <div class="text-[9px] opacity-45 font-normal tabular-nums">${item.subLabel || ''}</div>
                         </div>
                     `;
                 } else {
-                    labelHtml = `<span class="w-8 font-bold opacity-80 text-white shrink-0">${item.label}</span>`;
+                    labelHtml = `<span class="w-7 font-semibold opacity-60 shrink-0">${item.label}</span>`;
                 }
 
                 const valElemId = `recapBarVal_${idx}`;
@@ -3676,6 +3682,7 @@
                 `;
                 barsListEl.appendChild(row);
 
+                // Trigger smooth bar width & number animation
                 if (shouldAnimate && item.hasTrades) {
                     const prevVal = lastRecapBarValues[idx] !== undefined ? lastRecapBarValues[idx] : 0;
                     animateRecapValue(valElemId, prevVal, item.value, recapUnit, curr, 420, false);
@@ -3694,14 +3701,16 @@
                 });
             }
 
+            // Render Trajectory SVG with Line-Draw Animation
             renderRecapTrajectorySvg(filteredTrades, recapUnit, shouldAnimate);
 
+            // Footer Stats (Account Name & WR)
             const totalTradesCount = filteredTrades.length;
             const winsCount = filteredTrades.filter(t => Number(t.netPnL) > 0).length;
             const wrPct = totalTradesCount > 0 ? Math.round((winsCount / totalTradesCount) * 100) : 0;
 
-            document.getElementById('recapFooterTrades').innerText = `${totalTradesCount} trades • ${wrPct}% win rate`;
-            document.getElementById('recapFooterAccount').innerText = activeAcc.name || 'NAJHAN Terminal';
+            document.getElementById('recapFooterTrades').innerText = `Trades: ${totalTradesCount} • WR: ${wrPct}%`;
+            document.getElementById('recapFooterAccount').innerText = activeAcc.name || 'Personal';
         }
 
         function renderRecapTrajectorySvg(trades, unit, shouldAnimate = true) {
@@ -3710,9 +3719,9 @@
 
             const sorted = [...trades].sort((a, b) => new Date(a.date) - new Date(b.date));
             const width = 280;
-            const height = 44;
+            const height = 50;
             const padX = 6;
-            const padY = 6;
+            const padY = 8;
 
             const lineColor = recapTheme === 'dark' ? '#4ade80' : '#16a34a';
             const baselineColor = recapTheme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
@@ -3721,7 +3730,7 @@
                 const midY = height / 2;
                 svg.innerHTML = `
                     <line id="recapTrajLine" x1="${padX}" y1="${midY}" x2="${width - padX}" y2="${midY}" stroke="${lineColor}" stroke-width="2" stroke-linecap="round" />
-                    <circle class="${shouldAnimate ? 'recap-traj-dot-anim' : ''}" cx="${width - padX}" cy="${midY}" r="3" fill="${lineColor}" />
+                    <circle class="${shouldAnimate ? 'recap-traj-dot-anim' : ''}" cx="${width - padX}" cy="${midY}" r="3.5" fill="${lineColor}" />
                 `;
                 if (shouldAnimate) {
                     const lineEl = document.getElementById('recapTrajLine');
@@ -3761,14 +3770,14 @@
             svg.innerHTML = `
                 <defs>
                     <linearGradient id="recapTrajGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="${lineColor}" stop-opacity="0.32" />
+                        <stop offset="0%" stop-color="${lineColor}" stop-opacity="0.28" />
                         <stop offset="100%" stop-color="${lineColor}" stop-opacity="0.0" />
                     </linearGradient>
                 </defs>
                 <line x1="${padX}" y1="${zeroY.toFixed(1)}" x2="${width - padX}" y2="${zeroY.toFixed(1)}" stroke="${baselineColor}" stroke-width="1" stroke-dasharray="3 3" />
                 <path class="${shouldAnimate ? 'recap-traj-area-anim' : ''}" d="${areaD}" fill="url(#recapTrajGrad)" />
                 <path id="recapTrajPath" d="${pathD}" fill="none" stroke="${lineColor}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
-                <circle class="${shouldAnimate ? 'recap-traj-dot-anim' : ''}" cx="${lastPt.x.toFixed(1)}" cy="${lastPt.y.toFixed(1)}" r="3" fill="${lineColor}" />
+                <circle class="${shouldAnimate ? 'recap-traj-dot-anim' : ''}" cx="${lastPt.x.toFixed(1)}" cy="${lastPt.y.toFixed(1)}" r="3.5" fill="${lineColor}" />
             `;
 
             if (shouldAnimate) {
@@ -3838,4 +3847,4 @@
         window.toggleAuthMode = toggleAuthMode;
     </script>
 </body>
-</html>
+                            </html>
