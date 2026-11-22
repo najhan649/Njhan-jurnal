@@ -68,7 +68,17 @@
             animation: permanentGlow 4s ease-in-out infinite;
         }
 
-        /* Recap Card Custom Styles (100% Match Video) */
+        /* Metallic Bat Logo Glow */
+        .bat-logo-glow {
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.25)) drop-shadow(0 0 22px rgba(203, 213, 225, 0.15));
+            transition: filter 0.3s ease, transform 0.3s ease;
+        }
+        .group:hover .bat-logo-glow,
+        .bat-logo-hero:hover {
+            filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.45)) drop-shadow(0 0 28px rgba(16, 185, 129, 0.25));
+        }
+
+        /* Recap Card Custom Styles */
         .recap-story-dark {
             background: radial-gradient(120% 75% at 50% 0%, #10321d 0%, #09130d 45%, #060907 100%);
             color: #ffffff;
@@ -217,6 +227,39 @@
 </head>
 <body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black relative">
 
+    <!-- SHARED SVG DEFINITIONS FOR METALLIC SILVER BAT LOGO -->
+    <svg width="0" height="0" class="hidden" aria-hidden="true">
+        <defs>
+            <!-- Chrome Silver Outer Rim Gradient -->
+            <linearGradient id="batChromeOuter" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFFFFF" />
+                <stop offset="22%" stop-color="#9CA3AF" />
+                <stop offset="50%" stop-color="#F8FAFC" />
+                <stop offset="78%" stop-color="#4B5563" />
+                <stop offset="100%" stop-color="#E5E7EB" />
+            </linearGradient>
+            <!-- Brushed Metallic Inner Bevel Gradient -->
+            <linearGradient id="batChromeInner" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#E2E8F0" />
+                <stop offset="45%" stop-color="#374151" />
+                <stop offset="75%" stop-color="#CBD5E1" />
+                <stop offset="100%" stop-color="#1F2937" />
+            </linearGradient>
+            <!-- Dark Obsidian Body Fill -->
+            <linearGradient id="batObsidianFill" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stop-color="#1E242B" />
+                <stop offset="45%" stop-color="#090C10" />
+                <stop offset="100%" stop-color="#020407" />
+            </linearGradient>
+            <!-- Glowing Eyes Gradient -->
+            <linearGradient id="batEyeGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#F8FAFC" />
+                <stop offset="50%" stop-color="#FFFFFF" />
+                <stop offset="100%" stop-color="#CBD5E1" />
+            </linearGradient>
+        </defs>
+    </svg>
+
     <!-- Interactive Background Network Canvas -->
     <canvas id="networkCanvas"></canvas>
 
@@ -224,9 +267,37 @@
     <header class="bg-[#020407]/90 backdrop-blur-md border-b border-emerald-500/15 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <div class="flex items-center gap-2.5 cursor-pointer group" onclick="switchView('accounts')">
-                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-lg sm:text-xl shadow-lg shadow-emerald-950/50 group-hover:scale-105 transition-transform duration-300">
-                        N
+                <!-- BRAND LOGO WITH METALLIC BAT -->
+                <div class="flex items-center gap-3 cursor-pointer group" onclick="switchView('accounts')">
+                    <div class="w-12 h-10 sm:w-14 sm:h-11 rounded-xl bg-[#04070B] border border-slate-500/30 flex items-center justify-center shadow-lg shadow-black/80 group-hover:border-slate-300/60 group-hover:scale-105 transition-all duration-300 px-1.5">
+                        <svg viewBox="0 0 240 130" class="w-full h-full bat-logo-glow" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Outer Sharp Metallic Wing Silhouette -->
+                            <path d="M120 42 L106 23 L99 44 L86 38 L52 14 L12 43 L44 53 L29 73 L63 69 L68 87 L87 77 L97 92 L105 84 L120 118 L135 84 L143 92 L153 77 L172 87 L177 69 L211 73 L196 53 L228 43 L188 14 L154 38 L141 44 L134 23 L120 42 Z"
+                                  fill="url(#batObsidianFill)"
+                                  stroke="url(#batChromeOuter)"
+                                  stroke-width="3.6"
+                                  stroke-linejoin="miter"
+                                  stroke-miterlimit="10"/>
+                            <!-- Inner Wing Ribbing & Ridge Lines -->
+                            <path d="M98 48 L56 24 L27 42 M95 57 L48 67 M96 66 L73 80 M142 48 L184 24 L213 42 M145 57 L192 67 M144 66 L167 80"
+                                  stroke="url(#batChromeInner)"
+                                  stroke-width="2"
+                                  stroke-linecap="square"/>
+                            <!-- Head & Jaw Armor Outline -->
+                            <path d="M106 31 L101 56 L108 77 L120 96 L132 77 L139 56 L134 31 L126 44 L114 44 Z"
+                                  fill="#06090E"
+                                  stroke="url(#batChromeOuter)"
+                                  stroke-width="2.4"
+                                  stroke-linejoin="miter"/>
+                            <!-- Chin Chevron Detail -->
+                            <path d="M111 84 L120 105 L129 84"
+                                  stroke="url(#batChromeOuter)"
+                                  stroke-width="2.4"
+                                  stroke-linejoin="miter"/>
+                            <!-- Aggressive Slanted Eyes -->
+                            <polygon points="107,57 116,62 109,64" fill="url(#batEyeGlow)" />
+                            <polygon points="133,57 124,62 131,64" fill="url(#batEyeGlow)" />
+                        </svg>
                     </div>
                     <div>
                         <span class="font-extrabold text-base sm:text-lg text-white tracking-tight group-hover:text-emerald-400 transition">NAJHAN</span>
@@ -257,12 +328,42 @@
     </header>
 
     <!-- LANDING SCREEN / WELCOME MODAL -->
-    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/65 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
         <div class="max-w-xl w-full text-center space-y-8 animate-fade-in relative z-20 px-4">
             <div class="space-y-4">
-                <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-4xl mx-auto shadow-2xl shadow-emerald-950/60 ring-4 ring-emerald-400/20 animate-pulse">
-                    N
+                <!-- HERO METALLIC BAT EMBLEM -->
+                <div class="w-40 h-24 sm:w-48 sm:h-28 mx-auto flex items-center justify-center relative bat-logo-hero transition-transform duration-500 hover:scale-105">
+                    <div class="absolute inset-0 bg-slate-300/10 blur-2xl rounded-full pointer-events-none"></div>
+                    <svg viewBox="0 0 240 130" class="w-full h-full bat-logo-glow relative z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Outer Sharp Metallic Wing Silhouette -->
+                        <path d="M120 42 L106 23 L99 44 L86 38 L52 14 L12 43 L44 53 L29 73 L63 69 L68 87 L87 77 L97 92 L105 84 L120 118 L135 84 L143 92 L153 77 L172 87 L177 69 L211 73 L196 53 L228 43 L188 14 L154 38 L141 44 L134 23 L120 42 Z"
+                              fill="url(#batObsidianFill)"
+                              stroke="url(#batChromeOuter)"
+                              stroke-width="3.6"
+                              stroke-linejoin="miter"
+                              stroke-miterlimit="10"/>
+                        <!-- Inner Wing Ribbing & Ridge Lines -->
+                        <path d="M98 48 L56 24 L27 42 M95 57 L48 67 M96 66 L73 80 M142 48 L184 24 L213 42 M145 57 L192 67 M144 66 L167 80"
+                              stroke="url(#batChromeInner)"
+                              stroke-width="2"
+                              stroke-linecap="square"/>
+                        <!-- Head & Jaw Armor Outline -->
+                        <path d="M106 31 L101 56 L108 77 L120 96 L132 77 L139 56 L134 31 L126 44 L114 44 Z"
+                              fill="#06090E"
+                              stroke="url(#batChromeOuter)"
+                              stroke-width="2.4"
+                              stroke-linejoin="miter"/>
+                        <!-- Chin Chevron Detail -->
+                        <path d="M111 84 L120 105 L129 84"
+                              stroke="url(#batChromeOuter)"
+                              stroke-width="2.4"
+                              stroke-linejoin="miter"/>
+                        <!-- Aggressive Slanted Eyes -->
+                        <polygon points="107,57 116,62 109,64" fill="url(#batEyeGlow)" />
+                        <polygon points="133,57 124,62 131,64" fill="url(#batEyeGlow)" />
+                    </svg>
                 </div>
+
                 <div>
                     <span class="px-3.5 py-1 rounded-full text-[11px] font-extrabold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 uppercase">
                         CREATED BY NAJHAN
@@ -295,8 +396,29 @@
             </button>
 
             <div class="space-y-1">
-                <div id="authModalIcon" class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-black text-xl mx-auto mb-2">
-                    <i class="fa-solid fa-lock"></i>
+                <div id="authModalIcon" class="w-20 h-12 rounded-2xl bg-[#04070B] border border-slate-500/30 flex items-center justify-center mx-auto mb-2 px-2">
+                    <svg viewBox="0 0 240 130" class="w-full h-full bat-logo-glow" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M120 42 L106 23 L99 44 L86 38 L52 14 L12 43 L44 53 L29 73 L63 69 L68 87 L87 77 L97 92 L105 84 L120 118 L135 84 L143 92 L153 77 L172 87 L177 69 L211 73 L196 53 L228 43 L188 14 L154 38 L141 44 L134 23 L120 42 Z"
+                              fill="url(#batObsidianFill)"
+                              stroke="url(#batChromeOuter)"
+                              stroke-width="3.6"
+                              stroke-linejoin="miter"/>
+                        <path d="M98 48 L56 24 L27 42 M95 57 L48 67 M96 66 L73 80 M142 48 L184 24 L213 42 M145 57 L192 67 M144 66 L167 80"
+                              stroke="url(#batChromeInner)"
+                              stroke-width="2"
+                              stroke-linecap="square"/>
+                        <path d="M106 31 L101 56 L108 77 L120 96 L132 77 L139 56 L134 31 L126 44 L114 44 Z"
+                              fill="#06090E"
+                              stroke="url(#batChromeOuter)"
+                              stroke-width="2.4"
+                              stroke-linejoin="miter"/>
+                        <path d="M111 84 L120 105 L129 84"
+                              stroke="url(#batChromeOuter)"
+                              stroke-width="2.4"
+                              stroke-linejoin="miter"/>
+                        <polygon points="107,57 116,62 109,64" fill="url(#batEyeGlow)" />
+                        <polygon points="133,57 124,62 131,64" fill="url(#batEyeGlow)" />
+                    </svg>
                 </div>
                 <h3 id="authModalTitle" class="text-xl font-black text-white tracking-tight">Login Terminal</h3>
                 <p id="authModalSub" class="text-xs text-gray-400">Masukkan kredensial akun cloud Anda.</p>
@@ -1077,10 +1199,21 @@
                         <!-- Subtle Top Glow Effect -->
                         <div id="recapTopGlow" class="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-44 bg-emerald-500/20 blur-3xl rounded-full pointer-events-none"></div>
 
-                        <!-- TOP SECTION: Brand Logo (NAJHAN) & Period Label -->
+                        <!-- TOP SECTION: Brand Logo (NAJHAN + Bat) & Period Label -->
                         <div class="relative z-10">
                             <div class="flex items-center justify-between">
-                                <span id="recapBrandName" class="font-black text-sm sm:text-base tracking-[0.26em] uppercase">NAJHAN</span>
+                                <div class="flex items-center gap-2">
+                                    <svg viewBox="0 0 240 130" class="w-7 h-4 bat-logo-glow" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M120 42 L106 23 L99 44 L86 38 L52 14 L12 43 L44 53 L29 73 L63 69 L68 87 L87 77 L97 92 L105 84 L120 118 L135 84 L143 92 L153 77 L172 87 L177 69 L211 73 L196 53 L228 43 L188 14 L154 38 L141 44 L134 23 L120 42 Z"
+                                              fill="url(#batObsidianFill)"
+                                              stroke="url(#batChromeOuter)"
+                                              stroke-width="4"
+                                              stroke-linejoin="miter"/>
+                                        <polygon points="107,57 116,62 109,64" fill="url(#batEyeGlow)" />
+                                        <polygon points="133,57 124,62 131,64" fill="url(#batEyeGlow)" />
+                                    </svg>
+                                    <span id="recapBrandName" class="font-black text-sm sm:text-base tracking-[0.26em] uppercase">NAJHAN</span>
+                                </div>
                                 <span id="recapCardDateRange" class="text-[10px] sm:text-[11px] font-medium opacity-55">November 2026</span>
                             </div>
 
@@ -1339,9 +1472,9 @@
         let isSignUpMode = false;
 
         // Recap State & Animation Variables
-        let recapPeriod = 'month'; // 'week' | 'month' | 'year'
-        let recapUnit = 'R';       // 'R' | '$'
-        let recapTheme = 'dark';   // 'dark' | 'light'
+        let recapPeriod = 'month';
+        let recapUnit = 'R';
+        let recapTheme = 'dark';
         let recapRefDate = new Date();
         let lastRecapHeroNumeric = 0;
         let lastRecapStat2Numeric = 0;
@@ -3436,7 +3569,6 @@
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         }
 
-        // Menghitung minggu dalam satu bulan berdasarkan Senin - Minggu (W1 s/d W6)
         function getCalendarWeeksOfMonth(year, month) {
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const weeks = [];
@@ -3445,7 +3577,7 @@
 
             while (currentStart <= daysInMonth) {
                 const startDate = new Date(year, month, currentStart);
-                const dayOfWeek = startDate.getDay(); // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
+                const dayOfWeek = startDate.getDay();
                 const daysUntilSunday = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
                 let currentEnd = currentStart + daysUntilSunday;
                 if (currentEnd > daysInMonth) currentEnd = daysInMonth;
@@ -3501,7 +3633,6 @@
                 stat2Label = 'avg per day';
                 stat3Label = 'best day';
 
-                // Monday - Friday dengan tanggal di bawah hari (contoh: Mon / Nov 9)
                 const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
                 for (let i = 0; i < 5; i++) {
                     const currDay = new Date(monday);
@@ -3537,7 +3668,6 @@
                     return parseInt(parts[0]) === year && (parseInt(parts[1]) - 1) === month;
                 });
 
-                // Perhitungan W1 - W6 berdasarkan Senin - Minggu bulan tersebut
                 const weekBuckets = getCalendarWeeksOfMonth(year, month);
 
                 weekBuckets.forEach(w => {
@@ -3581,7 +3711,6 @@
                 }
             }
 
-            // Update Header & Labels
             document.getElementById('recapNavLabel').innerText = navLabel;
             document.getElementById('recapCardDateRange').innerText = cardDateRange;
             document.getElementById('recapReportTypeTitle').innerText = reportTitle;
@@ -3590,7 +3719,6 @@
             document.getElementById('recapStat2Label').innerText = stat2Label;
             document.getElementById('recapStat3Label').innerText = stat3Label;
 
-            // Hero Metric Calculation & Smooth Rolling Animation
             const totalMetric = filteredTrades.reduce((acc, t) => acc + getTradeMetricValue(t, recapUnit), 0);
             const heroEl = document.getElementById('recapHeroValue');
             if (totalMetric < 0) {
@@ -3606,7 +3734,6 @@
             }
             lastRecapHeroNumeric = totalMetric;
 
-            // Mini Boxes Calculation & Animation
             const activeBuckets = breakdownItems.filter(b => b.hasTrades);
             const greenBucketsCount = activeBuckets.filter(b => b.value > 0).length;
             const totalActiveBuckets = activeBuckets.length;
@@ -3624,7 +3751,6 @@
             lastRecapStat2Numeric = avgBucketVal;
             lastRecapStat3Numeric = bestBucketVal;
 
-            // Render Horizontal Bars with Smooth Width & Value Animation
             const barsListEl = document.getElementById('recapBarsList');
             barsListEl.innerHTML = '';
 
@@ -3659,7 +3785,6 @@
                             : 'opacity-70 font-semibold';
                 }
 
-                // Tampilan label hari + tanggal di bawahnya (Week) atau W1..W6 + tanggal di bawahnya (Month)
                 let labelHtml = '';
                 if (recapPeriod === 'week' || recapPeriod === 'month') {
                     labelHtml = `
@@ -3682,7 +3807,6 @@
                 `;
                 barsListEl.appendChild(row);
 
-                // Trigger smooth bar width & number animation
                 if (shouldAnimate && item.hasTrades) {
                     const prevVal = lastRecapBarValues[idx] !== undefined ? lastRecapBarValues[idx] : 0;
                     animateRecapValue(valElemId, prevVal, item.value, recapUnit, curr, 420, false);
@@ -3701,10 +3825,8 @@
                 });
             }
 
-            // Render Trajectory SVG with Line-Draw Animation
             renderRecapTrajectorySvg(filteredTrades, recapUnit, shouldAnimate);
 
-            // Footer Stats (Account Name & WR)
             const totalTradesCount = filteredTrades.length;
             const winsCount = filteredTrades.filter(t => Number(t.netPnL) > 0).length;
             const wrPct = totalTradesCount > 0 ? Math.round((winsCount / totalTradesCount) * 100) : 0;
@@ -3847,4 +3969,4 @@
         window.toggleAuthMode = toggleAuthMode;
     </script>
 </body>
-                                    </html>
+</html>
