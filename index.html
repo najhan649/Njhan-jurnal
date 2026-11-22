@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NAJHAN - Institutional Trading Terminal v2.0</title>
+
+    <!-- Metallic Bat Favicon SVG -->
+    <link
+        rel="icon"
+        type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 130'%3E%3Cdefs%3E%3ClinearGradient id='fg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ffffff'/%3E%3Cstop offset='35%25' stop-color='%239ca3af'/%3E%3Cstop offset='65%25' stop-color='%23374151'/%3E%3Cstop offset='100%25' stop-color='%23f3f4f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='240' height='130' rx='24' fill='%23020407'/%3E%3Cpath d='M120 42 L109 22 L105 48 L82 32 L24 56 L58 74 L44 94 L76 88 L88 108 L104 90 L120 118 L136 90 L152 108 L164 88 L196 94 L182 74 L216 56 L158 32 L135 48 L131 22 Z' fill='%23020407' stroke='url(%23fg)' stroke-width='4.5' stroke-linejoin='miter'/%3E%3C/svg%3E"
+    />
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -47,6 +55,19 @@
             overflow-x: hidden;
         }
 
+        /* Metallic Bat Logo Styling */
+        .bat-logo-svg {
+            display: block;
+            filter: drop-shadow(0 0 8px rgba(226, 232, 240, 0.22));
+            transition: transform 0.25s ease, filter 0.25s ease;
+        }
+
+        .group:hover .bat-logo-svg,
+        .bat-logo-hero:hover {
+            transform: scale(1.04);
+            filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.36));
+        }
+
         .glass-card {
             background: #020407;
             backdrop-filter: blur(24px);
@@ -68,7 +89,7 @@
             animation: permanentGlow 4s ease-in-out infinite;
         }
 
-        /* Recap Card Custom Styles (100% Match Video) */
+        /* Recap Card Custom Styles */
         .recap-story-dark {
             background: radial-gradient(120% 75% at 50% 0%, #10321d 0%, #09130d 45%, #060907 100%);
             color: #ffffff;
@@ -97,7 +118,6 @@
             font-variant-numeric: tabular-nums;
         }
 
-        /* Smooth Bar & Trajectory Animations */
         .recap-bar-fill {
             transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
             will-change: width;
@@ -217,6 +237,59 @@
 </head>
 <body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black relative">
 
+    <!-- REUSABLE METALLIC BAT LOGO TEMPLATE (Hidden) -->
+    <svg id="batEmblemTemplate" class="hidden" viewBox="0 0 280 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="batMetalStroke" x1="15" y1="15" x2="265" y2="135" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFFFFF" />
+                <stop offset="22%" stop-color="#94A3B8" />
+                <stop offset="48%" stop-color="#334155" />
+                <stop offset="72%" stop-color="#E2E8F0" />
+                <stop offset="100%" stop-color="#64748B" />
+            </linearGradient>
+            <linearGradient id="batMetalInner" x1="140" y1="20" x2="140" y2="135" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#F8FAFC" />
+                <stop offset="55%" stop-color="#475569" />
+                <stop offset="100%" stop-color="#CBD5E1" />
+            </linearGradient>
+        </defs>
+
+        <!-- Siluet Kelelawar Metalik -->
+        <path
+            d="M140 46 L128 24 L123 54 L96 36 L26 62 L64 82 L48 104 L84 96 L98 118 L116 98 L140 138 L164 98 L178 118 L192 96 L228 104 L212 82 L250 62 L180 36 L153 54 L148 24 Z"
+            fill="#020407"
+            stroke="url(#batMetalStroke)"
+            stroke-width="4.2"
+            stroke-linejoin="miter"
+            stroke-miterlimit="10"
+        />
+
+        <!-- Garis Kontur Dalam Sayap Kiri & Kanan -->
+        <path
+            d="M118 62 L94 48 L46 66 L76 81 L65 96 L90 90 L101 106 L116 92"
+            stroke="url(#batMetalInner)"
+            stroke-width="1.8"
+            stroke-opacity="0.75"
+        />
+        <path
+            d="M162 62 L186 48 L234 66 L204 81 L215 96 L190 90 L179 106 L164 92"
+            stroke="url(#batMetalInner)"
+            stroke-width="1.8"
+            stroke-opacity="0.75"
+        />
+
+        <!-- Aksen V-Chin Bawah -->
+        <path
+            d="M128 106 L140 124 L152 106"
+            stroke="url(#batMetalStroke)"
+            stroke-width="2.6"
+        />
+
+        <!-- Mata Tajam -->
+        <polygon points="126,72 135,76 128,78" fill="#F1F5F9" />
+        <polygon points="154,72 145,76 152,78" fill="#F1F5F9" />
+    </svg>
+
     <!-- Interactive Background Network Canvas -->
     <canvas id="networkCanvas"></canvas>
 
@@ -225,8 +298,46 @@
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-2.5 cursor-pointer group" onclick="switchView('accounts')">
-                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-lg sm:text-xl shadow-lg shadow-emerald-950/50 group-hover:scale-105 transition-transform duration-300">
-                        N
+                    <div class="h-9 sm:h-10 px-2 rounded-xl bg-[#020407] border border-slate-700/70 flex items-center justify-center shadow-lg group-hover:border-slate-400/70 transition-all duration-300">
+                        <svg class="bat-logo-svg w-11 sm:w-12 h-auto" viewBox="0 0 280 150" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="NAJHAN Logo">
+                            <defs>
+                                <linearGradient id="batMetalStrokeNav" x1="15" y1="15" x2="265" y2="135" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#FFFFFF" />
+                                    <stop offset="22%" stop-color="#94A3B8" />
+                                    <stop offset="48%" stop-color="#334155" />
+                                    <stop offset="72%" stop-color="#E2E8F0" />
+                                    <stop offset="100%" stop-color="#64748B" />
+                                </linearGradient>
+                                <linearGradient id="batMetalInnerNav" x1="140" y1="20" x2="140" y2="135" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#F8FAFC" />
+                                    <stop offset="55%" stop-color="#475569" />
+                                    <stop offset="100%" stop-color="#CBD5E1" />
+                                </linearGradient>
+                            </defs>
+                            <path
+                                d="M140 46 L128 24 L123 54 L96 36 L26 62 L64 82 L48 104 L84 96 L98 118 L116 98 L140 138 L164 98 L178 118 L192 96 L228 104 L212 82 L250 62 L180 36 L153 54 L148 24 Z"
+                                fill="#020407"
+                                stroke="url(#batMetalStrokeNav)"
+                                stroke-width="4.2"
+                                stroke-linejoin="miter"
+                                stroke-miterlimit="10"
+                            />
+                            <path
+                                d="M118 62 L94 48 L46 66 L76 81 L65 96 L90 90 L101 106 L116 92"
+                                stroke="url(#batMetalInnerNav)"
+                                stroke-width="1.8"
+                                stroke-opacity="0.75"
+                            />
+                            <path
+                                d="M162 62 L186 48 L234 66 L204 81 L215 96 L190 90 L179 106 L164 92"
+                                stroke="url(#batMetalInnerNav)"
+                                stroke-width="1.8"
+                                stroke-opacity="0.75"
+                            />
+                            <path d="M128 106 L140 124 L152 106" stroke="url(#batMetalStrokeNav)" stroke-width="2.6" />
+                            <polygon points="126,72 135,76 128,78" fill="#F1F5F9" />
+                            <polygon points="154,72 145,76 152,78" fill="#F1F5F9" />
+                        </svg>
                     </div>
                     <div>
                         <span class="font-extrabold text-base sm:text-lg text-white tracking-tight group-hover:text-emerald-400 transition">NAJHAN</span>
@@ -257,11 +368,49 @@
     </header>
 
     <!-- LANDING SCREEN / WELCOME MODAL -->
-    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/65 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="max-w-xl w-full text-center space-y-8 animate-fade-in relative z-20 px-4">
             <div class="space-y-4">
-                <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-700 flex items-center justify-center text-black font-black text-4xl mx-auto shadow-2xl shadow-emerald-950/60 ring-4 ring-emerald-400/20 animate-pulse">
-                    N
+                <div class="w-36 h-24 rounded-3xl bg-[#020407] border border-slate-700/80 flex items-center justify-center mx-auto shadow-2xl shadow-black ring-4 ring-slate-500/15">
+                    <svg class="bat-logo-svg bat-logo-hero w-28 h-auto" viewBox="0 0 280 150" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="NAJHAN Emblem">
+                        <defs>
+                            <linearGradient id="batMetalStrokeHero" x1="15" y1="15" x2="265" y2="135" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#FFFFFF" />
+                                <stop offset="22%" stop-color="#94A3B8" />
+                                <stop offset="48%" stop-color="#334155" />
+                                <stop offset="72%" stop-color="#E2E8F0" />
+                                <stop offset="100%" stop-color="#64748B" />
+                            </linearGradient>
+                            <linearGradient id="batMetalInnerHero" x1="140" y1="20" x2="140" y2="135" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#F8FAFC" />
+                                <stop offset="55%" stop-color="#475569" />
+                                <stop offset="100%" stop-color="#CBD5E1" />
+                            </linearGradient>
+                        </defs>
+                        <path
+                            d="M140 46 L128 24 L123 54 L96 36 L26 62 L64 82 L48 104 L84 96 L98 118 L116 98 L140 138 L164 98 L178 118 L192 96 L228 104 L212 82 L250 62 L180 36 L153 54 L148 24 Z"
+                            fill="#020407"
+                            stroke="url(#batMetalStrokeHero)"
+                            stroke-width="4.2"
+                            stroke-linejoin="miter"
+                            stroke-miterlimit="10"
+                        />
+                        <path
+                            d="M118 62 L94 48 L46 66 L76 81 L65 96 L90 90 L101 106 L116 92"
+                            stroke="url(#batMetalInnerHero)"
+                            stroke-width="1.8"
+                            stroke-opacity="0.75"
+                        />
+                        <path
+                            d="M162 62 L186 48 L234 66 L204 81 L215 96 L190 90 L179 106 L164 92"
+                            stroke="url(#batMetalInnerHero)"
+                            stroke-width="1.8"
+                            stroke-opacity="0.75"
+                        />
+                        <path d="M128 106 L140 124 L152 106" stroke="url(#batMetalStrokeHero)" stroke-width="2.6" />
+                        <polygon points="126,72 135,76 128,78" fill="#F1F5F9" />
+                        <polygon points="154,72 145,76 152,78" fill="#F1F5F9" />
+                    </svg>
                 </div>
                 <div>
                     <span class="px-3.5 py-1 rounded-full text-[11px] font-extrabold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 uppercase">
@@ -825,7 +974,6 @@
             <!-- TAB 3: ANALYTICS -->
             <div id="tabContentAnalytics" class="hidden space-y-6">
 
-                <!-- 1. BAGIAN ATAS (HEADER & SUMMARY CARDS) -->
                 <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
                         <i class="fa-solid fa-chart-line text-emerald-400"></i> Performance Analytics
@@ -857,7 +1005,6 @@
                     </div>
                 </div>
 
-                <!-- 2. EQUITY CURVE -->
                 <div class="glass-card p-5 sm:p-7 rounded-3xl shadow-2xl space-y-4 border border-emerald-500/30">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div>
@@ -873,7 +1020,6 @@
                     </div>
                 </div>
 
-                <!-- 3. OUTCOME BREAKDOWN -->
                 <div class="glass-card p-4 sm:p-6 rounded-2xl shadow-xl space-y-6">
                     <div class="border-b border-emerald-500/10 pb-3 text-center">
                         <h3 class="text-base font-black text-white tracking-tight uppercase">Outcome Breakdown</h3>
@@ -926,7 +1072,6 @@
                     </div>
                 </div>
 
-                <!-- 4. PER-PAIR PERFORMANCE COMPARISON -->
                 <div class="glass-card p-4 sm:p-6 rounded-2xl shadow-xl space-y-6">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-emerald-500/10 gap-2">
                         <div>
@@ -980,7 +1125,6 @@
                     </div>
                 </div>
 
-                <!-- 5. HOURLY ENTRY & MARKET SESSIONS -->
                 <div class="glass-card p-4 sm:p-6 rounded-2xl shadow-xl space-y-6">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-emerald-500/10 gap-2">
                         <div>
@@ -1002,7 +1146,6 @@
                     </div>
                 </div>
 
-                <!-- 6. PNL BY WEEKDAY -->
                 <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
                     <div class="flex justify-between items-center pb-2 border-b border-emerald-500/10">
                         <div>
@@ -1015,7 +1158,6 @@
                     </div>
                 </div>
 
-                <!-- 7. PNL BY ORDER TYPE / POSITION -->
                 <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
                     <div class="flex justify-between items-center pb-2 border-b border-emerald-500/10">
                         <div>
@@ -1033,17 +1175,14 @@
             <!-- TAB 4: RECAP -->
             <div id="tabContentRecap" class="hidden space-y-6 pb-8">
 
-                <!-- Top Control Bar (Period, Navigation, Unit R/$, Theme Dark/Light) -->
                 <div class="glass-card p-3 sm:p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3 max-w-3xl mx-auto">
                     
-                    <!-- Period Switcher: Week / Month / Year -->
                     <div class="flex items-center bg-[#020407] p-1 rounded-xl border border-emerald-500/20 text-xs font-bold">
                         <button onclick="setRecapPeriod('week')" id="recapPeriodWeek" class="px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition">Week</button>
                         <button onclick="setRecapPeriod('month')" id="recapPeriodMonth" class="px-3.5 py-1.5 rounded-lg bg-white text-black font-extrabold shadow transition">Month</button>
                         <button onclick="setRecapPeriod('year')" id="recapPeriodYear" class="px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition">Year</button>
                     </div>
 
-                    <!-- Period Navigator: < November 2026 > -->
                     <div class="flex items-center gap-2 text-xs font-bold text-white">
                         <button onclick="navigateRecapPeriod(-1)" class="w-7 h-7 rounded-lg bg-[#020407] hover:bg-emerald-500/20 border border-emerald-500/20 flex items-center justify-center text-gray-300 transition">
                             <i class="fa-solid fa-chevron-left text-[10px]"></i>
@@ -1054,15 +1193,12 @@
                         </button>
                     </div>
 
-                    <!-- Unit (R / $) & Theme (Dark / Light) -->
                     <div class="flex items-center gap-2">
-                        <!-- Unit Toggle -->
                         <div class="flex items-center bg-[#020407] p-1 rounded-full border border-emerald-500/20 text-xs font-bold">
                             <button onclick="setRecapUnit('R')" id="recapUnitR" class="w-7 h-7 rounded-full bg-white text-black font-black flex items-center justify-center shadow transition">R</button>
                             <button onclick="setRecapUnit('$')" id="recapUnitDollar" class="w-7 h-7 rounded-full text-gray-400 hover:text-white flex items-center justify-center transition">$</button>
                         </div>
 
-                        <!-- Theme Toggle -->
                         <div class="flex items-center bg-[#020407] p-1 rounded-xl border border-emerald-500/20 text-xs font-bold">
                             <button onclick="setRecapTheme('dark')" id="recapThemeDark" class="px-3.5 py-1.5 rounded-lg bg-white text-black font-extrabold shadow transition">Dark</button>
                             <button onclick="setRecapTheme('light')" id="recapThemeLight" class="px-3.5 py-1.5 rounded-lg text-gray-400 hover:text-white transition">Light</button>
@@ -1074,23 +1210,40 @@
                 <div class="flex flex-col items-center justify-center space-y-5">
                     <div id="recapStoryCard" class="recap-story-dark w-full max-w-[350px] sm:max-w-[370px] rounded-[28px] p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden transition-all duration-300" style="min-height: 615px;">
                         
-                        <!-- Subtle Top Glow Effect -->
                         <div id="recapTopGlow" class="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-44 bg-emerald-500/20 blur-3xl rounded-full pointer-events-none"></div>
 
-                        <!-- TOP SECTION: Brand Logo (NAJHAN) & Period Label -->
                         <div class="relative z-10">
                             <div class="flex items-center justify-between">
-                                <span id="recapBrandName" class="font-black text-sm sm:text-base tracking-[0.26em] uppercase">NAJHAN</span>
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-8 h-auto shrink-0" viewBox="0 0 280 150" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="NAJHAN Emblem">
+                                        <defs>
+                                            <linearGradient id="batMetalStrokeRecap" x1="15" y1="15" x2="265" y2="135" gradientUnits="userSpaceOnUse">
+                                                <stop offset="0%" stop-color="#FFFFFF" />
+                                                <stop offset="28%" stop-color="#94A3B8" />
+                                                <stop offset="55%" stop-color="#475569" />
+                                                <stop offset="80%" stop-color="#E2E8F0" />
+                                                <stop offset="100%" stop-color="#64748B" />
+                                            </linearGradient>
+                                        </defs>
+                                        <path
+                                            d="M140 46 L128 24 L123 54 L96 36 L26 62 L64 82 L48 104 L84 96 L98 118 L116 98 L140 138 L164 98 L178 118 L192 96 L228 104 L212 82 L250 62 L180 36 L153 54 L148 24 Z"
+                                            fill="#060907"
+                                            stroke="url(#batMetalStrokeRecap)"
+                                            stroke-width="4.5"
+                                            stroke-linejoin="miter"
+                                            stroke-miterlimit="10"
+                                        />
+                                    </svg>
+                                    <span id="recapBrandName" class="font-black text-sm sm:text-base tracking-[0.24em] uppercase">NAJHAN</span>
+                                </div>
                                 <span id="recapCardDateRange" class="text-[10px] sm:text-[11px] font-medium opacity-55">November 2026</span>
                             </div>
 
-                            <!-- Report Title & Big Hero Metric -->
                             <div class="mt-7">
                                 <div id="recapReportTypeTitle" class="text-[10px] font-bold tracking-[0.22em] uppercase opacity-50">MONTHLY REPORT</div>
                                 <div id="recapHeroValue" class="text-4xl sm:text-[44px] font-black tracking-tight mt-1 leading-none font-sans tabular-nums">+0.00R</div>
                             </div>
 
-                            <!-- 3 Mini Metric Boxes -->
                             <div class="grid grid-cols-3 gap-2.5 mt-6">
                                 <div id="recapBox1" class="recap-subcard-dark rounded-xl py-3 px-2 text-center">
                                     <div id="recapStat1Val" class="text-xs sm:text-sm font-extrabold tabular-nums">0 / 0</div>
@@ -1107,20 +1260,16 @@
                             </div>
                         </div>
 
-                        <!-- MIDDLE SECTION: Horizontal Breakdown Bars -->
                         <div class="relative z-10 my-5">
                             <div id="recapBreakdownTitle" class="text-[10px] font-semibold opacity-55 mb-2.5">Weekly result</div>
                             <div id="recapBarsList" class="space-y-2.5">
-                                <!-- Generated dynamically via JS -->
                             </div>
                         </div>
 
-                        <!-- BOTTOM SECTION: Trajectory Line & Footer Meta -->
                         <div class="relative z-10 pt-2">
                             <div class="text-[10px] font-semibold opacity-55 mb-1.5">Trajectory</div>
                             <div class="w-full h-14 relative">
                                 <svg id="recapTrajectorySvg" viewBox="0 0 280 56" class="w-full h-full overflow-visible">
-                                    <!-- Generated dynamically via JS -->
                                 </svg>
                             </div>
 
@@ -1132,7 +1281,6 @@
 
                     </div>
 
-                    <!-- Download Story Button -->
                     <div class="text-center space-y-2">
                         <button onclick="downloadRecapStory()" id="downloadRecapBtn" class="px-6 py-2.5 bg-[#10B981] hover:bg-[#059669] text-black font-extrabold text-xs rounded-xl shadow-lg shadow-emerald-950/40 transition flex items-center gap-2 mx-auto transform hover:scale-[1.02]">
                             <span>Download Story (9:16)</span>
@@ -1338,10 +1486,9 @@
         let logViewMode = 'table';
         let isSignUpMode = false;
 
-        // Recap State & Animation Variables
-        let recapPeriod = 'month'; // 'week' | 'month' | 'year'
-        let recapUnit = 'R';       // 'R' | '$'
-        let recapTheme = 'dark';   // 'dark' | 'light'
+        let recapPeriod = 'month';
+        let recapUnit = 'R';
+        let recapTheme = 'dark';
         let recapRefDate = new Date();
         let lastRecapHeroNumeric = 0;
         let lastRecapStat2Numeric = 0;
@@ -3267,9 +3414,6 @@
             });
         }
 
-        // ==========================================
-        // RECAP TAB LOGIC + SMOOTH ANIMATIONS
-        // ==========================================
         function animateRecapValue(elementId, fromVal, toVal, unit, curr, duration = 480, isHero = false) {
             const el = document.getElementById(elementId);
             if (!el) return;
@@ -3436,7 +3580,6 @@
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         }
 
-        // Menghitung minggu dalam satu bulan berdasarkan Senin - Minggu (W1 s/d W6)
         function getCalendarWeeksOfMonth(year, month) {
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const weeks = [];
@@ -3445,7 +3588,7 @@
 
             while (currentStart <= daysInMonth) {
                 const startDate = new Date(year, month, currentStart);
-                const dayOfWeek = startDate.getDay(); // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
+                const dayOfWeek = startDate.getDay();
                 const daysUntilSunday = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
                 let currentEnd = currentStart + daysUntilSunday;
                 if (currentEnd > daysInMonth) currentEnd = daysInMonth;
@@ -3501,7 +3644,6 @@
                 stat2Label = 'avg per day';
                 stat3Label = 'best day';
 
-                // Monday - Friday dengan tanggal di bawah hari (contoh: Mon / Nov 9)
                 const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
                 for (let i = 0; i < 5; i++) {
                     const currDay = new Date(monday);
@@ -3537,7 +3679,6 @@
                     return parseInt(parts[0]) === year && (parseInt(parts[1]) - 1) === month;
                 });
 
-                // Perhitungan W1 - W6 berdasarkan Senin - Minggu bulan tersebut
                 const weekBuckets = getCalendarWeeksOfMonth(year, month);
 
                 weekBuckets.forEach(w => {
@@ -3581,7 +3722,6 @@
                 }
             }
 
-            // Update Header & Labels
             document.getElementById('recapNavLabel').innerText = navLabel;
             document.getElementById('recapCardDateRange').innerText = cardDateRange;
             document.getElementById('recapReportTypeTitle').innerText = reportTitle;
@@ -3590,7 +3730,6 @@
             document.getElementById('recapStat2Label').innerText = stat2Label;
             document.getElementById('recapStat3Label').innerText = stat3Label;
 
-            // Hero Metric Calculation & Smooth Rolling Animation
             const totalMetric = filteredTrades.reduce((acc, t) => acc + getTradeMetricValue(t, recapUnit), 0);
             const heroEl = document.getElementById('recapHeroValue');
             if (totalMetric < 0) {
@@ -3606,7 +3745,6 @@
             }
             lastRecapHeroNumeric = totalMetric;
 
-            // Mini Boxes Calculation & Animation
             const activeBuckets = breakdownItems.filter(b => b.hasTrades);
             const greenBucketsCount = activeBuckets.filter(b => b.value > 0).length;
             const totalActiveBuckets = activeBuckets.length;
@@ -3624,7 +3762,6 @@
             lastRecapStat2Numeric = avgBucketVal;
             lastRecapStat3Numeric = bestBucketVal;
 
-            // Render Horizontal Bars with Smooth Width & Value Animation
             const barsListEl = document.getElementById('recapBarsList');
             barsListEl.innerHTML = '';
 
@@ -3659,7 +3796,6 @@
                             : 'opacity-70 font-semibold';
                 }
 
-                // Tampilan label hari + tanggal di bawahnya (Week) atau W1..W6 + tanggal di bawahnya (Month)
                 let labelHtml = '';
                 if (recapPeriod === 'week' || recapPeriod === 'month') {
                     labelHtml = `
@@ -3682,7 +3818,6 @@
                 `;
                 barsListEl.appendChild(row);
 
-                // Trigger smooth bar width & number animation
                 if (shouldAnimate && item.hasTrades) {
                     const prevVal = lastRecapBarValues[idx] !== undefined ? lastRecapBarValues[idx] : 0;
                     animateRecapValue(valElemId, prevVal, item.value, recapUnit, curr, 420, false);
@@ -3701,10 +3836,8 @@
                 });
             }
 
-            // Render Trajectory SVG with Line-Draw Animation
             renderRecapTrajectorySvg(filteredTrades, recapUnit, shouldAnimate);
 
-            // Footer Stats (Account Name & WR)
             const totalTradesCount = filteredTrades.length;
             const winsCount = filteredTrades.filter(t => Number(t.netPnL) > 0).length;
             const wrPct = totalTradesCount > 0 ? Math.round((winsCount / totalTradesCount) * 100) : 0;
