@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NAJHAN - Institutional Trading Terminal v2.0</title>
 
-    <!-- Metallic Bat Favicon SVG -->
+    <!-- Metallic Bat Favicon SVG (Matched to Reference) -->
     <link
         rel="icon"
         type="image/svg+xml"
-        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 130'%3E%3Cdefs%3E%3ClinearGradient id='fg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ffffff'/%3E%3Cstop offset='35%25' stop-color='%239ca3af'/%3E%3Cstop offset='65%25' stop-color='%23374151'/%3E%3Cstop offset='100%25' stop-color='%23f3f4f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='240' height='130' rx='24' fill='%23020407'/%3E%3Cpath d='M120 42 L109 22 L105 48 L82 32 L24 56 L58 74 L44 94 L76 88 L88 108 L104 90 L120 118 L136 90 L152 108 L164 88 L196 94 L182 74 L216 56 L158 32 L135 48 L131 22 Z' fill='%23020407' stroke='url(%23fg)' stroke-width='4.5' stroke-linejoin='miter'/%3E%3C/svg%3E"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 190'%3E%3Cdefs%3E%3ClinearGradient id='fg' x1='40' y1='35' x2='320' y2='165' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0%25' stop-color='%23f8fafc'/%3E%3Cstop offset='25%25' stop-color='%2394a3b8'/%3E%3Cstop offset='50%25' stop-color='%23334155'/%3E%3Cstop offset='78%25' stop-color='%23e2e8f0'/%3E%3Cstop offset='100%25' stop-color='%2364748b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='360' height='190' rx='36' fill='%23020407'/%3E%3Cpath d='M180 56 L166 28 L159 64 L132 46 L52 44 L88 76 L62 88 L98 98 L82 118 L118 110 L108 130 L144 108 L156 88 L156 106 L180 162 L204 106 L204 88 L216 108 L252 130 L242 110 L278 118 L262 98 L298 88 L272 76 L308 44 L228 46 L201 64 L194 28 Z' fill='%23020407' stroke='url(%23fg)' stroke-width='4' stroke-linejoin='miter'/%3E%3Cpath d='M168 112 L180 132 L192 112' fill='none' stroke='url(%23fg)' stroke-width='3'/%3E%3Cpolygon points='165,86 175,90 167,92' fill='%23f8fafc'/%3E%3Cpolygon points='195,86 185,90 193,92' fill='%23f8fafc'/%3E%3C/svg%3E"
     />
 
     <!-- Tailwind CSS CDN -->
@@ -58,14 +58,14 @@
         /* Metallic Bat Logo Styling */
         .bat-logo-svg {
             display: block;
-            filter: drop-shadow(0 0 8px rgba(226, 232, 240, 0.22));
+            filter: drop-shadow(0 0 8px rgba(226, 232, 240, 0.24));
             transition: transform 0.25s ease, filter 0.25s ease;
         }
 
         .group:hover .bat-logo-svg,
         .bat-logo-hero:hover {
             transform: scale(1.04);
-            filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.36));
+            filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.38));
         }
 
         .glass-card {
@@ -237,59 +237,6 @@
 </head>
 <body class="flex flex-col min-h-screen pb-12 selection:bg-emerald-500 selection:text-black relative">
 
-    <!-- REUSABLE METALLIC BAT LOGO TEMPLATE (Hidden) -->
-    <svg id="batEmblemTemplate" class="hidden" viewBox="0 0 280 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-            <linearGradient id="batMetalStroke" x1="15" y1="15" x2="265" y2="135" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#FFFFFF" />
-                <stop offset="22%" stop-color="#94A3B8" />
-                <stop offset="48%" stop-color="#334155" />
-                <stop offset="72%" stop-color="#E2E8F0" />
-                <stop offset="100%" stop-color="#64748B" />
-            </linearGradient>
-            <linearGradient id="batMetalInner" x1="140" y1="20" x2="140" y2="135" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#F8FAFC" />
-                <stop offset="55%" stop-color="#475569" />
-                <stop offset="100%" stop-color="#CBD5E1" />
-            </linearGradient>
-        </defs>
-
-        <!-- Siluet Kelelawar Metalik -->
-        <path
-            d="M140 46 L128 24 L123 54 L96 36 L26 62 L64 82 L48 104 L84 96 L98 118 L116 98 L140 138 L164 98 L178 118 L192 96 L228 104 L212 82 L250 62 L180 36 L153 54 L148 24 Z"
-            fill="#020407"
-            stroke="url(#batMetalStroke)"
-            stroke-width="4.2"
-            stroke-linejoin="miter"
-            stroke-miterlimit="10"
-        />
-
-        <!-- Garis Kontur Dalam Sayap Kiri & Kanan -->
-        <path
-            d="M118 62 L94 48 L46 66 L76 81 L65 96 L90 90 L101 106 L116 92"
-            stroke="url(#batMetalInner)"
-            stroke-width="1.8"
-            stroke-opacity="0.75"
-        />
-        <path
-            d="M162 62 L186 48 L234 66 L204 81 L215 96 L190 90 L179 106 L164 92"
-            stroke="url(#batMetalInner)"
-            stroke-width="1.8"
-            stroke-opacity="0.75"
-        />
-
-        <!-- Aksen V-Chin Bawah -->
-        <path
-            d="M128 106 L140 124 L152 106"
-            stroke="url(#batMetalStroke)"
-            stroke-width="2.6"
-        />
-
-        <!-- Mata Tajam -->
-        <polygon points="126,72 135,76 128,78" fill="#F1F5F9" />
-        <polygon points="154,72 145,76 152,78" fill="#F1F5F9" />
-    </svg>
-
     <!-- Interactive Background Network Canvas -->
     <canvas id="networkCanvas"></canvas>
 
@@ -299,44 +246,64 @@
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-2.5 cursor-pointer group" onclick="switchView('accounts')">
                     <div class="h-9 sm:h-10 px-2 rounded-xl bg-[#020407] border border-slate-700/70 flex items-center justify-center shadow-lg group-hover:border-slate-400/70 transition-all duration-300">
-                        <svg class="bat-logo-svg w-11 sm:w-12 h-auto" viewBox="0 0 280 150" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="NAJHAN Logo">
+                        <svg class="bat-logo-svg w-14 sm:w-16 h-auto" viewBox="0 0 360 190" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="NAJHAN Metallic Bat Logo">
                             <defs>
-                                <linearGradient id="batMetalStrokeNav" x1="15" y1="15" x2="265" y2="135" gradientUnits="userSpaceOnUse">
+                                <linearGradient id="batChromeOuterNav" x1="45" y1="30" x2="315" y2="165" gradientUnits="userSpaceOnUse">
                                     <stop offset="0%" stop-color="#FFFFFF" />
-                                    <stop offset="22%" stop-color="#94A3B8" />
-                                    <stop offset="48%" stop-color="#334155" />
-                                    <stop offset="72%" stop-color="#E2E8F0" />
+                                    <stop offset="18%" stop-color="#94A3B8" />
+                                    <stop offset="36%" stop-color="#334155" />
+                                    <stop offset="52%" stop-color="#F8FAFC" />
+                                    <stop offset="74%" stop-color="#475569" />
+                                    <stop offset="90%" stop-color="#E2E8F0" />
                                     <stop offset="100%" stop-color="#64748B" />
                                 </linearGradient>
-                                <linearGradient id="batMetalInnerNav" x1="140" y1="20" x2="140" y2="135" gradientUnits="userSpaceOnUse">
-                                    <stop offset="0%" stop-color="#F8FAFC" />
-                                    <stop offset="55%" stop-color="#475569" />
-                                    <stop offset="100%" stop-color="#CBD5E1" />
+                                <linearGradient id="batChromeHighlightNav" x1="180" y1="28" x2="180" y2="162" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#FFFFFF" />
+                                    <stop offset="50%" stop-color="#64748B" />
+                                    <stop offset="100%" stop-color="#F1F5F9" />
                                 </linearGradient>
                             </defs>
+
+                            <!-- Main Bat Silhouette -->
                             <path
-                                d="M140 46 L128 24 L123 54 L96 36 L26 62 L64 82 L48 104 L84 96 L98 118 L116 98 L140 138 L164 98 L178 118 L192 96 L228 104 L212 82 L250 62 L180 36 L153 54 L148 24 Z"
+                                d="M180 56 L166 28 L159 64 L132 46 L52 44 L88 76 L62 88 L98 98 L82 118 L118 110 L108 130 L144 108 L156 88 L156 106 L180 162 L204 106 L204 88 L216 108 L252 130 L242 110 L278 118 L262 98 L298 88 L272 76 L308 44 L228 46 L201 64 L194 28 Z"
                                 fill="#020407"
-                                stroke="url(#batMetalStrokeNav)"
-                                stroke-width="4.2"
+                                stroke="url(#batChromeOuterNav)"
+                                stroke-width="3.6"
                                 stroke-linejoin="miter"
                                 stroke-miterlimit="10"
                             />
+
+                            <!-- Inner Wing & Cheek Facet Highlights -->
                             <path
-                                d="M118 62 L94 48 L46 66 L76 81 L65 96 L90 90 L101 106 L116 92"
-                                stroke="url(#batMetalInnerNav)"
-                                stroke-width="1.8"
-                                stroke-opacity="0.75"
+                                d="M158 68 L134 53 L72 52 L101 77 L80 87 L110 95 L97 110 L124 104 L118 118 L146 101"
+                                stroke="url(#batChromeHighlightNav)"
+                                stroke-width="1.5"
+                                stroke-opacity="0.72"
                             />
                             <path
-                                d="M162 62 L186 48 L234 66 L204 81 L215 96 L190 90 L179 106 L164 92"
-                                stroke="url(#batMetalInnerNav)"
-                                stroke-width="1.8"
-                                stroke-opacity="0.75"
+                                d="M202 68 L226 53 L288 52 L259 77 L280 87 L250 95 L263 110 L236 104 L242 118 L214 101"
+                                stroke="url(#batChromeHighlightNav)"
+                                stroke-width="1.5"
+                                stroke-opacity="0.72"
                             />
-                            <path d="M128 106 L140 124 L152 106" stroke="url(#batMetalStrokeNav)" stroke-width="2.6" />
-                            <polygon points="126,72 135,76 128,78" fill="#F1F5F9" />
-                            <polygon points="154,72 145,76 152,78" fill="#F1F5F9" />
+
+                            <!-- Lower V-Chin Accent -->
+                            <path
+                                d="M167 110 L180 132 L193 110"
+                                stroke="url(#batChromeOuterNav)"
+                                stroke-width="2.5"
+                            />
+                            <path
+                                d="M172 122 L180 144 L188 122"
+                                stroke="url(#batChromeHighlightNav)"
+                                stroke-width="1.6"
+                                stroke-opacity="0.85"
+                            />
+
+                            <!-- Sharp Slit Eyes -->
+                            <polygon points="164,86 175,90 167,92" fill="#F8FAFC" />
+                            <polygon points="196,86 185,90 193,92" fill="#F8FAFC" />
                         </svg>
                     </div>
                     <div>
@@ -371,45 +338,61 @@
     <div id="landingModal" class="fixed inset-0 z-50 bg-[#020407]/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="max-w-xl w-full text-center space-y-8 animate-fade-in relative z-20 px-4">
             <div class="space-y-4">
-                <div class="w-36 h-24 rounded-3xl bg-[#020407] border border-slate-700/80 flex items-center justify-center mx-auto shadow-2xl shadow-black ring-4 ring-slate-500/15">
-                    <svg class="bat-logo-svg bat-logo-hero w-28 h-auto" viewBox="0 0 280 150" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="NAJHAN Emblem">
+                <div class="w-44 h-28 rounded-3xl bg-[#020407] border border-slate-700/80 flex items-center justify-center mx-auto shadow-2xl shadow-black ring-4 ring-slate-500/15">
+                    <svg class="bat-logo-svg bat-logo-hero w-36 h-auto" viewBox="0 0 360 190" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="NAJHAN Metallic Bat Emblem">
                         <defs>
-                            <linearGradient id="batMetalStrokeHero" x1="15" y1="15" x2="265" y2="135" gradientUnits="userSpaceOnUse">
+                            <linearGradient id="batChromeOuterHero" x1="45" y1="30" x2="315" y2="165" gradientUnits="userSpaceOnUse">
                                 <stop offset="0%" stop-color="#FFFFFF" />
-                                <stop offset="22%" stop-color="#94A3B8" />
-                                <stop offset="48%" stop-color="#334155" />
-                                <stop offset="72%" stop-color="#E2E8F0" />
+                                <stop offset="18%" stop-color="#94A3B8" />
+                                <stop offset="36%" stop-color="#334155" />
+                                <stop offset="52%" stop-color="#F8FAFC" />
+                                <stop offset="74%" stop-color="#475569" />
+                                <stop offset="90%" stop-color="#E2E8F0" />
                                 <stop offset="100%" stop-color="#64748B" />
                             </linearGradient>
-                            <linearGradient id="batMetalInnerHero" x1="140" y1="20" x2="140" y2="135" gradientUnits="userSpaceOnUse">
-                                <stop offset="0%" stop-color="#F8FAFC" />
-                                <stop offset="55%" stop-color="#475569" />
-                                <stop offset="100%" stop-color="#CBD5E1" />
+                            <linearGradient id="batChromeHighlightHero" x1="180" y1="28" x2="180" y2="162" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#FFFFFF" />
+                                <stop offset="50%" stop-color="#64748B" />
+                                <stop offset="100%" stop-color="#F1F5F9" />
                             </linearGradient>
                         </defs>
+
                         <path
-                            d="M140 46 L128 24 L123 54 L96 36 L26 62 L64 82 L48 104 L84 96 L98 118 L116 98 L140 138 L164 98 L178 118 L192 96 L228 104 L212 82 L250 62 L180 36 L153 54 L148 24 Z"
+                            d="M180 56 L166 28 L159 64 L132 46 L52 44 L88 76 L62 88 L98 98 L82 118 L118 110 L108 130 L144 108 L156 88 L156 106 L180 162 L204 106 L204 88 L216 108 L252 130 L242 110 L278 118 L262 98 L298 88 L272 76 L308 44 L228 46 L201 64 L194 28 Z"
                             fill="#020407"
-                            stroke="url(#batMetalStrokeHero)"
-                            stroke-width="4.2"
+                            stroke="url(#batChromeOuterHero)"
+                            stroke-width="3.6"
                             stroke-linejoin="miter"
                             stroke-miterlimit="10"
                         />
+
                         <path
-                            d="M118 62 L94 48 L46 66 L76 81 L65 96 L90 90 L101 106 L116 92"
-                            stroke="url(#batMetalInnerHero)"
-                            stroke-width="1.8"
-                            stroke-opacity="0.75"
+                            d="M158 68 L134 53 L72 52 L101 77 L80 87 L110 95 L97 110 L124 104 L118 118 L146 101"
+                            stroke="url(#batChromeHighlightHero)"
+                            stroke-width="1.5"
+                            stroke-opacity="0.72"
                         />
                         <path
-                            d="M162 62 L186 48 L234 66 L204 81 L215 96 L190 90 L179 106 L164 92"
-                            stroke="url(#batMetalInnerHero)"
-                            stroke-width="1.8"
-                            stroke-opacity="0.75"
+                            d="M202 68 L226 53 L288 52 L259 77 L280 87 L250 95 L263 110 L236 104 L242 118 L214 101"
+                            stroke="url(#batChromeHighlightHero)"
+                            stroke-width="1.5"
+                            stroke-opacity="0.72"
                         />
-                        <path d="M128 106 L140 124 L152 106" stroke="url(#batMetalStrokeHero)" stroke-width="2.6" />
-                        <polygon points="126,72 135,76 128,78" fill="#F1F5F9" />
-                        <polygon points="154,72 145,76 152,78" fill="#F1F5F9" />
+
+                        <path
+                            d="M167 110 L180 132 L193 110"
+                            stroke="url(#batChromeOuterHero)"
+                            stroke-width="2.5"
+                        />
+                        <path
+                            d="M172 122 L180 144 L188 122"
+                            stroke="url(#batChromeHighlightHero)"
+                            stroke-width="1.6"
+                            stroke-opacity="0.85"
+                        />
+
+                        <polygon points="164,86 175,90 167,92" fill="#F8FAFC" />
+                        <polygon points="196,86 185,90 193,92" fill="#F8FAFC" />
                     </svg>
                 </div>
                 <div>
@@ -1215,24 +1198,27 @@
                         <div class="relative z-10">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
-                                    <svg class="w-8 h-auto shrink-0" viewBox="0 0 280 150" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="NAJHAN Emblem">
+                                    <svg class="w-10 h-auto shrink-0" viewBox="0 0 360 190" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="NAJHAN Metallic Bat Emblem">
                                         <defs>
-                                            <linearGradient id="batMetalStrokeRecap" x1="15" y1="15" x2="265" y2="135" gradientUnits="userSpaceOnUse">
+                                            <linearGradient id="batChromeOuterRecap" x1="45" y1="30" x2="315" y2="165" gradientUnits="userSpaceOnUse">
                                                 <stop offset="0%" stop-color="#FFFFFF" />
-                                                <stop offset="28%" stop-color="#94A3B8" />
-                                                <stop offset="55%" stop-color="#475569" />
-                                                <stop offset="80%" stop-color="#E2E8F0" />
-                                                <stop offset="100%" stop-color="#64748B" />
+                                                <stop offset="22%" stop-color="#94A3B8" />
+                                                <stop offset="50%" stop-color="#F8FAFC" />
+                                                <stop offset="78%" stop-color="#64748B" />
+                                                <stop offset="100%" stop-color="#E2E8F0" />
                                             </linearGradient>
                                         </defs>
                                         <path
-                                            d="M140 46 L128 24 L123 54 L96 36 L26 62 L64 82 L48 104 L84 96 L98 118 L116 98 L140 138 L164 98 L178 118 L192 96 L228 104 L212 82 L250 62 L180 36 L153 54 L148 24 Z"
+                                            d="M180 56 L166 28 L159 64 L132 46 L52 44 L88 76 L62 88 L98 98 L82 118 L118 110 L108 130 L144 108 L156 88 L156 106 L180 162 L204 106 L204 88 L216 108 L252 130 L242 110 L278 118 L262 98 L298 88 L272 76 L308 44 L228 46 L201 64 L194 28 Z"
                                             fill="#060907"
-                                            stroke="url(#batMetalStrokeRecap)"
-                                            stroke-width="4.5"
+                                            stroke="url(#batChromeOuterRecap)"
+                                            stroke-width="4"
                                             stroke-linejoin="miter"
                                             stroke-miterlimit="10"
                                         />
+                                        <path d="M167 110 L180 132 L193 110" stroke="url(#batChromeOuterRecap)" stroke-width="2.5" />
+                                        <polygon points="164,86 175,90 167,92" fill="#F8FAFC" />
+                                        <polygon points="196,86 185,90 193,92" fill="#F8FAFC" />
                                     </svg>
                                     <span id="recapBrandName" class="font-black text-sm sm:text-base tracking-[0.24em] uppercase">NAJHAN</span>
                                 </div>
